@@ -16,6 +16,8 @@ import SentenceBuilder from './pages/SentenceBuilder';
 import StoryMode from './pages/StoryMode';
 import StoryList from './pages/StoryList';
 import StrokeWriter from './pages/StrokeWriter';
+import PhrasePractice from './pages/PhrasePractice';
+import PhraseTopicList from './pages/PhraseTopicList';
 import './index.css';
 
 export default function App() {
@@ -53,6 +55,8 @@ export default function App() {
             <Route path="/conversation/:lang/:convId" element={<Conversation />} />
             <Route path="/stories/:lang" element={<StoryList />} />
             <Route path="/story/:lang/:storyId" element={<StoryMode />} />
+            <Route path="/phrases/:lang" element={<PhraseTopicList />} />
+            <Route path="/phrases/:lang/:topicId" element={<PhrasePractice />} />
           </Routes>
 
           <NavBar />

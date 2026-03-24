@@ -3,6 +3,14 @@ import { useGame } from '../context/GameStateContext';
 
 const SECTIONS = [
     {
+        title: '🎤 Luyện câu giao tiếp (300+ câu)',
+        desc: 'Nghe → Nói theo → Phân tích từng từ kiểu ELSA!',
+        items: [
+            { id: 'phrases-en', title: '🎤 300+ câu Tiếng Anh', desc: '20 chủ đề giao tiếp thực tế', emoji: '🇬🇧', path: '/phrases/en' },
+            { id: 'phrases-cn', title: '🎤 300+ câu Tiếng Trung', desc: '20 chủ đề giao tiếp thực tế', emoji: '🇨🇳', path: '/phrases/cn' },
+        ],
+    },
+    {
         title: '📖 Truyện tương tác',
         desc: 'Đọc, nghe và nói theo câu chuyện',
         items: [
