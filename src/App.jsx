@@ -10,6 +10,9 @@ import Lesson from './pages/Lesson';
 import LessonChinese from './pages/LessonChinese';
 import MemoryGame from './pages/MemoryGame';
 import QuizGame from './pages/QuizGame';
+import Conversation from './pages/Conversation';
+import ConversationList from './pages/ConversationList';
+import SentenceBuilder from './pages/SentenceBuilder';
 import './index.css';
 
 export default function App() {
@@ -41,6 +44,9 @@ export default function App() {
             <Route path="/lesson-cn/:topicId" element={<LessonChinese />} />
             <Route path="/game/memory/:lang" element={<MemoryGame />} />
             <Route path="/game/quiz/:lang" element={<QuizGame />} />
+            <Route path="/game/sentence/:lang" element={<SentenceBuilder />} />
+            <Route path="/conversations/:lang" element={<ConversationList />} />
+            <Route path="/conversation/:lang/:convId" element={<Conversation />} />
           </Routes>
 
           <NavBar />
