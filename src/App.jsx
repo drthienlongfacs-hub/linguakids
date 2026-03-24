@@ -13,6 +13,9 @@ import QuizGame from './pages/QuizGame';
 import Conversation from './pages/Conversation';
 import ConversationList from './pages/ConversationList';
 import SentenceBuilder from './pages/SentenceBuilder';
+import StoryMode from './pages/StoryMode';
+import StoryList from './pages/StoryList';
+import StrokeWriter from './pages/StrokeWriter';
 import './index.css';
 
 export default function App() {
@@ -45,8 +48,11 @@ export default function App() {
             <Route path="/game/memory/:lang" element={<MemoryGame />} />
             <Route path="/game/quiz/:lang" element={<QuizGame />} />
             <Route path="/game/sentence/:lang" element={<SentenceBuilder />} />
+            <Route path="/game/stroke" element={<StrokeWriter />} />
             <Route path="/conversations/:lang" element={<ConversationList />} />
             <Route path="/conversation/:lang/:convId" element={<Conversation />} />
+            <Route path="/stories/:lang" element={<StoryList />} />
+            <Route path="/story/:lang/:storyId" element={<StoryMode />} />
           </Routes>
 
           <NavBar />

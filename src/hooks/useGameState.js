@@ -174,6 +174,63 @@ export function useGameState() {
     const unlockedBadges = BADGES.filter(badge => badge.condition(state));
     const lockedBadges = BADGES.filter(badge => !badge.condition(state));
 
+    // SM-2 Adaptive Difficulty System
+    // Calculates difficulty based on performance history
+    const getDifficulty = useCallback(() => {
+        const { gamesPlayed, perfectQuizzes, wordsLearned, streak } = state;
+        if (gamesPlayed < 3) return 'easy';
+
+        const accuracy = gamesPlayed > 0 ? perfectQuizzes / gamesPlayed : 0;
+        const wordCount = wordsLearned.length;
+
+        // Factor in: accuracy, word count, streak length
+        const score = (accuracy * 40) + (Math.min(wordCount, 50) / 50 * 30) + (Math.min(streak, 7) / 7 * 30);
+
+        if (score >= 70) return 'hard';
+        if (score >= 40) return 'medium';
+        return 'easy';
+    }, [state]);
+
+    // Get words due for review (spaced repetition)
+    const getWordsForReview = useCallback(() => {
+        const now = Date.now();
+        return state.wordsLearned.filter(w => w.nextReview && w.nextReview <= now);
+    }, [state.wordsLearned]);
+
+    // Update word review (SM-2 algorithm)
+    const reviewWord = useCallback((word, lang, quality) => {
+        // quality: 0-5 (0=blackout, 5=perfect)
+        setState(prev => {
+            const newWords = prev.wordsLearned.map(w => {
+                if (w.word !== word || w.lang !== lang) return w;
+
+                const ef = Math.max(1.3, (w.ef || 2.5) + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+                const count = (w.reviewCount || 0) + 1;
+                let interval;
+
+                if (quality < 3) {
+                    interval = 1; // Reset if poor
+                } else if (count === 1) {
+                    interval = 1;
+                } else if (count === 2) {
+                    interval = 6;
+                } else {
+                    interval = Math.round((w.lastInterval || 1) * ef);
+                }
+
+                return {
+                    ...w,
+                    reviewCount: count,
+                    ef,
+                    lastInterval: interval,
+                    nextReview: Date.now() + interval * 24 * 60 * 60 * 1000,
+                    lastReviewQuality: quality,
+                };
+            });
+            return { ...prev, wordsLearned: newWords };
+        });
+    }, []);
+
     // Reset state 
     const resetState = useCallback(() => {
         setState({ ...DEFAULT_STATE });
@@ -198,5 +255,9 @@ export function useGameState() {
         allBadges: BADGES,
         levels: LEVELS,
         resetState,
+        getDifficulty,
+        getWordsForReview,
+        reviewWord,
     };
 }
+
