@@ -3959,3 +3959,89 @@ p {
 .difficulty-filter::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================== */
+/* --- Accessibility (WCAG 2.1) --- */
+/* ============================== */
+
+/* Minimum touch target 44x44px */
+button,
+.lh-lesson-card,
+.quiz-option,
+.skill-card,
+.badge-item,
+.ll-tab,
+.sp-record-btn,
+.dict-play-btn,
+.quiz-submit-btn,
+.quiz-next-btn,
+.dictation-next-btn,
+.ll-done-btn {
+  min-height: 44px;
+}
+
+/* Focus indicators */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.lh-lesson-card:focus-visible,
+.quiz-option:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .bg-clouds,
+  .floating-shapes,
+  .cloud,
+  .shape {
+    display: none !important;
+  }
+}
+
+/* High contrast support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #333;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  .glass-card {
+    background: white !important;
+    border: 2px solid #333 !important;
+  }
+}
+
+/* Print styles */
+@media print {
+
+  .bg-sky,
+  .bg-clouds,
+  .floating-shapes,
+  .bottom-nav {
+    display: none;
+  }
+
+  .page {
+    padding: 0;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+}
