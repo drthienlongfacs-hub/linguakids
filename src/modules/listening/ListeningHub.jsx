@@ -1,14 +1,16 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getLessonsByMode } from '../../data/listening';
 import { isAdultMode } from '../../utils/userMode';
 
-// Entry point for the Listening module
+// Premium Listening Hub with difficulty filter + progress tracking
 export default function ListeningHub() {
     const navigate = useNavigate();
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
     const lessons = getLessonsByMode(state.userMode);
+    const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
     // Group by level
     const levels = {};
@@ -18,16 +20,27 @@ export default function ListeningHub() {
     });
 
     const levelOrder = adult
-        ? ['B2', 'B1', 'A2', 'A1']  // Show advanced first for adults
-        : ['A1', 'A2', 'B1'];       // Show beginner first for kids
+        ? ['B2', 'B1', 'A2', 'A1']
+        : ['A1', 'A2', 'B1'];
 
     const levelLabels = {
-        'A1': { label: '🌱 Cơ bản', desc: 'Beginner — Daily topics' },
-        'A2': { label: '🌿 Sơ cấp', desc: 'Elementary — Simple conversations' },
-        'B1': { label: '🌳 Trung cấp', desc: 'Intermediate — Professional topics' },
-        'B2': { label: '🌲 Cao cấp', desc: 'Upper-Intermediate — Academic content' },
-        'C1': { label: '🏔️ Nâng cao', desc: 'Advanced — Complex lectures' },
+        'A1': { label: '🌱 Cơ bản', desc: 'Beginner — Daily topics', difficulty: 'easy', color: '#10B981' },
+        'A2': { label: '🌿 Sơ cấp', desc: 'Elementary — Simple conversations', difficulty: 'medium', color: '#F59E0B' },
+        'B1': { label: '🌳 Trung cấp', desc: 'Intermediate — Professional topics', difficulty: 'hard', color: '#EF4444' },
+        'B2': { label: '🌲 Cao cấp', desc: 'Upper-Intermediate — Academic content', difficulty: 'hard', color: '#8B5CF6' },
+        'C1': { label: '🏔️ Nâng cao', desc: 'Advanced — Complex lectures', difficulty: 'hard', color: '#6366F1' },
     };
+
+    const difficultyFilters = [
+        { id: 'all', label: adult ? 'All' : 'Tất cả', emoji: '📚' },
+        { id: 'easy', label: adult ? 'Easy' : 'Dễ', emoji: '🌱' },
+        { id: 'medium', label: adult ? 'Medium' : 'Vừa', emoji: '🌿' },
+        { id: 'hard', label: adult ? 'Hard' : 'Khó', emoji: '🌳' },
+    ];
+
+    const filteredLevelOrder = selectedDifficulty === 'all'
+        ? levelOrder
+        : levelOrder.filter(l => levelLabels[l]?.difficulty === selectedDifficulty);
 
     return (
         <div className="listening-hub">
@@ -50,20 +63,59 @@ export default function ListeningHub() {
                 </div>
                 <div className="lh-stat">
                     <span className="lh-stat-number">4</span>
-                    <span className="lh-stat-label">{adult ? 'Activities/lesson' : 'Bài tập/bài'}</span>
+                    <span className="lh-stat-label">{adult ? 'Activities' : 'Bài tập'}</span>
                 </div>
                 <div className="lh-stat">
                     <span className="lh-stat-number">3</span>
-                    <span className="lh-stat-label">{adult ? 'Question types' : 'Dạng câu hỏi'}</span>
+                    <span className="lh-stat-label">{adult ? 'Question types' : 'Dạng'}</span>
                 </div>
             </div>
 
+            {/* Difficulty Filter */}
+            <div style={{
+                display: 'flex', gap: '8px', marginBottom: '16px', overflowX: 'auto',
+                padding: '4px 0', scrollbarWidth: 'none',
+            }}>
+                {difficultyFilters.map(f => (
+                    <button
+                        key={f.id}
+                        onClick={() => setSelectedDifficulty(f.id)}
+                        style={{
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            padding: '8px 16px', borderRadius: 'var(--radius-full)',
+                            border: selectedDifficulty === f.id
+                                ? '2px solid var(--color-primary)'
+                                : '2px solid var(--color-border)',
+                            background: selectedDifficulty === f.id
+                                ? 'var(--color-primary)' : 'white',
+                            color: selectedDifficulty === f.id ? 'white' : 'var(--color-text)',
+                            fontFamily: 'var(--font-display)', fontWeight: 600,
+                            fontSize: '0.85rem', cursor: 'pointer', whiteSpace: 'nowrap',
+                            transition: 'all var(--transition-fast)',
+                        }}
+                    >
+                        {f.emoji} {f.label}
+                    </button>
+                ))}
+            </div>
+
             {/* Lessons by level */}
-            {levelOrder.filter(l => levels[l]).map(level => (
-                <div key={level} className="lh-level-section">
+            {filteredLevelOrder.filter(l => levels[l]).map(level => (
+                <div key={level} className="lh-level-section reveal">
                     <div className="lh-level-header">
                         <h3>{levelLabels[level]?.label || level}</h3>
-                        <span className="lh-level-desc">{levelLabels[level]?.desc}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span style={{
+                                fontSize: '0.7rem', fontWeight: 700,
+                                padding: '3px 10px', borderRadius: 'var(--radius-full)',
+                                background: `${levelLabels[level]?.color}15`,
+                                color: levelLabels[level]?.color,
+                                border: `1px solid ${levelLabels[level]?.color}30`,
+                            }}>
+                                {levelLabels[level]?.difficulty?.toUpperCase()}
+                            </span>
+                            <span className="lh-level-desc">{levelLabels[level]?.desc}</span>
+                        </div>
                     </div>
                     <div className="lh-lesson-grid">
                         {levels[level].map(lesson => (
@@ -78,8 +130,8 @@ export default function ListeningHub() {
                                     <p className="lh-lesson-title-vi">{lesson.titleVi}</p>
                                     <div className="lh-lesson-meta">
                                         <span>⏱️ {lesson.duration}</span>
-                                        <span>📝 {lesson.quiz.length} câu</span>
-                                        <span>📚 {lesson.vocabulary.length} từ mới</span>
+                                        <span>📝 {lesson.quiz.length} {adult ? 'Q' : 'câu'}</span>
+                                        <span>📚 {lesson.vocabulary.length} {adult ? 'words' : 'từ'}</span>
                                     </div>
                                 </div>
                                 <span className="lh-lesson-arrow">▶</span>

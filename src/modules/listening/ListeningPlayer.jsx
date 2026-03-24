@@ -117,6 +117,23 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
 
     return (
         <div className="listening-player">
+            {/* Waveform Visualization */}
+            {isPlaying && (
+                <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: '3px', height: '40px', marginBottom: '12px',
+                }}>
+                    {Array.from({ length: 20 }, (_, i) => (
+                        <div key={i} style={{
+                            width: '4px', borderRadius: '4px',
+                            background: 'var(--gradient-listening)',
+                            animation: `waveBar 0.8s ease-in-out ${i * 0.04}s infinite alternate`,
+                            height: `${12 + Math.random() * 28}px`,
+                        }} />
+                    ))}
+                </div>
+            )}
+
             {/* Control Bar */}
             <div className="lp-controls">
                 <button className="lp-play-btn" onClick={handlePlay}>
@@ -127,9 +144,14 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
                     <div className="lp-progress-bar">
                         <div className="lp-progress-fill" style={{ width: `${progressPercent}%` }} />
                     </div>
-                    <span className="lp-time">
-                        {formatTime(currentTime)} / {formatTime(totalDuration)}
-                    </span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="lp-time">
+                            {formatTime(currentTime)} / {formatTime(totalDuration)}
+                        </span>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--color-text-light)' }}>
+                            {segmentIndexRef.current + 1}/{segments.length}
+                        </span>
+                    </div>
                 </div>
 
                 <button className="lp-speed-btn" onClick={handleSpeedChange}>
