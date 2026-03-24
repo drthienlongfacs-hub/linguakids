@@ -131,6 +131,39 @@ export default function Lesson() {
                         <div className="flashcard-emoji">{word.emoji}</div>
                         <div className="flashcard-word">{word.word}</div>
                         <div className="flashcard-translation">{word.vietnamese}</div>
+                        {word.example && (
+                            <div style={{
+                                marginTop: '16px', padding: '12px 16px',
+                                background: 'rgba(59,130,246,0.08)', borderRadius: '12px',
+                                borderLeft: '4px solid var(--color-english)',
+                                textAlign: 'left',
+                            }}>
+                                <div style={{
+                                    fontFamily: 'var(--font-display)', fontWeight: 700,
+                                    fontSize: '1rem', color: 'var(--color-english)',
+                                    lineHeight: 1.4,
+                                }}>
+                                    💬 {word.example}
+                                </div>
+                                <div style={{
+                                    fontSize: '0.85rem', color: 'var(--color-text-light)',
+                                    marginTop: '4px', fontStyle: 'italic',
+                                }}>
+                                    {word.exampleVi}
+                                </div>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); speakEnglish(word.example); }}
+                                    disabled={isSpeaking}
+                                    style={{
+                                        marginTop: '8px', background: 'var(--color-english)',
+                                        color: 'white', border: 'none', borderRadius: '20px',
+                                        padding: '4px 14px', fontSize: '0.8rem', cursor: 'pointer',
+                                    }}
+                                >
+                                    🔊 Nghe câu ví dụ
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
