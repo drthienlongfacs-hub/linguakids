@@ -14,17 +14,32 @@ const SPEAKER_INFO = {
     child: { name: 'Con', emoji: '🧒', color: '#10B981' },
 };
 
-// ELSA-style scoring: color-coded pronunciation feedback
-function scorePronunciation(spoken, expectedKeywords) {
-    if (!spoken) return { score: 0, level: 'none', color: '#94A3B8' };
-    const s = spoken.toLowerCase().trim();
-    const matched = expectedKeywords.filter(kw => s.includes(kw.toLowerCase()));
-    const ratio = matched.length / expectedKeywords.length;
+// ELSA-style word-by-word pronunciation analysis
+function analyzeWordsDetailed(spoken, expectedHint) {
+    if (!spoken || !expectedHint) return { words: [], score: 0, level: 'retry', color: '#EF4444', label: '🔄 Thử lại nào!' };
+    const spokenWords = spoken.toLowerCase().replace(/[.,!?']/g, '').split(/\s+/);
+    const hintWords = expectedHint.toLowerCase().replace(/[.,!?']/g, '').split(/\s+/);
 
-    if (ratio >= 0.7) return { score: 95, level: 'excellent', color: '#10B981', label: '🌟 Xuất sắc!', labelEn: 'Excellent!' };
-    if (ratio >= 0.4) return { score: 75, level: 'good', color: '#F59E0B', label: '👍 Tốt lắm!', labelEn: 'Good job!' };
-    if (ratio > 0) return { score: 50, level: 'fair', color: '#3B82F6', label: '💪 Gần đúng rồi!', labelEn: 'Almost there!' };
-    return { score: 25, level: 'retry', color: '#EF4444', label: '🔄 Thử lại nào!', labelEn: 'Try again!' };
+    const words = hintWords.map((hw, i) => {
+        const sw = spokenWords[i];
+        if (!sw) return { word: hw, status: 'missing', color: '#EF4444' };
+        if (sw === hw) return { word: hw, status: 'perfect', color: '#10B981' };
+        if (hw.length > 2 && sw.startsWith(hw.substring(0, Math.ceil(hw.length * 0.5))))
+            return { word: hw, status: 'close', color: '#F59E0B' };
+        return { word: hw, status: 'wrong', color: '#EF4444' };
+    });
+
+    const perfect = words.filter(w => w.status === 'perfect').length;
+    const close = words.filter(w => w.status === 'close').length;
+    const score = Math.round(((perfect * 100 + close * 60) / Math.max(words.length, 1)));
+
+    let level, label, color;
+    if (score >= 80) { level = 'excellent'; label = '🌟 Xuất sắc!'; color = '#10B981'; }
+    else if (score >= 50) { level = 'good'; label = '👍 Tốt lắm!'; color = '#F59E0B'; }
+    else if (score >= 25) { level = 'fair'; label = '💪 Gần đúng!'; color = '#3B82F6'; }
+    else { level = 'retry'; label = '🔄 Thử lại!'; color = '#EF4444'; }
+
+    return { words, score, level, label, color };
 }
 
 export default function Conversation() {
@@ -106,29 +121,32 @@ export default function Conversation() {
         processStep(0);
     }, []);
 
+    // Find current child turn index
+    const currentChildIdx = conv.dialogue.findIndex((t, i) => i >= step && t.speaker === 'child');
+
     const handleSpeak = () => {
         setLastResult(null);
-        const turn = conv.dialogue[step];
         const recognitionLang = isEnglish ? 'en-US' : 'zh-CN';
 
         startListening(recognitionLang, (results) => {
             const spoken = results[0];
-            const currentTurn = conv.dialogue.find((t, i) => i >= step && t.speaker === 'child');
+            const currentTurn = currentChildIdx >= 0 ? conv.dialogue[currentChildIdx] : null;
             if (!currentTurn) return;
 
-            const result = scorePronunciation(spoken, currentTurn.expected);
+            // ELSA-style word-by-word analysis against the hint
+            const result = analyzeWordsDetailed(spoken, currentTurn.hint);
             setLastResult({ ...result, spoken });
             setTotalScore(prev => prev + result.score);
             setAttempts(prev => prev + 1);
 
-            // Add child response to chat
+            // Add child response to chat with word-level data
             setChatHistory(prev => [...prev, {
                 type: 'child',
                 text: spoken,
                 result,
             }]);
 
-            if (result.score >= 50) {
+            if (result.score >= 40) {
                 addXP(result.score >= 70 ? 10 : 5);
                 if (result.score >= 70) setCelebration(c => c + 1);
 
@@ -136,14 +154,21 @@ export default function Conversation() {
                 setTimeout(() => {
                     setWaitingForChild(false);
                     setLastResult(null);
-                    const nextStep = conv.dialogue.findIndex((t, i) => i > step && t.speaker !== 'child') !== -1
-                        ? conv.dialogue.findIndex((t, i) => i > step)
-                        : step + 1;
-                    setStep(nextStep);
-                    processStep(nextStep);
-                }, 1500);
+                    const nextIdx = currentChildIdx + 1;
+                    setStep(nextIdx);
+                    processStep(nextIdx);
+                }, 2000);
             }
         });
+    };
+
+    // Replay the last NPC audio
+    const handleReplay = () => {
+        const lastNpc = [...chatHistory].reverse().find(m => m.type === 'npc');
+        if (lastNpc) {
+            if (isEnglish) speakEnglish(lastNpc.text);
+            else speakChinese(lastNpc.text);
+        }
     };
 
     const handleSkip = () => {
@@ -289,17 +314,31 @@ export default function Conversation() {
                                     borderRadius: '16px 16px 4px 16px', padding: '12px 16px',
                                     maxWidth: '80%', textAlign: 'right',
                                 }}>
-                                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem' }}>
-                                        {msg.text}
-                                    </div>
+                                    {/* Word-by-word colored display */}
+                                    {msg.result?.words ? (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end' }}>
+                                            {msg.result.words.map((w, wi) => (
+                                                <span key={wi} style={{
+                                                    fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem',
+                                                    color: w.color, padding: '2px 6px', borderRadius: '6px',
+                                                    background: `${w.color}15`,
+                                                }}>{w.word}{w.status === 'perfect' ? '✓' : ''}</span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem' }}>
+                                            {msg.text}
+                                        </div>
+                                    )}
                                     {msg.result && (
                                         <div style={{
                                             fontSize: '0.85rem', color: msg.result.color, fontWeight: 700,
                                             fontFamily: 'var(--font-display)', marginTop: '4px',
                                         }}>
-                                            {msg.result.label}
+                                            {msg.result.label} {msg.result.score}%
                                         </div>
                                     )}
+                                    <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: '2px' }}>🟢 Đúng · 🟡 Gần · 🔴 Sửa</div>
                                 </div>
                             </div>
                         );
@@ -320,8 +359,15 @@ export default function Conversation() {
                         🎤
                     </button>
                     <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginBottom: '8px' }}>
-                        {isListening ? '🔴 Đang nghe...' : '👆 Nhấn để nói'}
+                        {isListening ? '🔴 Đang nghe... (nói to rõ)' : '👆 Nhấn để nói'}
                     </p>
+                    <button onClick={handleReplay} disabled={isSpeaking} style={{
+                        background: 'var(--color-primary)', color: 'white', border: 'none',
+                        borderRadius: 'var(--radius-full)', padding: '6px 16px', fontSize: '0.85rem',
+                        cursor: 'pointer', marginBottom: '8px',
+                    }}>
+                        🔊 Nghe lại
+                    </button>
                     <button
                         style={{
                             background: 'none', border: 'none', color: 'var(--color-text-light)',
