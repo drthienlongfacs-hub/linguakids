@@ -159,41 +159,86 @@ export function useSpeech() {
         }, text.length * 200 + 1000); // Estimate first utterance duration
     }, [speak]);
 
-    // Speech Recognition
+    // Speech Recognition — with iOS Safari fallback
+    const speechSupported = useRef(null);
+
+    // Check support on mount
+    useEffect(() => {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        speechSupported.current = !!SR;
+    }, []);
+
     const startListening = useCallback((lang = 'en-US', onResult) => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            console.warn('Speech Recognition not supported');
+            // iOS Safari fallback — prompt text input
+            speechSupported.current = false;
+            const input = prompt('🎤 Nhập câu con muốn nói (Speech Recognition không khả dụng trên thiết bị này):');
+            if (input && onResult) {
+                setTranscript(input.toLowerCase().trim());
+                onResult([input.toLowerCase().trim()]);
+            }
             return;
         }
 
         // Cancel any ongoing speech first (avoid mic picking up TTS)
         window.speechSynthesis?.cancel();
+        setIsSpeaking(false);
 
-        const recognition = new SpeechRecognition();
-        recognition.lang = lang;
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 5; // More alternatives = better matching
+        try {
+            const recognition = new SpeechRecognition();
+            recognition.lang = lang;
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 5;
 
-        recognition.onstart = () => setIsListening(true);
-        recognition.onend = () => setIsListening(false);
-        recognition.onerror = (e) => {
-            console.warn('Recognition error:', e.error);
+            recognition.onstart = () => setIsListening(true);
+            recognition.onend = () => setIsListening(false);
+            recognition.onerror = (e) => {
+                console.warn('Recognition error:', e.error);
+                setIsListening(false);
+                // Fallback on error — show text input
+                if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'audio-capture') {
+                    const input = prompt('🎤 Mic không khả dụng. Nhập câu con muốn nói:');
+                    if (input && onResult) {
+                        setTranscript(input.toLowerCase().trim());
+                        onResult([input.toLowerCase().trim()]);
+                    }
+                }
+            };
+
+            recognition.onresult = (event) => {
+                const results = [];
+                for (let i = 0; i < event.results[0].length; i++) {
+                    results.push(event.results[0][i].transcript.toLowerCase().trim());
+                }
+                setTranscript(results[0]);
+                if (onResult) onResult(results);
+            };
+
+            // Auto-stop after 8 seconds (prevent hanging)
+            const timeout = setTimeout(() => {
+                try { recognition.stop(); } catch (e) { }
+                setIsListening(false);
+            }, 8000);
+
+            recognition.onend = () => {
+                clearTimeout(timeout);
+                setIsListening(false);
+            };
+
+            recognitionRef.current = recognition;
+            recognition.start();
+        } catch (e) {
+            console.warn('Failed to start recognition:', e);
             setIsListening(false);
-        };
-
-        recognition.onresult = (event) => {
-            const results = [];
-            for (let i = 0; i < event.results[0].length; i++) {
-                results.push(event.results[0][i].transcript.toLowerCase().trim());
+            // Fallback
+            const input = prompt('🎤 Nhập câu con muốn nói:');
+            if (input && onResult) {
+                setTranscript(input.toLowerCase().trim());
+                onResult([input.toLowerCase().trim()]);
             }
-            setTranscript(results[0]);
-            if (onResult) onResult(results);
-        };
-
-        recognitionRef.current = recognition;
-        recognition.start();
+        }
     }, []);
 
     const stopListening = useCallback(() => {
