@@ -147,6 +147,95 @@ export const ENGLISH_STORIES = [
             },
         ],
     },
+    {
+        id: 'brave_soldier',
+        title: 'Anh lính dũng cảm',
+        titleEn: 'The Brave Soldier',
+        emoji: '🎖️',
+        level: 'A1',
+        coverColor: '#166534',
+        scenes: [
+            {
+                bg: '🏕️',
+                narrator: "Long ago, there was a young soldier named Minh. He loved his country very much.",
+                narratorVi: "Ngày xưa, có một anh lính trẻ tên Minh. Anh rất yêu đất nước mình.",
+                image: '🪖👦🇻🇳',
+            },
+            {
+                bg: '🌄',
+                narrator: "Every morning, Minh woke up early. He put on his green uniform and his helmet.",
+                narratorVi: "Mỗi sáng, Minh dậy sớm. Anh mặc quân phục xanh và đội mũ sắt.",
+                image: '🌅🪖👕',
+                speakPractice: { text: "Good morning, soldiers!", prompt: "Nói: Good morning, soldiers!" },
+            },
+            {
+                bg: '🏃',
+                narrator: "Minh trained every day. He ran, he swam, and he marched with his friends.",
+                narratorVi: "Minh tập luyện mỗi ngày. Anh chạy, bơi, và hành quân cùng đồng đội.",
+                image: '🏃💪🤸',
+                question: {
+                    ask: "What did Minh do every day?",
+                    askVi: "Minh làm gì mỗi ngày?",
+                    options: [
+                        { text: "He trained 💪", correct: true },
+                        { text: "He slept 😴", correct: false },
+                        { text: "He played games 🎮", correct: false },
+                    ],
+                },
+            },
+            {
+                bg: '🚁',
+                narrator: "One day, Minh saw a helicopter! It was very big and loud. The helicopter carried supplies to the village.",
+                narratorVi: "Một ngày, Minh thấy một trực thăng! Nó rất to và ầm ĩ. Trực thăng chở đồ tiếp tế cho làng.",
+                image: '🚁📦🏘️',
+                speakPractice: { text: "Look! A helicopter!", prompt: "Nói: Look! A helicopter!" },
+            },
+            {
+                bg: '🌊',
+                narrator: "The navy ships sailed on the sea, protecting the coast. Minh saluted the sailors.",
+                narratorVi: "Tàu hải quân chạy trên biển, bảo vệ bờ biển. Minh chào các thủy thủ.",
+                image: '🚢⚓🫡',
+                question: {
+                    ask: "Who protects the sea?",
+                    askVi: "Ai bảo vệ biển?",
+                    options: [
+                        { text: "The Navy ⚓", correct: true },
+                        { text: "The teachers 👩‍🏫", correct: false },
+                        { text: "The doctors 🧑‍⚕️", correct: false },
+                    ],
+                },
+            },
+            {
+                bg: '🇻🇳',
+                narrator: "On September 2nd, all the soldiers stood together. They raised the red flag with a yellow star.",
+                narratorVi: "Vào ngày 2 tháng 9, tất cả các anh lính đứng cùng nhau. Họ kéo cờ đỏ sao vàng.",
+                image: '🇻🇳🪖🫡⭐',
+                speakPractice: { text: "Long live Vietnam!", prompt: "Nói: Long live Vietnam!" },
+            },
+            {
+                bg: '🕊️',
+                narrator: '"The most important mission," said the General, "is to protect peace."',
+                narratorVi: '"Nhiệm vụ quan trọng nhất," vị Tướng nói, "là bảo vệ hòa bình."',
+                image: '⭐🕊️🌍',
+                question: {
+                    ask: "What is the most important mission?",
+                    askVi: "Nhiệm vụ quan trọng nhất là gì?",
+                    options: [
+                        { text: "To protect peace 🕊️", correct: true },
+                        { text: "To eat cake 🎂", correct: false },
+                        { text: "To play games 🎮", correct: false },
+                    ],
+                },
+            },
+            {
+                bg: '🌟',
+                narrator: "Minh became a hero! He received a medal for his bravery. He always remembered: soldiers protect the people they love. The End! 🌟",
+                narratorVi: "Minh trở thành anh hùng! Anh nhận huân chương vì sự dũng cảm. Anh luôn nhớ: người lính bảo vệ những người mình yêu thương. Hết! 🌟",
+                image: '🎖️🦸🇻🇳💖',
+                speakPractice: { text: "Soldiers protect the people they love!", prompt: "Nói: Soldiers protect the people they love!" },
+            },
+        ],
+    },
 ];
 
 export const CHINESE_STORIES = [

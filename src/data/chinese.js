@@ -216,6 +216,29 @@ export const CHINESE_TOPICS = [
             { character: '勇敢', pinyin: 'yǒnggǎn', vietnamese: 'Dũng cảm', emoji: '💪' },
         ],
     },
+    {
+        id: 'military', title: '军队 (Quân đội)', emoji: '🎖️', color: '#166534',
+        words: [
+            { character: '军人', pinyin: 'jūnrén', vietnamese: 'Quân nhân', emoji: '🪖' },
+            { character: '军队', pinyin: 'jūnduì', vietnamese: 'Quân đội', emoji: '🎖️' },
+            { character: '海军', pinyin: 'hǎijūn', vietnamese: 'Hải quân', emoji: '⚓' },
+            { character: '空军', pinyin: 'kōngjūn', vietnamese: 'Không quân', emoji: '✈️' },
+            { character: '陆军', pinyin: 'lùjūn', vietnamese: 'Lục quân', emoji: '🪖' },
+            { character: '将军', pinyin: 'jiāngjūn', vietnamese: 'Tướng quân', emoji: '⭐' },
+            { character: '坦克', pinyin: 'tǎnkè', vietnamese: 'Xe tăng', emoji: '🪖' },
+            { character: '直升机', pinyin: 'zhíshēngjī', vietnamese: 'Trực thăng', emoji: '🚁' },
+            { character: '战斗机', pinyin: 'zhàndòujī', vietnamese: 'Máy bay chiến đấu', emoji: '✈️' },
+            { character: '军舰', pinyin: 'jūnjiàn', vietnamese: 'Tàu chiến', emoji: '🚢' },
+            { character: '潜水艇', pinyin: 'qiánshuǐtǐng', vietnamese: 'Tàu ngầm', emoji: '🤿' },
+            { character: '国旗', pinyin: 'guóqí', vietnamese: 'Quốc kỳ', emoji: '🇻🇳' },
+            { character: '英雄', pinyin: 'yīngxióng', vietnamese: 'Anh hùng', emoji: '🦸' },
+            { character: '和平', pinyin: 'hépíng', vietnamese: 'Hòa bình', emoji: '🕊️' },
+            { character: '勇敢', pinyin: 'yǒnggǎn', vietnamese: 'Dũng cảm', emoji: '💪' },
+            { character: '保卫', pinyin: 'bǎowèi', vietnamese: 'Bảo vệ', emoji: '🛡️' },
+            { character: '胜利', pinyin: 'shènglì', vietnamese: 'Chiến thắng', emoji: '🏆' },
+            { character: '独立', pinyin: 'dúlì', vietnamese: 'Độc lập', emoji: '🇻🇳' },
+        ],
+    },
 ];
 
 // Flatten all words for games
