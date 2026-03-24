@@ -1,5 +1,6 @@
 // useSpeech — Premium TTS + Speech Recognition
-// Optimized for: loud, clear, native-quality voices on iOS/iPad/Chrome
+// RCA Fix v2: Proper speech queue, iOS-safe timing, reliable full-sentence playback
+// Root causes fixed: cancel-kills-queue, aggressive pause/resume, no queue, bad timing
 import { useState, useCallback, useRef, useEffect } from 'react';
 
 // Voice preference lists — best quality first
@@ -25,10 +26,9 @@ const VOICE_PREFERENCES = {
 
 function findBestVoice(lang, voices) {
     if (!voices || voices.length === 0) return null;
-
     const prefs = VOICE_PREFERENCES[lang] || [];
 
-    // 1. Try preferred voices by name (premium/enhanced first)
+    // 1. Try preferred voices by name
     for (const pref of prefs) {
         const found = voices.find(v =>
             v.name.includes(pref) && v.lang.startsWith(lang.split('-')[0])
@@ -37,10 +37,10 @@ function findBestVoice(lang, voices) {
     }
 
     // 2. Try any voice for this language
-    const langBase = lang.split('-')[0]; // 'en', 'zh', 'vi'
+    const langBase = lang.split('-')[0];
     const langVoices = voices.filter(v => v.lang.startsWith(langBase));
 
-    // Prefer "enhanced" or "premium" voices
+    // Prefer enhanced/premium voices
     const enhanced = langVoices.find(v =>
         v.name.toLowerCase().includes('enhanced') ||
         v.name.toLowerCase().includes('premium') ||
@@ -48,7 +48,7 @@ function findBestVoice(lang, voices) {
     );
     if (enhanced) return enhanced;
 
-    // Prefer local (not remote/network) voices for better quality
+    // Prefer local voices (better quality, no network delay)
     const local = langVoices.find(v => v.localService);
     if (local) return local;
 
@@ -61,7 +61,9 @@ export function useSpeech() {
     const [transcript, setTranscript] = useState('');
     const [voices, setVoices] = useState([]);
     const recognitionRef = useRef(null);
-    const utteranceRef = useRef(null);
+    const queueRef = useRef([]);         // Speech queue
+    const processingRef = useRef(false); // Queue lock
+    const resumeTimerRef = useRef(null); // iOS resume timer
 
     // Load voices (some browsers load async)
     useEffect(() => {
@@ -72,8 +74,6 @@ export function useSpeech() {
 
         loadVoices();
         window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
-
-        // Fallback: retry after delays (Safari sometimes slow)
         const t1 = setTimeout(loadVoices, 500);
         const t2 = setTimeout(loadVoices, 1500);
 
@@ -84,85 +84,133 @@ export function useSpeech() {
         };
     }, []);
 
-    // iOS Safari workaround: speechSynthesis pauses after ~15s
-    // Keep it alive with periodic resume
-    useEffect(() => {
-        let interval;
-        if (isSpeaking) {
-            interval = setInterval(() => {
-                if (window.speechSynthesis?.speaking) {
-                    window.speechSynthesis.pause();
-                    window.speechSynthesis.resume();
-                }
-            }, 10000);
+    // =============================================
+    // FIX RC-3: Proper Speech Queue
+    // =============================================
+    const processQueue = useCallback(() => {
+        if (processingRef.current) return;
+        if (queueRef.current.length === 0) {
+            setIsSpeaking(false);
+            return;
         }
-        return () => clearInterval(interval);
-    }, [isSpeaking]);
 
-    // Text-to-Speech — loud, clear, native quality
-    const speak = useCallback((text, lang = 'en-US', options = {}) => {
-        if (!window.speechSynthesis) return;
+        processingRef.current = true;
+        setIsSpeaking(true);
+        const { text, lang, rate, pitch, onDone } = queueRef.current.shift();
 
-        // Cancel any ongoing speech
-        window.speechSynthesis.cancel();
+        // FIX RC-1: Only cancel if there's stale speech, not our queue
+        if (window.speechSynthesis?.speaking) {
+            window.speechSynthesis.cancel();
+        }
 
         const utterance = new SpeechSynthesisUtterance(text);
-
-        // Select best voice for this language
         const bestVoice = findBestVoice(lang, voices);
         if (bestVoice) {
             utterance.voice = bestVoice;
-            utterance.lang = bestVoice.lang; // Use exact voice lang for best quality
+            utterance.lang = bestVoice.lang;
         } else {
             utterance.lang = lang;
         }
 
-        // Audio settings — LOUD and CLEAR for kids
-        utterance.volume = 1.0;                    // Maximum volume
-        utterance.rate = options.rate || 0.75;      // Slow for kids to hear clearly
-        utterance.pitch = options.pitch || 1.05;    // Slightly higher = friendlier
+        utterance.volume = 1.0;
+        utterance.rate = rate;
+        utterance.pitch = pitch;
 
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        utterance.onerror = (e) => {
-            console.warn('TTS error:', e);
-            setIsSpeaking(false);
+        // FIX RC-2: iOS Safari resume — only for utterances > 3 seconds estimated
+        // Short utterances don't need it, and it causes glitches on them
+        const estimatedDuration = text.length * 80; // rough ms estimate
+        if (estimatedDuration > 3000) {
+            resumeTimerRef.current = setInterval(() => {
+                if (window.speechSynthesis?.speaking && !window.speechSynthesis?.paused) {
+                    window.speechSynthesis.pause();
+                    window.speechSynthesis.resume();
+                }
+            }, 12000); // 12s instead of 10s — less aggressive
+        }
+
+        utterance.onend = () => {
+            clearInterval(resumeTimerRef.current);
+            processingRef.current = false;
+            if (onDone) onDone();
+            // Process next in queue after a small gap
+            setTimeout(() => processQueue(), 150);
         };
 
-        utteranceRef.current = utterance;
+        utterance.onerror = (e) => {
+            console.warn('TTS error:', e.error);
+            clearInterval(resumeTimerRef.current);
+            processingRef.current = false;
+            // Still try next in queue
+            setTimeout(() => processQueue(), 200);
+        };
 
-        // iOS Safari requires a small delay after cancel
+        // FIX RC-1: iOS Safari needs delay after cancel
         setTimeout(() => {
-            window.speechSynthesis.speak(utterance);
-        }, 50);
+            try {
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.warn('TTS speak failed:', e);
+                processingRef.current = false;
+                processQueue();
+            }
+        }, 80);
     }, [voices]);
 
-    // Language-specific shortcuts with optimized settings
+    // Main speak function — adds to queue
+    const speak = useCallback((text, lang = 'en-US', options = {}) => {
+        if (!window.speechSynthesis || !text) return;
+
+        // FIX RC-5: Adjust rate based on sentence length
+        const wordCount = text.split(/\s+/).length;
+        let rate = options.rate || 0.85;
+        if (wordCount > 8) rate = Math.max(rate, 0.85);  // Don't go too slow on long sentences
+        if (wordCount <= 3) rate = Math.min(rate, 0.78); // Single words/short: slower for clarity
+
+        queueRef.current.push({
+            text,
+            lang,
+            rate,
+            pitch: options.pitch || 1.05,
+            onDone: options.onDone,
+        });
+
+        processQueue();
+    }, [processQueue]);
+
+    // Language-specific shortcuts
     const speakEnglish = useCallback((text) => {
-        speak(text, 'en-US', { rate: 0.75, pitch: 1.05 });
+        speak(text, 'en-US', { rate: 0.82, pitch: 1.05 });
     }, [speak]);
 
     const speakChinese = useCallback((text) => {
-        speak(text, 'zh-CN', { rate: 0.65, pitch: 1.0 }); // Even slower for Chinese tones
+        speak(text, 'zh-CN', { rate: 0.7, pitch: 1.0 });
     }, [speak]);
 
     const speakVietnamese = useCallback((text) => {
-        speak(text, 'vi-VN', { rate: 0.8, pitch: 1.0 });
+        speak(text, 'vi-VN', { rate: 0.85, pitch: 1.0 });
     }, [speak]);
 
-    // Speak word twice (repeat for kids to hear better)
+    // FIX RC-4: speakTwice uses queue properly (no time estimation)
     const speakTwice = useCallback((text, lang = 'en-US') => {
-        speak(text, lang, { rate: 0.7, pitch: 1.05 });
-        // Queue second utterance after first completes
-        setTimeout(() => {
-            speak(text, lang, { rate: 0.8, pitch: 1.05 });
-        }, text.length * 200 + 1000); // Estimate first utterance duration
+        speak(text, lang, { rate: 0.75, pitch: 1.05 });
+        // Second utterance queued — will play after first finishes naturally
+        speak(text, lang, { rate: 0.85, pitch: 1.05 });
     }, [speak]);
 
+    // Stop all speech and clear queue
+    const stopSpeaking = useCallback(() => {
+        queueRef.current = [];
+        processingRef.current = false;
+        clearInterval(resumeTimerRef.current);
+        window.speechSynthesis?.cancel();
+        setIsSpeaking(false);
+    }, []);
+
+    // =============================================
     // Speech Recognition — with iOS Safari fallback
+    // =============================================
     const speechSupported = useRef(null);
 
-    // Check support on mount
     useEffect(() => {
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         speechSupported.current = !!SR;
@@ -171,9 +219,8 @@ export function useSpeech() {
     const startListening = useCallback((lang = 'en-US', onResult) => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            // iOS Safari fallback — prompt text input
             speechSupported.current = false;
-            const input = prompt('🎤 Nhập câu con muốn nói (Speech Recognition không khả dụng trên thiết bị này):');
+            const input = prompt('🎤 Nhập câu con muốn nói (mic không khả dụng):');
             if (input && onResult) {
                 setTranscript(input.toLowerCase().trim());
                 onResult([input.toLowerCase().trim()]);
@@ -181,9 +228,8 @@ export function useSpeech() {
             return;
         }
 
-        // Cancel any ongoing speech first (avoid mic picking up TTS)
-        window.speechSynthesis?.cancel();
-        setIsSpeaking(false);
+        // Stop TTS first (avoid mic picking up speaker)
+        stopSpeaking();
 
         try {
             const recognition = new SpeechRecognition();
@@ -193,11 +239,10 @@ export function useSpeech() {
             recognition.maxAlternatives = 5;
 
             recognition.onstart = () => setIsListening(true);
-            recognition.onend = () => setIsListening(false);
+
             recognition.onerror = (e) => {
                 console.warn('Recognition error:', e.error);
                 setIsListening(false);
-                // Fallback on error — show text input
                 if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'audio-capture') {
                     const input = prompt('🎤 Mic không khả dụng. Nhập câu con muốn nói:');
                     if (input && onResult) {
@@ -216,7 +261,7 @@ export function useSpeech() {
                 if (onResult) onResult(results);
             };
 
-            // Auto-stop after 8 seconds (prevent hanging)
+            // Auto-stop after 8 seconds
             const timeout = setTimeout(() => {
                 try { recognition.stop(); } catch (e) { }
                 setIsListening(false);
@@ -232,14 +277,13 @@ export function useSpeech() {
         } catch (e) {
             console.warn('Failed to start recognition:', e);
             setIsListening(false);
-            // Fallback
             const input = prompt('🎤 Nhập câu con muốn nói:');
             if (input && onResult) {
                 setTranscript(input.toLowerCase().trim());
                 onResult([input.toLowerCase().trim()]);
             }
         }
-    }, []);
+    }, [stopSpeaking]);
 
     const stopListening = useCallback(() => {
         if (recognitionRef.current) {
@@ -248,49 +292,36 @@ export function useSpeech() {
         setIsListening(false);
     }, []);
 
-    // Kid-friendly pronunciation checking (very generous matching)
+    // Kid-friendly pronunciation checking
     const checkPronunciation = useCallback((spoken, expected) => {
         if (!spoken || !expected) return { score: 40, feedback: 'tryAgain' };
 
         const s = spoken.toLowerCase().trim();
         const e = expected.toLowerCase().trim();
 
-        // Exact match
         if (s === e) return { score: 100, feedback: 'perfect' };
-
-        // Contains match
         if (s.includes(e) || e.includes(s)) return { score: 85, feedback: 'great' };
 
-        // Word-level match (for multi-word phrases)
         const sWords = s.split(/\s+/);
         const eWords = e.split(/\s+/);
         const matching = eWords.filter(ew => sWords.some(sw => sw.includes(ew) || ew.includes(sw)));
         if (matching.length > 0) return { score: 70, feedback: 'good' };
 
-        // First letter/sound match
         if (s[0] === e[0]) return { score: 55, feedback: 'good' };
 
-        // Any attempt is encouraged for kids
         return { score: 40, feedback: 'tryAgain' };
     }, []);
 
-    const stopSpeaking = useCallback(() => {
-        window.speechSynthesis?.cancel();
-        setIsSpeaking(false);
-    }, []);
-
-    // Get available voice info (for debugging)
-    const getVoiceInfo = useCallback(() => {
-        return {
-            total: voices.length,
-            english: voices.filter(v => v.lang.startsWith('en')).map(v => v.name),
-            chinese: voices.filter(v => v.lang.startsWith('zh')).map(v => v.name),
-            vietnamese: voices.filter(v => v.lang.startsWith('vi')).map(v => v.name),
-            selectedEn: findBestVoice('en-US', voices)?.name,
-            selectedCn: findBestVoice('zh-CN', voices)?.name,
-            selectedVi: findBestVoice('vi-VN', voices)?.name,
-        };
-    }, [voices]);
+    // Debug info
+    const getVoiceInfo = useCallback(() => ({
+        total: voices.length,
+        english: voices.filter(v => v.lang.startsWith('en')).map(v => v.name),
+        chinese: voices.filter(v => v.lang.startsWith('zh')).map(v => v.name),
+        vietnamese: voices.filter(v => v.lang.startsWith('vi')).map(v => v.name),
+        selectedEn: findBestVoice('en-US', voices)?.name,
+        selectedCn: findBestVoice('zh-CN', voices)?.name,
+        selectedVi: findBestVoice('vi-VN', voices)?.name,
+    }), [voices]);
 
     return {
         speak,
