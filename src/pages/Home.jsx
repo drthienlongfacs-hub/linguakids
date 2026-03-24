@@ -25,10 +25,25 @@ export default function Home() {
     const circumference = 2 * Math.PI * normalizedRadius;
     const strokeDashoffset = circumference - (dailyStats.progress / 100) * circumference;
 
+    const skills = [
+        { to: '/english', icon: '🇬🇧', title: isAdult ? 'English' : 'Tiếng Anh', desc: `${state.englishWordsLearned} từ đã học`, theme: 'english' },
+        { to: '/chinese', icon: '🇨🇳', title: isAdult ? '中文 Chinese' : 'Tiếng Trung', desc: `${state.chineseWordsLearned} từ đã học`, theme: 'chinese' },
+        { to: '/listening', icon: '🎧', title: isAdult ? 'Listening Practice' : 'Luyện Nghe', desc: isAdult ? 'Audio, dictation, IELTS quiz' : 'Nghe, chính tả, trắc nghiệm', theme: 'listening' },
+        { to: '/speaking', icon: '🗣️', title: isAdult ? 'Speaking Practice' : 'Luyện Nói', desc: isAdult ? 'Shadowing, IELTS speaking' : 'Bắt chước, ghi âm', theme: 'speaking' },
+        { to: '/reading', icon: '📖', title: isAdult ? 'Reading Practice' : 'Luyện Đọc', desc: isAdult ? 'Passages, vocabulary' : 'Bài đọc, từ vựng', theme: 'reading' },
+        { to: '/writing', icon: '✍️', title: isAdult ? 'Writing Practice' : 'Luyện Viết', desc: isAdult ? 'Essays, grammar clinic' : 'Viết bài, sửa câu', theme: 'writing' },
+        { to: '/grammar', icon: '📐', title: isAdult ? 'Grammar' : 'Ngữ pháp', desc: isAdult ? 'Tenses, conditionals, passive' : 'Thì, câu điều kiện', theme: 'grammar' },
+        { to: '/games', icon: isAdult ? '🧩' : '🎮', title: isAdult ? 'Luyện tập' : 'Trò chơi', desc: isAdult ? 'Quiz, ghép câu, viết chữ' : 'Vừa chơi vừa học!', theme: 'games' },
+    ];
+
+    if (isAdult) {
+        skills.push({ to: '/exam-prep', icon: '🎯', title: 'Exam Prep Center', desc: 'IELTS · TOEIC · TOEFL', theme: 'exam' });
+    }
+
     return (
         <div className="page">
-            {/* Header with streak, XP & mode toggle */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            {/* Premium Hero Header */}
+            <div className="home-hero">
                 <div className="streak-display">
                     <span className="streak-fire" style={{ fontSize: state.streak >= 7 ? '1.5rem' : '1.2rem' }}>
                         {state.streak >= 7 ? '🔥🔥' : '🔥'}
@@ -38,11 +53,14 @@ export default function Home() {
                 <button className="mode-toggle" onClick={toggleMode} title="Chuyển chế độ">
                     {isAdult ? '🧒 Chế độ Bé' : '🧑 Người lớn'}
                 </button>
-                <div className="xp-badge">⭐ {state.xp} XP</div>
+                <div className="home-hero__badges">
+                    <div className="coin-badge">🪙 {state.xp}</div>
+                    <div className="xp-badge">⭐ {state.xp} XP</div>
+                </div>
             </div>
 
-            {/* Level bar */}
-            <div className="level-badge" style={{ marginBottom: '16px' }}>
+            {/* Level bar with glassmorphism */}
+            <div className="level-badge glass-card" style={{ marginBottom: '16px', padding: '10px 16px' }}>
                 <div className="level-badge__icon">{currentLevel.emoji}</div>
                 <div style={{ flex: 1 }}>
                     <div style={{ fontSize: '0.85rem', fontWeight: 700, fontFamily: 'var(--font-display)' }}>
@@ -73,16 +91,8 @@ export default function Home() {
                 </div>
             )}
 
-            {/* Daily Progress Card */}
-            <div style={{
-                background: isAdult
-                    ? 'rgba(99, 102, 241, 0.1)'
-                    : 'linear-gradient(135deg, #EEF2FF, #FDF4FF)',
-                borderRadius: '16px', padding: '16px',
-                marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px',
-                border: isAdult ? '1px solid rgba(129, 140, 248, 0.2)' : '2px solid #E0E7FF',
-            }}>
-                {/* Circular progress */}
+            {/* Daily Progress Card — Premium */}
+            <div className={`daily-progress-card ${isAdult ? 'daily-progress-card--adult' : 'daily-progress-card--kids'}`}>
                 <div style={{ position: 'relative', width: radius * 2, height: radius * 2, flexShrink: 0 }}>
                     <svg width={radius * 2} height={radius * 2} style={{ transform: 'rotate(-90deg)' }}>
                         <circle stroke={isAdult ? 'rgba(148,163,184,0.15)' : '#E5E7EB'} fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius} />
@@ -122,7 +132,7 @@ export default function Home() {
                         background: isAdult
                             ? 'linear-gradient(135deg, #6366F1, #8B5CF6)'
                             : 'linear-gradient(135deg, #7C3AED, #EC4899)',
-                        borderRadius: '16px', padding: '14px 20px', marginBottom: '16px',
+                        borderRadius: 'var(--radius-xl)', padding: '14px 20px', marginBottom: '16px',
                         display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer',
                         color: 'white', boxShadow: isAdult ? '0 4px 12px rgba(99,102,241,0.3)' : '0 4px 12px rgba(124,58,237,0.3)',
                     }}>
@@ -140,170 +150,39 @@ export default function Home() {
                 </Link>
             )}
 
-            {/* Language cards */}
-            <h2 style={{ textAlign: 'center', marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
-                {isAdult ? 'Chọn ngôn ngữ' : 'Hôm nay học gì nào? 📚'}
+            {/* Section Title */}
+            <h2 className="section-title">
+                <span className="section-title__emoji">📚</span>
+                {isAdult ? 'Chọn kỹ năng' : 'Hôm nay học gì nào?'}
             </h2>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* English card */}
-                <Link to="/english" style={{ textDecoration: 'none' }}>
-                    <div className="card card--english" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>🇬🇧</div>
-                        <div>
-                            <h3 style={{ color: 'var(--color-english)', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'English' : 'Tiếng Anh'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {state.englishWordsLearned} từ đã học
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Chinese card */}
-                <Link to="/chinese" style={{ textDecoration: 'none' }}>
-                    <div className="card card--chinese" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>🇨🇳</div>
-                        <div>
-                            <h3 style={{ color: 'var(--color-chinese)', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? '中文 Chinese' : 'Tiếng Trung'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {state.chineseWordsLearned} từ đã học
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Listening card — NEW */}
-                <Link to="/listening" style={{ textDecoration: 'none' }}>
-                    <div className="card card--listening" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>🎧</div>
-                        <div>
-                            <h3 style={{ color: '#6366F1', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Listening Practice' : 'Luyện Nghe'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'Audio, dictation, IELTS quiz' : 'Nghe, chính tả, trắc nghiệm'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Speaking card */}
-                <Link to="/speaking" style={{ textDecoration: 'none' }}>
-                    <div className="card card--speaking" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>🗣️</div>
-                        <div>
-                            <h3 style={{ color: '#EC4899', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Speaking Practice' : 'Luyện Nói'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'Shadowing, IELTS speaking, voice recording' : 'Bắt chước, ghi âm, phỏng vấn'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Reading card */}
-                <Link to="/reading" style={{ textDecoration: 'none' }}>
-                    <div className="card card--reading" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>📖</div>
-                        <div>
-                            <h3 style={{ color: '#10B981', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Reading Practice' : 'Luyện Đọc'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'Passages, IELTS questions, vocabulary' : 'Bài đọc, trắc nghiệm, từ vựng'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Writing card */}
-                <Link to="/writing" style={{ textDecoration: 'none' }}>
-                    <div className="card card--writing" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>✍️</div>
-                        <div>
-                            <h3 style={{ color: '#F59E0B', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Writing Practice' : 'Luyện Viết'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'IELTS essays, email, grammar clinic' : 'Viết bài, sửa câu'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Grammar card */}
-                <Link to="/grammar" style={{ textDecoration: 'none' }}>
-                    <div className="card card--grammar" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>📐</div>
-                        <div>
-                            <h3 style={{ color: '#8B5CF6', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Grammar' : 'Ngữ pháp'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'Tenses, conditionals, passive, reported speech' : 'Thì, câu điều kiện, bị động'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
-
-                {/* Exam Prep card — adults only */}
-                {isAdult && (
-                    <Link to="/exam-prep" style={{ textDecoration: 'none' }}>
-                        <div className="card card--exam" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '3.5rem' }}>🎯</div>
-                            <div>
-                                <h3 style={{ color: '#EF4444', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                    Exam Prep Center
-                                </h3>
-                                <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                    IELTS · TOEIC · TOEFL — Study plans & mock tests
-                                </p>
+            {/* Premium Skills Grid with Scroll Reveal */}
+            <div className="skills-grid">
+                {skills.map((skill, i) => (
+                    <Link key={skill.to} to={skill.to} style={{ textDecoration: 'none' }}>
+                        <div className={`skill-card skill-card--${skill.theme} reveal`} style={{ animationDelay: `${i * 0.06}s` }}>
+                            <div className="skill-card__icon">{skill.icon}</div>
+                            <div className="skill-card__info">
+                                <div className="skill-card__title" style={{ color: 'var(--color-text)' }}>{skill.title}</div>
+                                <div className="skill-card__desc">{skill.desc}</div>
                             </div>
-                            <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
+                            <div className="skill-card__arrow">→</div>
                         </div>
                     </Link>
-                )}
-
-                {/* Games card */}
-                <Link to="/games" style={{ textDecoration: 'none' }}>
-                    <div className="card card--game" style={{ display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
-                        <div style={{ fontSize: '3.5rem' }}>{isAdult ? '🧩' : '🎮'}</div>
-                        <div>
-                            <h3 style={{ color: '#8B5CF6', fontFamily: 'var(--font-display)', fontSize: '1.3rem' }}>
-                                {isAdult ? 'Luyện tập' : 'Trò chơi'}
-                            </h3>
-                            <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem', marginTop: '4px' }}>
-                                {isAdult ? 'Quiz, ghép câu, viết chữ' : 'Vừa chơi vừa học nào!'}
-                            </p>
-                        </div>
-                        <div style={{ marginLeft: 'auto', fontSize: '1.5rem' }}>▶️</div>
-                    </div>
-                </Link>
+                ))}
             </div>
 
             {/* Stats mini-row */}
             <div className="stats-row" style={{ marginTop: '24px' }}>
-                <div className="stat-card">
+                <div className="stat-card glass-card">
                     <div className="stat-card__value">{state.wordsLearned.length}</div>
                     <div className="stat-card__label">Từ đã học</div>
                 </div>
-                <div className="stat-card">
+                <div className="stat-card glass-card">
                     <div className="stat-card__value">{state.gamesPlayed}</div>
                     <div className="stat-card__label">{isAdult ? 'Bài tập' : 'Trận chơi'}</div>
                 </div>
-                <div className="stat-card">
+                <div className="stat-card glass-card">
                     <div className="stat-card__value">{state.unlockedBadges?.length || 0}</div>
                     <div className="stat-card__label">{isAdult ? 'Thành tích' : 'Huy chương'}</div>
                 </div>
