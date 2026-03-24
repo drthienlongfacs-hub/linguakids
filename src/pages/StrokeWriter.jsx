@@ -1,6 +1,6 @@
 // StrokeWriter — Chinese character stroke order practice
 // Uses HanziWriter (MIT license open-source) for animation + quiz
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HanziWriter from 'hanzi-writer';
 import { useGame } from '../context/GameStateContext';
@@ -84,7 +84,7 @@ export default function StrokeWriter() {
         } else {
             // Quiz mode
             writer.quiz({
-                onMistake: (data) => {
+                onMistake: () => {
                     setMistakes(m => m + 1);
                 },
                 onComplete: (data) => {
@@ -116,12 +116,7 @@ export default function StrokeWriter() {
         }
     };
 
-    const handlePrev = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(i => i - 1);
-            setMode('learn');
-        }
-    };
+    // Navigation handled by the character grid below
 
     const progress = ((currentIndex + 1) / CHARACTERS.length) * 100;
 

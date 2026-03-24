@@ -1,10 +1,9 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react'; // useEffect used for cleanup
 
 // Custom audio player with speed control, transcript sync, A/B loop
 export default function ListeningPlayer({ segments, onSegmentChange }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
     const [speed, setSpeed] = useState(1);
     const [showTranscript, setShowTranscript] = useState(true);
     const [showTranslation, setShowTranslation] = useState(false);

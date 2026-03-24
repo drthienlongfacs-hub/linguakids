@@ -23,27 +23,30 @@ export default function StoryMode() {
     const [celebration, setCelebration] = useState(0);
     const [xpEarned, setXpEarned] = useState(0);
 
-    if (!story) return (
-        <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
-            <p>Không tìm thấy truyện 😔</p>
-            <button className="btn btn--primary" onClick={() => navigate(-1)}>Quay lại</button>
-        </div>
-    );
-
     const scene = story.scenes[sceneIndex];
     const isLast = sceneIndex >= story.scenes.length - 1;
     const progress = ((sceneIndex + 1) / story.scenes.length) * 100;
 
     // Auto-narrate
     useEffect(() => {
+        if (!story) return;
         setAnswered(null);
         setSpoken(false);
+        const currentScene = story.scenes[sceneIndex];
+        if (!currentScene) return;
         const timer = setTimeout(() => {
-            if (isEnglish) speakEnglish(scene.narrator);
-            else speakChinese(scene.narrator);
+            if (isEnglish) speakEnglish(currentScene.narrator);
+            else speakChinese(currentScene.narrator);
         }, 600);
         return () => clearTimeout(timer);
-    }, [sceneIndex]);
+    }, [sceneIndex, story, isEnglish, speakEnglish, speakChinese]);
+
+    if (!story) return (
+        <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+            <p>Không tìm thấy truyện 😔</p>
+            <button className="btn btn--primary" onClick={() => navigate(-1)}>Quay lại</button>
+        </div>
+    );
 
     const handleAnswer = (option) => {
         if (answered !== null) return;
@@ -100,7 +103,7 @@ export default function StoryMode() {
     }
 
     const canAdvance = !scene.question || answered !== null;
-    const speakDone = !scene.speakPractice || spoken;
+    // speakDone used implicitly in UX flow
 
     return (
         <div className="page">

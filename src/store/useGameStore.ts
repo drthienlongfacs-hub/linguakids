@@ -1,0 +1,205 @@
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { USER_MODES, getModeConfig } from '../utils/userMode';
+
+export interface WordLearned {
+    word: string;
+    lang: 'en' | 'cn';
+    masteredAt: number;
+    reviewCount: number;
+    nextReview: number;
+    ef?: number;
+    lastInterval?: number;
+    lastReviewQuality?: number;
+}
+
+export interface GameState {
+    childName: string;
+    avatarEmoji: string;
+    xp: number;
+    streak: number;
+    lastActiveDate: string | null;
+    wordsLearned: WordLearned[];
+    englishWordsLearned: number;
+    chineseWordsLearned: number;
+    gamesPlayed: number;
+    perfectQuizzes: number;
+    unlockedBadges: string[];
+    soundEnabled: boolean;
+    totalSessions: number;
+    sessionStartTime: number | null;
+    topicProgress: Record<string, { completed: number; total: number }>;
+
+    // Daily tracking
+    activityDates: string[];
+    dailyGoal: number;
+    dailyWordsToday: number;
+    dailyReviewsToday: number;
+    lastDailyReset: string | null;
+    freezesUsedThisWeek: number;
+
+    // Mode
+    userMode: string;
+}
+
+interface GameActions {
+    addXP: (amount: number) => void;
+    learnWord: (word: string, lang: 'en' | 'cn') => void;
+    recordGame: (isPerfect?: boolean) => void;
+    updateTopicProgress: (topicId: string, completed: number, total: number) => void;
+    setChildName: (name: string) => void;
+    setAvatar: (emoji: string) => void;
+    toggleSound: () => void;
+    toggleMode: () => void;
+    reviewWord: (word: string, lang: 'en' | 'cn', quality: number) => void;
+    recordDailyActivity: (type?: 'learn' | 'review') => void;
+    resetState: () => void;
+    checkAndResetDaily: () => void;
+}
+
+export type GameStore = GameState & GameActions;
+
+const DEFAULT_STATE: GameState = {
+    childName: '',
+    avatarEmoji: '🐼',
+    xp: 0,
+    streak: 0,
+    lastActiveDate: null,
+    wordsLearned: [],
+    englishWordsLearned: 0,
+    chineseWordsLearned: 0,
+    gamesPlayed: 0,
+    perfectQuizzes: 0,
+    unlockedBadges: [],
+    soundEnabled: true,
+    totalSessions: 0,
+    sessionStartTime: null,
+    topicProgress: {},
+    activityDates: [],
+    dailyGoal: 10,
+    dailyWordsToday: 0,
+    dailyReviewsToday: 0,
+    lastDailyReset: null,
+    freezesUsedThisWeek: 0,
+    userMode: USER_MODES.KIDS,
+};
+
+export const useGameStore = create<GameStore>()(
+    persist(
+        (set, get) => ({
+            ...DEFAULT_STATE,
+
+            checkAndResetDaily: () => {
+                const today = new Date().toDateString();
+                const state = get();
+                if (state.lastActiveDate !== today) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const isConsecutive = state.lastActiveDate === yesterday.toDateString();
+
+                    set({
+                        streak: isConsecutive ? state.streak + 1 : (state.lastActiveDate ? 1 : state.streak),
+                        lastActiveDate: today,
+                        totalSessions: state.totalSessions + 1,
+                        sessionStartTime: Date.now(),
+                        dailyWordsToday: state.lastDailyReset === today ? state.dailyWordsToday : 0,
+                        dailyReviewsToday: state.lastDailyReset === today ? state.dailyReviewsToday : 0,
+                        lastDailyReset: today,
+                        activityDates: state.activityDates.includes(today)
+                            ? state.activityDates
+                            : [...state.activityDates.slice(-90), today]
+                    });
+                }
+            },
+
+            addXP: (amount: number) => set((state) => ({ xp: state.xp + amount })),
+
+            learnWord: (word: string, lang: 'en' | 'cn') => set((state) => {
+                const isNew = !state.wordsLearned.find(w => w.word === word && w.lang === lang);
+                if (!isNew) return state;
+
+                const now = Date.now();
+                const newWordEntry: WordLearned = {
+                    word,
+                    lang,
+                    masteredAt: now,
+                    reviewCount: 0,
+                    nextReview: now + 24 * 60 * 60 * 1000,
+                };
+
+                return {
+                    wordsLearned: [...state.wordsLearned, newWordEntry],
+                    englishWordsLearned: state.englishWordsLearned + (lang === 'en' ? 1 : 0),
+                    chineseWordsLearned: state.chineseWordsLearned + (lang === 'cn' ? 1 : 0),
+                    xp: state.xp + 10,
+                };
+            }),
+
+            recordGame: (isPerfect = false) => set((state) => ({
+                gamesPlayed: state.gamesPlayed + 1,
+                perfectQuizzes: state.perfectQuizzes + (isPerfect ? 1 : 0),
+                xp: state.xp + (isPerfect ? 25 : 15),
+            })),
+
+            updateTopicProgress: (topicId: string, completed: number, total: number) => set((state) => ({
+                topicProgress: {
+                    ...state.topicProgress,
+                    [topicId]: { completed, total },
+                }
+            })),
+
+            setChildName: (name: string) => set({ childName: name }),
+            setAvatar: (emoji: string) => set({ avatarEmoji: emoji }),
+            toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
+
+            toggleMode: () => set((state) => {
+                const newMode = state.userMode === USER_MODES.KIDS ? USER_MODES.ADULT : USER_MODES.KIDS;
+                const config = getModeConfig(newMode);
+                return { userMode: newMode, dailyGoal: config.dailyGoal };
+            }),
+
+            reviewWord: (word: string, lang: 'en' | 'cn', quality: number) => set((state) => {
+                const newWords = state.wordsLearned.map(w => {
+                    if (w.word !== word || w.lang !== lang) return w;
+
+                    const ef = Math.max(1.3, (w.ef || 2.5) + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
+                    const count = (w.reviewCount || 0) + 1;
+                    let interval;
+
+                    if (quality < 3) {
+                        interval = 1;
+                    } else if (count === 1) {
+                        interval = 1;
+                    } else if (count === 2) {
+                        interval = 6;
+                    } else {
+                        interval = Math.round((w.lastInterval || 1) * ef);
+                    }
+
+                    return {
+                        ...w,
+                        reviewCount: count,
+                        ef,
+                        lastInterval: interval,
+                        nextReview: Date.now() + interval * 24 * 60 * 60 * 1000,
+                        lastReviewQuality: quality,
+                    };
+                });
+                return { wordsLearned: newWords };
+            }),
+
+            recordDailyActivity: (type = 'learn') => set((state) => ({
+                dailyWordsToday: type === 'learn' ? state.dailyWordsToday + 1 : state.dailyWordsToday,
+                dailyReviewsToday: type === 'review' ? state.dailyReviewsToday + 1 : state.dailyReviewsToday,
+            })),
+
+            resetState: () => {
+                set(DEFAULT_STATE);
+                localStorage.removeItem('linguakids_state_z');
+            }
+        }),
+        {
+            name: 'linguakids_state_z', // unique name
+        }
+    )
+);

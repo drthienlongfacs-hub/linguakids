@@ -1,8 +1,7 @@
-// useGameState — XP, levels, streaks, achievements, spaced repetition
-import { useState, useEffect, useCallback } from 'react';
+// Bridging to Zustand store to avoid breaking 15+ pages at once
+import { useCallback, useEffect } from 'react';
 import { USER_MODES, getModeConfig } from '../utils/userMode';
-
-const STORAGE_KEY = 'linguakids_state';
+import { useGameStore } from '../store/useGameStore';
 
 const LEVELS = [
     { level: 1, title: 'Bé Mầm Non', titleEn: 'Little Seedling', emoji: '🌱', xpNeeded: 0 },
@@ -39,280 +38,76 @@ const BADGES = [
     { id: 'perfect_quiz', title: 'Xuất Sắc', emoji: '💯', condition: (s) => s.perfectQuizzes >= 1 },
 ];
 
-const DEFAULT_STATE = {
-    childName: '',
-    avatarEmoji: '🐼',
-    xp: 0,
-    streak: 0,
-    lastActiveDate: null,
-    wordsLearned: [],     // Array of { word, lang, masteredAt, reviewCount, nextReview }
-    englishWordsLearned: 0,
-    chineseWordsLearned: 0,
-    gamesPlayed: 0,
-    perfectQuizzes: 0,
-    unlockedBadges: [],
-    soundEnabled: true,
-    totalSessions: 0,
-    sessionStartTime: null,
-    topicProgress: {},    // { topicId: { completed: number, total: number } }
-    // Phase 1: Daily tracking
-    activityDates: [],     // ISO date strings of days practiced
-    dailyGoal: 10,         // Words per day target
-    dailyWordsToday: 0,    // Words completed today
-    dailyReviewsToday: 0,  // Reviews completed today
-    lastDailyReset: null,  // Date string of last daily reset
-    freezesUsedThisWeek: 0,
-    // v5.0: Dual mode
-    userMode: USER_MODES.KIDS,  // 'kids' or 'adult'
-};
-
-function loadState() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            return { ...DEFAULT_STATE, ...JSON.parse(saved) };
-        }
-    } catch (e) {
-        console.warn('Failed to load game state:', e);
-    }
-    return { ...DEFAULT_STATE };
-}
-
-function saveState(state) {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-        console.warn('Failed to save game state:', e);
-    }
-}
-
 export function useGameState() {
-    const [state, setState] = useState(loadState);
+    const store = useGameStore();
 
-    // Save state whenever it changes
+    // Trigger daily check on mount
     useEffect(() => {
-        saveState(state);
-    }, [state]);
-
-    // Check and update streak on mount + reset daily counters
-    useEffect(() => {
-        const today = new Date().toDateString();
-        if (state.lastActiveDate !== today) {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const isConsecutive = state.lastActiveDate === yesterday.toDateString();
-
-            setState(prev => ({
-                ...prev,
-                streak: isConsecutive ? prev.streak + 1 : (prev.lastActiveDate === today ? prev.streak : 1),
-                lastActiveDate: today,
-                totalSessions: prev.totalSessions + 1,
-                sessionStartTime: Date.now(),
-                // Reset daily counters
-                dailyWordsToday: prev.lastDailyReset === today ? prev.dailyWordsToday : 0,
-                dailyReviewsToday: prev.lastDailyReset === today ? prev.dailyReviewsToday : 0,
-                lastDailyReset: today,
-                // Track activity date
-                activityDates: prev.activityDates.includes(today)
-                    ? prev.activityDates
-                    : [...prev.activityDates.slice(-90), today], // Keep last 90 days
-            }));
-        }
+        store.checkAndResetDaily();
     }, []);
 
-    // Add XP
-    const addXP = useCallback((amount) => {
-        setState(prev => ({ ...prev, xp: prev.xp + amount }));
-    }, []);
-
-    // Learn a word (track for spaced repetition)
-    const learnWord = useCallback((word, lang) => {
-        setState(prev => {
-            const isNew = !prev.wordsLearned.find(w => w.word === word && w.lang === lang);
-            if (!isNew) return prev;
-
-            const now = Date.now();
-            const newWordEntry = {
-                word,
-                lang,
-                masteredAt: now,
-                reviewCount: 0,
-                nextReview: now + 24 * 60 * 60 * 1000, // 1 day
-            };
-
-            return {
-                ...prev,
-                wordsLearned: [...prev.wordsLearned, newWordEntry],
-                englishWordsLearned: prev.englishWordsLearned + (lang === 'en' ? 1 : 0),
-                chineseWordsLearned: prev.chineseWordsLearned + (lang === 'cn' ? 1 : 0),
-                xp: prev.xp + 10, // +10 XP per new word
-            };
-        });
-    }, []);
-
-    // Record game played
-    const recordGame = useCallback((isPerfect = false) => {
-        setState(prev => ({
-            ...prev,
-            gamesPlayed: prev.gamesPlayed + 1,
-            perfectQuizzes: prev.perfectQuizzes + (isPerfect ? 1 : 0),
-            xp: prev.xp + (isPerfect ? 25 : 15),
-        }));
-    }, []);
-
-    // Update topic progress
-    const updateTopicProgress = useCallback((topicId, completed, total) => {
-        setState(prev => ({
-            ...prev,
-            topicProgress: {
-                ...prev.topicProgress,
-                [topicId]: { completed, total },
-            },
-        }));
-    }, []);
-
-    // Set child name
-    const setChildName = useCallback((name) => {
-        setState(prev => ({ ...prev, childName: name }));
-    }, []);
-
-    // Set avatar
-    const setAvatar = useCallback((emoji) => {
-        setState(prev => ({ ...prev, avatarEmoji: emoji }));
-    }, []);
-
-    // Toggle sound
-    const toggleSound = useCallback(() => {
-        setState(prev => ({ ...prev, soundEnabled: !prev.soundEnabled }));
-    }, []);
-
-    // Toggle user mode (Kids ↔ Adult)
-    const toggleMode = useCallback(() => {
-        setState(prev => {
-            const newMode = prev.userMode === USER_MODES.KIDS ? USER_MODES.ADULT : USER_MODES.KIDS;
-            const config = getModeConfig(newMode);
-            return { ...prev, userMode: newMode, dailyGoal: config.dailyGoal };
-        });
-    }, []);
-
-    // Get current level (mode-aware)
-    const activeLevels = state.userMode === USER_MODES.ADULT ? ADULT_LEVELS : LEVELS;
+    const activeLevels = store.userMode === USER_MODES.ADULT ? ADULT_LEVELS : LEVELS;
     const currentLevel = activeLevels.reduce((acc, lvl) => {
-        if (state.xp >= lvl.xpNeeded) return lvl;
+        if (store.xp >= lvl.xpNeeded) return lvl;
         return acc;
     }, activeLevels[0]);
 
     const nextLevel = activeLevels[activeLevels.indexOf(currentLevel) + 1] || null;
-    const xpForNext = nextLevel ? nextLevel.xpNeeded - state.xp : 0;
+    const xpForNext = nextLevel ? nextLevel.xpNeeded - store.xp : 0;
     const levelProgress = nextLevel
-        ? ((state.xp - currentLevel.xpNeeded) / (nextLevel.xpNeeded - currentLevel.xpNeeded)) * 100
+        ? ((store.xp - currentLevel.xpNeeded) / (nextLevel.xpNeeded - currentLevel.xpNeeded)) * 100
         : 100;
 
-    // Check unlocked badges
-    const unlockedBadges = BADGES.filter(badge => badge.condition(state));
-    const lockedBadges = BADGES.filter(badge => !badge.condition(state));
+    const unlockedBadges = BADGES.filter(badge => badge.condition(store));
+    const lockedBadges = BADGES.filter(badge => !badge.condition(store));
 
-    // SM-2 Adaptive Difficulty System
-    // Calculates difficulty based on performance history
     const getDifficulty = useCallback(() => {
-        const { gamesPlayed, perfectQuizzes, wordsLearned, streak } = state;
+        const { gamesPlayed, perfectQuizzes, wordsLearned, streak } = store;
         if (gamesPlayed < 3) return 'easy';
 
         const accuracy = gamesPlayed > 0 ? perfectQuizzes / gamesPlayed : 0;
         const wordCount = wordsLearned.length;
 
-        // Factor in: accuracy, word count, streak length
         const score = (accuracy * 40) + (Math.min(wordCount, 50) / 50 * 30) + (Math.min(streak, 7) / 7 * 30);
 
         if (score >= 70) return 'hard';
         if (score >= 40) return 'medium';
         return 'easy';
-    }, [state]);
+    }, [store.gamesPlayed, store.perfectQuizzes, store.wordsLearned.length, store.streak]);
 
-    // Get words due for review (spaced repetition)
     const getWordsForReview = useCallback(() => {
         const now = Date.now();
-        return state.wordsLearned.filter(w => w.nextReview && w.nextReview <= now);
-    }, [state.wordsLearned]);
+        return store.wordsLearned.filter(w => w.nextReview && w.nextReview <= now);
+    }, [store.wordsLearned]);
 
-    // Update word review (SM-2 algorithm)
-    const reviewWord = useCallback((word, lang, quality) => {
-        // quality: 0-5 (0=blackout, 5=perfect)
-        setState(prev => {
-            const newWords = prev.wordsLearned.map(w => {
-                if (w.word !== word || w.lang !== lang) return w;
-
-                const ef = Math.max(1.3, (w.ef || 2.5) + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02)));
-                const count = (w.reviewCount || 0) + 1;
-                let interval;
-
-                if (quality < 3) {
-                    interval = 1; // Reset if poor
-                } else if (count === 1) {
-                    interval = 1;
-                } else if (count === 2) {
-                    interval = 6;
-                } else {
-                    interval = Math.round((w.lastInterval || 1) * ef);
-                }
-
-                return {
-                    ...w,
-                    reviewCount: count,
-                    ef,
-                    lastInterval: interval,
-                    nextReview: Date.now() + interval * 24 * 60 * 60 * 1000,
-                    lastReviewQuality: quality,
-                };
-            });
-            return { ...prev, wordsLearned: newWords };
-        });
-    }, []);
-
-    // Reset state 
-    const resetState = useCallback(() => {
-        setState({ ...DEFAULT_STATE });
-        localStorage.removeItem(STORAGE_KEY);
-    }, []);
-
-    // Record daily activity (called when word learned or reviewed)
-    const recordDailyActivity = useCallback((type = 'learn') => {
-        setState(prev => ({
-            ...prev,
-            dailyWordsToday: type === 'learn' ? prev.dailyWordsToday + 1 : prev.dailyWordsToday,
-            dailyReviewsToday: type === 'review' ? prev.dailyReviewsToday + 1 : prev.dailyReviewsToday,
-        }));
-    }, []);
-
-    // Get daily progress stats
     const getDailyStats = useCallback(() => {
-        const totalToday = state.dailyWordsToday + state.dailyReviewsToday;
-        const progress = Math.min(100, Math.round((totalToday / state.dailyGoal) * 100));
-        const wordsForReview = state.wordsLearned.filter(w => w.nextReview && w.nextReview <= Date.now()).length;
+        const totalToday = store.dailyWordsToday + store.dailyReviewsToday;
+        const progress = Math.min(100, Math.round((totalToday / store.dailyGoal) * 100));
+        const wordsForReview = store.wordsLearned.filter(w => w.nextReview && w.nextReview <= Date.now()).length;
+
         return {
-            wordsLearned: state.dailyWordsToday,
-            wordsReviewed: state.dailyReviewsToday,
+            wordsLearned: store.dailyWordsToday,
+            wordsReviewed: store.dailyReviewsToday,
             totalToday,
-            goal: state.dailyGoal,
+            goal: store.dailyGoal,
             progress,
-            goalReached: totalToday >= state.dailyGoal,
+            goalReached: totalToday >= store.dailyGoal,
             wordsForReview,
         };
-    }, [state]);
+    }, [store.dailyWordsToday, store.dailyReviewsToday, store.dailyGoal, store.wordsLearned]);
 
-    // Mode config helper
-    const modeConfig = getModeConfig(state.userMode);
+    const modeConfig = getModeConfig(store.userMode);
 
     return {
-        state,
-        addXP,
-        learnWord,
-        recordGame,
-        updateTopicProgress,
-        setChildName,
-        setAvatar,
-        toggleSound,
-        toggleMode,
+        state: store,
+        addXP: store.addXP,
+        learnWord: store.learnWord,
+        recordGame: store.recordGame,
+        updateTopicProgress: store.updateTopicProgress,
+        setChildName: store.setChildName,
+        setAvatar: store.setAvatar,
+        toggleSound: store.toggleSound,
+        toggleMode: store.toggleMode,
         modeConfig,
         currentLevel,
         nextLevel,
@@ -322,12 +117,11 @@ export function useGameState() {
         lockedBadges,
         allBadges: BADGES,
         levels: activeLevels,
-        resetState,
+        resetState: store.resetState,
         getDifficulty,
         getWordsForReview,
-        reviewWord,
-        recordDailyActivity,
+        reviewWord: store.reviewWord,
+        recordDailyActivity: store.recordDailyActivity,
         getDailyStats,
     };
 }
-

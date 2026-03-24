@@ -268,7 +268,7 @@ export function useSpeech() {
 
             // Auto-stop after 8 seconds
             const timeout = setTimeout(() => {
-                try { recognition.stop(); } catch (e) { }
+                try { recognition.stop(); } catch (_err) { /* ignore */ }
                 setIsListening(false);
             }, 8000);
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // Quiz component supporting MCQ, Gap-fill, True/False
-export default function ListeningQuiz({ quiz, lessonTitle, onComplete }) {
+export default function ListeningQuiz({ quiz, onComplete }) {
     const [currentQ, setCurrentQ] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [gapInput, setGapInput] = useState('');

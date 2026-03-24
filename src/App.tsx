@@ -1,5 +1,5 @@
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { GameStateProvider, useGame } from './context/GameStateContext';
+import { useGameStore } from './store/useGameStore';
 import NavBar from './components/NavBar';
 import Home from './pages/Home';
 import LearnEnglish from './pages/LearnEnglish';
@@ -31,8 +31,8 @@ import { isAdultMode } from './utils/userMode';
 import './index.css';
 
 function AppContent() {
-  const { state } = useGame();
-  const adultClass = isAdultMode(state.userMode) ? 'adult-mode' : '';
+  const userMode = useGameStore(state => state.userMode);
+  const adultClass = isAdultMode(userMode) ? 'adult-mode' : '';
 
   return (
     <div className={`app-layout ${adultClass}`}>
@@ -86,11 +86,9 @@ function AppContent() {
 
 export default function App() {
   return (
-    <GameStateProvider>
-      <HashRouter>
-        <AppContent />
-      </HashRouter>
-    </GameStateProvider>
+    <HashRouter>
+      <AppContent />
+    </HashRouter>
   );
 }
 

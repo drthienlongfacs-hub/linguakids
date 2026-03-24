@@ -85,9 +85,9 @@ function SpeakingExercise({ lesson, onBack, adult }) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = 'en-US'; u.rate = 0.9;
-        const voices = window.speechSynthesis.getVoices();
-        const v = voices.find(v => v.lang.startsWith('en-US')) || voices.find(v => v.lang.startsWith('en'));
-        if (v) u.voice = v;
+        const allVoices = window.speechSynthesis.getVoices();
+        const enVoice = allVoices.find(voice => voice.lang.startsWith('en-US')) || allVoices.find(voice => voice.lang.startsWith('en'));
+        if (enVoice) u.voice = enVoice;
         window.speechSynthesis.speak(u);
     }, []);
 
