@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ENGLISH_TOPICS } from '../data/english';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
+import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
 
 export default function Lesson() {
@@ -189,32 +190,13 @@ export default function Lesson() {
                 </button>
             </div>
 
-            {/* Speaking result */}
+            {/* Pronunciation Detail */}
             {speakResult && (
-                <div className="animate-pop-in" style={{
-                    textAlign: 'center',
-                    marginTop: '16px',
-                    padding: '12px',
-                    borderRadius: 'var(--radius-lg)',
-                    background: speakResult.score >= 60 ? '#ECFDF5' : '#FFF8F0',
-                    border: `2px solid ${speakResult.score >= 60 ? 'var(--color-success)' : 'var(--color-xp)'}`,
-                }}>
-                    <span style={{ fontSize: '1.5rem' }}>
-                        {speakResult.score >= 80 ? '🌟' : speakResult.score >= 60 ? '👍' : '💪'}
-                    </span>
-                    <p style={{ fontFamily: 'var(--font-display)', fontWeight: 600, marginTop: '4px' }}>
-                        {speakResult.score >= 80
-                            ? 'Xuất sắc! Phát âm rất tốt!'
-                            : speakResult.score >= 60
-                                ? 'Giỏi lắm! Gần đúng rồi!'
-                                : 'Cố lên! Thử lại nào!'}
-                    </p>
-                    {transcript && (
-                        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', marginTop: '4px' }}>
-                            Con nói: "{transcript}"
-                        </p>
-                    )}
-                </div>
+                <PronunciationDetail
+                    result={speakResult}
+                    targetWord={word.word}
+                    onPlayback={() => speakEnglish(word.word)}
+                />
             )}
 
             {/* Next button */}
