@@ -46,7 +46,8 @@ export default function Lesson() {
     const handleSpeak = () => {
         setSpeakResult(null);
         startListening('en-US', (results) => {
-            const result = checkPronunciation(results[0], word.word);
+            // Pass all alternatives for best matching (Levenshtein + phonetic)
+            const result = checkPronunciation(results, word.word);
             setSpeakResult(result);
             if (result.score >= 60) {
                 addXP(5);
