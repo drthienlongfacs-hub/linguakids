@@ -49,9 +49,6 @@ export default function LearnChinese() {
                                 )}
                                 <div className="topic-card__emoji">{topic.emoji}</div>
                                 <div className="topic-card__title">{topic.title}</div>
-                                <div className="topic-card__count" style={{ fontFamily: 'var(--font-display)' }}>
-                                    {topic.titleCn}
-                                </div>
                                 <div className="topic-card__count">{topic.words.length} từ</div>
                                 <div className="topic-card__progress">
                                     <div

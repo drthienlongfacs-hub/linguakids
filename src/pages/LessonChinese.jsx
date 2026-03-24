@@ -1,4 +1,5 @@
 // LessonChinese — Chinese character flashcard + pinyin + tone + speaking
+// RCA Fix: Auto-extract tones from pinyin diacritics (word.tones was undefined → crash)
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CHINESE_TOPICS, TONE_COLORS } from '../data/chinese';
@@ -6,6 +7,19 @@ import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
 import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
+
+// Auto-extract tone numbers from pinyin diacritics
+// ā ē ī ō ū ǖ → T1, á é í ó ú ǘ → T2, ǎ ě ǐ ǒ ǔ ǚ → T3, à è ì ò ù ǜ → T4
+function extractTonesFromPinyin(pinyin) {
+    if (!pinyin) return [0];
+    return pinyin.split(' ').map(syllable => {
+        if (/[āēīōūǖ]/.test(syllable)) return 1;
+        if (/[áéíóúǘ]/.test(syllable)) return 2;
+        if (/[ǎěǐǒǔǚ]/.test(syllable)) return 3;
+        if (/[àèìòùǜ]/.test(syllable)) return 4;
+        return 0; // neutral tone
+    });
+}
 
 export default function LessonChinese() {
     const { topicId } = useParams();
@@ -77,9 +91,11 @@ export default function LessonChinese() {
         setSpeakResult(null);
     };
 
-    // Render pinyin with tone colors
-    const renderPinyin = (pinyin, tones) => {
+    // Render pinyin with tone colors — auto-extract tones from diacritics
+    const renderPinyin = (pinyin) => {
+        if (!pinyin) return null;
         const syllables = pinyin.split(' ');
+        const tones = extractTonesFromPinyin(pinyin);
         return syllables.map((s, i) => (
             <span key={i} style={{
                 color: TONE_COLORS[tones[i]] || TONE_COLORS[0],
@@ -153,7 +169,7 @@ export default function LessonChinese() {
                             {word.character}
                         </div>
                         <div style={{ marginBottom: '8px' }}>
-                            {renderPinyin(word.pinyin, word.tones)}
+                            {renderPinyin(word.pinyin)}
                         </div>
                         <div className="flashcard-translation">{word.vietnamese}</div>
                         <p style={{ marginTop: '12px', fontSize: '0.85rem', color: 'var(--color-text-light)' }}>
@@ -177,19 +193,22 @@ export default function LessonChinese() {
                 marginTop: '16px',
                 flexWrap: 'wrap',
             }}>
-                {word.tones.filter((v, i, a) => a.indexOf(v) === i).map(t => (
-                    <span key={t} style={{
-                        fontSize: '0.75rem',
-                        padding: '4px 10px',
-                        borderRadius: '99px',
-                        background: `${TONE_COLORS[t]}15`,
-                        color: TONE_COLORS[t],
-                        fontWeight: 600,
-                        fontFamily: 'var(--font-display)',
-                    }}>
-                        Thanh {t === 0 ? 'nhẹ' : t}
-                    </span>
-                ))}
+                {(() => {
+                    const tones = extractTonesFromPinyin(word.pinyin);
+                    return tones.filter((v, i, a) => a.indexOf(v) === i).map(t => (
+                        <span key={t} style={{
+                            fontSize: '0.75rem',
+                            padding: '4px 10px',
+                            borderRadius: '99px',
+                            background: `${TONE_COLORS[t]}15`,
+                            color: TONE_COLORS[t],
+                            fontWeight: 600,
+                            fontFamily: 'var(--font-display)',
+                        }}>
+                            Thanh {t === 0 ? 'nhẹ' : t}
+                        </span>
+                    ));
+                })()}
             </div>
 
             {/* Audio & Speaking */}
