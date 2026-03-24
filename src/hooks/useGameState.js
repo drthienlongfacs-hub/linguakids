@@ -1,0 +1,202 @@
+// useGameState — XP, levels, streaks, achievements, spaced repetition
+import { useState, useEffect, useCallback } from 'react';
+
+const STORAGE_KEY = 'linguakids_state';
+
+const LEVELS = [
+    { level: 1, title: 'Bé Mầm Non', titleEn: 'Little Seedling', emoji: '🌱', xpNeeded: 0 },
+    { level: 2, title: 'Bé Khám Phá', titleEn: 'Explorer', emoji: '🌿', xpNeeded: 100 },
+    { level: 3, title: 'Bé Thông Minh', titleEn: 'Smart Kid', emoji: '🌳', xpNeeded: 250 },
+    { level: 4, title: 'Bé Giỏi Giang', titleEn: 'Champion', emoji: '⭐', xpNeeded: 500 },
+    { level: 5, title: 'Bé Siêu Sao', titleEn: 'Superstar', emoji: '🌟', xpNeeded: 800 },
+    { level: 6, title: 'Bé Tài Năng', titleEn: 'Prodigy', emoji: '🏆', xpNeeded: 1200 },
+    { level: 7, title: 'Nhà Ngôn Ngữ', titleEn: 'Linguist', emoji: '👑', xpNeeded: 2000 },
+];
+
+const BADGES = [
+    { id: 'first_word', title: 'Từ Đầu Tiên', emoji: '🎯', condition: (s) => s.wordsLearned.length >= 1 },
+    { id: 'ten_words', title: '10 Từ Mới', emoji: '📚', condition: (s) => s.wordsLearned.length >= 10 },
+    { id: 'twenty_words', title: '20 Từ Mới', emoji: '🎓', condition: (s) => s.wordsLearned.length >= 20 },
+    { id: 'fifty_words', title: '50 Từ Mới', emoji: '🏅', condition: (s) => s.wordsLearned.length >= 50 },
+    { id: 'streak_3', title: '3 Ngày Liên Tiếp', emoji: '🔥', condition: (s) => s.streak >= 3 },
+    { id: 'streak_7', title: '1 Tuần Liên Tiếp', emoji: '💎', condition: (s) => s.streak >= 7 },
+    { id: 'first_game', title: 'Game Thủ Nhí', emoji: '🎮', condition: (s) => s.gamesPlayed >= 1 },
+    { id: 'ten_games', title: 'Vua Trò Chơi', emoji: '👾', condition: (s) => s.gamesPlayed >= 10 },
+    { id: 'english_starter', title: 'En → Bắt Đầu', emoji: '🇬🇧', condition: (s) => s.englishWordsLearned >= 5 },
+    { id: 'chinese_starter', title: 'Cn → Bắt Đầu', emoji: '🇨🇳', condition: (s) => s.chineseWordsLearned >= 5 },
+    { id: 'bilingual', title: 'Song Ngữ', emoji: '🌍', condition: (s) => s.englishWordsLearned >= 10 && s.chineseWordsLearned >= 10 },
+    { id: 'perfect_quiz', title: 'Xuất Sắc', emoji: '💯', condition: (s) => s.perfectQuizzes >= 1 },
+];
+
+const DEFAULT_STATE = {
+    childName: '',
+    avatarEmoji: '🐼',
+    xp: 0,
+    streak: 0,
+    lastActiveDate: null,
+    wordsLearned: [],     // Array of { word, lang, masteredAt, reviewCount, nextReview }
+    englishWordsLearned: 0,
+    chineseWordsLearned: 0,
+    gamesPlayed: 0,
+    perfectQuizzes: 0,
+    unlockedBadges: [],
+    soundEnabled: true,
+    totalSessions: 0,
+    sessionStartTime: null,
+    topicProgress: {},    // { topicId: { completed: number, total: number } }
+};
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            return { ...DEFAULT_STATE, ...JSON.parse(saved) };
+        }
+    } catch (e) {
+        console.warn('Failed to load game state:', e);
+    }
+    return { ...DEFAULT_STATE };
+}
+
+function saveState(state) {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        console.warn('Failed to save game state:', e);
+    }
+}
+
+export function useGameState() {
+    const [state, setState] = useState(loadState);
+
+    // Save state whenever it changes
+    useEffect(() => {
+        saveState(state);
+    }, [state]);
+
+    // Check and update streak on mount
+    useEffect(() => {
+        const today = new Date().toDateString();
+        if (state.lastActiveDate !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const isConsecutive = state.lastActiveDate === yesterday.toDateString();
+
+            setState(prev => ({
+                ...prev,
+                streak: isConsecutive ? prev.streak + 1 : (prev.lastActiveDate === today ? prev.streak : 1),
+                lastActiveDate: today,
+                totalSessions: prev.totalSessions + 1,
+                sessionStartTime: Date.now(),
+            }));
+        }
+    }, []);
+
+    // Add XP
+    const addXP = useCallback((amount) => {
+        setState(prev => ({ ...prev, xp: prev.xp + amount }));
+    }, []);
+
+    // Learn a word (track for spaced repetition)
+    const learnWord = useCallback((word, lang) => {
+        setState(prev => {
+            const isNew = !prev.wordsLearned.find(w => w.word === word && w.lang === lang);
+            if (!isNew) return prev;
+
+            const now = Date.now();
+            const newWordEntry = {
+                word,
+                lang,
+                masteredAt: now,
+                reviewCount: 0,
+                nextReview: now + 24 * 60 * 60 * 1000, // 1 day
+            };
+
+            return {
+                ...prev,
+                wordsLearned: [...prev.wordsLearned, newWordEntry],
+                englishWordsLearned: prev.englishWordsLearned + (lang === 'en' ? 1 : 0),
+                chineseWordsLearned: prev.chineseWordsLearned + (lang === 'cn' ? 1 : 0),
+                xp: prev.xp + 10, // +10 XP per new word
+            };
+        });
+    }, []);
+
+    // Record game played
+    const recordGame = useCallback((isPerfect = false) => {
+        setState(prev => ({
+            ...prev,
+            gamesPlayed: prev.gamesPlayed + 1,
+            perfectQuizzes: prev.perfectQuizzes + (isPerfect ? 1 : 0),
+            xp: prev.xp + (isPerfect ? 25 : 15),
+        }));
+    }, []);
+
+    // Update topic progress
+    const updateTopicProgress = useCallback((topicId, completed, total) => {
+        setState(prev => ({
+            ...prev,
+            topicProgress: {
+                ...prev.topicProgress,
+                [topicId]: { completed, total },
+            },
+        }));
+    }, []);
+
+    // Set child name
+    const setChildName = useCallback((name) => {
+        setState(prev => ({ ...prev, childName: name }));
+    }, []);
+
+    // Set avatar
+    const setAvatar = useCallback((emoji) => {
+        setState(prev => ({ ...prev, avatarEmoji: emoji }));
+    }, []);
+
+    // Toggle sound
+    const toggleSound = useCallback(() => {
+        setState(prev => ({ ...prev, soundEnabled: !prev.soundEnabled }));
+    }, []);
+
+    // Get current level
+    const currentLevel = LEVELS.reduce((acc, lvl) => {
+        if (state.xp >= lvl.xpNeeded) return lvl;
+        return acc;
+    }, LEVELS[0]);
+
+    const nextLevel = LEVELS[LEVELS.indexOf(currentLevel) + 1] || null;
+    const xpForNext = nextLevel ? nextLevel.xpNeeded - state.xp : 0;
+    const levelProgress = nextLevel
+        ? ((state.xp - currentLevel.xpNeeded) / (nextLevel.xpNeeded - currentLevel.xpNeeded)) * 100
+        : 100;
+
+    // Check unlocked badges
+    const unlockedBadges = BADGES.filter(badge => badge.condition(state));
+    const lockedBadges = BADGES.filter(badge => !badge.condition(state));
+
+    // Reset state 
+    const resetState = useCallback(() => {
+        setState({ ...DEFAULT_STATE });
+        localStorage.removeItem(STORAGE_KEY);
+    }, []);
+
+    return {
+        state,
+        addXP,
+        learnWord,
+        recordGame,
+        updateTopicProgress,
+        setChildName,
+        setAvatar,
+        toggleSound,
+        currentLevel,
+        nextLevel,
+        xpForNext,
+        levelProgress,
+        unlockedBadges,
+        lockedBadges,
+        allBadges: BADGES,
+        levels: LEVELS,
+        resetState,
+    };
+}
