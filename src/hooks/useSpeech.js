@@ -1,7 +1,8 @@
 // useSpeech — Premium TTS + Speech Recognition
 // RCA Fix v2: Proper speech queue, iOS-safe timing, reliable full-sentence playback
-// Root causes fixed: cancel-kills-queue, aggressive pause/resume, no queue, bad timing
+// v3: Enhanced recognition with confidence + N-best alternatives
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { checkWordPronunciation } from '../utils/pronunciationEngine';
 
 // Voice preference lists — best quality first
 const VOICE_PREFERENCES = {
@@ -253,11 +254,15 @@ export function useSpeech() {
             };
 
             recognition.onresult = (event) => {
+                // Pass full alternatives with confidence scores
                 const results = [];
                 for (let i = 0; i < event.results[0].length; i++) {
-                    results.push(event.results[0][i].transcript.toLowerCase().trim());
+                    results.push({
+                        text: event.results[0][i].transcript.toLowerCase().trim(),
+                        confidence: event.results[0][i].confidence || 0.5,
+                    });
                 }
-                setTranscript(results[0]);
+                setTranscript(results[0]?.text || '');
                 if (onResult) onResult(results);
             };
 
@@ -292,24 +297,19 @@ export function useSpeech() {
         setIsListening(false);
     }, []);
 
-    // Kid-friendly pronunciation checking
-    const checkPronunciation = useCallback((spoken, expected) => {
-        if (!spoken || !expected) return { score: 40, feedback: 'tryAgain' };
+    // Enhanced pronunciation checking using pronunciationEngine
+    const checkPronunciation = useCallback((spokenAlts, expected) => {
+        if (!expected) return { score: 40, feedback: 'tryAgain' };
 
-        const s = spoken.toLowerCase().trim();
-        const e = expected.toLowerCase().trim();
+        // Handle both old format (string) and new format (array of {text, confidence})
+        const alternatives = typeof spokenAlts === 'string'
+            ? [{ text: spokenAlts, confidence: 0.5 }]
+            : Array.isArray(spokenAlts)
+                ? spokenAlts.map(a => typeof a === 'string' ? { text: a, confidence: 0.5 } : a)
+                : [{ text: String(spokenAlts), confidence: 0.5 }];
 
-        if (s === e) return { score: 100, feedback: 'perfect' };
-        if (s.includes(e) || e.includes(s)) return { score: 85, feedback: 'great' };
+        return checkWordPronunciation(alternatives, expected);
 
-        const sWords = s.split(/\s+/);
-        const eWords = e.split(/\s+/);
-        const matching = eWords.filter(ew => sWords.some(sw => sw.includes(ew) || ew.includes(sw)));
-        if (matching.length > 0) return { score: 70, feedback: 'good' };
-
-        if (s[0] === e[0]) return { score: 55, feedback: 'good' };
-
-        return { score: 40, feedback: 'tryAgain' };
     }, []);
 
     // Debug info

@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ENGLISH_CONVERSATIONS, CHINESE_CONVERSATIONS } from '../data/conversations';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
+import { analyzeWordByWord } from '../utils/pronunciationEngine';
 import StarBurst from '../components/StarBurst';
 
 const SPEAKER_INFO = {
@@ -14,33 +15,8 @@ const SPEAKER_INFO = {
     child: { name: 'Con', emoji: '🧒', color: '#10B981' },
 };
 
-// ELSA-style word-by-word pronunciation analysis
-function analyzeWordsDetailed(spoken, expectedHint) {
-    if (!spoken || !expectedHint) return { words: [], score: 0, level: 'retry', color: '#EF4444', label: '🔄 Thử lại nào!' };
-    const spokenWords = spoken.toLowerCase().replace(/[.,!?']/g, '').split(/\s+/);
-    const hintWords = expectedHint.toLowerCase().replace(/[.,!?']/g, '').split(/\s+/);
-
-    const words = hintWords.map((hw, i) => {
-        const sw = spokenWords[i];
-        if (!sw) return { word: hw, status: 'missing', color: '#EF4444' };
-        if (sw === hw) return { word: hw, status: 'perfect', color: '#10B981' };
-        if (hw.length > 2 && sw.startsWith(hw.substring(0, Math.ceil(hw.length * 0.5))))
-            return { word: hw, status: 'close', color: '#F59E0B' };
-        return { word: hw, status: 'wrong', color: '#EF4444' };
-    });
-
-    const perfect = words.filter(w => w.status === 'perfect').length;
-    const close = words.filter(w => w.status === 'close').length;
-    const score = Math.round(((perfect * 100 + close * 60) / Math.max(words.length, 1)));
-
-    let level, label, color;
-    if (score >= 80) { level = 'excellent'; label = '🌟 Xuất sắc!'; color = '#10B981'; }
-    else if (score >= 50) { level = 'good'; label = '👍 Tốt lắm!'; color = '#F59E0B'; }
-    else if (score >= 25) { level = 'fair'; label = '💪 Gần đúng!'; color = '#3B82F6'; }
-    else { level = 'retry'; label = '🔄 Thử lại!'; color = '#EF4444'; }
-
-    return { words, score, level, label, color };
-}
+// Use external engine (Levenshtein + phonetic + multi-alt)
+// Removed inline analyzeWordsDetailed — now in pronunciationEngine.js
 
 export default function Conversation() {
     const { lang, convId } = useParams();
@@ -129,13 +105,14 @@ export default function Conversation() {
         const recognitionLang = isEnglish ? 'en-US' : 'zh-CN';
 
         startListening(recognitionLang, (results) => {
-            const spoken = results[0];
+            // results is now array of {text, confidence}
             const currentTurn = currentChildIdx >= 0 ? conv.dialogue[currentChildIdx] : null;
             if (!currentTurn) return;
 
-            // ELSA-style word-by-word analysis against the hint
-            const result = analyzeWordsDetailed(spoken, currentTurn.hint);
-            setLastResult({ ...result, spoken });
+            // Use advanced engine with all alternatives
+            const result = analyzeWordByWord(results, currentTurn.hint);
+            const spokenText = results[0]?.text || results[0] || '';
+            setLastResult({ ...result, spoken: spokenText });
             setTotalScore(prev => prev + result.score);
             setAttempts(prev => prev + 1);
 
