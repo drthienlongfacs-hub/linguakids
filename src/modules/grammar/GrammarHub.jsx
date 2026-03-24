@@ -27,13 +27,21 @@ export default function GrammarHub() {
             </div>
 
             <div className="lh-lesson-grid">
-                {GRAMMAR_TOPICS.map(t => (
-                    <div key={t.id} className="lh-lesson-card" onClick={() => setActiveTopic(t)}>
+                {GRAMMAR_TOPICS.map((t, i) => (
+                    <div key={t.id} className="lh-lesson-card reveal" style={{ animationDelay: `${i * 0.06}s` }} onClick={() => setActiveTopic(t)}>
                         <span className="lh-lesson-emoji">{t.emoji}</span>
                         <div className="lh-lesson-info">
                             <h4>{t.title}</h4>
                             <p className="lh-lesson-title-vi">{t.titleVi}</p>
-                            <div className="lh-lesson-meta"><span>{t.level}</span><span>{t.sections?.length || 0} sections</span><span>{t.exercises?.length || 0} exercises</span></div>
+                            <div className="lh-lesson-meta">
+                                <span style={{
+                                    background: t.level === 'B1' ? '#F59E0B15' : '#8B5CF615',
+                                    color: t.level === 'B1' ? '#F59E0B' : '#8B5CF6',
+                                    padding: '2px 8px', borderRadius: '99px', fontSize: '0.7rem', fontWeight: 700,
+                                }}>{t.level}</span>
+                                <span>{t.sections?.length || 0} {adult ? 'sections' : 'phần'}</span>
+                                <span>{t.exercises?.length || 0} {adult ? 'exercises' : 'bài'}</span>
+                            </div>
                         </div>
                         <span className="lh-lesson-arrow">▶</span>
                     </div>

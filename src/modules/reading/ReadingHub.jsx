@@ -30,14 +30,21 @@ export default function ReadingHub() {
             </div>
 
             <div className="lh-lesson-grid">
-                {passages.map(p => (
-                    <div key={p.id} className="lh-lesson-card" onClick={() => setActivePassage(p)}>
+                {passages.map((p, i) => (
+                    <div key={p.id} className="lh-lesson-card reveal" style={{ animationDelay: `${i * 0.06}s` }} onClick={() => setActivePassage(p)}>
                         <span className="lh-lesson-emoji">{p.emoji}</span>
                         <div className="lh-lesson-info">
                             <h4>{p.title}</h4>
                             <p className="lh-lesson-title-vi">{p.titleVi}</p>
                             <div className="lh-lesson-meta">
-                                <span>{p.level}</span><span>{p.wordCount} từ</span><span>⏱️ {p.readingTime}</span><span>📝 {p.quiz.length} câu</span>
+                                <span style={{
+                                    background: p.level === 'A1' ? '#10B98115' : p.level === 'A2' ? '#F59E0B15' : '#6366F115',
+                                    color: p.level === 'A1' ? '#10B981' : p.level === 'A2' ? '#F59E0B' : '#6366F1',
+                                    padding: '2px 8px', borderRadius: '99px', fontSize: '0.7rem', fontWeight: 700,
+                                }}>{p.level}</span>
+                                <span>{p.wordCount} {adult ? 'words' : 'từ'}</span>
+                                <span>⏱️ {p.readingTime}</span>
+                                <span>📝 {p.quiz.length} {adult ? 'Q' : 'câu'}</span>
                             </div>
                         </div>
                         <span className="lh-lesson-arrow">▶</span>

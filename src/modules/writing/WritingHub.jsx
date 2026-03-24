@@ -31,10 +31,13 @@ export default function WritingHub() {
             <div className="lh-level-section">
                 <div className="lh-level-header"><h3>📝 {adult ? 'Essay & Report Writing' : 'Viết bài'}</h3></div>
                 <div className="lh-lesson-grid">
-                    {WRITING_PROMPTS.map(p => (
-                        <div key={p.id} className="lh-lesson-card" onClick={() => { setActiveItem(p); setActiveType('essay'); }}>
+                    {WRITING_PROMPTS.map((p, i) => (
+                        <div key={p.id} className="lh-lesson-card reveal" style={{ animationDelay: `${i * 0.06}s` }} onClick={() => { setActiveItem(p); setActiveType('essay'); }}>
                             <span className="lh-lesson-emoji">{p.emoji}</span>
-                            <div className="lh-lesson-info"><h4>{p.title}</h4><p className="lh-lesson-title-vi">{p.examType}</p><div className="lh-lesson-meta"><span>{p.level}</span><span>≥{p.minWords} từ</span><span>⏱️ {Math.round(p.timeLimit / 60)}\'</span></div></div>
+                            <div className="lh-lesson-info"><h4>{p.title}</h4><p className="lh-lesson-title-vi">{p.examType}</p><div className="lh-lesson-meta">
+                                <span style={{ background: '#8B5CF615', color: '#8B5CF6', padding: '2px 8px', borderRadius: '99px', fontSize: '0.7rem', fontWeight: 700 }}>{p.level}</span>
+                                <span>≥{p.minWords} {adult ? 'words' : 'từ'}</span><span>⏱️ {Math.round(p.timeLimit / 60)}'</span>
+                            </div></div>
                             <span className="lh-lesson-arrow">▶</span>
                         </div>
                     ))}
