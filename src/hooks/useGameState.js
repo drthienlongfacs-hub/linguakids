@@ -44,6 +44,13 @@ const DEFAULT_STATE = {
     totalSessions: 0,
     sessionStartTime: null,
     topicProgress: {},    // { topicId: { completed: number, total: number } }
+    // Phase 1: Daily tracking
+    activityDates: [],     // ISO date strings of days practiced
+    dailyGoal: 10,         // Words per day target
+    dailyWordsToday: 0,    // Words completed today
+    dailyReviewsToday: 0,  // Reviews completed today
+    lastDailyReset: null,  // Date string of last daily reset
+    freezesUsedThisWeek: 0,
 };
 
 function loadState() {
@@ -74,7 +81,7 @@ export function useGameState() {
         saveState(state);
     }, [state]);
 
-    // Check and update streak on mount
+    // Check and update streak on mount + reset daily counters
     useEffect(() => {
         const today = new Date().toDateString();
         if (state.lastActiveDate !== today) {
@@ -88,6 +95,14 @@ export function useGameState() {
                 lastActiveDate: today,
                 totalSessions: prev.totalSessions + 1,
                 sessionStartTime: Date.now(),
+                // Reset daily counters
+                dailyWordsToday: prev.lastDailyReset === today ? prev.dailyWordsToday : 0,
+                dailyReviewsToday: prev.lastDailyReset === today ? prev.dailyReviewsToday : 0,
+                lastDailyReset: today,
+                // Track activity date
+                activityDates: prev.activityDates.includes(today)
+                    ? prev.activityDates
+                    : [...prev.activityDates.slice(-90), today], // Keep last 90 days
             }));
         }
     }, []);
@@ -237,6 +252,31 @@ export function useGameState() {
         localStorage.removeItem(STORAGE_KEY);
     }, []);
 
+    // Record daily activity (called when word learned or reviewed)
+    const recordDailyActivity = useCallback((type = 'learn') => {
+        setState(prev => ({
+            ...prev,
+            dailyWordsToday: type === 'learn' ? prev.dailyWordsToday + 1 : prev.dailyWordsToday,
+            dailyReviewsToday: type === 'review' ? prev.dailyReviewsToday + 1 : prev.dailyReviewsToday,
+        }));
+    }, []);
+
+    // Get daily progress stats
+    const getDailyStats = useCallback(() => {
+        const totalToday = state.dailyWordsToday + state.dailyReviewsToday;
+        const progress = Math.min(100, Math.round((totalToday / state.dailyGoal) * 100));
+        const wordsForReview = state.wordsLearned.filter(w => w.nextReview && w.nextReview <= Date.now()).length;
+        return {
+            wordsLearned: state.dailyWordsToday,
+            wordsReviewed: state.dailyReviewsToday,
+            totalToday,
+            goal: state.dailyGoal,
+            progress,
+            goalReached: totalToday >= state.dailyGoal,
+            wordsForReview,
+        };
+    }, [state]);
+
     return {
         state,
         addXP,
@@ -258,6 +298,8 @@ export function useGameState() {
         getDifficulty,
         getWordsForReview,
         reviewWord,
+        recordDailyActivity,
+        getDailyStats,
     };
 }
 

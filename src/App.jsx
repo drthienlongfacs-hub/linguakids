@@ -18,6 +18,7 @@ import StoryList from './pages/StoryList';
 import StrokeWriter from './pages/StrokeWriter';
 import PhrasePractice from './pages/PhrasePractice';
 import PhraseTopicList from './pages/PhraseTopicList';
+import DailyReview from './pages/DailyReview';
 import './index.css';
 
 export default function App() {
@@ -41,6 +42,7 @@ export default function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/review" element={<DailyReview />} />
             <Route path="/english" element={<LearnEnglish />} />
             <Route path="/chinese" element={<LearnChinese />} />
             <Route path="/games" element={<Games />} />

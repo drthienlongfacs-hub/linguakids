@@ -3,7 +3,8 @@ import { useGame } from '../context/GameStateContext';
 import MascotBuddy from '../components/MascotBuddy';
 
 export default function Home() {
-    const { state, currentLevel, levelProgress, nextLevel } = useGame();
+    const { state, currentLevel, levelProgress, nextLevel, getDailyStats } = useGame();
+    const dailyStats = getDailyStats();
 
     const greetingByTime = () => {
         const h = new Date().getHours();
@@ -14,17 +15,23 @@ export default function Home() {
 
     const childName = state.childName || 'bạn nhỏ';
 
+    // SVG circular progress ring
+    const radius = 32, stroke = 6;
+    const normalizedRadius = radius - stroke / 2;
+    const circumference = 2 * Math.PI * normalizedRadius;
+    const strokeDashoffset = circumference - (dailyStats.progress / 100) * circumference;
+
     return (
         <div className="page">
             {/* Header with streak & XP */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                 <div className="streak-display">
-                    <span className="streak-fire">🔥</span>
+                    <span className="streak-fire" style={{ fontSize: state.streak >= 7 ? '1.5rem' : '1.2rem' }}>
+                        {state.streak >= 7 ? '🔥🔥' : '🔥'}
+                    </span>
                     <span>{state.streak} ngày</span>
                 </div>
-                <div className="xp-badge">
-                    ⭐ {state.xp} XP
-                </div>
+                <div className="xp-badge">⭐ {state.xp} XP</div>
             </div>
 
             {/* Level bar */}
@@ -47,6 +54,67 @@ export default function Home() {
 
             {/* Mascot */}
             <MascotBuddy message={`${greetingByTime()}, ${childName}! 🎉`} />
+
+            {/* Daily Progress Card */}
+            <div style={{
+                background: 'linear-gradient(135deg, #EEF2FF, #FDF4FF)',
+                borderRadius: '16px', padding: '16px',
+                marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px',
+                border: '2px solid #E0E7FF',
+            }}>
+                {/* Circular progress */}
+                <div style={{ position: 'relative', width: radius * 2, height: radius * 2, flexShrink: 0 }}>
+                    <svg width={radius * 2} height={radius * 2} style={{ transform: 'rotate(-90deg)' }}>
+                        <circle stroke="#E5E7EB" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius} />
+                        <circle
+                            stroke={dailyStats.goalReached ? '#10B981' : '#8B5CF6'}
+                            fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius}
+                            strokeDasharray={`${circumference} ${circumference}`}
+                            strokeDashoffset={strokeDashoffset}
+                            strokeLinecap="round"
+                            style={{ transition: 'stroke-dashoffset 0.5s ease' }}
+                        />
+                    </svg>
+                    <div style={{
+                        position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontSize: dailyStats.goalReached ? '1.3rem' : '0.85rem', fontWeight: 700,
+                        color: dailyStats.goalReached ? '#10B981' : '#8B5CF6',
+                    }}>
+                        {dailyStats.goalReached ? '🌟' : `${dailyStats.totalToday}/${dailyStats.goal}`}
+                    </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: '#1E1B4B' }}>
+                        {dailyStats.goalReached ? 'Đạt mục tiêu hôm nay! 🎉' : 'Mục tiêu hôm nay'}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
+                        {dailyStats.wordsLearned} từ mới · {dailyStats.wordsReviewed} ôn tập
+                    </div>
+                </div>
+            </div>
+
+            {/* Review card — show if words due */}
+            {dailyStats.wordsForReview > 0 && (
+                <Link to="/review" style={{ textDecoration: 'none' }}>
+                    <div className="animate-pop-in" style={{
+                        background: 'linear-gradient(135deg, #7C3AED, #EC4899)',
+                        borderRadius: '16px', padding: '14px 20px', marginBottom: '16px',
+                        display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer',
+                        color: 'white', boxShadow: '0 4px 12px rgba(124,58,237,0.3)',
+                    }}>
+                        <div style={{ fontSize: '2rem' }}>🧠</div>
+                        <div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem' }}>
+                                Ôn tập ngay!
+                            </div>
+                            <div style={{ fontSize: '0.8rem', opacity: 0.9 }}>
+                                {dailyStats.wordsForReview} từ cần ôn hôm nay
+                            </div>
+                        </div>
+                        <div style={{ marginLeft: 'auto', fontSize: '1.3rem' }}>▶️</div>
+                    </div>
+                </Link>
+            )}
 
             {/* Language cards */}
             <h2 style={{ textAlign: 'center', marginBottom: '16px', fontFamily: 'var(--font-display)' }}>
