@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CHINESE_TOPICS, TONE_COLORS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
+import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
 
 export default function LessonChinese() {
@@ -46,8 +47,16 @@ export default function LessonChinese() {
     const handleSpeak = () => {
         setSpeakResult(null);
         startListening('zh-CN', (results) => {
-            const result = checkPronunciation(results[0], word.character);
-            setSpeakResult(result);
+            // FIX: Pass FULL results array (not results[0])
+            const result = checkPronunciation(results, word.character);
+            setSpeakResult({
+                ...result,
+                spoken: results[0]?.text || '',
+                color: result.score >= 80 ? '#10B981' : result.score >= 60 ? '#F59E0B' : '#EF4444',
+                label: result.score >= 80 ? '棒极了! Phát âm rất tốt!' :
+                    result.score >= 60 ? '很好! Gần đúng rồi!' :
+                        '加油! Cố lên nào!',
+            });
             if (result.score >= 60) {
                 addXP(5);
                 setCelebration(c => c + 1);
@@ -201,27 +210,13 @@ export default function LessonChinese() {
                 </button>
             </div>
 
-            {/* Speaking result */}
+            {/* Pronunciation Detail */}
             {speakResult && (
-                <div className="animate-pop-in" style={{
-                    textAlign: 'center',
-                    marginTop: '16px',
-                    padding: '12px',
-                    borderRadius: 'var(--radius-lg)',
-                    background: speakResult.score >= 60 ? '#ECFDF5' : '#FFF8F0',
-                    border: `2px solid ${speakResult.score >= 60 ? 'var(--color-success)' : 'var(--color-xp)'}`,
-                }}>
-                    <span style={{ fontSize: '1.5rem' }}>
-                        {speakResult.score >= 80 ? '🐉' : speakResult.score >= 60 ? '👍' : '💪'}
-                    </span>
-                    <p style={{ fontFamily: 'var(--font-display)', fontWeight: 600, marginTop: '4px' }}>
-                        {speakResult.score >= 80
-                            ? '棒极了! Phát âm rất tốt!'
-                            : speakResult.score >= 60
-                                ? '很好! Gần đúng rồi!'
-                                : '加油! Cố lên nào!'}
-                    </p>
-                </div>
+                <PronunciationDetail
+                    result={speakResult}
+                    targetWord={word.character}
+                    onPlayback={() => speakChinese(word.character)}
+                />
             )}
 
             {/* Next */}
