@@ -1,5 +1,6 @@
 // useGameState — XP, levels, streaks, achievements, spaced repetition
 import { useState, useEffect, useCallback } from 'react';
+import { USER_MODES, getModeConfig } from '../utils/userMode';
 
 const STORAGE_KEY = 'linguakids_state';
 
@@ -11,6 +12,16 @@ const LEVELS = [
     { level: 5, title: 'Bé Siêu Sao', titleEn: 'Superstar', emoji: '🌟', xpNeeded: 800 },
     { level: 6, title: 'Bé Tài Năng', titleEn: 'Prodigy', emoji: '🏆', xpNeeded: 1200 },
     { level: 7, title: 'Nhà Ngôn Ngữ', titleEn: 'Linguist', emoji: '👑', xpNeeded: 2000 },
+];
+
+const ADULT_LEVELS = [
+    { level: 1, title: 'Người Mới Bắt Đầu', titleEn: 'Beginner', emoji: '📖', xpNeeded: 0 },
+    { level: 2, title: 'Học Viên Chăm Chỉ', titleEn: 'Dedicated Learner', emoji: '📝', xpNeeded: 100 },
+    { level: 3, title: 'Người Giao Tiếp', titleEn: 'Communicator', emoji: '💬', xpNeeded: 250 },
+    { level: 4, title: 'Người Thành Thạo', titleEn: 'Proficient', emoji: '🎯', xpNeeded: 500 },
+    { level: 5, title: 'Chuyên Gia Ngôn Ngữ', titleEn: 'Language Expert', emoji: '🏅', xpNeeded: 800 },
+    { level: 6, title: 'Bậc Thầy', titleEn: 'Master', emoji: '🏆', xpNeeded: 1200 },
+    { level: 7, title: 'Đa Ngôn Ngữ', titleEn: 'Polyglot', emoji: '🌐', xpNeeded: 2000 },
 ];
 
 const BADGES = [
@@ -51,6 +62,8 @@ const DEFAULT_STATE = {
     dailyReviewsToday: 0,  // Reviews completed today
     lastDailyReset: null,  // Date string of last daily reset
     freezesUsedThisWeek: 0,
+    // v5.0: Dual mode
+    userMode: USER_MODES.KIDS,  // 'kids' or 'adult'
 };
 
 function loadState() {
@@ -173,13 +186,23 @@ export function useGameState() {
         setState(prev => ({ ...prev, soundEnabled: !prev.soundEnabled }));
     }, []);
 
-    // Get current level
-    const currentLevel = LEVELS.reduce((acc, lvl) => {
+    // Toggle user mode (Kids ↔ Adult)
+    const toggleMode = useCallback(() => {
+        setState(prev => {
+            const newMode = prev.userMode === USER_MODES.KIDS ? USER_MODES.ADULT : USER_MODES.KIDS;
+            const config = getModeConfig(newMode);
+            return { ...prev, userMode: newMode, dailyGoal: config.dailyGoal };
+        });
+    }, []);
+
+    // Get current level (mode-aware)
+    const activeLevels = state.userMode === USER_MODES.ADULT ? ADULT_LEVELS : LEVELS;
+    const currentLevel = activeLevels.reduce((acc, lvl) => {
         if (state.xp >= lvl.xpNeeded) return lvl;
         return acc;
-    }, LEVELS[0]);
+    }, activeLevels[0]);
 
-    const nextLevel = LEVELS[LEVELS.indexOf(currentLevel) + 1] || null;
+    const nextLevel = activeLevels[activeLevels.indexOf(currentLevel) + 1] || null;
     const xpForNext = nextLevel ? nextLevel.xpNeeded - state.xp : 0;
     const levelProgress = nextLevel
         ? ((state.xp - currentLevel.xpNeeded) / (nextLevel.xpNeeded - currentLevel.xpNeeded)) * 100
@@ -277,6 +300,9 @@ export function useGameState() {
         };
     }, [state]);
 
+    // Mode config helper
+    const modeConfig = getModeConfig(state.userMode);
+
     return {
         state,
         addXP,
@@ -286,6 +312,8 @@ export function useGameState() {
         setChildName,
         setAvatar,
         toggleSound,
+        toggleMode,
+        modeConfig,
         currentLevel,
         nextLevel,
         xpForNext,
@@ -293,7 +321,7 @@ export function useGameState() {
         unlockedBadges,
         lockedBadges,
         allBadges: BADGES,
-        levels: LEVELS,
+        levels: activeLevels,
         resetState,
         getDifficulty,
         getWordsForReview,

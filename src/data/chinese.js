@@ -239,9 +239,114 @@ export const CHINESE_TOPICS = [
             { character: '独立', pinyin: 'dúlì', vietnamese: 'Độc lập', emoji: '🇻🇳' },
         ],
     },
+    // ============================================
+    // ADULT TOPICS — HSK 4-5 (professional contexts)
+    // ============================================
+    {
+        id: 'business_cn', title: '商务 (Kinh doanh)', emoji: '💼', color: '#6366F1', mode: 'adult',
+        words: [
+            { character: '公司', pinyin: 'gōngsī', vietnamese: 'Công ty', emoji: '🏢' },
+            { character: '经理', pinyin: 'jīnglǐ', vietnamese: 'Giám đốc', emoji: '👔' },
+            { character: '合同', pinyin: 'hétóng', vietnamese: 'Hợp đồng', emoji: '📝' },
+            { character: '会议', pinyin: 'huìyì', vietnamese: 'Cuộc họp', emoji: '🤝' },
+            { character: '工资', pinyin: 'gōngzī', vietnamese: 'Lương', emoji: '💰' },
+            { character: '同事', pinyin: 'tóngshì', vietnamese: 'Đồng nghiệp', emoji: '👥' },
+            { character: '面试', pinyin: 'miànshì', vietnamese: 'Phỏng vấn', emoji: '🎤' },
+            { character: '简历', pinyin: 'jiǎnlì', vietnamese: 'Sơ yếu lý lịch', emoji: '📄' },
+            { character: '加班', pinyin: 'jiābān', vietnamese: 'Tăng ca', emoji: '⏰' },
+            { character: '出差', pinyin: 'chūchāi', vietnamese: 'Đi công tác', emoji: '✈️' },
+            { character: '报告', pinyin: 'bàogào', vietnamese: 'Báo cáo', emoji: '📊' },
+            { character: '客户', pinyin: 'kèhù', vietnamese: 'Khách hàng', emoji: '🤝' },
+        ],
+    },
+    {
+        id: 'travel_cn', title: '旅行 (Du lịch)', emoji: '✈️', color: '#0EA5E9', mode: 'adult',
+        words: [
+            { character: '护照', pinyin: 'hùzhào', vietnamese: 'Hộ chiếu', emoji: '🛂' },
+            { character: '签证', pinyin: 'qiānzhèng', vietnamese: 'Visa', emoji: '📋' },
+            { character: '机场', pinyin: 'jīchǎng', vietnamese: 'Sân bay', emoji: '🛫' },
+            { character: '航班', pinyin: 'hángbān', vietnamese: 'Chuyến bay', emoji: '✈️' },
+            { character: '行李', pinyin: 'xínglǐ', vietnamese: 'Hành lý', emoji: '🧳' },
+            { character: '酒店', pinyin: 'jiǔdiàn', vietnamese: 'Khách sạn', emoji: '🏨' },
+            { character: '预订', pinyin: 'yùdìng', vietnamese: 'Đặt trước', emoji: '📅' },
+            { character: '地图', pinyin: 'dìtú', vietnamese: 'Bản đồ', emoji: '🗺️' },
+            { character: '景点', pinyin: 'jǐngdiǎn', vietnamese: 'Điểm du lịch', emoji: '📍' },
+            { character: '纪念品', pinyin: 'jìniànpǐn', vietnamese: 'Quà lưu niệm', emoji: '🎁' },
+            { character: '换钱', pinyin: 'huànqián', vietnamese: 'Đổi tiền', emoji: '💱' },
+            { character: '海关', pinyin: 'hǎiguān', vietnamese: 'Hải quan', emoji: '🛃' },
+        ],
+    },
+    {
+        id: 'health_cn', title: '健康 (Sức khỏe)', emoji: '🏥', color: '#10B981', mode: 'adult',
+        words: [
+            { character: '医院', pinyin: 'yīyuàn', vietnamese: 'Bệnh viện', emoji: '🏥' },
+            { character: '医生', pinyin: 'yīshēng', vietnamese: 'Bác sĩ', emoji: '👨‍⚕️' },
+            { character: '药', pinyin: 'yào', vietnamese: 'Thuốc', emoji: '💊' },
+            { character: '检查', pinyin: 'jiǎnchá', vietnamese: 'Kiểm tra', emoji: '🔍' },
+            { character: '保险', pinyin: 'bǎoxiǎn', vietnamese: 'Bảo hiểm', emoji: '🛡️' },
+            { character: '过敏', pinyin: 'guòmǐn', vietnamese: 'Dị ứng', emoji: '🤧' },
+            { character: '发烧', pinyin: 'fāshāo', vietnamese: 'Sốt', emoji: '🤒' },
+            { character: '血压', pinyin: 'xuèyā', vietnamese: 'Huyết áp', emoji: '❤️' },
+            { character: '锻炼', pinyin: 'duànliàn', vietnamese: 'Tập thể dục', emoji: '🏃' },
+            { character: '营养', pinyin: 'yíngyǎng', vietnamese: 'Dinh dưỡng', emoji: '🥗' },
+            { character: '挂号', pinyin: 'guàhào', vietnamese: 'Đăng ký khám', emoji: '📋' },
+            { character: '手术', pinyin: 'shǒushù', vietnamese: 'Phẫu thuật', emoji: '🔪' },
+        ],
+    },
+    {
+        id: 'tech_cn', title: '科技 (Công nghệ)', emoji: '💻', color: '#8B5CF6', mode: 'adult',
+        words: [
+            { character: '电脑', pinyin: 'diànnǎo', vietnamese: 'Máy tính', emoji: '💻' },
+            { character: '手机', pinyin: 'shǒujī', vietnamese: 'Điện thoại', emoji: '📱' },
+            { character: '网络', pinyin: 'wǎngluò', vietnamese: 'Mạng', emoji: '🌐' },
+            { character: '软件', pinyin: 'ruǎnjiàn', vietnamese: 'Phần mềm', emoji: '💿' },
+            { character: '密码', pinyin: 'mìmǎ', vietnamese: 'Mật khẩu', emoji: '🔐' },
+            { character: '下载', pinyin: 'xiàzǎi', vietnamese: 'Tải xuống', emoji: '⬇️' },
+            { character: '上传', pinyin: 'shàngchuán', vietnamese: 'Tải lên', emoji: '⬆️' },
+            { character: '数据', pinyin: 'shùjù', vietnamese: 'Dữ liệu', emoji: '🗄️' },
+            { character: '人工智能', pinyin: 'réngōng zhìnéng', vietnamese: 'Trí tuệ nhân tạo', emoji: '🤖' },
+            { character: '应用', pinyin: 'yìngyòng', vietnamese: 'Ứng dụng', emoji: '📱' },
+            { character: '备份', pinyin: 'bèifèn', vietnamese: 'Sao lưu', emoji: '💾' },
+            { character: '网站', pinyin: 'wǎngzhàn', vietnamese: 'Trang web', emoji: '🌐' },
+        ],
+    },
+    {
+        id: 'dining_cn', title: '餐饮 (Nhà hàng)', emoji: '🍽️', color: '#D97706', mode: 'adult',
+        words: [
+            { character: '菜单', pinyin: 'càidān', vietnamese: 'Thực đơn', emoji: '📋' },
+            { character: '服务员', pinyin: 'fúwùyuán', vietnamese: 'Phục vụ', emoji: '🧑‍🍳' },
+            { character: '买单', pinyin: 'mǎidān', vietnamese: 'Tính tiền', emoji: '💳' },
+            { character: '预约', pinyin: 'yùyuē', vietnamese: 'Đặt bàn', emoji: '📞' },
+            { character: '素食', pinyin: 'sùshí', vietnamese: 'Ăn chay', emoji: '🥬' },
+            { character: '味道', pinyin: 'wèidào', vietnamese: 'Hương vị', emoji: '😋' },
+            { character: '辣', pinyin: 'là', vietnamese: 'Cay', emoji: '🌶️' },
+            { character: '甜', pinyin: 'tián', vietnamese: 'Ngọt', emoji: '🍯' },
+            { character: '咸', pinyin: 'xián', vietnamese: 'Mặn', emoji: '🧂' },
+            { character: '酸', pinyin: 'suān', vietnamese: 'Chua', emoji: '🍋' },
+            { character: '饮料', pinyin: 'yǐnliào', vietnamese: 'Đồ uống', emoji: '🥤' },
+            { character: '外卖', pinyin: 'wàimài', vietnamese: 'Giao hàng', emoji: '🛵' },
+        ],
+    },
+    {
+        id: 'conversation_cn', title: '对话 (Giao tiếp)', emoji: '💬', color: '#EC4899', mode: 'adult',
+        words: [
+            { character: '打电话', pinyin: 'dǎ diànhuà', vietnamese: 'Gọi điện', emoji: '📞' },
+            { character: '发短信', pinyin: 'fā duǎnxìn', vietnamese: 'Nhắn tin', emoji: '💬' },
+            { character: '邮件', pinyin: 'yóujiàn', vietnamese: 'Email', emoji: '📧' },
+            { character: '确认', pinyin: 'quèrèn', vietnamese: 'Xác nhận', emoji: '✅' },
+            { character: '道歉', pinyin: 'dàoqiàn', vietnamese: 'Xin lỗi', emoji: '🙏' },
+            { character: '感谢', pinyin: 'gǎnxiè', vietnamese: 'Cảm ơn', emoji: '🌟' },
+            { character: '介绍', pinyin: 'jièshào', vietnamese: 'Giới thiệu', emoji: '🤝' },
+            { character: '讨论', pinyin: 'tǎolùn', vietnamese: 'Thảo luận', emoji: '🗣️' },
+            { character: '建议', pinyin: 'jiànyì', vietnamese: 'Đề xuất', emoji: '💡' },
+            { character: '解释', pinyin: 'jiěshì', vietnamese: 'Giải thích', emoji: '🔎' },
+            { character: '总结', pinyin: 'zǒngjié', vietnamese: 'Tổng kết', emoji: '📝' },
+            { character: '同意', pinyin: 'tóngyì', vietnamese: 'Đồng ý', emoji: '👍' },
+        ],
+    },
 ];
 
 // Flatten all words for games
 export const ALL_CHINESE_WORDS = CHINESE_TOPICS.flatMap(topic =>
-    topic.words.map(w => ({ ...w, topicId: topic.id }))
+    topic.words.map(w => ({ ...w, topicId: topic.id, topicMode: topic.mode }))
 );

@@ -1,36 +1,43 @@
-// spacedRepetition.js — SM-2 Algorithm adapted for children 6-9
-// Based on: Pimsleur (1967), Wozniak SM-2 (1987), adapted for kids
+// spacedRepetition.js — SM-2 Algorithm (Dual Mode: Kids + Adult)
+// Based on: Pimsleur (1967), Wozniak SM-2 (1987)
+// Kids: shorter intervals (max 60 days), generous scoring
+// Adults: standard SM-2 intervals (max 365 days), stricter scoring
 // Evidence: 40% better 6-month retention vs fixed intervals (meta-analysis 2023)
 
-// SM-2 intervals in days (child-friendly: shorter than adult)
-const INTERVALS = [0, 1, 3, 7, 14, 30, 60]; // day 0 = today (new word)
+// Mode-specific configuration
+const SM2_CONFIG = {
+    kids: { maxInterval: 60, initialIntervals: [1, 3], minEF: 1.3 },
+    adult: { maxInterval: 365, initialIntervals: [1, 6], minEF: 1.3 },
+};
 
 /**
  * Calculate next review based on SM-2 algorithm
  * @param {Object} card - { word, easeFactor, interval, reps, nextReview }
  * @param {number} quality - 0-5 rating (0=blackout, 5=perfect)
+ * @param {string} userMode - 'kids' or 'adult' (default: 'kids')
  * @returns {Object} updated card
  */
-export function sm2Update(card, quality) {
+export function sm2Update(card, quality, userMode = 'kids') {
     const { easeFactor = 2.5, reps = 0 } = card;
+    const config = SM2_CONFIG[userMode] || SM2_CONFIG.kids;
 
     // Clamp quality to 0-5
     const q = Math.max(0, Math.min(5, quality));
 
     let newEF = easeFactor + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02));
-    newEF = Math.max(1.3, newEF); // Never below 1.3
+    newEF = Math.max(config.minEF, newEF); // Never below min
 
     let newReps, newInterval;
 
     if (q >= 3) {
         // Correct response — advance
         newReps = reps + 1;
-        if (newReps <= 1) newInterval = 1;
-        else if (newReps === 2) newInterval = 3;
+        if (newReps <= 1) newInterval = config.initialIntervals[0];
+        else if (newReps === 2) newInterval = config.initialIntervals[1];
         else newInterval = Math.round(card.interval * newEF);
 
-        // Cap at 60 days for kids (adults go to 365+)
-        newInterval = Math.min(60, newInterval);
+        // Cap by mode (60 days kids, 365 days adults)
+        newInterval = Math.min(config.maxInterval, newInterval);
     } else {
         // Incorrect — reset to beginning
         newReps = 0;
@@ -53,9 +60,22 @@ export function sm2Update(card, quality) {
 
 /**
  * Convert pronunciation score (0-100) to SM-2 quality (0-5)
- * Kid-friendly: more generous than adult SM-2
+ * Kids: generous thresholds to encourage learning
+ * Adults: stricter thresholds for deeper mastery
+ * @param {number} score - 0-100
+ * @param {string} userMode - 'kids' or 'adult'
  */
-export function scoreToQuality(score) {
+export function scoreToQuality(score, userMode = 'kids') {
+    if (userMode === 'adult') {
+        // Stricter scoring for adults
+        if (score >= 95) return 5; // Perfect
+        if (score >= 85) return 4; // Great
+        if (score >= 70) return 3; // Good (passes)
+        if (score >= 50) return 2; // Needs work
+        if (score >= 30) return 1; // Struggling
+        return 0;
+    }
+    // Kid-friendly: more generous
     if (score >= 90) return 5; // Perfect
     if (score >= 75) return 4; // Great
     if (score >= 60) return 3; // Good (passes)
