@@ -5,7 +5,7 @@ const NAV_ITEMS = [
     { path: '/english', icon: '🇬🇧', label: 'English' },
     { path: '/chinese', icon: '🇨🇳', label: '中文' },
     { path: '/games', icon: '🎮', label: 'Trò chơi' },
-    { path: '/progress', icon: '📊', label: 'Tiến bộ' },
+    { path: '/achievements', icon: '🏆', label: 'Huy chương' },
 ];
 
 export default function NavBar() {
