@@ -38,12 +38,17 @@ export interface GameState {
     lastDailyReset: string | null;
     freezesUsedThisWeek: number;
 
+    // Coin Economy
+    coins: number;
+    totalCoinsEarned: number;
+
     // Mode
     userMode: string;
 }
 
 interface GameActions {
     addXP: (amount: number) => void;
+    addCoins: (amount: number) => void;
     learnWord: (word: string, lang: 'en' | 'cn') => void;
     recordGame: (isPerfect?: boolean) => void;
     updateTopicProgress: (topicId: string, completed: number, total: number) => void;
@@ -81,6 +86,8 @@ const DEFAULT_STATE: GameState = {
     dailyReviewsToday: 0,
     lastDailyReset: null,
     freezesUsedThisWeek: 0,
+    coins: 0,
+    totalCoinsEarned: 0,
     userMode: USER_MODES.KIDS,
 };
 
@@ -113,6 +120,11 @@ export const useGameStore = create<GameStore>()(
             },
 
             addXP: (amount: number) => set((state) => ({ xp: state.xp + amount })),
+
+            addCoins: (amount: number) => set((state) => ({
+                coins: state.coins + amount,
+                totalCoinsEarned: state.totalCoinsEarned + amount,
+            })),
 
             learnWord: (word: string, lang: 'en' | 'cn') => set((state) => {
                 const isNew = !state.wordsLearned.find(w => w.word === word && w.lang === lang);

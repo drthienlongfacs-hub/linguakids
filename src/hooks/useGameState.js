@@ -36,6 +36,9 @@ const BADGES = [
     { id: 'chinese_starter', title: 'Cn → Bắt Đầu', emoji: '🇨🇳', condition: (s) => s.chineseWordsLearned >= 5 },
     { id: 'bilingual', title: 'Song Ngữ', emoji: '🌍', condition: (s) => s.englishWordsLearned >= 10 && s.chineseWordsLearned >= 10 },
     { id: 'perfect_quiz', title: 'Xuất Sắc', emoji: '💯', condition: (s) => s.perfectQuizzes >= 1 },
+    { id: 'coin_100', title: '100 Xu', emoji: '🪙', condition: (s) => s.totalCoinsEarned >= 100 },
+    { id: 'coin_500', title: '500 Xu', emoji: '💰', condition: (s) => s.totalCoinsEarned >= 500 },
+    { id: 'coin_1000', title: 'Tỉ Phú Nhí', emoji: '🤑', condition: (s) => s.totalCoinsEarned >= 1000 },
 ];
 
 export function useGameState() {
@@ -101,6 +104,7 @@ export function useGameState() {
     return {
         state: store,
         addXP: store.addXP,
+        addCoins: store.addCoins,
         learnWord: store.learnWord,
         recordGame: store.recordGame,
         updateTopicProgress: store.updateTopicProgress,
