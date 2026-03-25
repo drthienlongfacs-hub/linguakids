@@ -1,24 +1,57 @@
 {
-    "name": "LinguaKids",
+    "name": "LinguaKids — Học Tiếng Anh & Trung",
     "short_name": "LinguaKids",
-    "description": "Học Tiếng Anh & Tiếng Trung cho bé",
-    "start_url": "/",
+    "description": "Ứng dụng học Tiếng Anh & Tiếng Trung song ngữ cho trẻ em và người lớn. Gamification, SM-2 Spaced Repetition, offline-first PWA.",
+    "start_url": "/linguakids/",
+    "scope": "/linguakids/",
     "display": "standalone",
-    "orientation": "portrait",
+    "orientation": "portrait-primary",
     "background_color": "#FAFBFF",
     "theme_color": "#6C63FF",
+    "categories": [
+        "education",
+        "kids"
+    ],
+    "lang": "vi",
+    "dir": "ltr",
+    "prefer_related_applications": false,
     "icons": [
         {
-            "src": "/icon-192.png",
+            "src": "/linguakids/icon-192.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         },
         {
-            "src": "/icon-512.png",
+            "src": "/linguakids/icon-512.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Học Tiếng Anh",
+            "short_name": "English",
+            "url": "/linguakids/#/english",
+            "icons": [
+                {
+                    "src": "/linguakids/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Học Tiếng Trung",
+            "short_name": "Chinese",
+            "url": "/linguakids/#/chinese",
+            "icons": [
+                {
+                    "src": "/linguakids/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
         }
     ]
 }
