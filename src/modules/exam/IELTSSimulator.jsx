@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IELTS_READING_PASSAGES, IELTS_WRITING, IELTS_SPEAKING } from '../../data/ielts_content';
 import { useGameStore } from '../../store/useGameStore';
+import SpeakingPractice from '../speaking/SpeakingPractice';
 
 const TABS = ['Reading', 'Writing', 'Speaking'];
 
@@ -316,52 +317,70 @@ export default function IELTSSimulator() {
     // ===== SPEAKING TAB =====
     const renderSpeaking = () => (
         <div>
-            <h3 style={{ margin: '0 0 12px' }}>🗣️ Part 1 — Interview Questions</h3>
+            {/* Part 1 — Interactive Interview Questions */}
+            <h3 style={{ margin: '0 0 12px', color: '#F1F5F9' }}>🗣️ Part 1 — Interview Questions</h3>
+            <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: '16px' }}>
+                Tap 🎤 to record your answer. Your speech will be analyzed for pronunciation, fluency, and vocabulary.
+            </p>
             {IELTS_SPEAKING.part1.map((set, idx) => (
-                <details key={idx} style={{ marginBottom: '12px', background: 'var(--color-surface)', borderRadius: '12px', padding: '16px' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600 }}>💬 {set.topic}</summary>
-                    {set.questions.map((q, qIdx) => (
-                        <div key={qIdx} style={{ margin: '12px 0', paddingBottom: '12px', borderBottom: '1px solid var(--color-border)' }}>
-                            <p style={{ fontWeight: 600, fontSize: '0.9rem', margin: '0 0 4px' }}>Q: {q}</p>
-                            <p style={{ fontSize: '0.85rem', color: '#059669', margin: 0, lineHeight: 1.6 }}>
-                                💡 {set.sampleAnswers[qIdx]}
-                            </p>
-                        </div>
-                    ))}
-                </details>
-            ))}
-
-            <h3 style={{ margin: '20px 0 12px' }}>🎤 Part 2 — Cue Cards</h3>
-            {IELTS_SPEAKING.part2.map(card => (
-                <details key={card.id} style={{ marginBottom: '12px', background: 'var(--color-surface)', borderRadius: '12px', padding: '16px' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600 }}>🃏 {card.cueCard}</summary>
-                    <div style={{ background: '#FEF3C7', padding: '12px', borderRadius: '8px', margin: '8px 0' }}>
-                        <p style={{ margin: '0 0 4px', fontWeight: 600, fontSize: '0.85rem' }}>You should say:</p>
-                        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.85rem' }}>
-                            {card.points.map((p, i) => <li key={i}>{p}</li>)}
-                        </ul>
-                        <p style={{ margin: '8px 0 0', fontSize: '0.8rem', color: '#92400E' }}>
-                            ⏱️ Prep: {card.thinkTime}s · Speak: {card.speakTime}s
-                        </p>
-                    </div>
-                    <div style={{ marginTop: '12px' }}>
-                        <h4 style={{ fontSize: '0.9rem', color: '#059669' }}>Sample Answer</h4>
-                        {card.sampleAnswer.split('\n\n').map((p, i) => (
-                            <p key={i} style={{ fontSize: '0.85rem', lineHeight: 1.7 }}>{p}</p>
-                        ))}
-                    </div>
-                </details>
-            ))}
-
-            <h3 style={{ margin: '20px 0 12px' }}>🎯 Part 3 — Discussion Topics</h3>
-            {IELTS_SPEAKING.part3.map((set, idx) => (
-                <details key={idx} style={{ marginBottom: '12px', background: 'var(--color-surface)', borderRadius: '12px', padding: '16px' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600 }}>🧠 {set.topic}</summary>
-                    <ol style={{ paddingLeft: '20px', fontSize: '0.85rem' }}>
+                <details key={idx} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>💬 {set.topic}</summary>
+                    <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {set.questions.map((q, qIdx) => (
-                            <li key={qIdx} style={{ marginBottom: '8px' }}>{q}</li>
+                            <SpeakingPractice
+                                key={`p1-${idx}-${qIdx}`}
+                                question={q}
+                                modelAnswer={set.sampleAnswers[qIdx]}
+                                part={1}
+                                speakTime={60}
+                            />
                         ))}
-                    </ol>
+                    </div>
+                </details>
+            ))}
+
+            {/* Part 2 — Interactive Cue Cards */}
+            <h3 style={{ margin: '20px 0 12px', color: '#F1F5F9' }}>🎤 Part 2 — Cue Cards</h3>
+            <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: '16px' }}>
+                1 minute preparation + 2 minutes speaking. Full IELTS simulation.
+            </p>
+            {IELTS_SPEAKING.part2.map(card => (
+                <details key={card.id} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>🃏 {card.cueCard}</summary>
+                    <div style={{ background: 'rgba(251,191,36,0.08)', padding: '12px', borderRadius: '10px', margin: '12px 0', border: '1px solid rgba(251,191,36,0.2)' }}>
+                        <p style={{ margin: '0 0 6px', fontWeight: 600, fontSize: '0.85rem', color: '#FCD34D' }}>You should say:</p>
+                        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.82rem', color: '#E2E8F0' }}>
+                            {card.points.map((p, i) => <li key={i} style={{ marginBottom: '4px' }}>{p}</li>)}
+                        </ul>
+                    </div>
+                    <SpeakingPractice
+                        question={card.cueCard}
+                        modelAnswer={card.sampleAnswer}
+                        prepTime={card.thinkTime}
+                        speakTime={card.speakTime}
+                        part={2}
+                    />
+                </details>
+            ))}
+
+            {/* Part 3 — Interactive Discussion */}
+            <h3 style={{ margin: '20px 0 12px', color: '#F1F5F9' }}>🎯 Part 3 — Discussion Topics</h3>
+            <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: '16px' }}>
+                Advanced discussion questions. Aim for 2+ minutes per response.
+            </p>
+            {IELTS_SPEAKING.part3.map((set, idx) => (
+                <details key={idx} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>🧠 {set.topic}</summary>
+                    <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {set.questions.map((q, qIdx) => (
+                            <SpeakingPractice
+                                key={`p3-${idx}-${qIdx}`}
+                                question={q}
+                                part={3}
+                                speakTime={120}
+                            />
+                        ))}
+                    </div>
                 </details>
             ))}
         </div>
