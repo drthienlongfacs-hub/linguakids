@@ -35,6 +35,7 @@ import RoadmapHub from './modules/roadmap/RoadmapHub';
 import MockTestHub from './modules/exam/MockTestHub';
 import IELTSSimulator from './modules/exam/IELTSSimulator';
 import HSKSimulator from './modules/exam/HSKSimulator';
+import PlacementTest from './modules/exam/PlacementTest';
 import ClozeExercise from './modules/exercises/ClozeExercise';
 import ConversationAI from './modules/conversation/ConversationAI';
 import { isAdultMode } from './utils/userMode';
@@ -97,6 +98,7 @@ function AppContent() {
         <Route path="/hsk-sim" element={<HSKSimulator />} />
         <Route path="/cloze/:lang" element={<ClozeExercise />} />
         <Route path="/cloze/:lang/:level" element={<ClozeExercise />} />
+        <Route path="/placement" element={<PlacementTest />} />
         <Route path="/conversation-ai" element={<ConversationAI />} />
       </Routes>
 
