@@ -1750,10 +1750,13 @@ p {
   --glass-blur: 24px;
 }
 
-/* === Root Background === */
-.adult-mode body,
-.adult-mode #root {
-  background: #0F172A;
+/* === Root Background ===
+   CRITICAL: .adult-mode is on div.app-layout (CHILD of body/#root),
+   so we CANNOT style body from here. Apply bg directly on container. */
+.adult-mode {
+  background: #0F172A !important;
+  color: #F8FAFC;
+  min-height: 100vh;
 }
 
 /* === Global Typography Boost for Adult Mode === */
@@ -2113,6 +2116,150 @@ p {
 .adult-mode .lh-lesson-meta span {
   color: #94A3B8 !important;
   font-size: 0.8rem !important;
+}
+
+/* === CRITICAL: Adult Dark Skill Cards (Home Page) ===
+   Without these, skill cards show light pastel bg + white text = unreadable */
+.adult-mode .skill-card {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.adult-mode .skill-card--english {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(6, 182, 212, 0.10)) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+}
+
+.adult-mode .skill-card--chinese {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.10)) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
+.adult-mode .skill-card--listening {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.10)) !important;
+  border-color: rgba(99, 102, 241, 0.35) !important;
+}
+
+.adult-mode .skill-card--speaking {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(244, 114, 182, 0.10)) !important;
+  border-color: rgba(236, 72, 153, 0.35) !important;
+}
+
+.adult-mode .skill-card--reading {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.10)) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+.adult-mode .skill-card--writing {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(251, 191, 36, 0.10)) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+.adult-mode .skill-card--grammar {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(167, 139, 250, 0.10)) !important;
+  border-color: rgba(139, 92, 246, 0.35) !important;
+}
+
+.adult-mode .skill-card--games {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(236, 72, 153, 0.08)) !important;
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+.adult-mode .skill-card--exam,
+.adult-mode .skill-card--roadmap {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(239, 68, 68, 0.10)) !important;
+  border-color: rgba(249, 115, 22, 0.35) !important;
+}
+
+.adult-mode .skill-card__title {
+  color: #F1F5F9 !important;
+}
+
+.adult-mode .skill-card__desc {
+  color: #CBD5E1 !important;
+}
+
+.adult-mode .skill-card__arrow {
+  color: #94A3B8 !important;
+}
+
+.adult-mode .skill-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* === Adult Home Hero === */
+.adult-mode .home-hero {
+  background: transparent !important;
+}
+
+.adult-mode .home-hero__badges {
+  color: #E2E8F0;
+}
+
+/* === Adult Daily Progress Card === */
+.adult-mode .daily-progress-card {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.adult-mode .daily-progress-card--adult {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* === Adult Section Title === */
+.adult-mode .section-title {
+  color: #E2E8F0 !important;
+}
+
+/* === Adult Stats Row === */
+.adult-mode .stat-card {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.adult-mode .stat-card__value {
+  color: #C7D2FE !important;
+}
+
+.adult-mode .stat-card__label {
+  color: #94A3B8 !important;
+}
+
+/* === Adult Page Header === */
+.adult-mode .page-header {
+  background: transparent !important;
+}
+
+.adult-mode .page-header__back {
+  color: #E2E8F0 !important;
+  background: rgba(30, 41, 59, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.adult-mode .page-header__title {
+  color: #F8FAFC !important;
+}
+
+/* === Adult Module Hub (Roadmap, Simulators) === */
+.adult-mode .module-hub {
+  color: #F8FAFC;
+}
+
+.adult-mode .module-hub h1,
+.adult-mode .module-hub h2,
+.adult-mode .module-hub h3 {
+  color: #F8FAFC !important;
+}
+
+.adult-mode .module-hub p {
+  color: #E2E8F0 !important;
+}
+
+.adult-mode .back-button {
+  color: #E2E8F0 !important;
+  background: rgba(30, 41, 59, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 /* ============================================
