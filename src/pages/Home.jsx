@@ -4,6 +4,7 @@ import { useGame } from '../context/GameStateContext';
 import MascotBuddy from '../components/MascotBuddy';
 import { isAdultMode } from '../utils/userMode';
 import { getDailyQuote, getDailyFallbackQuote } from '../services/quoteService';
+import { getXPData } from '../services/xpEngine';
 
 const LEARNING_TIPS = [
     { emoji: '💡', en: 'Review words before bed — your brain consolidates memories during sleep!', vi: 'Ôn từ trước khi ngủ — não ghi nhớ tốt hơn khi ngủ!' },
@@ -18,6 +19,7 @@ export default function Home() {
     const { state, currentLevel, levelProgress, nextLevel, getDailyStats, toggleMode, modeConfig } = useGame();
     const dailyStats = getDailyStats();
     const isAdult = isAdultMode(state.userMode);
+    const xpData = getXPData();
 
     // Live daily quote from Quotable API
     const [dailyQuote, setDailyQuote] = useState(null);
@@ -43,6 +45,7 @@ export default function Home() {
     const strokeDashoffset = circumference - (dailyStats.progress / 100) * circumference;
 
     const skills = [
+        { to: '/placement', icon: '📝', title: isAdult ? 'Placement Test' : 'Kiểm tra trình độ', desc: isAdult ? `Level ${xpData.level} · ${xpData.totalXP} XP` : 'Kiểm tra trình độ A1→C1', theme: 'exam' },
         { to: '/english', icon: '🇬🇧', title: isAdult ? 'English' : 'Tiếng Anh', desc: `${state.englishWordsLearned} từ đã học`, theme: 'english' },
         { to: '/chinese', icon: '🇨🇳', title: isAdult ? '中文 Chinese' : 'Tiếng Trung', desc: `${state.chineseWordsLearned} từ đã học`, theme: 'chinese' },
         { to: '/listening', icon: '🎧', title: isAdult ? 'Listening Practice' : 'Luyện Nghe', desc: isAdult ? 'Audio, dictation, IELTS quiz' : 'Nghe, chính tả, trắc nghiệm', theme: 'listening' },
@@ -174,6 +177,71 @@ export default function Home() {
                     </div>
                 </Link>
             )}
+
+            {/* Weak Area Recommendation */}
+            {(() => {
+                const skillMap = {
+                    listening: { icon: '🎧', title: isAdult ? 'Listening' : 'Nghe', to: '/listening' },
+                    reading: { icon: '📖', title: isAdult ? 'Reading' : 'Đọc', to: '/reading' },
+                    writing: { icon: '✍️', title: isAdult ? 'Writing' : 'Viết', to: '/writing' },
+                    speaking: { icon: '🗣️', title: isAdult ? 'Speaking' : 'Nói', to: '/speaking' },
+                    grammar: { icon: '📐', title: isAdult ? 'Grammar' : 'Ngữ pháp', to: '/grammar' },
+                    vocabulary: { icon: '📚', title: isAdult ? 'Vocabulary' : 'Từ vựng', to: '/vocabulary' },
+                };
+                const scores = state.skillScores || {};
+                const entries = Object.entries(scores).filter(([k]) => skillMap[k]);
+                if (entries.length === 0) return null;
+                const [weakKey, weakVal] = entries.reduce((min, cur) => cur[1] < min[1] ? cur : min);
+                const weak = skillMap[weakKey];
+                if (!weak || weakVal >= 80) return null; // Don't show if all scores are high
+
+                // Show placement test CTA if not completed
+                if (!state.placementCompleted) {
+                    return (
+                        <Link to="/placement" style={{ textDecoration: 'none' }}>
+                            <div className="glass-card animate-pop-in" style={{
+                                padding: '14px 18px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px',
+                                cursor: 'pointer', border: '1.5px solid rgba(99,102,241,0.3)',
+                                background: 'linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.05))',
+                            }}>
+                                <div style={{ fontSize: '1.6rem' }}>📝</div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem' }}>
+                                        {isAdult ? 'Take your Placement Test' : 'Kiểm tra trình độ'}
+                                    </div>
+                                    <div style={{ fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                                        {isAdult ? 'Get personalized content for your level' : 'Để nhận nội dung phù hợp với bạn'}
+                                    </div>
+                                </div>
+                                <div style={{ fontSize: '1.1rem' }}>→</div>
+                            </div>
+                        </Link>
+                    );
+                }
+
+                return (
+                    <Link to={weak.to} style={{ textDecoration: 'none' }}>
+                        <div className="glass-card animate-pop-in" style={{
+                            padding: '14px 18px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '12px',
+                            cursor: 'pointer', border: '1.5px solid rgba(245,158,11,0.3)',
+                            background: 'linear-gradient(135deg, rgba(245,158,11,0.08), rgba(249,115,22,0.05))',
+                        }}>
+                            <div style={{ fontSize: '1.6rem' }}>{weak.icon}</div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.9rem' }}>
+                                    {isAdult ? `Focus: ${weak.title}` : `Cần luyện: ${weak.title}`}
+                                </div>
+                                <div style={{ fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                                    {isAdult
+                                        ? `Your weakest area — score ${weakVal}%`
+                                        : `Kỹ năng yếu nhất — ${weakVal}%`}
+                                </div>
+                            </div>
+                            <div style={{ fontSize: '1.1rem' }}>→</div>
+                        </div>
+                    </Link>
+                );
+            })()}
 
             {/* Daily Tip + Live Quote */}
             {(() => {

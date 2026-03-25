@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { lookupWord, playPronunciation } from '../services/dictionaryService';
 import { getWordProfile } from '../services/datamuseService';
 import { getCEFRLevel, getCEFRColor } from '../data/cefrData';
+import { getOfflineIPA } from '../data/ipaDatabase';
 
 const POS_COLORS = {
     noun: '#3B82F6',
@@ -69,9 +70,9 @@ export default function WordDetail({ word, onClose }) {
                                 background: cefrColor.bg, color: cefrColor.text, border: `1px solid ${cefrColor.text}33`,
                             }}>{cefrLevel} · {cefrColor.label}</span>
                         </div>
-                        {data?.phonetic && (
+                        {(data?.phonetic || getOfflineIPA(word)) && (
                             <span style={{ color: '#818CF8', fontSize: '0.95rem', fontFamily: "'Noto Sans', sans-serif" }}>
-                                {data.phonetic}
+                                {data?.phonetic || getOfflineIPA(word)}
                             </span>
                         )}
                     </div>

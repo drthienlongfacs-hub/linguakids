@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { isAdultMode } from '../utils/userMode';
+import { useMemo } from 'react';
 
 export default function Progress() {
     const navigate = useNavigate();
@@ -31,16 +32,20 @@ export default function Progress() {
     // CEFR Level Estimator
     const totalWords = state.wordsLearned.length;
     const quizzes = state.gamesPlayed;
-    const cefrLevel = totalWords >= 150 && quizzes >= 30 ? 'A2'
-        : totalWords >= 80 && quizzes >= 15 ? 'A1'
-            : totalWords >= 30 ? 'Pre-A1'
-                : 'Starter';
+    const cefrLevel = state.userCEFRLevel ||
+        (totalWords >= 150 && quizzes >= 30 ? 'A2'
+            : totalWords >= 80 && quizzes >= 15 ? 'A1'
+                : totalWords >= 30 ? 'Pre-A1'
+                    : 'Starter');
 
     const cefrColors = {
         'Starter': '#94A3B8',
         'Pre-A1': '#F59E0B',
         'A1': '#3B82F6',
         'A2': '#10B981',
+        'B1': '#8B5CF6',
+        'B2': '#EC4899',
+        'C1': '#EF4444',
     };
 
     // Skill breakdown (approximate from data)
@@ -123,6 +128,112 @@ export default function Progress() {
                     <div className="stat-card__label">🪙 {isAdult ? 'Coins' : 'Xu'}</div>
                 </div>
             </div>
+
+            {/* Activity Heatmap — GitHub-style */}
+            {(() => {
+                const dates = state.activityDates || [];
+                const dateSet = new Set(dates);
+                const weeks = 12;
+                const cells = [];
+                const today = new Date();
+                for (let w = weeks - 1; w >= 0; w--) {
+                    for (let d = 0; d < 7; d++) {
+                        const date = new Date(today);
+                        date.setDate(today.getDate() - (w * 7 + (6 - d)));
+                        const key = date.toDateString();
+                        const isActive = dateSet.has(key);
+                        const isToday = date.toDateString() === today.toDateString();
+                        cells.push({ key, isActive, isToday, w: weeks - 1 - w, d });
+                    }
+                }
+                return (
+                    <div className="glass-card" style={{ padding: '16px', marginBottom: '16px' }}>
+                        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginBottom: '12px' }}>
+                            {isAdult ? '📅 Activity Heatmap' : '📅 Lịch học tập'}
+                        </h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${weeks}, 1fr)`, gridTemplateRows: 'repeat(7, 1fr)', gap: '3px' }}>
+                            {cells.map((c, i) => (
+                                <div key={i} style={{
+                                    width: '100%', aspectRatio: '1', borderRadius: '3px',
+                                    background: c.isActive
+                                        ? 'var(--color-primary)'
+                                        : c.isToday
+                                            ? 'rgba(99,102,241,0.15)'
+                                            : 'rgba(148,163,184,0.1)',
+                                    opacity: c.isActive ? 1 : 0.6,
+                                    border: c.isToday ? '1px solid var(--color-primary)' : 'none',
+                                }} title={c.key} />
+                            ))}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '6px', fontSize: '0.65rem', color: 'var(--color-text-light)' }}>
+                            <span>{isAdult ? '12 weeks ago' : '12 tuần trước'}</span>
+                            <span>{isAdult ? 'Today' : 'Hôm nay'}</span>
+                        </div>
+                    </div>
+                );
+            })()}
+
+            {/* SVG Radar Chart for Skills */}
+            {(() => {
+                const scores = state.skillScores || {};
+                const skillKeys = ['listening', 'reading', 'speaking', 'writing', 'grammar'];
+                const labels = isAdult
+                    ? ['Listening', 'Reading', 'Speaking', 'Writing', 'Grammar']
+                    : ['Nghe', 'Đọc', 'Nói', 'Viết', 'Ngữ pháp'];
+                const n = skillKeys.length;
+                const cx = 100, cy = 100, R = 70;
+                const angleStep = (2 * Math.PI) / n;
+                const offset = -Math.PI / 2;
+
+                const getPoint = (i, r) => {
+                    const angle = offset + i * angleStep;
+                    return [cx + r * Math.cos(angle), cy + r * Math.sin(angle)];
+                };
+
+                const levels = [0.25, 0.5, 0.75, 1];
+                const vals = skillKeys.map(k => Math.min(100, scores[k] || 0) / 100);
+                const dataPoints = vals.map((v, i) => getPoint(i, v * R));
+                const dataPath = dataPoints.map((p, i) => `${i === 0 ? 'M' : 'L'}${p[0]},${p[1]}`).join(' ') + ' Z';
+
+                return (
+                    <div className="glass-card" style={{ padding: '16px', marginBottom: '16px' }}>
+                        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginBottom: '8px' }}>
+                            {isAdult ? '🎯 Skill Radar' : '🎯 Biểu đồ kỹ năng'}
+                        </h3>
+                        <svg viewBox="0 0 200 200" style={{ width: '100%', maxWidth: '280px', margin: '0 auto', display: 'block' }}>
+                            {/* Grid rings */}
+                            {levels.map(l => (
+                                <polygon key={l}
+                                    points={Array.from({ length: n }, (_, i) => getPoint(i, l * R).join(',')).join(' ')}
+                                    fill="none" stroke="rgba(148,163,184,0.2)" strokeWidth="0.5"
+                                />
+                            ))}
+                            {/* Axis lines */}
+                            {Array.from({ length: n }, (_, i) => {
+                                const [x, y] = getPoint(i, R);
+                                return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(148,163,184,0.15)" strokeWidth="0.5" />;
+                            })}
+                            {/* Data area */}
+                            <polygon points={dataPoints.map(p => p.join(',')).join(' ')}
+                                fill="rgba(99,102,241,0.15)" stroke="#6366F1" strokeWidth="1.5" />
+                            {/* Data dots */}
+                            {dataPoints.map((p, i) => (
+                                <circle key={i} cx={p[0]} cy={p[1]} r="3" fill="#6366F1" />
+                            ))}
+                            {/* Labels */}
+                            {labels.map((label, i) => {
+                                const [x, y] = getPoint(i, R + 18);
+                                return (
+                                    <text key={i} x={x} y={y} textAnchor="middle" dominantBaseline="central"
+                                        style={{ fontSize: '8px', fill: 'var(--color-text-light)', fontWeight: 600 }}>
+                                        {label}
+                                    </text>
+                                );
+                            })}
+                        </svg>
+                    </div>
+                );
+            })()}
 
             {/* Skill Breakdown — Bar Chart */}
             <div className="glass-card" style={{ padding: '16px', marginBottom: '16px' }}>

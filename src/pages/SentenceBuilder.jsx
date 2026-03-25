@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { SENTENCE_EXERCISES } from '../data/conversations';
 import { useGame } from '../context/GameStateContext';
+import { useGameStore } from '../store/useGameStore';
 import { useSpeech } from '../hooks/useSpeech';
 import StarBurst from '../components/StarBurst';
 
@@ -19,6 +20,7 @@ export default function SentenceBuilder() {
     const { lang } = useParams();
     const navigate = useNavigate();
     const { addXP, recordGame, state } = useGame();
+    const updateSkillScore = useGameStore(s => s.updateSkillScore);
     const { speakEnglish, speakChinese } = useSpeech();
 
     const isEnglish = lang === 'en';
@@ -79,7 +81,9 @@ export default function SentenceBuilder() {
         setTimeout(() => {
             if (currentIndex + 1 >= total) {
                 const isPerfect = score + (correct ? 1 : 0) === total;
+                const pct = Math.round(((score + (correct ? 1 : 0)) / total) * 100);
                 recordGame(isPerfect);
+                updateSkillScore('grammar', pct);
                 setComplete(true);
             } else {
                 setCurrentIndex(prev => prev + 1);

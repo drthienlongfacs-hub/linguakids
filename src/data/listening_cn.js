@@ -150,9 +150,112 @@ export const LISTENING_CN_LESSONS = [
             { type: 'mcq', question: '在哪里可以看大熊猫？', options: ['北京', '桂林', '四川', '上海'], correct: 2 },
         ],
     },
+    // ============ HSK 2 Level — Shopping ============
+    {
+        id: 'shopping-market-cn',
+        title: '在市场买东西',
+        titleVi: 'Mua sắm ở chợ',
+        level: 'A2',
+        duration: '2:00',
+        topic: 'Shopping',
+        emoji: '🛒',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 15,
+                text: '你好！这个苹果多少钱一斤？',
+                pinyin: 'nǐ hǎo! zhè ge píngguǒ duōshǎo qián yī jīn?',
+                textVi: 'Xin chào! Táo này bao nhiêu một cân?',
+            },
+            {
+                id: 2, startTime: 15, endTime: 30,
+                text: '十块钱一斤。很新鲜的！今天刚从农场运来的。你想要几斤？',
+                pinyin: 'shí kuài qián yī jīn. hěn xīnxiān de! jīntiān gāng cóng nóngchǎng yùn lái de. nǐ xiǎng yào jǐ jīn?',
+                textVi: 'Mười tệ một cân. Rất tươi! Hôm nay mới vận chuyển từ nông trại. Bạn muốn mấy cân?',
+            },
+            {
+                id: 3, startTime: 30, endTime: 45,
+                text: '两斤苹果。还有香蕉怎么卖？我还想买一些葡萄。',
+                pinyin: 'liǎng jīn píngguǒ. háiyǒu xiāngjiāo zěnme mài? wǒ hái xiǎng mǎi yīxiē pútáo.',
+                textVi: 'Hai cân táo. Chuối thì bán sao? Tôi còn muốn mua ít nho.',
+            },
+            {
+                id: 4, startTime: 45, endTime: 60,
+                text: '香蕉五块一把，葡萄十五块一斤。一共四十块钱。给你个袋子。',
+                pinyin: 'xiāngjiāo wǔ kuài yī bǎ, pútáo shíwǔ kuài yī jīn. yígòng sìshí kuài qián. gěi nǐ ge dàizi.',
+                textVi: 'Chuối năm tệ một nải, nho mười lăm tệ một cân. Tổng cộng bốn mươi tệ. Cho bạn cái túi.',
+            },
+        ],
+        vocabulary: [
+            { word: '苹果', pinyin: 'píngguǒ', meaning: 'táo', example: '我喜欢吃苹果。' },
+            { word: '新鲜', pinyin: 'xīnxiān', meaning: 'tươi', example: '这些水果很新鲜。' },
+            { word: '农场', pinyin: 'nóngchǎng', meaning: 'nông trại', example: '苹果从农场运来。' },
+            { word: '香蕉', pinyin: 'xiāngjiāo', meaning: 'chuối', example: '香蕉五块一把。' },
+            { word: '葡萄', pinyin: 'pútáo', meaning: 'nho', example: '我想买一些葡萄。' },
+            { word: '一共', pinyin: 'yígòng', meaning: 'tổng cộng', example: '一共四十块钱。' },
+        ],
+        quiz: [
+            { type: 'mcq', question: '苹果多少钱一斤？', options: ['五块', '十块', '十五块', '二十块'], correct: 1 },
+            { type: 'true_false', question: '客人买了三斤苹果。', answer: false, explanation: '客人买了两斤苹果。' },
+            { type: 'mcq', question: '一共多少钱？', options: ['三十块', '四十块', '五十块', '六十块'], correct: 1 },
+        ],
+    },
+    // ============ HSK 3 Level — At the Doctor ============
+    {
+        id: 'doctor-visit-cn',
+        title: '去看医生',
+        titleVi: 'Đi khám bệnh',
+        level: 'B1',
+        duration: '2:30',
+        topic: 'Health',
+        emoji: '🏥',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 18,
+                text: '医生：你好，请坐。哪里不舒服？\n病人：医生你好。我头疼，嗓子也疼。从昨天开始的。',
+                pinyin: 'yīshēng: nǐ hǎo, qǐng zuò. nǎlǐ bù shūfu?\nbìngrén: yīshēng nǐ hǎo. wǒ tóuténg, sǎngzi yě téng. cóng zuótiān kāishǐ de.',
+                textVi: 'Bác sĩ: Xin chào, mời ngồi. Không khỏe ở đâu?\nBệnh nhân: Chào bác sĩ. Tôi đau đầu, cổ họng cũng đau. Từ hôm qua bắt đầu.',
+            },
+            {
+                id: 2, startTime: 18, endTime: 38,
+                text: '医生：有没有发烧？让我量一下体温。三十八度五。你感冒了。最近天气变化大，很多人生病。',
+                pinyin: 'yīshēng: yǒu méiyǒu fāshāo? ràng wǒ liáng yīxià tǐwēn. sānshíbā dù wǔ. nǐ gǎnmào le.',
+                textVi: 'Bác sĩ: Có sốt không? Để tôi đo nhiệt độ. 38.5 độ. Bạn bị cảm. Gần đây thời tiết thay đổi nhiều, nhiều người bệnh.',
+            },
+            {
+                id: 3, startTime: 38, endTime: 55,
+                text: '医生：我给你开三天的药。每天吃三次，每次两片。多喝水，好好休息。如果三天后还没好，再来看看。',
+                pinyin: 'yīshēng: wǒ gěi nǐ kāi sān tiān de yào. měi tiān chī sān cì, měi cì liǎng piàn. duō hē shuǐ, hǎohǎo xiūxi.',
+                textVi: 'Bác sĩ: Tôi kê thuốc ba ngày. Mỗi ngày uống ba lần, mỗi lần hai viên. Uống nhiều nước, nghỉ ngơi tốt. Nếu ba ngày sau chưa khỏi, quay lại.',
+            },
+            {
+                id: 4, startTime: 55, endTime: 72,
+                text: '病人：好的，谢谢医生。请问药房在哪里？\n医生：出门左转，走到头就是药房。祝你早日康复！',
+                pinyin: 'bìngrén: hǎo de, xièxie yīshēng. qǐngwèn yàofáng zài nǎlǐ?\nyīshēng: chūmén zuǒ zhuǎn, zǒu dào tóu jiù shì yàofáng. zhù nǐ zǎorì kāngfù!',
+                textVi: 'Bệnh nhân: Vâng, cảm ơn bác sĩ. Xin hỏi nhà thuốc ở đâu?\nBác sĩ: Ra cửa rẽ trái, đi đến cuối là nhà thuốc. Chúc sớm khỏe!',
+            },
+        ],
+        vocabulary: [
+            { word: '头疼', pinyin: 'tóuténg', meaning: 'đau đầu', example: '我今天头疼。' },
+            { word: '发烧', pinyin: 'fāshāo', meaning: 'sốt', example: '他发烧了。' },
+            { word: '体温', pinyin: 'tǐwēn', meaning: 'nhiệt độ cơ thể', example: '让我量一下体温。' },
+            { word: '感冒', pinyin: 'gǎnmào', meaning: 'cảm', example: '你感冒了。' },
+            { word: '开药', pinyin: 'kāi yào', meaning: 'kê thuốc', example: '医生给我开药。' },
+            { word: '药房', pinyin: 'yàofáng', meaning: 'nhà thuốc', example: '药房在左边。' },
+            { word: '康复', pinyin: 'kāngfù', meaning: 'hồi phục', example: '祝你早日康复！' },
+        ],
+        quiz: [
+            { type: 'mcq', question: '病人哪里不舒服？', options: ['肚子疼', '头疼和嗓子疼', '腿疼', '牙疼'], correct: 1 },
+            { type: 'true_false', question: '病人的体温是三十七度。', answer: false, explanation: '病人的体温是三十八度五。' },
+            { type: 'mcq', question: '医生说每天吃几次药？', options: ['一次', '两次', '三次', '四次'], correct: 2 },
+            { type: 'mcq', question: '药房在哪里？', options: ['出门右转', '出门左转走到头', '二楼', '对面'], correct: 1 },
+        ],
+    },
 ];
 
 export const ALL_LISTENING_CN_LESSONS = LISTENING_CN_LESSONS;
+
 
 export function getCnLessonsByMode(mode) {
     if (mode === 'adult') return LISTENING_CN_LESSONS;

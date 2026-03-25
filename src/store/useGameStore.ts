@@ -45,6 +45,11 @@ export interface GameState {
     // Mode
     userMode: string;
 
+    // Placement Test Results
+    userCEFRLevel: string | null;
+    userHSKLevel: string | null;
+    placementCompleted: boolean;
+
     // Roadmap
     examTarget: string | null;
     roadmapWeek: number;
@@ -70,6 +75,8 @@ interface GameActions {
     setExamTarget: (target: string | null) => void;
     setRoadmapWeek: (week: number) => void;
     completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => void;
+    setPlacementResult: (cefrLevel: string | null, hskLevel: string | null) => void;
+    updateSkillScore: (skill: string, score: number) => void;
 }
 
 export type GameStore = GameState & GameActions;
@@ -99,6 +106,9 @@ const DEFAULT_STATE: GameState = {
     coins: 0,
     totalCoinsEarned: 0,
     userMode: USER_MODES.KIDS,
+    userCEFRLevel: null,
+    userHSKLevel: null,
+    placementCompleted: false,
     examTarget: null,
     roadmapWeek: 1,
     completedRoadmapTasks: [],
@@ -227,6 +237,11 @@ export const useGameStore = create<GameStore>()(
 
             setExamTarget: (target: string | null) => set({ examTarget: target }),
             setRoadmapWeek: (week: number) => set({ roadmapWeek: week }),
+            setPlacementResult: (cefrLevel: string | null, hskLevel: string | null) => set({
+                userCEFRLevel: cefrLevel,
+                userHSKLevel: hskLevel,
+                placementCompleted: true,
+            }),
             completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => set((state) => {
                 const already = state.completedRoadmapTasks.some(
                     t => t.week === task.week && t.day === task.day && t.taskIdx === task.taskIdx
@@ -236,7 +251,16 @@ export const useGameStore = create<GameStore>()(
                     completedRoadmapTasks: [...state.completedRoadmapTasks, task],
                     xp: state.xp + (task.xp || 0),
                 };
-            })
+            }),
+            // EMA-based skill score update: newScore = α * incoming + (1-α) * old
+            updateSkillScore: (skill: string, score: number) => set((state) => {
+                const alpha = 0.3;
+                const old = state.skillScores[skill] ?? 0;
+                const updated = old === 0 ? score : Math.round(alpha * score + (1 - alpha) * old);
+                return {
+                    skillScores: { ...state.skillScores, [skill]: Math.min(100, Math.max(0, updated)) },
+                };
+            }),
         }),
         {
             name: 'linguakids_state_z', // unique name

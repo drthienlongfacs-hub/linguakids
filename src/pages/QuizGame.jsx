@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ALL_ENGLISH_WORDS } from '../data/english';
 import { ALL_CHINESE_WORDS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
+import { useGameStore } from '../store/useGameStore';
 import { useSpeech } from '../hooks/useSpeech';
 import StarBurst from '../components/StarBurst';
 
@@ -22,6 +23,7 @@ export default function QuizGame() {
     const { lang } = useParams();
     const navigate = useNavigate();
     const { addXP, recordGame, state } = useGame();
+    const updateSkillScore = useGameStore(s => s.updateSkillScore);
     const { speakEnglish, speakChinese } = useSpeech();
 
     const isEnglish = lang === 'en';
@@ -89,7 +91,9 @@ export default function QuizGame() {
         setTimeout(() => {
             if (currentQ + 1 >= questions.length) {
                 const isPerfect = score + (correct ? 1 : 0) === TOTAL_QUESTIONS;
+                const pct = Math.round(((score + (correct ? 1 : 0)) / TOTAL_QUESTIONS) * 100);
                 recordGame(isPerfect);
+                updateSkillScore('vocabulary', pct);
                 setGameComplete(true);
             } else {
                 setCurrentQ(q => q + 1);

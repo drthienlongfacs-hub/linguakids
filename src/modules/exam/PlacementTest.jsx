@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
+import { useGameStore } from '../../store/useGameStore';
 import { awardXP } from '../../services/xpEngine';
 
 // Adaptive placement test — 20 questions, difficulty adjusts based on answers
@@ -56,14 +57,30 @@ function assessLevel(score, total) {
 export default function PlacementTest() {
     const navigate = useNavigate();
     const { state, dispatch } = useGame();
+    const setPlacementResult = useGameStore(s => s.setPlacementResult);
     const [lang, setLang] = useState(null); // null = choose, 'en' or 'cn'
     const [idx, setIdx] = useState(0);
     const [score, setScore] = useState(0);
     const [selected, setSelected] = useState(null);
     const [done, setDone] = useState(false);
+    const [persisted, setPersisted] = useState(false);
 
     const questions = useMemo(() => lang === 'cn' ? CN_QUESTIONS : EN_QUESTIONS, [lang]);
     const current = questions[idx];
+
+    // Persist result to store when test completes
+    useEffect(() => {
+        if (done && !persisted) {
+            const result = assessLevel(score, questions.length);
+            if (lang === 'en') {
+                setPlacementResult(result.en, null);
+            } else {
+                setPlacementResult(null, result.cn);
+            }
+            awardXP('placement_test');
+            setPersisted(true);
+        }
+    }, [done, persisted, score, questions.length, lang, setPlacementResult]);
 
     if (!lang) {
         return (
@@ -89,7 +106,6 @@ export default function PlacementTest() {
 
     if (done) {
         const result = assessLevel(score, questions.length);
-        awardXP('placement_test');
         return (
             <div className="page" style={{ padding: '40px 20px', textAlign: 'center' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🎯</div>

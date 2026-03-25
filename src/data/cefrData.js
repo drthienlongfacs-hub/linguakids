@@ -178,12 +178,116 @@ const CEFR_LEVELS = {
         'variable', 'venture', 'verify', 'version', 'vertical', 'viable', 'violation', 'virtue',
         'visible', 'visual', 'vital', 'voluntary', 'vulnerable', 'welfare', 'whereby', 'widespread',
     ]),
+
+    // C1 — Advanced
+    C1: new Set([
+        'aberration', 'abridge', 'abstain', 'accentuate', 'accolade', 'acquiesce', 'adept', 'adversary',
+        'affluent', 'allegation', 'alleviate', 'amalgamate', 'ambivalent', 'amend', 'amiable', 'annihilate',
+        'anomaly', 'antagonist', 'apathy', 'appease', 'apprehend', 'arduous', 'assert', 'astute',
+        'atrocity', 'augment', 'auspicious', 'avert', 'avid', 'belligerent', 'benevolent', 'blatant',
+        'bolster', 'brazen', 'brevity', 'candid', 'capitulate', 'catalyst', 'cede', 'censure',
+        'circumvent', 'clandestine', 'coerce', 'cogent', 'commemorate', 'commensurate', 'compassion',
+        'compel', 'complacent', 'concede', 'conciliatory', 'condone', 'confiscate', 'congenial',
+        'connive', 'conscientious', 'consensus', 'construe', 'contentious', 'contrite', 'conundrum',
+        'converge', 'conviction', 'copious', 'corollary', 'corroborate', 'culminate', 'curtail',
+        'dearth', 'debilitate', 'decimate', 'decree', 'defer', 'defunct', 'delegate', 'deliberate',
+        'deluge', 'demeanor', 'deplore', 'depose', 'deprive', 'deride', 'despondent', 'detrimental',
+        'deviate', 'devise', 'diatribe', 'dichotomy', 'diffuse', 'digress', 'diligent', 'dire',
+        'discern', 'discrepancy', 'discretion', 'disdain', 'dismantle', 'disparage', 'disparity',
+        'dispatch', 'dispel', 'disseminate', 'dissent', 'diverge', 'dormant', 'dubious', 'duplicity',
+        'eclectic', 'edify', 'efficacy', 'effusive', 'egregious', 'elicit', 'eloquent', 'elude',
+        'emancipate', 'embark', 'eminent', 'empathy', 'emulate', 'encumber', 'endeavor', 'enigma',
+        'enmity', 'ensue', 'entail', 'enumerate', 'envoy', 'ephemeral', 'epitome', 'equate',
+        'equitable', 'eradicate', 'erratic', 'esteem', 'evade', 'exacerbate', 'exasperate', 'exemplary',
+        'exemplify', 'exonerate', 'expedient', 'expedite', 'explicit', 'extort', 'extraneous',
+        'fabricate', 'facet', 'fallacy', 'fathom', 'fervent', 'fickle', 'flaunt', 'fledgling',
+        'flounder', 'flout', 'foment', 'forfeit', 'formidable', 'fortify', 'foster', 'frivolous',
+        'frugal', 'futile', 'galvanize', 'garner', 'germane', 'grapple', 'gratuitous', 'grievance',
+        'guise', 'hamper', 'haphazard', 'hasten', 'hegemony', 'heresy', 'hinder', 'holistic',
+        'homogeneous', 'hubris', 'hypothetical', 'iconoclast', 'illuminate', 'imminent', 'impeach',
+        'impede', 'impending', 'imperative', 'impervious', 'impetuous', 'implausible', 'implicate',
+        'impoverish', 'impromptu', 'impunity', 'inadvertent', 'inception', 'incite', 'incoherent',
+        'incur', 'indignant', 'indiscriminate', 'indispensable', 'inept', 'inexorable', 'infamous',
+        'infatuate', 'infer', 'influx', 'infringe', 'ingenious', 'ingrained', 'inherently', 'innate',
+        'innocuous', 'insinuate', 'instigate', 'intrepid', 'intricate', 'inundate', 'invoke',
+        'irrevocable', 'jeopardize', 'judicious', 'jurisdiction', 'juxtapose', 'kindle', 'kinship',
+        'labyrinth', 'lackluster', 'languish', 'lavish', 'legitimate', 'lenient', 'lethal', 'lethargic',
+        'levity', 'liaison', 'liberate', 'linger', 'loathe', 'lucid', 'ludicrous', 'magnanimous',
+        'malicious', 'mandate', 'mar', 'meager', 'mediate', 'mercenary', 'meticulous', 'milieu',
+        'mitigate', 'monotonous', 'morbid', 'mundane', 'nefarious', 'negligent', 'niche', 'nomadic',
+        'nonchalant', 'notorious', 'novice', 'nullify', 'oblivious', 'obnoxious', 'obscene', 'obsolete',
+        'ominous', 'opaque', 'opportune', 'oppress', 'orthodox', 'ostentatious', 'oust', 'outlandish',
+        'overhaul', 'oversight', 'overt', 'pacify', 'panacea', 'paradigm', 'paramount', 'paraphrase',
+        'parity', 'partisan', 'pathological', 'patronize', 'paucity', 'pedagogy', 'pedestrian',
+        'penchant', 'pensive', 'peripheral', 'permeate', 'perpetuate', 'pervasive', 'pilfer',
+        'pinnacle', 'placate', 'platitude', 'plight', 'pragmatic', 'precarious', 'preclude',
+        'preeminent', 'premise', 'prevalent', 'pristine', 'prodigious', 'proficient', 'prognosis',
+        'proliferate', 'propensity', 'proprietary', 'proscribe', 'prototype', 'provenance', 'prudent',
+        'purport', 'quandary', 'quarantine', 'quash', 'quintessential', 'ramification', 'rampant',
+        'ratify', 'rebuke', 'recluse', 'redeem', 'redundant', 'refute', 'reiterate', 'relegate',
+        'relinquish', 'remedial', 'remnant', 'remorse', 'renounce', 'repeal', 'repercussion',
+        'replenish', 'reprehensible', 'reprimand', 'reproach', 'repudiate', 'resent', 'resilient',
+        'restitution', 'restive', 'resurrect', 'retaliate', 'retract', 'retribution', 'retrograde',
+        'revere', 'rhetoric', 'rigorous', 'riveting', 'rudimentary', 'ruthless', 'sacrosanct',
+        'sagacious', 'salient', 'satire', 'scant', 'scathing', 'scrupulous', 'scrutinize', 'seclude',
+        'sedentary', 'sentinel', 'serendipity', 'servile', 'shrewd', 'skeptical', 'slander',
+        'solace', 'solicit', 'somber', 'sovereign', 'sparse', 'sporadic', 'spurious', 'stagnant',
+        'staunch', 'stigma', 'stipulate', 'stoic', 'stringent', 'subversive', 'succinct', 'succumb',
+        'superficial', 'supplant', 'surpass', 'surreptitious', 'susceptible', 'sycophant', 'tangible',
+        'tantamount', 'tedious', 'temper', 'tenacious', 'tentative', 'tenure', 'terse', 'theological',
+        'thorough', 'thwart', 'tirade', 'tranquil', 'transcend', 'transgress', 'transient', 'traverse',
+        'trepidation', 'trivial', 'tumultuous', 'ubiquitous', 'undermine', 'underscore', 'unilateral',
+        'unprecedented', 'unscrupulous', 'uphold', 'usurp', 'utilitarian', 'utopia', 'vacillate',
+        'vehement', 'venerate', 'verbose', 'versatile', 'vex', 'vindicate', 'virulent', 'visceral',
+        'volatile', 'volition', 'voracious', 'wane', 'warrant', 'wield', 'zealous',
+    ]),
+
+    // C2 — Proficiency (Mastery level)
+    C2: new Set([
+        'abate', 'abnegate', 'abrogate', 'abstemious', 'acerbic', 'acrimony', 'admonish', 'adroit',
+        'aggrandize', 'alacrity', 'anachronism', 'anathema', 'antithesis', 'apotheosis', 'approbation',
+        'arcane', 'ardor', 'assiduous', 'attrition', 'avarice', 'axiom', 'beatitude', 'bifurcate',
+        'blandish', 'blighted', 'bombastic', 'bucolic', 'byzantine', 'cabal', 'cacophony', 'calumny',
+        'captious', 'capricious', 'castigate', 'caustic', 'chicanery', 'circumlocution', 'clairvoyant',
+        'cloister', 'coagulate', 'commencement', 'compendium', 'concomitant', 'conflagration',
+        'connoisseur', 'consternation', 'contiguous', 'contravene', 'contumacious', 'convivial',
+        'coruscate', 'countenance', 'craven', 'crucible', 'curmudgeon', 'debacle', 'decorum',
+        'deference', 'delineate', 'deleterious', 'demagogue', 'denigrate', 'denouement', 'derelict',
+        'desultory', 'dexterous', 'didactic', 'dilatory', 'dilettante', 'dirge', 'disabuse',
+        'discursive', 'disingenuous', 'disquisition', 'dissolution', 'ebullience', 'edification',
+        'effete', 'effrontery', 'egalitarian', 'elegiac', 'elegy', 'elucidate', 'embellish',
+        'empiricism', 'encomium', 'endemic', 'enervate', 'ennui', 'ephemeron', 'equanimity',
+        'equivocate', 'erudite', 'estimable', 'ethereal', 'evanescent', 'excoriate', 'exculpate',
+        'execrable', 'exhort', 'existential', 'exorbitant', 'expatiate', 'expiate', 'expunge',
+        'extirpate', 'extricate', 'facetious', 'fastidious', 'fatuous', 'feign', 'felicitous',
+        'fetid', 'filigree', 'filibuster', 'flagrant', 'fulminate', 'garrulous', 'grandiloquent',
+        'gregarious', 'harangue', 'harbinger', 'hermetic', 'histrionics', 'ignominious', 'imbroglio',
+        'implacable', 'impute', 'incandescent', 'inchoate', 'incorrigible', 'indefatigable',
+        'indelible', 'indigent', 'ineffable', 'ineluctable', 'inexplicable', 'inscrutable',
+        'insipid', 'intransigent', 'inveterate', 'irascible', 'laconic', 'lassitude', 'laud',
+        'litigious', 'loquacious', 'lucrative', 'machiavellian', 'maelstrom', 'magniloquent',
+        'malapropism', 'malleable', 'mendacious', 'mercurial', 'miscreant', 'mollify', 'moribund',
+        'munificent', 'nascent', 'nebulous', 'nefarious', 'nihilism', 'obdurate', 'obfuscate',
+        'objurgate', 'obloquy', 'obstinate', 'opprobrium', 'panegyric', 'paragon', 'pariah',
+        'parsimonious', 'peccadillo', 'pejorative', 'penurious', 'perdition', 'perfidious',
+        'perfunctory', 'peripatetic', 'pernicious', 'perspicacious', 'pertinacious', 'philistine',
+        'phlegmatic', 'polemic', 'portentous', 'precipitous', 'precocious', 'predilection',
+        'preponderance', 'prerogative', 'prescient', 'prestidigitation', 'prevaricate', 'probity',
+        'proclivity', 'prodigal', 'promulgate', 'propitiate', 'puerile', 'pugilistic', 'punctilious',
+        'pusillanimous', 'quagmire', 'querulous', 'quiescent', 'quixotic', 'raconteur', 'recalcitrant',
+        'recapitulate', 'recidivism', 'recondite', 'recrimination', 'redolent', 'remonstrate',
+        'repartee', 'reprobate', 'requite', 'sacrilege', 'salubrious', 'sardonic', 'sartorial',
+        'scintillate', 'seditious', 'soporific', 'specious', 'stolid', 'supercilious', 'supplicate',
+        'sycophantic', 'tautology', 'tendentious', 'torpid', 'trenchant', 'turgid', 'umbrage',
+        'unconscionable', 'unctuous', 'venal', 'verisimilitude', 'vicissitude', 'vituperate',
+        'voluble', 'wanton', 'winsome', 'zeitgeist',
+    ]),
 };
 
 /**
  * Get CEFR level for a word
  * @param {string} word
- * @returns {string} 'A1' | 'A2' | 'B1' | 'B2' | 'C1' (default for unknown)
+ * @returns {string} 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2'
  */
 export function getCEFRLevel(word) {
     const w = word.toLowerCase().trim();
@@ -191,6 +295,8 @@ export function getCEFRLevel(word) {
     if (CEFR_LEVELS.A2.has(w)) return 'A2';
     if (CEFR_LEVELS.B1.has(w)) return 'B1';
     if (CEFR_LEVELS.B2.has(w)) return 'B2';
+    if (CEFR_LEVELS.C1.has(w)) return 'C1';
+    if (CEFR_LEVELS.C2.has(w)) return 'C2';
     return 'C1'; // Unknown words assumed advanced
 }
 
@@ -210,11 +316,26 @@ export function getCEFRColor(level) {
 }
 
 /**
+ * Get total classified word count
+ */
+export function getCEFRStats() {
+    return {
+        A1: CEFR_LEVELS.A1.size,
+        A2: CEFR_LEVELS.A2.size,
+        B1: CEFR_LEVELS.B1.size,
+        B2: CEFR_LEVELS.B2.size,
+        C1: CEFR_LEVELS.C1.size,
+        C2: CEFR_LEVELS.C2.size,
+        total: Object.values(CEFR_LEVELS).reduce((sum, s) => sum + s.size, 0),
+    };
+}
+
+/**
  * Classify difficulty of a passage (array of words)
  * Returns average CEFR level and distribution
  */
 export function classifyPassageDifficulty(words) {
-    const levels = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0 };
+    const levels = { A1: 0, A2: 0, B1: 0, B2: 0, C1: 0, C2: 0 };
     const uniqueWords = [...new Set(words.map(w => w.toLowerCase().replace(/[^a-z'-]/g, '')).filter(w => w.length > 1))];
 
     for (const w of uniqueWords) {
@@ -223,10 +344,11 @@ export function classifyPassageDifficulty(words) {
     }
 
     const total = uniqueWords.length || 1;
-    const score = (levels.A1 * 1 + levels.A2 * 2 + levels.B1 * 3 + levels.B2 * 4 + levels.C1 * 5) / total;
+    const score = (levels.A1 * 1 + levels.A2 * 2 + levels.B1 * 3 + levels.B2 * 4 + levels.C1 * 5 + levels.C2 * 6) / total;
 
     let overall = 'A1';
-    if (score > 4) overall = 'C1';
+    if (score > 5) overall = 'C2';
+    else if (score > 4) overall = 'C1';
     else if (score > 3.2) overall = 'B2';
     else if (score > 2.5) overall = 'B1';
     else if (score > 1.8) overall = 'A2';
@@ -234,4 +356,4 @@ export function classifyPassageDifficulty(words) {
     return { levels, total, score: Math.round(score * 10) / 10, overall };
 }
 
-export default { getCEFRLevel, getCEFRColor, classifyPassageDifficulty };
+export default { getCEFRLevel, getCEFRColor, getCEFRStats, classifyPassageDifficulty };

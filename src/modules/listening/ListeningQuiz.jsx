@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useGameStore } from '../../store/useGameStore';
 
 // Quiz component supporting MCQ, Gap-fill, True/False
 export default function ListeningQuiz({ quiz, onComplete }) {
+    const updateSkillScore = useGameStore(s => s.updateSkillScore);
     const [currentQ, setCurrentQ] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [gapInput, setGapInput] = useState('');
@@ -33,7 +35,10 @@ export default function ListeningQuiz({ quiz, onComplete }) {
     const handleNext = () => {
         if (currentQ + 1 >= quiz.length) {
             setIsFinished(true);
-            onComplete?.({ score: score + (isCorrect ? 0 : 0), total: quiz.length }); // score already updated
+            const finalScore = score;
+            const pct = Math.round((finalScore / quiz.length) * 100);
+            updateSkillScore('listening', pct);
+            onComplete?.({ score: finalScore, total: quiz.length });
         } else {
             setCurrentQ(currentQ + 1);
             setSelectedAnswer(null);
