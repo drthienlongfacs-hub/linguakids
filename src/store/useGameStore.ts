@@ -44,6 +44,13 @@ export interface GameState {
 
     // Mode
     userMode: string;
+
+    // Roadmap
+    examTarget: string | null;
+    roadmapWeek: number;
+    completedRoadmapTasks: { week: number; day: number; taskIdx: number; type: string; xp: number }[];
+    skillScores: Record<string, number>;
+    examHistory: { date: string; type: string; score: number }[];
 }
 
 interface GameActions {
@@ -60,6 +67,9 @@ interface GameActions {
     recordDailyActivity: (type?: 'learn' | 'review') => void;
     resetState: () => void;
     checkAndResetDaily: () => void;
+    setExamTarget: (target: string | null) => void;
+    setRoadmapWeek: (week: number) => void;
+    completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => void;
 }
 
 export type GameStore = GameState & GameActions;
@@ -89,6 +99,11 @@ const DEFAULT_STATE: GameState = {
     coins: 0,
     totalCoinsEarned: 0,
     userMode: USER_MODES.KIDS,
+    examTarget: null,
+    roadmapWeek: 1,
+    completedRoadmapTasks: [],
+    skillScores: { listening: 0, reading: 0, writing: 0, speaking: 0, grammar: 0, vocabulary: 0 },
+    examHistory: [],
 };
 
 export const useGameStore = create<GameStore>()(
@@ -208,7 +223,20 @@ export const useGameStore = create<GameStore>()(
             resetState: () => {
                 set(DEFAULT_STATE);
                 localStorage.removeItem('linguakids_state_z');
-            }
+            },
+
+            setExamTarget: (target: string | null) => set({ examTarget: target }),
+            setRoadmapWeek: (week: number) => set({ roadmapWeek: week }),
+            completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => set((state) => {
+                const already = state.completedRoadmapTasks.some(
+                    t => t.week === task.week && t.day === task.day && t.taskIdx === task.taskIdx
+                );
+                if (already) return state;
+                return {
+                    completedRoadmapTasks: [...state.completedRoadmapTasks, task],
+                    xp: state.xp + (task.xp || 0),
+                };
+            })
         }),
         {
             name: 'linguakids_state_z', // unique name

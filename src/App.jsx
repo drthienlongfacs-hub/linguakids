@@ -29,7 +29,10 @@ import ReadingHub from './modules/reading/ReadingHub';
 import WritingHub from './modules/writing/WritingHub';
 import GrammarHub from './modules/grammar/GrammarHub';
 import GrammarCnHub from './modules/grammar_cn/GrammarCnHub';
+import RoadmapHub from './modules/roadmap/RoadmapHub';
 import MockTestHub from './modules/exam/MockTestHub';
+import IELTSSimulator from './modules/exam/IELTSSimulator';
+import HSKSimulator from './modules/exam/HSKSimulator';
 import { isAdultMode } from './utils/userMode';
 import './index.css';
 
@@ -82,7 +85,10 @@ function AppContent() {
         <Route path="/writing" element={<WritingHub />} />
         <Route path="/grammar" element={<GrammarHub />} />
         <Route path="/grammar-cn" element={<GrammarCnHub />} />
+        <Route path="/roadmap" element={<RoadmapHub />} />
         <Route path="/exam-prep" element={<MockTestHub />} />
+        <Route path="/ielts-sim" element={<IELTSSimulator />} />
+        <Route path="/hsk-sim" element={<HSKSimulator />} />
       </Routes>
 
       <NavBar />

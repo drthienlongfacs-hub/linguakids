@@ -37,7 +37,12 @@ export default function Home() {
     ];
 
     if (isAdult) {
-        skills.push({ to: '/exam-prep', icon: '🎯', title: 'Exam Prep Center', desc: 'IELTS · TOEIC · TOEFL', theme: 'exam' });
+        skills.push(
+            { to: '/roadmap', icon: '🗺️', title: 'Study Roadmap', desc: 'IELTS 7.5 & HSK 3 plan', theme: 'roadmap' },
+            { to: '/ielts-sim', icon: '🎯', title: 'IELTS Simulator', desc: 'Reading, Writing, Speaking', theme: 'exam' },
+            { to: '/hsk-sim', icon: '🏮', title: 'HSK 3 Mock Exam', desc: 'Listening, Reading, Writing', theme: 'exam' },
+            { to: '/exam-prep', icon: '📊', title: 'Exam Prep Center', desc: 'IELTS · TOEIC · TOEFL', theme: 'exam' },
+        );
     }
 
     return (

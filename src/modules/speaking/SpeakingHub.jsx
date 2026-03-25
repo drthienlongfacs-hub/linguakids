@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getSpeakingByMode } from '../../data/speaking';
 import { isAdultMode } from '../../utils/userMode';
+import ShadowingEngine from './ShadowingEngine';
 
 export default function SpeakingHub() {
     const navigate = useNavigate();
@@ -73,7 +74,49 @@ export default function SpeakingHub() {
 // ============================================
 function SpeakingExercise({ lesson, onBack, adult }) {
     const [currentIdx, setCurrentIdx] = useState(0);
-    const [recState, setRecState] = useState('idle'); // idle | requesting | listening | processing | done | error
+
+    const items = lesson.type === 'shadowing' ? lesson.sentences
+        : lesson.type === 'ielts_speaking' ? (lesson.questions || [{ question: lesson.cueCard?.topic || '' }])
+            : [];
+    const current = items[currentIdx];
+
+    const handleNext = () => {
+        if (currentIdx + 1 >= items.length) setCurrentIdx(0);
+        else setCurrentIdx(i => i + 1);
+    };
+
+    // ===== USE SHADOWING ENGINE for shadowing-type lessons =====
+    if (lesson.type === 'shadowing') {
+        return (
+            <div className="speaking-exercise page">
+                <div className="ll-header">
+                    <button className="ll-back" onClick={onBack}>←</button>
+                    <div className="ll-title-group">
+                        <h2 className="ll-title">{lesson.emoji} {lesson.title}</h2>
+                        <div className="ll-meta">
+                            <span className="ll-badge level">{lesson.level}</span>
+                            <span className="ll-badge topic">Shadowing</span>
+                            <span className="ll-badge duration">{currentIdx + 1}/{items.length}</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="sp-progress">
+                    <div className="dictation-progress-bar"><div className="dictation-progress-fill" style={{ width: `${((currentIdx + 1) / items.length) * 100}%` }} /></div>
+                </div>
+
+                <ShadowingEngine
+                    key={currentIdx}
+                    text={current?.text || ''}
+                    textVi={current?.textVi}
+                    lang="en"
+                    onComplete={() => handleNext()}
+                />
+            </div>
+        );
+    }
+
+    // ===== IELTS Speaking / other types — use original implementation =====
+    const [recState, setRecState] = useState('idle');
     const [interimText, setInterimText] = useState('');
     const [finalText, setFinalText] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
@@ -83,11 +126,6 @@ function SpeakingExercise({ lesson, onBack, adult }) {
     const recognitionRef = useRef(null);
     const timeoutRef = useRef(null);
     const voicesRef = useRef([]);
-
-    const items = lesson.type === 'shadowing' ? lesson.sentences
-        : lesson.type === 'ielts_speaking' ? (lesson.questions || [{ question: lesson.cueCard?.topic || '' }])
-            : [];
-    const current = items[currentIdx];
 
     // Pre-load voices on mount (Chrome loads them async)
     useEffect(() => {
@@ -247,7 +285,7 @@ function SpeakingExercise({ lesson, onBack, adult }) {
         recognitionRef.current?.stop();
     };
 
-    const handleNext = () => {
+    const handleNextIelts = () => {
         if (currentIdx + 1 >= items.length) {
             setCurrentIdx(0);
         } else {
@@ -388,7 +426,7 @@ function SpeakingExercise({ lesson, onBack, adult }) {
                             <button className="dict-play-btn" onClick={startRecording} style={{ flex: 1 }}>
                                 🔄 {adult ? 'Try Again' : 'Thử lại'}
                             </button>
-                            <button className="dictation-next-btn" onClick={handleNext} style={{ flex: 1 }}>
+                            <button className="dictation-next-btn" onClick={handleNextIelts} style={{ flex: 1 }}>
                                 {currentIdx + 1 >= items.length ? '🔁 Làm lại' : '→ Câu tiếp'}
                             </button>
                         </div>
