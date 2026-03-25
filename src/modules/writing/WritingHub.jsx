@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { WRITING_PROMPTS, SENTENCE_EXERCISES } from '../../data/writing';
 import { isAdultMode } from '../../utils/userMode';
+import { checkGrammar, highlightErrors, calculateGrammarScore, categorizeErrors } from '../../services/grammarService';
 
 export default function WritingHub() {
     const navigate = useNavigate();
@@ -65,6 +66,8 @@ function WritingExercise({ prompt, onBack, adult }) {
     const [timeLeft, setTimeLeft] = useState(prompt.timeLimit);
     const [showModel, setShowModel] = useState(false);
     const [showScoring, setShowScoring] = useState(false);
+    const [grammarResult, setGrammarResult] = useState(null);
+    const [isChecking, setIsChecking] = useState(false);
     const timerRef = useRef(null);
 
     useEffect(() => {
@@ -118,6 +121,14 @@ function WritingExercise({ prompt, onBack, adult }) {
 
             <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
                 <button className="quiz-submit-btn" onClick={() => setShowScoring(true)} disabled={!essay.trim()} style={{ flex: 1 }}>📊 {adult ? 'Score My Essay' : 'Chấm điểm'}</button>
+                <button className="quiz-submit-btn" onClick={async () => {
+                    setIsChecking(true);
+                    const result = await checkGrammar(essay);
+                    setGrammarResult(result);
+                    setIsChecking(false);
+                }} disabled={!essay.trim() || isChecking} style={{ flex: 1, background: isChecking ? '#64748B' : '#818CF8' }}>
+                    {isChecking ? '⏳ Checking...' : '✨ Grammar Check'}
+                </button>
                 {prompt.modelAnswer && <button className="quiz-next-btn" onClick={() => setShowModel(!showModel)} style={{ flex: 1 }}>{showModel ? '🙈 Ẩn' : '📖 Bài mẫu'}</button>}
             </div>
 
@@ -141,6 +152,54 @@ function WritingExercise({ prompt, onBack, adult }) {
                         <span style={{ fontSize: '2rem', fontWeight: 800, color: '#6366F1' }}>~Band {Math.round(getScore().total / 25 * 4 + 4)}.0</span>
                         <p style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>{adult ? 'Estimated IELTS band (simplified scoring)' : 'Điểm IELTS ước tính'}</p>
                     </div>
+                </div>
+            )}
+
+            {grammarResult && grammarResult.matches.length > 0 && (
+                <div style={{ marginTop: 16, background: 'rgba(129,140,248,0.08)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(129,140,248,0.2)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                        <h3 style={{ margin: 0, fontSize: '1rem' }}>✨ Grammar Analysis</h3>
+                        <span style={{
+                            padding: '4px 12px', borderRadius: '99px', fontSize: '0.85rem', fontWeight: 700,
+                            background: calculateGrammarScore(essay, grammarResult.matches) >= 80 ? '#10B98122' : calculateGrammarScore(essay, grammarResult.matches) >= 50 ? '#F59E0B22' : '#EF444422',
+                            color: calculateGrammarScore(essay, grammarResult.matches) >= 80 ? '#10B981' : calculateGrammarScore(essay, grammarResult.matches) >= 50 ? '#F59E0B' : '#EF4444',
+                        }}>Score: {calculateGrammarScore(essay, grammarResult.matches)}/100</span>
+                    </div>
+
+                    <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginBottom: '12px' }}>
+                        Found {grammarResult.matches.length} issue{grammarResult.matches.length > 1 ? 's' : ''}
+                    </p>
+
+                    {grammarResult.matches.map((m, i) => (
+                        <div key={i} style={{ marginBottom: '10px', padding: '10px', background: 'rgba(0,0,0,0.15)', borderRadius: '10px', borderLeft: `3px solid ${m.type === 'typographical' ? '#F59E0B' : m.type === 'grammar' ? '#EF4444' : '#818CF8'}` }}>
+                            <p style={{ margin: '0 0 4px', fontSize: '0.85rem', fontWeight: 600, color: '#E2E8F0' }}>{m.message}</p>
+                            <p style={{ margin: '0 0 4px', fontSize: '0.78rem', color: '#64748B' }}>Category: {m.category}</p>
+                            {m.replacements.length > 0 && (
+                                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
+                                    <span style={{ fontSize: '0.72rem', color: '#64748B' }}>Suggestions:</span>
+                                    {m.replacements.map((r, ri) => (
+                                        <span key={ri} style={{ fontSize: '0.75rem', color: '#22C55E', background: 'rgba(34,197,94,0.12)', padding: '2px 8px', borderRadius: '6px' }}>{r}</span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+
+                    {grammarResult.correctedText !== essay && (
+                        <details style={{ marginTop: '12px' }}>
+                            <summary style={{ cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, color: '#818CF8' }}>📝 View corrected text</summary>
+                            <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(34,197,94,0.08)', borderRadius: '10px', fontSize: '0.85rem', lineHeight: 1.7, color: '#E2E8F0' }}>
+                                {grammarResult.correctedText}
+                            </div>
+                        </details>
+                    )}
+                </div>
+            )}
+
+            {grammarResult && grammarResult.matches.length === 0 && (
+                <div style={{ marginTop: 16, background: 'rgba(16,185,129,0.1)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(16,185,129,0.2)', textAlign: 'center' }}>
+                    <span style={{ fontSize: '2rem' }}>✅</span>
+                    <p style={{ margin: '8px 0 0', fontSize: '0.9rem', color: '#10B981', fontWeight: 600 }}>No grammar issues found!</p>
                 </div>
             )}
 

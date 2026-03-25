@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getReadingByMode } from '../../data/reading';
 import { isAdultMode } from '../../utils/userMode';
+import { fetchWordDetail } from '../../services/dictionaryService';
 
 export default function ReadingHub() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function ReadingHub() {
                 <button className="lh-back" onClick={() => navigate('/')}>←</button>
                 <h2 className="lh-title">📖 {adult ? 'Reading Practice' : 'Luyện Đọc'}</h2>
             </div>
-            <p className="lh-subtitle">{adult ? 'Build comprehension with academic and professional passages.' : 'Đọc hiểu tiếng Anh qua các bài đọc thú vị! 📚'}</p>
+            <p className="lh-subtitle">{adult ? 'Build comprehension with academic and professional passages. Tap any word to get instant definitions.' : 'Đọc hiểu tiếng Anh qua các bài đọc thú vị! Chạm từ để xem nghĩa 📚'}</p>
 
             <div className="lh-stats">
                 <div className="lh-stat"><span className="lh-stat-number">{passages.length}</span><span className="lh-stat-label">{adult ? 'Passages' : 'Bài đọc'}</span></div>
@@ -57,8 +58,15 @@ export default function ReadingHub() {
 
 function ReadingExercise({ passage, onBack, adult }) {
     const [tab, setTab] = useState('read');
-    const [showVocab, setShowVocab] = useState(false);
     const [selectedWord, setSelectedWord] = useState(null);
+    const [wordDetail, setWordDetail] = useState(null);
+    const [loadingWord, setLoadingWord] = useState(false);
+
+    // Reading speed tracker
+    const [readingStartTime, setReadingStartTime] = useState(null);
+    const [readingWPM, setReadingWPM] = useState(null);
+    const [readingDone, setReadingDone] = useState(false);
+
     // Quiz state
     const [quizIdx, setQuizIdx] = useState(0);
     const [answer, setAnswer] = useState(null);
@@ -67,10 +75,54 @@ function ReadingExercise({ passage, onBack, adult }) {
     const [score, setScore] = useState(0);
     const [quizDone, setQuizDone] = useState(false);
 
-    const handleWordClick = (word) => {
+    // Start reading timer when read tab opens
+    useEffect(() => {
+        if (tab === 'read' && !readingStartTime && !readingDone) {
+            setReadingStartTime(Date.now());
+        }
+    }, [tab, readingStartTime, readingDone]);
+
+    // Tap-to-define with FreeDictionaryAPI
+    const handleWordClick = useCallback(async (word) => {
         const clean = word.replace(/[^a-zA-Z'-]/g, '').toLowerCase();
+        if (!clean || clean.length < 2) return;
+
+        // First check local vocabulary
         const found = passage.vocabulary.find(v => v.word.toLowerCase() === clean);
-        setSelectedWord(found || { word: clean, meaning: '(not in vocabulary list)', example: '' });
+        setSelectedWord(clean);
+        setWordDetail(found ? { word: clean, meaning: found.meaning, example: found.example, local: true } : null);
+
+        // Then fetch from API for richer data
+        setLoadingWord(true);
+        try {
+            const detail = await fetchWordDetail(clean);
+            if (detail) {
+                setWordDetail(prev => ({
+                    word: clean,
+                    meaning: found?.meaning || detail.meanings?.[0]?.definitions?.[0]?.definition || '',
+                    example: found?.example || detail.meanings?.[0]?.definitions?.[0]?.example || '',
+                    phonetic: detail.phonetic || '',
+                    audio: detail.audio || '',
+                    partOfSpeech: detail.meanings?.[0]?.partOfSpeech || '',
+                    definitions: detail.meanings?.slice(0, 2).map(m => ({
+                        pos: m.partOfSpeech,
+                        def: m.definitions?.[0]?.definition || '',
+                    })) || [],
+                    local: !!found,
+                }));
+            }
+        } catch { /* use local data */ }
+        setLoadingWord(false);
+    }, [passage.vocabulary]);
+
+    const handleFinishReading = () => {
+        if (readingStartTime) {
+            const elapsedMin = (Date.now() - readingStartTime) / 60000;
+            const wpm = Math.round((passage.wordCount || 200) / Math.max(elapsedMin, 0.1));
+            setReadingWPM(wpm);
+            setReadingDone(true);
+        }
+        setTab('quiz');
     };
 
     const handleQuizSubmit = () => {
@@ -92,13 +144,20 @@ function ReadingExercise({ passage, onBack, adult }) {
     const q = passage.quiz[quizIdx];
     const pct = quizDone ? Math.round((score / passage.quiz.length) * 100) : 0;
 
+    // WPM Assessment
+    const wpmLabel = readingWPM >= 250 ? 'Fast reader!' : readingWPM >= 150 ? 'Good pace' : readingWPM >= 80 ? 'Careful reader' : 'Take your time';
+
     return (
         <div className="reading-exercise page">
             <div className="ll-header">
                 <button className="ll-back" onClick={onBack}>←</button>
                 <div className="ll-title-group">
                     <h2 className="ll-title">{passage.emoji} {passage.title}</h2>
-                    <div className="ll-meta"><span className="ll-badge level">{passage.level}</span><span className="ll-badge duration">{passage.wordCount} words</span><span className="ll-badge topic">{passage.topic}</span></div>
+                    <div className="ll-meta">
+                        <span className="ll-badge level">{passage.level}</span>
+                        <span className="ll-badge duration">{passage.wordCount} words</span>
+                        <span className="ll-badge topic">{passage.topic}</span>
+                    </div>
                 </div>
             </div>
 
@@ -110,27 +169,76 @@ function ReadingExercise({ passage, onBack, adult }) {
 
             {tab === 'read' && (
                 <div className="reading-passage-container">
-                    <div className="ll-instructions"><h3>📖 {adult ? 'Read the passage' : 'Đọc bài'}</h3><p>{adult ? 'Tap any word to see its meaning.' : 'Chạm vào từ để xem nghĩa.'}</p></div>
+                    <div className="ll-instructions">
+                        <h3>📖 {adult ? 'Read the passage' : 'Đọc bài'}</h3>
+                        <p>{adult ? 'Tap any word for instant definition with IPA pronunciation.' : 'Chạm vào từ để xem nghĩa và phiên âm IPA.'}</p>
+                    </div>
+
+                    {/* Reading Timer */}
+                    {readingStartTime && !readingDone && (
+                        <ReadingTimer startTime={readingStartTime} />
+                    )}
+
                     <div className="reading-passage">
                         {passage.passage.split(/\s+/).map((word, i) => (
-                            <span key={i} className="reading-word" onClick={() => handleWordClick(word)}>{word} </span>
+                            <span key={i} className={`reading-word ${selectedWord === word.replace(/[^a-zA-Z'-]/g, '').toLowerCase() ? 'reading-word--active' : ''}`}
+                                onClick={() => handleWordClick(word)}>{word} </span>
                         ))}
                     </div>
+
+                    {/* Enhanced Word Popup with API data */}
                     {selectedWord && (
-                        <div className="reading-word-popup">
-                            <div className="rwp-word">{selectedWord.word}</div>
-                            <div className="rwp-meaning">🇻🇳 {selectedWord.meaning}</div>
-                            {selectedWord.example && <div className="rwp-example">💬 {selectedWord.example}</div>}
-                            <button className="rwp-close" onClick={() => setSelectedWord(null)}>✕</button>
-                            <button className="vocab-speak-btn" onClick={() => { const u = new SpeechSynthesisUtterance(selectedWord.word); u.lang = 'en-US'; window.speechSynthesis.speak(u); }}>🔊</button>
+                        <div className="reading-word-popup reading-word-popup--enhanced">
+                            <button className="rwp-close" onClick={() => { setSelectedWord(null); setWordDetail(null); }}>✕</button>
+                            <div className="rwp-word">{selectedWord}</div>
+
+                            {loadingWord && <div className="rwp-loading">⏳ Loading...</div>}
+
+                            {wordDetail && (
+                                <>
+                                    {wordDetail.phonetic && (
+                                        <div className="rwp-phonetic">
+                                            <span className="rwp-ipa">/{wordDetail.phonetic}/</span>
+                                            {wordDetail.partOfSpeech && <span className="rwp-pos">{wordDetail.partOfSpeech}</span>}
+                                        </div>
+                                    )}
+                                    <div className="rwp-meaning">🇻🇳 {wordDetail.meaning}</div>
+                                    {wordDetail.definitions?.map((d, i) => (
+                                        <div key={i} className="rwp-definition">
+                                            <span className="rwp-def-pos">{d.pos}</span>
+                                            <span className="rwp-def-text">{d.def}</span>
+                                        </div>
+                                    ))}
+                                    {wordDetail.example && <div className="rwp-example">💬 {wordDetail.example}</div>}
+                                </>
+                            )}
+
+                            <div className="rwp-actions">
+                                <button className="vocab-speak-btn" onClick={() => {
+                                    if (wordDetail?.audio) { new Audio(wordDetail.audio).play(); }
+                                    else { const u = new SpeechSynthesisUtterance(selectedWord); u.lang = 'en-US'; window.speechSynthesis.speak(u); }
+                                }}>🔊 {adult ? 'Listen' : 'Nghe'}</button>
+                            </div>
                         </div>
                     )}
-                    <button className="ll-done-btn" onClick={() => setTab('quiz')}>✅ {adult ? 'Done reading → Quiz' : 'Đọc xong → Quiz'}</button>
+
+                    <button className="ll-done-btn" onClick={handleFinishReading}>
+                        ✅ {adult ? 'Done reading → Quiz' : 'Đọc xong → Quiz'}
+                    </button>
                 </div>
             )}
 
             {tab === 'quiz' && !quizDone && (
                 <div className="listening-quiz">
+                    {/* WPM result banner */}
+                    {readingWPM && (
+                        <div className="reading-wpm-banner">
+                            <span className="wpm-icon">⚡</span>
+                            <span className="wpm-value">{readingWPM} WPM</span>
+                            <span className="wpm-label">{wpmLabel}</span>
+                        </div>
+                    )}
+
                     <div className="quiz-header"><span className="quiz-progress-text">Câu {quizIdx + 1} / {passage.quiz.length}</span><div className="quiz-progress-bar"><div className="quiz-progress-fill" style={{ width: `${((quizIdx + 1) / passage.quiz.length) * 100}%` }} /></div></div>
                     <div className="quiz-question-card">
                         <div className="quiz-type-badge">{q.type === 'mcq' ? '📋 MCQ' : q.type === 'gap_fill' ? '✏️ Gap Fill' : '✓✗ True/False'}</div>
@@ -155,6 +263,28 @@ function ReadingExercise({ passage, onBack, adult }) {
                     ))}</div>
                 </div>
             )}
+        </div>
+    );
+}
+
+// Live reading timer component
+function ReadingTimer({ startTime }) {
+    const [elapsed, setElapsed] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setElapsed(Math.floor((Date.now() - startTime) / 1000));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [startTime]);
+
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+
+    return (
+        <div className="reading-timer">
+            <span className="reading-timer-icon">⏱️</span>
+            <span className="reading-timer-value">{mins}:{secs.toString().padStart(2, '0')}</span>
         </div>
     );
 }

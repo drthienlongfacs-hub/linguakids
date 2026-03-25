@@ -1,12 +1,29 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useGame } from '../context/GameStateContext';
 import MascotBuddy from '../components/MascotBuddy';
 import { isAdultMode } from '../utils/userMode';
+import { getDailyQuote, getDailyFallbackQuote } from '../services/quoteService';
+
+const LEARNING_TIPS = [
+    { emoji: '💡', en: 'Review words before bed — your brain consolidates memories during sleep!', vi: 'Ôn từ trước khi ngủ — não ghi nhớ tốt hơn khi ngủ!' },
+    { emoji: '🎧', en: 'Shadowing improves pronunciation by 40% in 8 weeks.', vi: 'Bắt chước (shadowing) cải thiện phát âm 40% trong 8 tuần!' },
+    { emoji: '📖', en: 'Reading 15 min daily expands vocabulary 3x faster.', vi: 'Đọc 15 phút mỗi ngày giúp mở rộng từ vựng gấp 3!' },
+    { emoji: '🗣️', en: 'Active recall is 5x more effective than passive reading.', vi: 'Nhớ chủ động hiệu quả gấp 5 lần đọc thầm!' },
+    { emoji: '🔥', en: 'Consistency beats intensity. 15 min/day > 2 hours/week.', vi: '15 phút mỗi ngày tốt hơn 2 giờ mỗi tuần!' },
+    { emoji: '🧠', en: 'FSRS gives 90%+ retention vs 20% cramming.', vi: 'Ôn giãn cách (FSRS) giúp nhớ 90% so với 20% nhồi!' },
+];
 
 export default function Home() {
     const { state, currentLevel, levelProgress, nextLevel, getDailyStats, toggleMode, modeConfig } = useGame();
     const dailyStats = getDailyStats();
     const isAdult = isAdultMode(state.userMode);
+
+    // Live daily quote from Quotable API
+    const [dailyQuote, setDailyQuote] = useState(null);
+    useEffect(() => {
+        getDailyQuote().then(setDailyQuote).catch(() => { });
+    }, []);
 
     const greetingByTime = () => {
         const h = new Date().getHours();
@@ -34,6 +51,7 @@ export default function Home() {
         { to: '/writing', icon: '✍️', title: isAdult ? 'Writing Practice' : 'Luyện Viết', desc: isAdult ? 'Essays, grammar clinic' : 'Viết bài, sửa câu', theme: 'writing' },
         { to: '/grammar', icon: '📐', title: isAdult ? 'Grammar' : 'Ngữ pháp', desc: isAdult ? 'Tenses, conditionals, passive' : 'Thì, câu điều kiện', theme: 'grammar' },
         { to: '/games', icon: isAdult ? '🧩' : '🎮', title: isAdult ? 'Luyện tập' : 'Trò chơi', desc: isAdult ? 'Quiz, ghép câu, viết chữ' : 'Vừa chơi vừa học!', theme: 'games' },
+        { to: '/vocabulary', icon: '📊', title: isAdult ? 'Vocabulary' : 'Từ vựng', desc: isAdult ? 'FSRS review, mastery tracking' : 'Ôn tập, theo dõi từ vựng', theme: 'vocabulary' },
     ];
 
     if (isAdult) {
@@ -154,6 +172,32 @@ export default function Home() {
                     </div>
                 </Link>
             )}
+
+            {/* Daily Tip + Live Quote */}
+            {(() => {
+                const tip = LEARNING_TIPS[Math.floor(Date.now() / 86400000) % LEARNING_TIPS.length];
+                return (
+                    <>
+                        {dailyQuote && (
+                            <div className="daily-tip-card glass-card" style={{ marginBottom: 8 }}>
+                                <span className="daily-tip-emoji">💬</span>
+                                <div className="daily-tip-text">
+                                    <strong>{isAdult ? 'Quote of the Day' : 'Câu nói hay'}</strong>
+                                    <p>"{dailyQuote.content}"</p>
+                                    <p style={{ fontSize: '0.72rem', fontStyle: 'italic', opacity: 0.7, marginTop: 2 }}>— {dailyQuote.author}</p>
+                                </div>
+                            </div>
+                        )}
+                        <div className="daily-tip-card glass-card">
+                            <span className="daily-tip-emoji">{tip.emoji}</span>
+                            <div className="daily-tip-text">
+                                <strong>{isAdult ? 'Learning Tip' : 'Mẹo học tập'}</strong>
+                                <p>{isAdult ? tip.en : tip.vi}</p>
+                            </div>
+                        </div>
+                    </>
+                );
+            })()}
 
             {/* Section Title */}
             <h2 className="section-title">

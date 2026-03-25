@@ -20,6 +20,7 @@ import PhrasePractice from './pages/PhrasePractice';
 import PhraseTopicList from './pages/PhraseTopicList';
 import DailyReview from './pages/DailyReview';
 import Achievements from './pages/Achievements';
+import VocabularyDashboard from './pages/VocabularyDashboard';
 import ListeningHub from './modules/listening/ListeningHub';
 import ListeningLesson from './modules/listening/ListeningLesson';
 import SpeakingHub from './modules/speaking/SpeakingHub';
@@ -60,6 +61,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/review" element={<DailyReview />} />
         <Route path="/achievements" element={<Achievements />} />
+        <Route path="/vocabulary" element={<VocabularyDashboard />} />
         <Route path="/english" element={<LearnEnglish />} />
         <Route path="/chinese" element={<LearnChinese />} />
         <Route path="/games" element={<Games />} />

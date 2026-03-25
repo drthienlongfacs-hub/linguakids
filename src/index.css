@@ -4355,3 +4355,650 @@ textarea:focus-visible,
     color: black;
   }
 }
+
+/* ============================================
+   LinguaKids v8.0 — New Component Styles
+   ============================================ */
+
+/* --- Daily Tip Card --- */
+.daily-tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  animation: slideUpFade 0.4s ease-out;
+}
+
+.daily-tip-emoji {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.daily-tip-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.daily-tip-text strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  margin-bottom: 2px;
+}
+
+.daily-tip-text p {
+  font-size: 0.82rem;
+  color: var(--color-text-light);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* --- Vocabulary Dashboard --- */
+.vocabulary-dashboard {
+  animation: fadeIn 0.3s ease;
+}
+
+.vocab-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.vocab-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 6px;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-fast);
+}
+
+.vocab-stat-card.highlight {
+  background: linear-gradient(135deg, #EF444410, #F59E0B10);
+  border-color: #EF444430;
+}
+
+.vocab-stat-icon {
+  font-size: 1.3rem;
+}
+
+.vocab-stat-number {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.vocab-stat-label {
+  font-size: 0.65rem;
+  color: var(--color-text-light);
+  text-align: center;
+}
+
+/* Review CTA */
+.vocab-review-cta {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, #6366F1, #8B5CF6);
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  transition: all var(--transition-normal);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.vocab-review-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+}
+
+.vocab-review-cta:active {
+  transform: scale(0.98);
+}
+
+/* Filter Row */
+.vocab-filter-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0;
+  margin-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.vocab-filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.vocab-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  background: white;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  color: var(--color-text-light);
+}
+
+.vocab-filter-btn.active {
+  background: var(--filter-color, var(--color-primary));
+  color: white;
+  border-color: var(--filter-color, var(--color-primary));
+}
+
+/* Search Row */
+.vocab-search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.vocab-lang-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.vocab-lang-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border);
+  background: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vocab-lang-btn.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.vocab-search-input {
+  flex: 1;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-border);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+  background: white;
+}
+
+.vocab-search-input:focus {
+  border-color: var(--color-primary);
+}
+
+/* Word List */
+.vocab-word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vocab-word-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: white;
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  animation: slideUpFade 0.3s ease-out;
+}
+
+.vocab-word-card:hover {
+  border-color: var(--color-primary-light);
+  transform: translateX(4px);
+}
+
+.vocab-word-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vocab-word-text {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.vocab-word-lang {
+  font-size: 0.8rem;
+}
+
+.vocab-word-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vocab-mastery-badge {
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.vocab-word-meta {
+  font-size: 0.68rem;
+  color: var(--color-text-light);
+  white-space: nowrap;
+}
+
+.vocab-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-text-light);
+}
+
+.vocab-empty p {
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+/* Review Mode */
+.vocab-review-card {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 40px 24px;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  animation: slideUpFade 0.4s ease-out;
+}
+
+.vocab-review-word {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.vocab-review-lang {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: 24px;
+}
+
+.vocab-show-btn {
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.vocab-show-btn:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.vocab-rating-section {
+  margin-top: 20px;
+}
+
+.vocab-rating-label {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: 12px;
+}
+
+.vocab-rating-btns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.vocab-rate-btn {
+  padding: 10px 6px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.vocab-rate-btn.forgot {
+  background: #FEF2F2;
+  color: #EF4444;
+}
+
+.vocab-rate-btn.hard {
+  background: #FFF7ED;
+  color: #F59E0B;
+}
+
+.vocab-rate-btn.good {
+  background: #ECFDF5;
+  color: #10B981;
+}
+
+.vocab-rate-btn.easy {
+  background: #EFF6FF;
+  color: #3B82F6;
+}
+
+.vocab-rate-btn:hover {
+  transform: scale(1.05);
+}
+
+.vocab-rate-btn:active {
+  transform: scale(0.95);
+}
+
+/* --- Reading Enhancements --- */
+.reading-word--active {
+  background: rgba(99, 102, 241, 0.15);
+  border-radius: 4px;
+  padding: 1px 2px;
+}
+
+.reading-timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  padding: 6px 16px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-full);
+  background: rgba(99, 102, 241, 0.08);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: #6366F1;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reading-timer-icon {
+  font-size: 1rem;
+}
+
+.reading-timer-value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.reading-wpm-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #6366F110, #8B5CF610);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.wpm-icon {
+  font-size: 1.2rem;
+}
+
+.wpm-value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #6366F1;
+}
+
+.wpm-label {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+/* Enhanced Word Popup */
+.reading-word-popup--enhanced {
+  padding: 16px;
+}
+
+.rwp-phonetic {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.rwp-ipa {
+  font-size: 0.9rem;
+  color: #8B5CF6;
+  font-style: italic;
+}
+
+.rwp-pos {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: #8B5CF615;
+  color: #8B5CF6;
+  font-weight: 600;
+}
+
+.rwp-loading {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  text-align: center;
+  padding: 8px;
+}
+
+.rwp-definition {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--color-text-light);
+}
+
+.rwp-def-pos {
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-border);
+  color: var(--color-text-light);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rwp-def-text {
+  flex: 1;
+}
+
+.rwp-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* --- ShadowingEngine Slow-Reveal --- */
+.shadow-word {
+  display: inline-block;
+  transition: all 0.3s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.shadow-word--revealed {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-text);
+}
+
+.shadow-word--hidden {
+  color: rgba(99, 102, 241, 0.2);
+}
+
+.shadow-word--current {
+  background: rgba(99, 102, 241, 0.25);
+  color: var(--color-primary);
+  font-weight: 700;
+  transform: scale(1.05);
+}
+
+/* --- Skill Card Vocabulary Theme --- */
+.skill-card--vocabulary {
+  border-color: #8B5CF630;
+  background: #FAF5FF;
+}
+
+.skill-card--vocabulary:hover {
+  border-color: #8B5CF6;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.15);
+}
+
+/* --- Animations --- */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- Adult Mode Overrides for New Components --- */
+.adult-mode .daily-tip-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+.adult-mode .daily-tip-text strong {
+  color: #818CF8;
+}
+
+.adult-mode .daily-tip-text p {
+  color: #94A3B8;
+}
+
+.adult-mode .vocab-stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.1);
+}
+
+.adult-mode .vocab-stat-number {
+  color: #E2E8F0;
+}
+
+.adult-mode .vocab-word-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.1);
+}
+
+.adult-mode .vocab-word-text {
+  color: #E2E8F0;
+}
+
+.adult-mode .vocab-filter-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.15);
+  color: #94A3B8;
+}
+
+.adult-mode .vocab-search-input {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(148, 163, 184, 0.15);
+  color: #E2E8F0;
+}
+
+.adult-mode .vocab-review-card {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(148, 163, 184, 0.1);
+}
+
+.adult-mode .vocab-review-word {
+  color: #E2E8F0;
+}
+
+.adult-mode .vocab-show-btn {
+  border-color: #818CF8;
+  color: #818CF8;
+}
+
+.adult-mode .vocab-show-btn:hover {
+  background: #818CF8;
+  color: #0F172A;
+}
+
+.adult-mode .vocab-rate-btn.forgot {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.adult-mode .vocab-rate-btn.hard {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.adult-mode .vocab-rate-btn.good {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.adult-mode .vocab-rate-btn.easy {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.adult-mode .reading-timer {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.adult-mode .reading-wpm-banner {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.15);
+}
+
+.adult-mode .skill-card--vocabulary {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(139, 92, 246, 0.2);
+}

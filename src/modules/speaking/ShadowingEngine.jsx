@@ -4,7 +4,7 @@
 // Works with: Web Speech API (SpeechRecognition + SpeechSynthesis)
 // Supports: English (en-US) and Chinese Mandarin (zh-CN)
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 
 // ============================================================
 // Levenshtein distance for word-level similarity scoring
@@ -116,11 +116,19 @@ export default function ShadowingEngine({
     const [error, setError] = useState('');
     const [isBrowserSupported, setIsBrowserSupported] = useState(true);
     const [waveAmplitude, setWaveAmplitude] = useState(0);
+    const [revealIdx, setRevealIdx] = useState(-1); // slow-reveal word index
 
     const recRef = useRef(null);
     const timeoutRef = useRef(null);
     const analyserRef = useRef(null);
     const frameRef = useRef(null);
+    const revealTimerRef = useRef(null);
+
+    // Parse words for slow-reveal
+    const words = useMemo(() => {
+        if (lang === 'cn') return text.replace(/[\s。，！？、]/g, '').split('');
+        return text.split(/\s+/).filter(Boolean);
+    }, [text, lang]);
 
     // Check browser support
     useEffect(() => {
@@ -133,6 +141,7 @@ export default function ShadowingEngine({
         return () => {
             recRef.current?.abort();
             clearTimeout(timeoutRef.current);
+            clearInterval(revealTimerRef.current);
             cancelAnimationFrame(frameRef.current);
             window.speechSynthesis.cancel();
         };
@@ -152,10 +161,25 @@ export default function ShadowingEngine({
         const voice = voices.find(v => v.lang.startsWith(targetLang)) || voices[0];
         if (voice) u.voice = voice;
 
-        u.onend = () => setState('idle');
-        u.onerror = () => setState('idle');
+        u.onend = () => { setState('idle'); clearInterval(revealTimerRef.current); setRevealIdx(-1); };
+        u.onerror = () => { setState('idle'); clearInterval(revealTimerRef.current); setRevealIdx(-1); };
         window.speechSynthesis.speak(u);
-    }, [text, lang, speed]);
+
+        // Slow-reveal: estimate word timing and highlight sequentially
+        const totalDuration = (text.length / (speed * 12)) * 1000; // rough ms estimate
+        const perWord = totalDuration / Math.max(words.length, 1);
+        let idx = 0;
+        setRevealIdx(0);
+        revealTimerRef.current = setInterval(() => {
+            idx++;
+            if (idx >= words.length) {
+                clearInterval(revealTimerRef.current);
+                setRevealIdx(-1);
+            } else {
+                setRevealIdx(idx);
+            }
+        }, perWord);
+    }, [text, lang, speed, words]);
 
     // ====== Waveform visualization during recording ======
     const startWaveform = useCallback(async () => {
@@ -309,7 +333,13 @@ export default function ShadowingEngine({
                 marginBottom: '16px', textAlign: 'center',
             }}>
                 <p style={{ fontSize: lang === 'cn' ? '1.5rem' : '1.15rem', fontWeight: 600, margin: '0 0 6px', lineHeight: 1.6 }}>
-                    {text}
+                    {state === 'playing' && revealIdx >= 0 ? (
+                        words.map((w, i) => (
+                            <span key={i} className={`shadow-word ${i < revealIdx ? 'shadow-word--revealed' : i === revealIdx ? 'shadow-word--current' : 'shadow-word--hidden'}`}>
+                                {w}{lang !== 'cn' ? ' ' : ''}
+                            </span>
+                        ))
+                    ) : text}
                 </p>
                 {pinyin && <p style={{ fontSize: '0.9rem', color: '#8B5CF6', margin: '0 0 4px' }}>{pinyin}</p>}
                 {textVi && showTranslation && (

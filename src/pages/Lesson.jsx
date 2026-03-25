@@ -6,6 +6,8 @@ import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
 import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
+import WordDetail from '../components/WordDetail';
+import { reviewCard, Rating } from '../services/fsrs';
 
 export default function Lesson() {
     const { topicId } = useParams();
@@ -19,6 +21,7 @@ export default function Lesson() {
     const [celebration, setCelebration] = useState(0);
     const [speakResult, setSpeakResult] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
+    const [dictWord, setDictWord] = useState(null);
 
     if (!topic) {
         return (
@@ -59,6 +62,8 @@ export default function Lesson() {
 
     const handleNext = () => {
         learnWord(word.word, 'en');
+        // FSRS: schedule as Good on first learn
+        reviewCard(`en_${word.word}`, Rating.Good);
 
         if (isLastWord) {
             addXP(20); // Bonus for completing topic
@@ -181,6 +186,14 @@ export default function Lesson() {
                     🔊
                 </button>
                 <button
+                    className="btn btn--icon"
+                    onClick={(e) => { e.stopPropagation(); setDictWord(word.word); }}
+                    title="Từ điển"
+                    style={{ background: 'var(--color-english-light)', color: 'var(--color-english)' }}
+                >
+                    📖
+                </button>
+                <button
                     className={`mic-button ${isListening ? 'listening' : ''}`}
                     onClick={(e) => { e.stopPropagation(); handleSpeak(); }}
                     disabled={isListening}
@@ -205,6 +218,9 @@ export default function Lesson() {
                     {isLastWord ? '🎉 Hoàn thành!' : 'Tiếp theo ▶️'}
                 </button>
             </div>
+
+            {/* Dictionary Modal */}
+            {dictWord && <WordDetail word={dictWord} onClose={() => setDictWord(null)} />}
         </div>
     );
 }
