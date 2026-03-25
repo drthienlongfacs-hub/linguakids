@@ -316,9 +316,296 @@ export const SPEAKING_LESSONS = [
             { text: "Swimming is fun but you should always swim with an adult.", textVi: "Bơi lội rất vui nhưng bạn nên luôn bơi cùng người lớn." },
         ],
     },
+    // ═══════════════════════════════════════════════════════
+    // IELTS Speaking Expansion — High-frequency topics
+    // Source: Cambridge IELTS 12-19 topic analysis
+    // ═══════════════════════════════════════════════════════
+
+    // ── Part 1: Education ──
+    {
+        id: 'ielts-part1-education',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 1: Education',
+        titleVi: 'IELTS Phần 1: Giáo dục',
+        level: 'B1',
+        emoji: '📚',
+        mode: 'adult',
+        part: 1,
+        timeLimit: 300,
+        questions: [
+            { question: "What subject did you enjoy most at school?", tip: "Name subject + explain why with a specific memory.", tipVi: "Nêu môn học + giải thích tại sao kèm kỷ niệm cụ thể." },
+            { question: "Do you think the education system in your country is effective?", tip: "Give your opinion, then one strength and one weakness.", tipVi: "Nêu ý kiến, rồi một điểm mạnh và một điểm yếu." },
+            { question: "Would you like to study abroad in the future?", tip: "State yes/no + reasons. Mention a specific country if possible.", tipVi: "Trả lời có/không + lý do. Nêu tên nước cụ thể nếu được." },
+            { question: "How has the internet changed the way people learn?", tip: "Give 2 concrete examples. Compare past vs. present.", tipVi: "Cho 2 ví dụ cụ thể. So sánh quá khứ và hiện tại." },
+            { question: "Do you prefer studying alone or in a group?", tip: "State preference clearly, give pros of your choice.", tipVi: "Nêu rõ sở thích, cho ưu điểm của lựa chọn." },
+        ],
+    },
+
+    // ── Part 1: Health & Sports ──
+    {
+        id: 'ielts-part1-health',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 1: Health & Sports',
+        titleVi: 'IELTS Phần 1: Sức khỏe & Thể thao',
+        level: 'B1',
+        emoji: '🏃',
+        mode: 'adult',
+        part: 1,
+        timeLimit: 300,
+        questions: [
+            { question: "What do you do to keep fit and healthy?", tip: "Mention specific activities, frequency, and why.", tipVi: "Nêu hoạt động cụ thể, tần suất, và lý do." },
+            { question: "Do you play any sports regularly?", tip: "Name the sport, how often, who you play with.", tipVi: "Nêu tên môn, tần suất, chơi với ai." },
+            { question: "Is it important for children to do physical exercise?", tip: "Say yes + give 2 benefits (physical + mental).", tipVi: "Nói có + cho 2 lợi ích (thể chất + tinh thần)." },
+            { question: "Do you think people in your country eat healthily?", tip: "Give a balanced view. Mention traditional vs. modern food habits.", tipVi: "Nhận xét cân bằng. So sánh thói quen ăn truyền thống và hiện đại." },
+        ],
+    },
+
+    // ── Part 1: Work & Career ──
+    {
+        id: 'ielts-part1-work',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 1: Work & Career',
+        titleVi: 'IELTS Phần 1: Công việc & Nghề nghiệp',
+        level: 'B1',
+        emoji: '💼',
+        mode: 'adult',
+        part: 1,
+        timeLimit: 300,
+        questions: [
+            { question: "What kind of work do you do?", tip: "Name your job/field, main responsibilities, what you enjoy about it.", tipVi: "Nêu công việc, trách nhiệm chính, điều bạn thích." },
+            { question: "What job would you like to have in the future?", tip: "Name a dream job + explain what attracts you.", tipVi: "Nêu công việc mơ ước + giải thích điểm hấp dẫn." },
+            { question: "Do you prefer working from home or in an office?", tip: "State preference + 2 reasons. Acknowledge downsides briefly.", tipVi: "Nêu sở thích + 2 lý do. Nhắc qua nhược điểm." },
+            { question: "Is work-life balance important to you?", tip: "Say yes + explain how you achieve it or struggle with it.", tipVi: "Nói có + giải thích cách bạn thực hiện hoặc khó khăn." },
+        ],
+    },
+
+    // ── Part 2: Describe a Person ──
+    {
+        id: 'ielts-part2-person',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 2: Describe a Person',
+        titleVi: 'IELTS Phần 2: Mô tả người',
+        level: 'B2',
+        emoji: '👤',
+        mode: 'adult',
+        part: 2,
+        prepTime: 60,
+        timeLimit: 120,
+        cueCard: {
+            topic: "Describe someone who has had a significant influence on your life.",
+            points: [
+                "Who this person is",
+                "How you know this person",
+                "What this person has done",
+                "And explain why they have influenced you",
+            ],
+        },
+        followUp: [
+            "Do you think famous people are good role models?",
+            "How have role models changed compared to the past?",
+            "Is it important for children to have role models?",
+        ],
+    },
+
+    // ── Part 2: Describe an Event ──
+    {
+        id: 'ielts-part2-event',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 2: Describe an Event',
+        titleVi: 'IELTS Phần 2: Mô tả sự kiện',
+        level: 'B2',
+        emoji: '🎉',
+        mode: 'adult',
+        part: 2,
+        prepTime: 60,
+        timeLimit: 120,
+        cueCard: {
+            topic: "Describe a memorable celebration or event that you attended.",
+            points: [
+                "What the event was",
+                "Where and when it took place",
+                "Who was there with you",
+                "And explain why it was memorable",
+            ],
+        },
+        followUp: [
+            "Do you think traditional celebrations are still important?",
+            "How do celebrations differ between generations?",
+            "Are festivals in your country becoming more commercialized?",
+        ],
+    },
+
+    // ── Part 2: Describe an Achievement ──
+    {
+        id: 'ielts-part2-achievement',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 2: Describe an Achievement',
+        titleVi: 'IELTS Phần 2: Mô tả thành tựu',
+        level: 'B2',
+        emoji: '🏆',
+        mode: 'adult',
+        part: 2,
+        prepTime: 60,
+        timeLimit: 120,
+        cueCard: {
+            topic: "Describe something you achieved that you are proud of.",
+            points: [
+                "What you achieved",
+                "When you achieved it",
+                "How difficult it was",
+                "And explain why you feel proud of it",
+            ],
+        },
+        followUp: [
+            "What motivates people to work hard?",
+            "Is it better to set realistic or ambitious goals?",
+            "How important is recognition for achievements?",
+        ],
+    },
+
+    // ── Part 2: Describe a Skill ──
+    {
+        id: 'ielts-part2-skill',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 2: Describe a Skill',
+        titleVi: 'IELTS Phần 2: Mô tả kỹ năng',
+        level: 'B2',
+        emoji: '🎯',
+        mode: 'adult',
+        part: 2,
+        prepTime: 60,
+        timeLimit: 120,
+        cueCard: {
+            topic: "Describe a skill you learned that you found useful.",
+            points: [
+                "What the skill is",
+                "How you learned it",
+                "How long it took you to learn",
+                "And explain why you found it useful",
+            ],
+        },
+        followUp: [
+            "What skills do you think will be important in the future?",
+            "Is it better to learn from teachers or self-study?",
+            "At what age should children start learning practical skills?",
+        ],
+    },
+
+    // ── Part 3: Society & Culture ──
+    {
+        id: 'ielts-part3-society',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 3: Society & Culture',
+        titleVi: 'IELTS Phần 3: Xã hội & Văn hóa',
+        level: 'C1',
+        emoji: '🌏',
+        mode: 'adult',
+        part: 3,
+        timeLimit: 300,
+        questions: [
+            { question: "How has globalization affected local cultures?", tip: "Discuss both positive (connection, exposure) and negative (homogenization) effects with examples.", tipVi: "Thảo luận cả mặt tích cực và tiêu cực kèm ví dụ." },
+            { question: "Do you think social media has brought people closer together or driven them apart?", tip: "Take a nuanced position. Use 'on one hand... on the other hand' structure.", tipVi: "Đưa quan điểm cân bằng. Dùng cấu trúc 'một mặt... mặt khác'." },
+            { question: "What role should the government play in promoting public health?", tip: "Give 2-3 specific policies. Use should/ought to/must.", tipVi: "Đưa 2-3 chính sách cụ thể. Dùng should/ought to/must." },
+            { question: "Is it more important to preserve traditions or embrace change?", tip: "Show ability to see both sides. Conclude with your balanced view.", tipVi: "Cho thấy khả năng nhìn cả hai phía. Kết luận với quan điểm cân bằng." },
+            { question: "How has the concept of family changed in recent decades?", tip: "Compare traditional vs. modern family structures. Give reasons for changes.", tipVi: "So sánh gia đình truyền thống và hiện đại. Cho lý do thay đổi." },
+        ],
+    },
+
+    // ── Part 3: Education & Future ──
+    {
+        id: 'ielts-part3-education',
+        type: 'ielts_speaking',
+        title: 'IELTS Part 3: Education & Future',
+        titleVi: 'IELTS Phần 3: Giáo dục & Tương lai',
+        level: 'C1',
+        emoji: '🎓',
+        mode: 'adult',
+        part: 3,
+        timeLimit: 300,
+        questions: [
+            { question: "Should university education be free for everyone?", tip: "Present arguments for and against. Consider economic implications.", tipVi: "Trình bày lập luận thuận và chống. Xem xét hệ quả kinh tế." },
+            { question: "How will artificial intelligence change the job market?", tip: "Mention specific industries. Discuss both job loss and new opportunities.", tipVi: "Đề cập ngành cụ thể. Thảo luận cả mất việc và cơ hội mới." },
+            { question: "What skills should schools focus on teaching in the 21st century?", tip: "Name 3-4 skills (critical thinking, digital literacy, etc.) with justification.", tipVi: "Nêu 3-4 kỹ năng kèm giải thích lý do." },
+            { question: "Do you think online learning can replace traditional classrooms?", tip: "Discuss limitations of both approaches. Give a balanced conclusion.", tipVi: "Thảo luận hạn chế của cả hai. Kết luận cân bằng." },
+        ],
+    },
+
+    // ═══════════════════════════════════════════════════════
+    // Advanced Shadowing — C1 Exam Prep (Fluency + Coherence)
+    // ═══════════════════════════════════════════════════════
+
+    {
+        id: 'shadow-opinion-structures',
+        type: 'shadowing',
+        title: 'Opinion & Argument Structures',
+        titleVi: 'Cấu trúc ý kiến & Lập luận',
+        level: 'C1',
+        emoji: '💬',
+        mode: 'adult',
+        sentences: [
+            { text: "While I understand the appeal of that argument, I believe the evidence suggests otherwise.", textVi: "Dù tôi hiểu sức hấp dẫn của lập luận đó, tôi tin bằng chứng cho thấy điều ngược lại." },
+            { text: "There are several factors that need to be taken into consideration before we can draw any definitive conclusions.", textVi: "Có nhiều yếu tố cần xem xét trước khi đưa ra kết luận chắc chắn." },
+            { text: "From my perspective, the benefits significantly outweigh the potential drawbacks.", textVi: "Theo quan điểm của tôi, lợi ích vượt trội đáng kể so với nhược điểm tiềm ẩn." },
+            { text: "It is widely acknowledged that education plays a crucial role in reducing social inequality.", textVi: "Người ta thừa nhận rộng rãi rằng giáo dục đóng vai trò quan trọng trong giảm bất bình đẳng xã hội." },
+            { text: "Having said that, I think we should also consider the long-term implications of this policy.", textVi: "Tuy nhiên, tôi nghĩ chúng ta cũng nên xem xét hệ quả dài hạn của chính sách này." },
+        ],
+    },
+    {
+        id: 'shadow-linking-devices',
+        type: 'shadowing',
+        title: 'Linking Words & Transitions',
+        titleVi: 'Từ nối & Chuyển ý',
+        level: 'B2',
+        emoji: '🔗',
+        mode: 'adult',
+        sentences: [
+            { text: "First of all, I'd like to point out that this issue affects everyone, regardless of their background.", textVi: "Trước hết, tôi muốn chỉ ra rằng vấn đề này ảnh hưởng đến mọi người, bất kể hoàn cảnh." },
+            { text: "Furthermore, recent studies have shown a direct link between physical exercise and mental wellbeing.", textVi: "Hơn nữa, các nghiên cứu gần đây cho thấy mối liên hệ trực tiếp giữa tập thể dục và sức khỏe tinh thần." },
+            { text: "On the other hand, some people argue that technology has made us more isolated than ever.", textVi: "Mặt khác, một số người cho rằng công nghệ đã khiến chúng ta cô đơn hơn bao giờ hết." },
+            { text: "In conclusion, I firmly believe that a combination of both approaches would yield the best results.", textVi: "Tóm lại, tôi tin chắc rằng sự kết hợp cả hai cách tiếp cận sẽ mang lại kết quả tốt nhất." },
+            { text: "To sum up, while there are valid arguments on both sides, the evidence predominantly supports the first view.", textVi: "Tóm lại, dù có lập luận hợp lệ từ cả hai phía, bằng chứng chủ yếu ủng hộ quan điểm thứ nhất." },
+        ],
+    },
 ];
 
 export function getSpeakingByMode(mode) {
     if (mode === 'adult') return SPEAKING_LESSONS;
     return SPEAKING_LESSONS.filter(l => l.mode === 'kids' || l.level === 'A1');
+}
+
+// ═══════════════════════════════════════════════════════
+// Utility: Get lessons by type/part/level
+// ═══════════════════════════════════════════════════════
+export function getSpeakingByType(type) {
+    return SPEAKING_LESSONS.filter(l => l.type === type);
+}
+
+export function getIELTSByPart(part) {
+    return SPEAKING_LESSONS.filter(l => l.type === 'ielts_speaking' && l.part === part);
+}
+
+export function getSpeakingByLevel(level) {
+    return SPEAKING_LESSONS.filter(l => l.level === level);
+}
+
+export function getSpeakingStats() {
+    const shadowing = SPEAKING_LESSONS.filter(l => l.type === 'shadowing');
+    const ielts = SPEAKING_LESSONS.filter(l => l.type === 'ielts_speaking');
+    return {
+        totalLessons: SPEAKING_LESSONS.length,
+        shadowing: shadowing.length,
+        ielts: ielts.length,
+        byLevel: {
+            A1: SPEAKING_LESSONS.filter(l => l.level === 'A1').length,
+            A2: SPEAKING_LESSONS.filter(l => l.level === 'A2').length,
+            B1: SPEAKING_LESSONS.filter(l => l.level === 'B1').length,
+            B2: SPEAKING_LESSONS.filter(l => l.level === 'B2').length,
+            C1: SPEAKING_LESSONS.filter(l => l.level === 'C1').length,
+        },
+        byPart: {
+            1: ielts.filter(l => l.part === 1).length,
+            2: ielts.filter(l => l.part === 2).length,
+            3: ielts.filter(l => l.part === 3).length,
+        },
+    };
 }

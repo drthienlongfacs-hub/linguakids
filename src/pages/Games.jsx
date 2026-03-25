@@ -56,6 +56,25 @@ const SECTIONS = [
             { id: 'memory-cn', title: 'Chinese Memory', titleVi: '🃏 Lật Thẻ 🇨🇳', desc: 'Match characters', descVi: 'Ghép chữ Hán với hình', emoji: '🀄', path: '/game/memory/cn', color: '#EC4899' },
         ],
     },
+    {
+        title: '🤖 AI Conversation',
+        titleVi: '🤖 Hội thoại AI',
+        desc: 'Practice with AI in real-life scenarios',
+        descVi: 'Luyện tập với AI trong tình huống thực tế',
+        items: [
+            { id: 'conv-ai', title: 'AI Chat Practice', titleVi: '🤖 Trò chuyện AI', desc: 'Restaurant, Airport, Doctor, Interview, Hotel', descVi: 'Nhà hàng, Sân bay, Bệnh viện, Phỏng vấn, Khách sạn', emoji: '💬', path: '/conversation-ai', color: '#8B5CF6' },
+        ],
+    },
+    {
+        title: '📝 Fill in the Blank',
+        titleVi: '📝 Điền vào chỗ trống',
+        desc: 'Grammar exercises — A1 to B2',
+        descVi: 'Bài tập ngữ pháp — A1 đến B2',
+        items: [
+            { id: 'cloze-en', title: 'English Cloze', titleVi: '📝 Điền khuyết 🇬🇧', desc: '40+ exercises, A1→B2', descVi: '40+ bài, A1→B2', emoji: '🇬🇧', path: '/cloze/en', color: '#3B82F6' },
+            { id: 'cloze-cn', title: 'Chinese Cloze', titleVi: '📝 Điền khuyết 🇨🇳', desc: '15+ exercises, HSK1→3', descVi: '15+ bài, HSK1→3', emoji: '🇨🇳', path: '/cloze/cn', color: '#EF4444' },
+        ],
+    },
 ];
 
 export default function Games() {

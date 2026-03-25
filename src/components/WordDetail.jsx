@@ -2,9 +2,9 @@
 // Powered by FreeDictionaryAPI (free, unlimited, no key)
 
 import { useState, useEffect, useCallback } from 'react';
-import { lookupWord, playPronunciation } from '../../services/dictionaryService';
-import { getWordProfile } from '../../services/datamuseService';
-import { getCEFRLevel, getCEFRColor } from '../../data/cefrData';
+import { lookupWord, playPronunciation } from '../services/dictionaryService';
+import { getWordProfile } from '../services/datamuseService';
+import { getCEFRLevel, getCEFRColor } from '../data/cefrData';
 
 const POS_COLORS = {
     noun: '#3B82F6',

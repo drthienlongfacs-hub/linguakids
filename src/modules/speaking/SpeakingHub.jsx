@@ -52,16 +52,30 @@ export default function SpeakingHub() {
 
             {ielts.length > 0 && (
                 <div className="lh-level-section">
-                    <div className="lh-level-header"><h3>🎤 {adult ? 'IELTS Speaking' : 'Phỏng vấn'}</h3><span className="lh-level-desc">{adult ? 'Mock speaking test practice' : 'Luyện phỏng vấn'}</span></div>
-                    <div className="lh-lesson-grid">
-                        {ielts.map(l => (
-                            <div key={l.id} className="lh-lesson-card" onClick={() => setActiveLesson(l)}>
-                                <span className="lh-lesson-emoji">{l.emoji}</span>
-                                <div className="lh-lesson-info"><h4>{l.title}</h4><p className="lh-lesson-title-vi">{l.titleVi}</p><div className="lh-lesson-meta"><span>{l.level}</span><span>Part {l.part}</span></div></div>
-                                <span className="lh-lesson-arrow">▶</span>
+                    <div className="lh-level-header"><h3>🎤 {adult ? 'IELTS Speaking' : 'Phỏng vấn'}</h3><span className="lh-level-desc">{adult ? 'Mock speaking test — Parts 1, 2 & 3' : 'Luyện phỏng vấn'}</span></div>
+                    {[1, 2, 3].map(part => {
+                        const partLessons = ielts.filter(l => l.part === part);
+                        if (partLessons.length === 0) return null;
+                        const partLabels = { 1: 'Part 1: Introduction & Interview', 2: 'Part 2: Long Turn (Cue Card)', 3: 'Part 3: Two-Way Discussion' };
+                        const partTimes = { 1: '4-5 min', 2: '1 min prep + 2 min speak', 3: '4-5 min' };
+                        return (
+                            <div key={part} style={{ marginBottom: '12px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                                    <span style={{ color: '#94A3B8', fontSize: '0.8rem', fontWeight: 600 }}>{partLabels[part]}</span>
+                                    <span style={{ color: '#64748B', fontSize: '0.75rem' }}>{partTimes[part]}</span>
+                                </div>
+                                <div className="lh-lesson-grid">
+                                    {partLessons.map(l => (
+                                        <div key={l.id} className="lh-lesson-card" onClick={() => setActiveLesson(l)}>
+                                            <span className="lh-lesson-emoji">{l.emoji}</span>
+                                            <div className="lh-lesson-info"><h4>{l.title}</h4><p className="lh-lesson-title-vi">{l.titleVi}</p><div className="lh-lesson-meta"><span>{l.level}</span><span>Part {l.part}</span>{l.prepTime > 0 && <span>⏱️ {l.prepTime}s prep</span>}</div></div>
+                                            <span className="lh-lesson-arrow">▶</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
             )}
         </div>
@@ -123,8 +137,11 @@ function SpeakingExercise({ lesson, onBack, adult }) {
     const [showResult, setShowResult] = useState(false);
     const [scores, setScores] = useState([]);
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [prepPhase, setPrepPhase] = useState(lesson.prepTime > 0);
+    const [prepTimer, setPrepTimer] = useState(lesson.prepTime || 0);
     const recognitionRef = useRef(null);
     const timeoutRef = useRef(null);
+    const prepTimerRef = useRef(null);
     const voicesRef = useRef([]);
 
     // Pre-load voices on mount (Chrome loads them async)
@@ -137,11 +154,29 @@ function SpeakingExercise({ lesson, onBack, adult }) {
         return () => { window.speechSynthesis.onvoiceschanged = null; };
     }, []);
 
+    // Prep timer countdown for Part 2
+    useEffect(() => {
+        if (prepPhase && prepTimer > 0) {
+            prepTimerRef.current = setInterval(() => {
+                setPrepTimer(prev => {
+                    if (prev <= 1) {
+                        clearInterval(prepTimerRef.current);
+                        setPrepPhase(false);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(prepTimerRef.current);
+    }, [prepPhase, prepTimer > 0]);
+
     // Cleanup on unmount
     useEffect(() => {
         return () => {
             recognitionRef.current?.abort();
             clearTimeout(timeoutRef.current);
+            clearInterval(prepTimerRef.current);
             window.speechSynthesis.cancel();
         };
     }, []);
@@ -338,13 +373,38 @@ function SpeakingExercise({ lesson, onBack, adult }) {
                 <div className="dictation-progress-bar"><div className="dictation-progress-fill" style={{ width: `${((currentIdx + 1) / items.length) * 100}%` }} /></div>
             </div>
 
-            {/* IELTS Cue Card */}
-            {lesson.cueCard && lesson.type === 'ielts_speaking' && lesson.part === 2 && (
+            {/* IELTS Part 2: Prep Phase with Timer */}
+            {prepPhase && lesson.part === 2 && lesson.cueCard && (
+                <div style={{ textAlign: 'center', padding: '24px 16px', background: 'rgba(99,102,241,0.08)', borderRadius: '16px', border: '1px solid rgba(99,102,241,0.2)', marginBottom: '16px' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>📝</div>
+                    <p style={{ color: '#C7D2FE', fontSize: '0.95rem', fontWeight: 600, marginBottom: '4px' }}>
+                        {adult ? 'Preparation Time' : 'Thời gian chuẩn bị'}
+                    </p>
+                    <div style={{ fontSize: '3rem', fontWeight: 700, color: prepTimer <= 10 ? '#FB7185' : '#818CF8', fontFamily: 'monospace', transition: 'color 0.3s' }}>
+                        {Math.floor(prepTimer / 60)}:{(prepTimer % 60).toString().padStart(2, '0')}
+                    </div>
+                    <p style={{ color: '#94A3B8', fontSize: '0.8rem', margin: '8px 0 16px' }}>
+                        {adult ? 'Read the cue card and organize your thoughts' : 'Đọc đề bài và chuẩn bị ý tưởng'}
+                    </p>
+                    <div className="sp-cue-card" style={{ textAlign: 'left' }}>
+                        <h3>📋 Cue Card</h3>
+                        <p className="sp-cue-topic">{lesson.cueCard.topic}</p>
+                        <ul>{lesson.cueCard.points.map((p, i) => <li key={i}>{p}</li>)}</ul>
+                    </div>
+                    <button onClick={() => { clearInterval(prepTimerRef.current); setPrepPhase(false); setPrepTimer(0); }}
+                        style={{ marginTop: '16px', padding: '10px 24px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(129,140,248,0.2)', color: '#C7D2FE', cursor: 'pointer', fontSize: '0.9rem', fontWeight: 600 }}>
+                        {adult ? 'Skip → Start Speaking' : 'Bỏ qua → Bắt đầu nói'}
+                    </button>
+                </div>
+            )}
+
+            {/* IELTS Cue Card (shown during speaking, without timer) */}
+            {!prepPhase && lesson.cueCard && lesson.type === 'ielts_speaking' && lesson.part === 2 && (
                 <div className="sp-cue-card">
                     <h3>📋 Cue Card</h3>
                     <p className="sp-cue-topic">{lesson.cueCard.topic}</p>
                     <ul>{lesson.cueCard.points.map((p, i) => <li key={i}>{p}</li>)}</ul>
-                    <p className="sp-cue-time">⏱️ You have 1 minute to prepare and 2 minutes to speak.</p>
+                    <p className="sp-cue-time">⏱️ {adult ? 'You have 2 minutes to speak.' : 'Bạn có 2 phút để nói.'}</p>
                 </div>
             )}
 

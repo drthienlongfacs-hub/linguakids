@@ -399,6 +399,267 @@ Despite this progress, significant challenges remain. Developing countries often
             { type: 'true_false', question: 'Lithium-ion battery costs have decreased by 50% in ten years.', answer: false, explanation: 'Battery costs declined by 90%, not 50%.' },
         ],
     },
+    // ========== NEW KIDS PASSAGES ==========
+    {
+        id: 'my-family-trip', title: 'My Family Trip', titleVi: 'Chuyến đi của gia đình em', level: 'A1', wordCount: 110, readingTime: '2 min', topic: 'Family', emoji: '🚗', mode: 'kids',
+        passage: `Last weekend, my family went to Vung Tau beach. We went by car. The trip took two hours.\n\nAt the beach, I built sandcastles with my sister. My father swam in the sea. My mother took many photos.\n\nWe ate seafood for lunch at a restaurant near the beach. I had grilled fish and rice. It was delicious!\n\nIn the afternoon, we flew a kite. The wind was strong and the kite went very high. I was so happy!\n\nWe went home at five o'clock. I was tired but very happy. I love family trips!`,
+        vocabulary: [
+            { word: 'sandcastle', meaning: 'lâu đài cát', example: 'I built sandcastles on the beach.' },
+            { word: 'grilled', meaning: 'nướng', example: 'Grilled fish is delicious.' },
+            { word: 'kite', meaning: 'diều', example: 'We flew a kite at the beach.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'Where did the family go?', options: ['Da Lat', 'Vung Tau', 'Nha Trang', 'Phu Quoc'], correct: 1 },
+            { type: 'true_false', question: 'They went by bus.', answer: false, explanation: 'They went by car.' },
+            { type: 'mcq', question: 'What did the child eat for lunch?', options: ['Pizza', 'Noodles', 'Grilled fish', 'Chicken'], correct: 2 },
+            { type: 'gap_fill', question: 'They flew a _______ in the afternoon.', answer: 'kite', hint: 'Something that flies in the wind' },
+        ],
+    },
+    {
+        id: 'the-zoo', title: 'A Day at the Zoo', titleVi: 'Một ngày ở sở thú', level: 'A1', wordCount: 120, readingTime: '2 min', topic: 'Animals', emoji: '🦁', mode: 'kids',
+        passage: `Today my class went to the zoo. We took the school bus. It was exciting!\n\nFirst, we saw the elephants. They were eating bananas. Baby elephants are very cute. Then we went to see the monkeys. They were jumping and playing in the trees. One monkey threw a banana at us!\n\nMy favorite animal was the giraffe. It has a very long neck and brown spots. The giraffe ate leaves from tall trees.\n\nWe also saw lions, tigers, and penguins. The penguins were swimming in cold water. They looked funny when they walked!\n\nAt noon, we had lunch in the park. I ate a sandwich and drank juice. It was the best day ever!`,
+        vocabulary: [
+            { word: 'spots', meaning: 'đốm', example: 'The giraffe has brown spots.' },
+            { word: 'penguin', meaning: 'chim cánh cụt', example: 'Penguins swim in cold water.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: "What was the child's favorite animal?", options: ['Elephant', 'Monkey', 'Giraffe', 'Lion'], correct: 2 },
+            { type: 'true_false', question: 'The class walked to the zoo.', answer: false, explanation: 'They took the school bus.' },
+            { type: 'mcq', question: 'What were the elephants eating?', options: ['Grass', 'Bananas', 'Leaves', 'Apples'], correct: 1 },
+        ],
+    },
+    {
+        id: 'birthday-party', title: 'My Birthday Party', titleVi: 'Tiệc sinh nhật của em', level: 'A1', wordCount: 130, readingTime: '2 min', topic: 'Celebration', emoji: '🎂', mode: 'kids',
+        passage: `Yesterday was my seventh birthday. I had a party at home with my friends and family.\n\nMom made a big chocolate cake with seven candles. She also made cookies and fruit juice. There were colorful balloons everywhere!\n\nMy friends gave me many presents. Hoa gave me a book about animals. Minh gave me a robot toy. My grandparents gave me new shoes.\n\nWe played many games. We played musical chairs and hide-and-seek. I won the musical chairs game! Everyone laughed and had fun.\n\nAt the end, we sang "Happy Birthday" and I made a wish. Then I blew out all the candles. I wished for a pet dog!\n\nIt was the best birthday ever! I said thank you to everyone.`,
+        vocabulary: [
+            { word: 'candle', meaning: 'nến', example: 'The cake had seven candles.' },
+            { word: 'balloon', meaning: 'bóng bay', example: 'Colorful balloons decorated the room.' },
+            { word: 'wish', meaning: 'điều ước', example: 'I made a wish before blowing the candles.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How old is the child?', options: ['Five', 'Six', 'Seven', 'Eight'], correct: 2 },
+            { type: 'gap_fill', question: 'Mom made a big _______ cake.', answer: 'chocolate', hint: 'A brown sweet flavor' },
+            { type: 'true_false', question: 'Hoa gave the child a robot toy.', answer: false, explanation: 'Hoa gave a book about animals. Minh gave the robot toy.' },
+            { type: 'mcq', question: 'What game did the child win?', options: ['Hide-and-seek', 'Tag', 'Musical chairs', 'Puzzle'], correct: 2 },
+        ],
+    },
+    {
+        id: 'rainy-day', title: 'A Rainy Day', titleVi: 'Ngày mưa', level: 'A2', wordCount: 140, readingTime: '2 min', topic: 'Weather', emoji: '🌧️', mode: 'kids',
+        passage: `It was raining heavily this morning so I couldn't go outside to play. I felt a little sad because I wanted to ride my bicycle.\n\nBut then Mom said, "Let's do something fun inside!" We made cookies together in the kitchen. I helped mix the flour and sugar. The cookies were shaped like stars and hearts.\n\nWhile the cookies were baking, I read my favorite book about space. I learned that the sun is actually a star! That was very interesting.\n\nIn the afternoon, the rain stopped and a beautiful rainbow appeared in the sky. I counted all the colors: red, orange, yellow, green, blue, indigo, and violet. There were seven colors!\n\nSometimes rainy days can be wonderful too. I ate warm cookies and saw a rainbow. What a great day!`,
+        vocabulary: [
+            { word: 'heavily', meaning: 'nặng hạt', example: 'It was raining heavily.' },
+            { word: 'rainbow', meaning: 'cầu vồng', example: 'A rainbow appeared after the rain.' },
+            { word: 'indigo', meaning: 'chàm', example: 'Indigo is between blue and violet.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'Why was the child sad?', options: ['No school', 'Could not play outside', 'Lost a toy', 'Was sick'], correct: 1 },
+            { type: 'gap_fill', question: 'The cookies were shaped like stars and _______.', answer: 'hearts', hint: 'A shape representing love' },
+            { type: 'mcq', question: 'How many colors does a rainbow have?', options: ['Five', 'Six', 'Seven', 'Eight'], correct: 2 },
+            { type: 'true_false', question: 'The child learned that the moon is a star.', answer: false, explanation: 'The child learned the sun is a star.' },
+        ],
+    },
+    {
+        id: 'helping-mom-cook', title: 'Helping Mom Cook', titleVi: 'Giúp mẹ nấu ăn', level: 'A2', wordCount: 140, readingTime: '2 min', topic: 'Food', emoji: '🍳', mode: 'kids',
+        passage: `Today is Sunday and I am helping Mom cook lunch. We are making phở bò, my favorite Vietnamese soup.\n\nFirst, Mom boils the beef bones to make the broth. The kitchen smells wonderful! I help wash the bean sprouts, herbs, and lime.\n\nThen Mom cooks the rice noodles in hot water. She slices the beef very thin. I am not allowed to use the knife yet because I am too young.\n\nWhen everything is ready, Mom puts the noodles in a big bowl, adds the beef slices, and pours the hot broth on top. I add bean sprouts, basil, and a squeeze of lime.\n\n"Mmm! It's delicious!" I say. Mom smiles. "You are a great helper!" she says.\n\nI love cooking with Mom. When I grow up, I want to be a chef!`,
+        vocabulary: [
+            { word: 'broth', meaning: 'nước dùng', example: 'The broth smells wonderful.' },
+            { word: 'bean sprouts', meaning: 'giá đỗ', example: 'Add bean sprouts to the phở.' },
+            { word: 'basil', meaning: 'rau quế', example: 'Fresh basil makes phở taste better.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'What dish are they cooking?', options: ['Bún bò', 'Phở bò', 'Cơm tấm', 'Bánh mì'], correct: 1 },
+            { type: 'true_false', question: 'The child uses a knife to slice the beef.', answer: false, explanation: 'The child is not allowed to use the knife because they are too young.' },
+            { type: 'gap_fill', question: 'The child adds bean sprouts, basil, and a squeeze of _______.', answer: 'lime', hint: 'A green citrus fruit' },
+            { type: 'mcq', question: 'What does the child want to be when they grow up?', options: ['Teacher', 'Doctor', 'Chef', 'Pilot'], correct: 2 },
+        ],
+    },
+    {
+        id: 'camping-adventure', title: 'Camping Adventure', titleVi: 'Chuyến cắm trại', level: 'A2', wordCount: 150, readingTime: '3 min', topic: 'Outdoors', emoji: '⛺', mode: 'kids',
+        passage: `Last summer, my family went camping in the mountains. We drove for three hours to get there. The campsite was near a river.\n\nDad and I set up the tent while Mom prepared the food. Setting up a tent is harder than I thought! We had to put poles together and hammer stakes into the ground.\n\nIn the evening, we made a campfire. We sat around it and roasted marshmallows on sticks. Dad told us scary stories. I pretended I wasn't scared, but I was a little!\n\nAt night, we slept in sleeping bags inside the tent. I could hear crickets and an owl outside. The sky was full of stars — much more than in the city.\n\nThe next morning, we went hiking by the river. I saw a deer drinking water! It ran away when it heard us. We also found beautiful wildflowers.\n\nCamping was amazing! I can't wait to go again.`,
+        vocabulary: [
+            { word: 'campfire', meaning: 'lửa trại', example: 'We sat around the campfire.' },
+            { word: 'marshmallow', meaning: 'kẹo bông gòn', example: 'Roast marshmallows over fire.' },
+            { word: 'cricket', meaning: 'dế', example: 'Crickets sing at night.' },
+            { word: 'deer', meaning: 'hươu/nai', example: 'A deer was drinking water.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'Where did the family go camping?', options: ['Beach', 'Forest', 'Mountains', 'Lake'], correct: 2 },
+            { type: 'true_false', question: 'Setting up the tent was easy.', answer: false, explanation: 'The child said it was harder than they thought.' },
+            { type: 'mcq', question: 'What animal did they see by the river?', options: ['Bear', 'Rabbit', 'Deer', 'Fox'], correct: 2 },
+            { type: 'gap_fill', question: 'They roasted _______ on sticks over the campfire.', answer: 'marshmallows', hint: 'A soft, white sweet treat' },
+        ],
+    },
+    {
+        id: 'seasons-in-vietnam', title: 'Seasons in Vietnam', titleVi: 'Các mùa ở Việt Nam', level: 'A2', wordCount: 160, readingTime: '3 min', topic: 'Nature', emoji: '🌺', mode: 'kids',
+        passage: `Vietnam has different weather in the north and south. In the north, there are four seasons: spring, summer, autumn, and winter. In the south, there are only two seasons: the rainy season and the dry season.\n\nSpring in the north starts in February. The weather is cool and flowers bloom everywhere. Vietnamese people celebrate Tet, the Lunar New Year, in spring. Children receive red envelopes with money inside!\n\nSummer is from May to August. It is very hot! Children go swimming and eat lots of ice cream. In the south, the rainy season starts around May. It rains almost every afternoon.\n\nAutumn in the north is beautiful. The weather is cool and the sky is clear. Children celebrate the Mid-Autumn Festival with lanterns and mooncakes.\n\nWinter in Hanoi can be cold. People wear warm jackets. In Sa Pa, it sometimes snows! But in Ho Chi Minh City, it is warm all year round.\n\nI love all the seasons in Vietnam because each one is special!`,
+        vocabulary: [
+            { word: 'bloom', meaning: 'nở (hoa)', example: 'Flowers bloom in spring.' },
+            { word: 'lantern', meaning: 'đèn lồng', example: 'Children carry lanterns during Mid-Autumn Festival.' },
+            { word: 'mooncake', meaning: 'bánh trung thu', example: 'Mooncakes are eaten during the Mid-Autumn Festival.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many seasons does southern Vietnam have?', options: ['One', 'Two', 'Three', 'Four'], correct: 1 },
+            { type: 'true_false', question: 'It sometimes snows in Sa Pa.', answer: true, explanation: 'The passage states "In Sa Pa, it sometimes snows!"' },
+            { type: 'gap_fill', question: 'Children receive red _______ with money during Tet.', answer: 'envelopes', hint: 'Something you put letters or money into' },
+            { type: 'mcq', question: 'When is the Mid-Autumn Festival celebrated?', options: ['Spring', 'Summer', 'Autumn', 'Winter'], correct: 2 },
+        ],
+    },
+    {
+        id: 'learning-to-ride', title: 'Learning to Ride a Bicycle', titleVi: 'Học đi xe đạp', level: 'A2', wordCount: 140, readingTime: '2 min', topic: 'Sports', emoji: '🚲', mode: 'kids',
+        passage: `When I was five years old, I wanted to learn to ride a bicycle. Dad bought me a small red bicycle with training wheels.\n\nAt first, riding was easy because the training wheels kept me balanced. But one day, Dad said, "Let's take off the training wheels. You're ready!"\n\nI was scared. Without the training wheels, I fell down many times. My knees got scratched and I wanted to cry. But Dad ran beside me and said, "Don't give up! You can do it!"\n\nI tried again and again. After three days of practice, something magical happened — I could ride without falling! I felt like I was flying!\n\nNow I ride my bicycle to school every day. Sometimes I race with my friends. I'm not the fastest, but I never give up. That's what Dad taught me.\n\n"If you fall, get up and try again." That is the best lesson ever.`,
+        vocabulary: [
+            { word: 'training wheels', meaning: 'bánh phụ (xe đạp)', example: 'Training wheels help beginners balance.' },
+            { word: 'balanced', meaning: 'giữ thăng bằng', example: 'Training wheels kept me balanced.' },
+            { word: 'scratched', meaning: 'bị trầy xước', example: 'My knees got scratched.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'What color was the bicycle?', options: ['Blue', 'Green', 'Red', 'Yellow'], correct: 2 },
+            { type: 'true_false', question: 'The child learned to ride in one day.', answer: false, explanation: 'It took three days of practice.' },
+            { type: 'gap_fill', question: 'Dad said, "If you fall, get up and _______ again."', answer: 'try', hint: 'An action word meaning to attempt' },
+            { type: 'mcq', question: 'How does the child go to school now?', options: ['By car', 'By bus', 'By bicycle', 'On foot'], correct: 2 },
+        ],
+    },
+    // ========== NEW ADULT PASSAGES ==========
+    {
+        id: 'mental-health-awareness', title: 'Mental Health in the Workplace', titleVi: 'Sức khỏe tâm thần nơi công sở', level: 'B1', wordCount: 320, readingTime: '4 min', topic: 'Health', emoji: '🧠', mode: 'adult',
+        passage: `Mental health has become one of the most important topics in the modern workplace. According to the World Health Organization, depression and anxiety cost the global economy approximately $1 trillion per year in lost productivity. Yet despite this enormous impact, many employees still hesitate to discuss their mental health with their employers.\n\nThe COVID-19 pandemic accelerated conversations about workplace mental health. Remote work, social isolation, and uncertainty about the future contributed to a significant increase in anxiety and burnout. A 2022 survey by McKinsey found that one in four employees reported symptoms of burnout.\n\nProgressive companies have responded by implementing Employee Assistance Programs (EAPs), offering mental health days, and training managers to recognize signs of distress. Some companies, like Microsoft and Google, provide free therapy sessions and meditation apps to all employees.\n\nHowever, experts emphasize that individual wellness programs are not enough. Organizations must address the root causes of workplace stress, including unrealistic workloads, lack of autonomy, poor management, and inadequate compensation. Creating a psychologically safe environment where employees feel comfortable speaking about challenges without fear of judgment is equally important.\n\nThe business case for investing in mental health is clear. For every $1 invested in mental health treatment, companies see a return of $4 in improved health and productivity.`,
+        vocabulary: [
+            { word: 'burnout', meaning: 'kiệt sức', example: 'One in four employees reported burnout symptoms.' },
+            { word: 'psychologically safe', meaning: 'an toàn tâm lý', example: 'Employees need psychologically safe environments.' },
+            { word: 'autonomy', meaning: 'sự tự chủ', example: 'Lack of autonomy causes workplace stress.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How much does depression and anxiety cost the global economy yearly?', options: ['$100 billion', '$500 billion', '$1 trillion', '$5 trillion'], correct: 2 },
+            { type: 'true_false', question: 'One in ten employees reported burnout symptoms.', answer: false, explanation: 'One in four employees reported burnout symptoms.' },
+            { type: 'gap_fill', question: 'For every $1 invested in mental health, companies see a return of $_______.', answer: '4', hint: 'A single digit' },
+            { type: 'mcq', question: 'What is NOT mentioned as a root cause of workplace stress?', options: ['Unrealistic workloads', 'Poor management', 'Office location', 'Lack of autonomy'], correct: 2 },
+        ],
+    },
+    {
+        id: 'cryptocurrency-basics', title: 'Understanding Cryptocurrency', titleVi: 'Hiểu về tiền mã hóa', level: 'B2', wordCount: 380, readingTime: '5 min', topic: 'Finance', emoji: '₿', mode: 'adult',
+        passage: `Cryptocurrency has evolved from a niche concept known mainly to technology enthusiasts into a global financial phenomenon with a market capitalization exceeding $2 trillion. At its core, cryptocurrency is a digital currency that uses cryptographic technology to secure transactions and control the creation of new units, without the need for a central authority like a bank or government.\n\nBitcoin, created in 2009 by the pseudonymous Satoshi Nakamoto, remains the largest and most well-known cryptocurrency. Its blockchain technology — a decentralized, transparent ledger that records every transaction — has been described as potentially the most significant technological innovation since the internet.\n\nBeyond Bitcoin, thousands of other cryptocurrencies have emerged, each with different features and use cases. Ethereum introduced smart contracts, enabling developers to build decentralized applications. Stablecoins like USDT are pegged to traditional currencies, reducing volatility. And Central Bank Digital Currencies (CBDCs) are being developed by governments worldwide as a regulated alternative.\n\nHowever, the crypto industry faces significant challenges. Price volatility — Bitcoin has experienced multiple drops of over 50% — makes it unreliable as a day-to-day payment method. Environmental concerns about the energy consumption of mining operations have also drawn criticism. And regulatory uncertainty varies widely between countries, creating a patchwork of rules that can be difficult for investors to navigate.\n\nDespite these challenges, blockchain technology continues to find applications far beyond currency, including supply chain management, digital identity verification, and decentralized finance (DeFi).`,
+        vocabulary: [
+            { word: 'cryptographic', meaning: 'mã hóa', example: 'Cryptographic technology secures transactions.' },
+            { word: 'blockchain', meaning: 'chuỗi khối', example: 'Blockchain is a decentralized ledger.' },
+            { word: 'volatility', meaning: 'biến động', example: 'High price volatility is a concern.' },
+            { word: 'pseudonymous', meaning: 'bút danh/ẩn danh', example: 'Bitcoin was created by pseudonymous Satoshi Nakamoto.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'When was Bitcoin created?', options: ['2005', '2009', '2013', '2017'], correct: 1 },
+            { type: 'gap_fill', question: 'The crypto market has a capitalization exceeding $_______ trillion.', answer: '2', hint: 'A single digit' },
+            { type: 'true_false', question: 'Ethereum introduced the concept of smart contracts.', answer: true, explanation: 'The passage states Ethereum introduced smart contracts.' },
+            { type: 'mcq', question: 'What are stablecoins pegged to?', options: ['Gold', 'Bitcoin', 'Traditional currencies', 'Real estate'], correct: 2 },
+            { type: 'true_false', question: 'The passage suggests blockchain has no uses beyond currency.', answer: false, explanation: 'Blockchain is used in supply chain, identity verification, and DeFi.' },
+        ],
+    },
+    {
+        id: 'future-of-education', title: 'The Future of Education', titleVi: 'Tương lai của giáo dục', level: 'B1', wordCount: 300, readingTime: '4 min', topic: 'Education', emoji: '📚', mode: 'adult',
+        passage: `Education is undergoing its most significant transformation in centuries. Technology, changing workforce demands, and new research on how people learn are reshaping what, how, and where we study.\n\nOnline learning platforms like Coursera, edX, and Khan Academy have democratized access to world-class education. A student in rural Vietnam can now take courses from MIT or Harvard for free. During the pandemic, the number of online learners worldwide jumped from 300 million to over 1.6 billion.\n\nArtificial intelligence is personalizing the learning experience. AI tutoring systems can identify each student's strengths and weaknesses, adjusting the difficulty and pace of lessons in real time. This adaptive learning approach has been shown to improve outcomes by 30% compared to traditional one-size-fits-all instruction.\n\nThe skills needed for the future workforce are also changing rapidly. The World Economic Forum estimates that 65% of children entering primary school today will work in jobs that don't yet exist. This has led to growing emphasis on critical thinking, creativity, collaboration, and digital literacy — often called the \"4Cs\" — rather than rote memorization.\n\nHowever, technology cannot replace the human element of education. Studies consistently show that strong teacher-student relationships are the single most important factor in student success. The best educational models combine technological tools with skilled, caring teachers who can inspire, motivate, and mentor their students.`,
+        vocabulary: [
+            { word: 'democratized', meaning: 'đại chúng hóa', example: 'Online platforms have democratized education.' },
+            { word: 'adaptive', meaning: 'thích ứng', example: 'Adaptive learning adjusts to each student.' },
+            { word: 'rote memorization', meaning: 'học thuộc lòng', example: 'Schools are moving away from rote memorization.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many online learners were there during the pandemic?', options: ['300 million', '800 million', '1.6 billion', '3 billion'], correct: 2 },
+            { type: 'true_false', question: "65% of today's children will work in jobs that already exist.", answer: false, explanation: "They will work in jobs that don't yet exist." },
+            { type: 'gap_fill', question: 'AI can improve learning outcomes by _______% compared to traditional methods.', answer: '30', hint: 'A two-digit number' },
+            { type: 'mcq', question: 'What is the most important factor in student success?', options: ['Technology', 'Textbooks', 'Teacher-student relationships', 'Class size'], correct: 2 },
+        ],
+    },
+    {
+        id: 'social-media-effects', title: 'Social Media and Society', titleVi: 'Mạng xã hội và xã hội', level: 'B2', wordCount: 350, readingTime: '5 min', topic: 'Technology', emoji: '📱', mode: 'adult',
+        passage: `Social media has fundamentally altered how humans communicate, consume information, and form communities. With over 4.9 billion social media users worldwide — representing roughly 60% of the global population — platforms like Facebook, Instagram, TikTok, and X (formerly Twitter) have become integral to daily life.\n\nThe benefits of social media are significant. It enables individuals to maintain relationships across distances, provides platforms for marginalized voices, and has proven crucial for organizing social movements. Small businesses can now reach global audiences with minimal marketing budgets, and nonprofit organizations can mobilize support faster than ever before.\n\nHowever, research increasingly highlights the psychological costs. A meta-analysis published in the Journal of Social and Clinical Psychology found a causal link between social media use and increased feelings of depression and loneliness, particularly among young adults aged 18-25. The constant exposure to curated, idealized portrayals of others' lives can erode self-esteem and fuel anxiety.\n\nMisinformation presents another serious concern. During the COVID-19 pandemic, the WHO declared an \"infodemic\" — an overabundance of information, including false claims, that undermined public health responses. Research from MIT showed that false stories on social media spread six times faster than true stories.\n\nPolicymakers worldwide are grappling with how to regulate social media without infringing on free speech. The European Union's Digital Services Act requires platforms to be more transparent about their algorithms and take faster action against illegal content.`,
+        vocabulary: [
+            { word: 'marginalized', meaning: 'bị gạt ra bên lề', example: 'Social media gives voice to marginalized communities.' },
+            { word: 'curated', meaning: 'được chọn lọc', example: "Social media shows curated versions of people's lives." },
+            { word: 'infodemic', meaning: 'đại dịch thông tin', example: 'The WHO declared an infodemic during COVID-19.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many social media users are there worldwide?', options: ['2.5 billion', '3.8 billion', '4.9 billion', '6.2 billion'], correct: 2 },
+            { type: 'true_false', question: 'False stories spread six times faster than true stories on social media.', answer: true, explanation: 'MIT research confirmed this finding.' },
+            { type: 'gap_fill', question: 'Social media users represent roughly _______% of the global population.', answer: '60', hint: 'More than half' },
+            { type: 'mcq', question: 'Which group is most affected by depression from social media?', options: ['Children under 10', 'Young adults 18-25', 'Adults 40-50', 'Seniors 65+'], correct: 1 },
+        ],
+    },
+    {
+        id: 'electric-vehicles', title: 'The Electric Vehicle Revolution', titleVi: 'Cuộc cách mạng xe điện', level: 'B2', wordCount: 350, readingTime: '5 min', topic: 'Technology', emoji: '🚗', mode: 'adult',
+        passage: `Electric vehicles are experiencing unprecedented growth worldwide. In 2023, global EV sales reached 14 million units — a 35% increase from the previous year — and EVs now account for approximately 18% of all new car sales. China leads the transition, representing over 60% of global EV sales, followed by Europe and the United States.\n\nThe driving forces behind this shift are multiple. Government incentives, including tax credits, subsidies, and zero-emission mandates, have made EVs more affordable for consumers. Battery technology improvements have increased range while reducing costs — the average EV can now travel over 300 miles on a single charge, compared to just 73 miles a decade ago.\n\nEnvironmentally, the benefits are clear. Even accounting for the electricity source and manufacturing process, EVs produce approximately 50% fewer greenhouse gas emissions over their lifetime compared to internal combustion vehicles. In countries with clean electricity grids, this advantage is even greater.\n\nHowever, challenges remain. Charging infrastructure is still insufficient in many regions, creating \"range anxiety\" among potential buyers. The mining of lithium, cobalt, and nickel for batteries raises environmental and human rights concerns, particularly in developing countries. And the current electricity grid may not be able to handle millions of EVs charging simultaneously without significant upgrades.\n\nDespite these challenges, most major automakers have announced plans to phase out internal combustion engines within the next 15-20 years, signaling that the electric future is not just possible — it's inevitable.`,
+        vocabulary: [
+            { word: 'incentive', meaning: 'ưu đãi', example: 'Government incentives make EVs affordable.' },
+            { word: 'range anxiety', meaning: 'lo lắng tầm hoạt động', example: 'Range anxiety prevents some people from buying EVs.' },
+            { word: 'phase out', meaning: 'loại bỏ dần', example: 'Automakers plan to phase out combustion engines.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many EVs were sold globally in 2023?', options: ['5 million', '10 million', '14 million', '20 million'], correct: 2 },
+            { type: 'gap_fill', question: 'EVs produce approximately _______% fewer emissions over their lifetime.', answer: '50', hint: 'Half' },
+            { type: 'true_false', question: 'The US leads global EV sales.', answer: false, explanation: 'China leads with over 60% of global sales.' },
+            { type: 'mcq', question: 'What is "range anxiety"?', options: ['Fear of driving', 'Worry about running out of charge', 'Concern about speed', 'Worry about cost'], correct: 1 },
+        ],
+    },
+    {
+        id: 'global-water-crisis', title: 'The Global Water Crisis', titleVi: 'Khủng hoảng nước toàn cầu', level: 'C1', wordCount: 400, readingTime: '5 min', topic: 'Environment', emoji: '💧', mode: 'adult',
+        passage: `Despite covering 71% of the Earth's surface, only 3% of the planet's water is freshwater, and less than 1% is readily accessible for human use. This scarcity, combined with population growth, climate change, and pollution, has created a global water crisis that affects over 2 billion people who lack access to safely managed drinking water.\n\nAgriculture is by far the largest consumer of freshwater, accounting for approximately 70% of global withdrawals. As the world's population is projected to reach 9.7 billion by 2050, food production must increase by an estimated 60%, placing enormous additional pressure on water resources. Industrial use accounts for another 19%, while domestic consumption represents only 11%.\n\nClimate change is exacerbating the crisis in multiple ways. Rising temperatures increase evaporation rates, reducing water availability in already arid regions. Changing precipitation patterns create more frequent and severe droughts in some areas while causing devastating floods in others. Glaciers, which serve as natural water storage for billions of people, are retreating at alarming rates.\n\nInnovative solutions are emerging. Desalination technology, which converts seawater to freshwater, has become increasingly cost-effective, with countries like Israel now producing over 80% of their drinking water through this method. Smart irrigation systems can reduce agricultural water use by up to 50%. And wastewater recycling — treating used water to drinking water standards — is being adopted in water-stressed cities like Singapore and Windhoek, Namibia.\n\nExperts agree that the water crisis is ultimately a governance crisis. The technology and knowledge to provide clean water for everyone exist; what's lacking is the political will, investment, and international cooperation needed to deploy them at scale.`,
+        vocabulary: [
+            { word: 'scarcity', meaning: 'sự khan hiếm', example: 'Water scarcity affects billions of people.' },
+            { word: 'desalination', meaning: 'khử mặn', example: 'Desalination converts seawater to freshwater.' },
+            { word: 'arid', meaning: 'khô cằn', example: 'Climate change reduces water in arid regions.' },
+            { word: 'exacerbate', meaning: 'làm trầm trọng', example: 'Climate change exacerbates the water crisis.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: "What percentage of Earth's water is freshwater?", options: ['1%', '3%', '10%', '30%'], correct: 1 },
+            { type: 'gap_fill', question: 'Agriculture accounts for approximately _______% of global water withdrawals.', answer: '70', hint: 'A large percentage starting with 7' },
+            { type: 'true_false', question: 'Israel produces over 80% of its drinking water through desalination.', answer: true, explanation: 'This is directly stated in the passage.' },
+            { type: 'mcq', question: 'How many people lack access to safely managed drinking water?', options: ['500 million', '1 billion', '2 billion', '4 billion'], correct: 2 },
+            { type: 'true_false', question: 'Domestic use is the largest consumer of freshwater.', answer: false, explanation: 'Agriculture is the largest at 70%, domestic is only 11%.' },
+        ],
+    },
+    {
+        id: 'language-learning-science', title: 'The Science of Language Learning', titleVi: 'Khoa học về việc học ngôn ngữ', level: 'B1', wordCount: 310, readingTime: '4 min', topic: 'Education', emoji: '🗣️', mode: 'adult',
+        passage: `Learning a new language is one of the most rewarding yet challenging cognitive tasks a person can undertake. Research in neuroscience and applied linguistics has revealed fascinating insights into how the brain acquires language — and what methods are most effective.\n\nThe concept of a \"critical period\" for language learning has been widely debated. While children do have natural advantages in pronunciation and grammar acquisition, adults possess their own strengths: larger vocabularies, better study habits, and the ability to understand abstract grammatical rules. Research from MIT, published in 2018, suggests that the critical period for achieving native-like grammar extends to approximately age 17-18.\n\nSpaced repetition — reviewing information at gradually increasing intervals — has been proven to be one of the most effective memorization techniques. Studies show that spaced repetition can improve vocabulary retention by up to 200% compared to traditional cramming. This principle forms the basis of popular language apps like Anki and the FSRS algorithm.\n\nComprehensible input — exposure to language that is slightly above the learner's current level — is another crucial factor. Linguist Stephen Krashen's Input Hypothesis argues that we acquire language most naturally when we understand messages, not when we memorize rules. This supports the effectiveness of extensive reading, listening to podcasts, and watching films in the target language.\n\nPerhaps most importantly, consistency matters more than intensity. Research shows that studying 30 minutes daily for six months produces better results than studying three hours daily for one month.`,
+        vocabulary: [
+            { word: 'cognitive', meaning: 'nhận thức', example: 'Language learning is a complex cognitive task.' },
+            { word: 'spaced repetition', meaning: 'lặp lại ngắt quãng', example: 'Spaced repetition improves vocabulary retention.' },
+            { word: 'retention', meaning: 'sự ghi nhớ', example: 'Good methods improve knowledge retention.' },
+            { word: 'comprehensible input', meaning: 'đầu vào có thể hiểu', example: 'Comprehensible input helps acquire language naturally.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'At what age does the critical period for native-like grammar end?', options: ['Age 7', 'Age 12', 'Age 17-18', 'Age 25'], correct: 2 },
+            { type: 'gap_fill', question: 'Spaced repetition can improve vocabulary retention by up to _______%.', answer: '200', hint: 'Double' },
+            { type: 'true_false', question: 'Adults have no advantages over children in language learning.', answer: false, explanation: 'Adults have larger vocabularies, better study habits, and can understand abstract rules.' },
+            { type: 'mcq', question: 'According to the passage, what produces better results?', options: ['3 hours daily for 1 month', '30 minutes daily for 6 months', '1 hour weekly', 'Weekend-only study'], correct: 1 },
+        ],
+    },
+    {
+        id: 'gig-economy', title: 'The Gig Economy', titleVi: 'Nền kinh tế tạm thời', level: 'B2', wordCount: 340, readingTime: '4 min', topic: 'Business', emoji: '💼', mode: 'adult',
+        passage: `The gig economy — a labor market characterized by short-term, flexible work arrangements rather than permanent employment — has grown explosively over the past decade. An estimated 1.57 billion people worldwide now participate in some form of gig work, from ride-sharing drivers and food delivery couriers to freelance designers and software developers.\n\nTechnology platforms like Uber, Grab, Fiverr, and Upwork have been the primary enablers of this transformation. These platforms connect workers directly with clients, eliminating traditional intermediaries and allowing people to monetize skills and assets with unprecedented flexibility.\n\nFor workers, the gig economy offers attractive benefits: the freedom to set their own schedules, the ability to work from anywhere, and opportunities to pursue multiple income streams. For many people in developing countries, gig platforms provide access to a global marketplace that would otherwise be inaccessible.\n\nHowever, the gig economy has also drawn significant criticism. Gig workers typically don't receive benefits like health insurance, paid leave, or retirement contributions. The lack of a guaranteed minimum wage means income can be unpredictable. And the algorithmic management systems used by many platforms have been accused of creating intense pressure and unfair working conditions.\n\nGovernments worldwide are struggling to adapt labor regulations to this new reality. The European Union passed a directive in 2024 establishing criteria for determining when gig workers should be classified as employees rather than independent contractors. This ongoing debate reflects the broader tension between innovation and worker protection in the digital age.`,
+        vocabulary: [
+            { word: 'intermediary', meaning: 'trung gian', example: 'Platforms eliminate traditional intermediaries.' },
+            { word: 'monetize', meaning: 'kiếm tiền từ', example: 'People can monetize skills through gig platforms.' },
+            { word: 'algorithmic management', meaning: 'quản lý bằng thuật toán', example: 'Algorithmic management creates intense pressure.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many people participate in gig work worldwide?', options: ['500 million', '1 billion', '1.57 billion', '3 billion'], correct: 2 },
+            { type: 'true_false', question: 'Gig workers typically receive health insurance benefits.', answer: false, explanation: "The passage says gig workers typically don't receive benefits like health insurance." },
+            { type: 'gap_fill', question: 'The EU passed a directive in _______ about gig worker classification.', answer: '2024', hint: 'A recent year' },
+            { type: 'mcq', question: 'Which is NOT mentioned as a gig platform?', options: ['Uber', 'Fiverr', 'Amazon', 'Upwork'], correct: 2 },
+        ],
+    },
+    {
+        id: 'urbanization-trends', title: 'Global Urbanization Trends', titleVi: 'Xu hướng đô thị hóa toàn cầu', level: 'C1', wordCount: 380, readingTime: '5 min', topic: 'Society', emoji: '🏙️', mode: 'adult',
+        passage: `For the first time in human history, more than half of the world's population lives in cities. The United Nations projects that by 2050, 68% of humanity — approximately 6.7 billion people — will be urban dwellers. This unprecedented wave of urbanization is reshaping societies, economies, and the natural environment.\n\nThe drivers of urbanization are well understood. Cities offer greater economic opportunities, better access to education and healthcare, and more diverse social and cultural experiences. In developing countries, rural-to-urban migration is driven primarily by the prospect of higher wages — urban workers in low-income countries earn on average three times more than their rural counterparts.\n\nHowever, rapid urbanization creates immense challenges. Housing shortages have driven prices to unaffordable levels in many major cities, from Hong Kong and London to San Francisco and Sydney. Traffic congestion costs the global economy an estimated $300 billion annually in lost productivity. And the concentration of infrastructure and population in coastal cities makes them particularly vulnerable to climate change impacts such as sea-level rise and extreme weather events.\n\nSmart city initiatives are emerging as one approach to managing urban growth. Using sensors, data analytics, and AI, cities like Singapore, Copenhagen, and Seoul are optimizing everything from traffic flow and energy consumption to waste management and public safety. Barcelona's smart streetlights, for example, adjust brightness based on pedestrian activity, reducing energy consumption by 30%.\n\nThe most successful urban development strategies recognize that technology alone isn't sufficient. Livable cities require thoughtful planning that prioritizes green spaces, affordable housing, efficient public transportation, and vibrant community spaces.`,
+        vocabulary: [
+            { word: 'urbanization', meaning: 'đô thị hóa', example: 'Urbanization is accelerating worldwide.' },
+            { word: 'congestion', meaning: 'tắc nghẽn', example: 'Traffic congestion costs billions annually.' },
+            { word: 'livable', meaning: 'đáng sống', example: 'Livable cities need green spaces.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'What percentage of humanity will be urban by 2050?', options: ['50%', '55%', '68%', '80%'], correct: 2 },
+            { type: 'gap_fill', question: 'Traffic congestion costs the global economy $_______ billion annually.', answer: '300', hint: 'A three-digit number starting with 3' },
+            { type: 'true_false', question: "Barcelona's smart streetlights reduced energy consumption by 30%.", answer: true, explanation: 'This is directly stated in the passage.' },
+            { type: 'mcq', question: 'How much more do urban workers earn in low-income countries?', options: ['Twice', 'Three times', 'Five times', 'Ten times'], correct: 1 },
+        ],
+    },
 ];
 
 export function getReadingByMode(mode) {
