@@ -61,6 +61,25 @@ export default function LearnChinese() {
                 <div className="xp-badge">⭐ {state.xp}</div>
             </div>
 
+            {/* Module navigation cards */}
+            <div style={{
+                display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px',
+                maxWidth: '420px', margin: '0 auto 24px',
+            }}>
+                <div className="topic-card" onClick={() => navigate('/listening-cn')} style={{ cursor: 'pointer', textAlign: 'center', padding: '16px 10px' }}>
+                    <div className="topic-card__emoji">🎧</div>
+                    <div className="topic-card__title" style={{ fontSize: '0.8rem' }}>{isAdult ? '听力' : 'Nghe'}</div>
+                </div>
+                <div className="topic-card" onClick={() => navigate('/speaking-cn')} style={{ cursor: 'pointer', textAlign: 'center', padding: '16px 10px' }}>
+                    <div className="topic-card__emoji">🗣️</div>
+                    <div className="topic-card__title" style={{ fontSize: '0.8rem' }}>{isAdult ? '口语' : 'Nói'}</div>
+                </div>
+                <div className="topic-card" onClick={() => navigate('/grammar-cn')} style={{ cursor: 'pointer', textAlign: 'center', padding: '16px 10px' }}>
+                    <div className="topic-card__emoji">📐</div>
+                    <div className="topic-card__title" style={{ fontSize: '0.8rem' }}>{isAdult ? '语法' : 'Ngữ pháp'}</div>
+                </div>
+            </div>
+
             <p style={{
                 textAlign: 'center', color: 'var(--color-text-light)',
                 marginBottom: '24px', fontFamily: 'var(--font-display)', fontSize: '1.1rem'

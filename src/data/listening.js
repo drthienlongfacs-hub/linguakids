@@ -308,6 +308,318 @@ export const LISTENING_LESSONS = [
             { type: 'true_false', question: 'Minh goes to bed at ten o\'clock.', answer: false, explanation: 'Minh goes to bed at nine o\'clock.' },
         ],
     },
+    // ============ B1 Level — Health ============
+    {
+        id: 'healthy-eating-habits',
+        title: 'Healthy Eating Habits',
+        titleVi: 'Thói quen ăn uống lành mạnh',
+        level: 'B1',
+        duration: '3:10',
+        topic: 'Health',
+        emoji: '🥗',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 18,
+                text: "We all know that eating well is important, but with so much conflicting information out there, it can be hard to know what a truly healthy diet looks like. Let's break down the key principles of good nutrition that most experts actually agree on.",
+                textVi: "Chúng ta đều biết ăn uống tốt rất quan trọng, nhưng với quá nhiều thông tin mâu thuẫn, thật khó biết chế độ ăn lành mạnh là gì. Hãy phân tích các nguyên tắc chính mà hầu hết chuyên gia đồng ý.",
+            },
+            {
+                id: 2, startTime: 18, endTime: 38,
+                text: "First, eat more whole foods and fewer processed ones. Whole foods — like fruits, vegetables, whole grains, and lean proteins — contain essential nutrients that your body needs. Processed foods, on the other hand, often contain added sugar, unhealthy fats, and excessive salt that can lead to health problems over time.",
+                textVi: "Đầu tiên, ăn nhiều thực phẩm nguyên chất và ít thực phẩm chế biến. Thực phẩm nguyên chất — trái cây, rau, ngũ cốc nguyên hạt, protein nạc — chứa dinh dưỡng thiết yếu.",
+            },
+            {
+                id: 3, startTime: 38, endTime: 55,
+                text: "Second, stay hydrated. The average adult should drink about two liters of water per day, though this varies depending on your climate and activity level. Many people mistake thirst for hunger, so drinking water regularly can actually help prevent overeating.",
+                textVi: "Thứ hai, giữ đủ nước. Người lớn trung bình nên uống khoảng 2 lít nước mỗi ngày. Nhiều người nhầm khát với đói, nên uống nước đều đặn có thể giúp tránh ăn quá nhiều.",
+            },
+            {
+                id: 4, startTime: 55, endTime: 75,
+                text: "Third, pay attention to portion sizes. Even healthy foods can lead to weight gain if you eat too much of them. Using smaller plates, eating slowly, and stopping when you feel about eighty percent full are simple but effective strategies. In Japan, this concept is known as 'hara hachi bu' and is considered one of the secrets to longevity.",
+                textVi: "Thứ ba, chú ý khẩu phần ăn. Ngay cả thực phẩm lành mạnh cũng có thể gây tăng cân nếu ăn quá nhiều. Ở Nhật, 'hara hachi bu' — ăn khi no 80% — được coi là bí quyết sống lâu.",
+            },
+        ],
+        vocabulary: [
+            { word: 'processed', meaning: 'chế biến', example: 'Avoid processed foods.' },
+            { word: 'hydrated', meaning: 'đủ nước', example: 'Stay hydrated throughout the day.' },
+            { word: 'portion sizes', meaning: 'khẩu phần ăn', example: 'Watch your portion sizes.' },
+            { word: 'longevity', meaning: 'tuổi thọ', example: 'Diet contributes to longevity.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'What is the first principle mentioned?', options: ['Drink more water', 'Eat more whole foods', 'Reduce sugar', 'Exercise more'], correct: 1 },
+            { type: 'gap_fill', question: 'The average adult should drink about _______ liters of water per day.', answer: 'two / 2', hint: 'A small number' },
+            { type: 'true_false', question: "The Japanese concept 'hara hachi bu' means eating until you are completely full.", answer: false, explanation: 'It means eating until 80% full.' },
+            { type: 'mcq', question: 'What do many people mistake thirst for?', options: ['Tiredness', 'Hunger', 'Boredom', 'Stress'], correct: 1 },
+        ],
+    },
+    // ============ B2 Level — Technology ============
+    {
+        id: 'social-media-impact',
+        title: 'The Impact of Social Media',
+        titleVi: 'Tác động của mạng xã hội',
+        level: 'B2',
+        duration: '4:15',
+        topic: 'Technology',
+        emoji: '📱',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 20,
+                text: "Social media has fundamentally changed how we communicate, consume information, and view the world. With over four billion people using social media platforms worldwide, it's arguably the most significant communication revolution since the invention of the printing press.",
+                textVi: "Mạng xã hội đã thay đổi cơ bản cách chúng ta giao tiếp, tiêu thụ thông tin, và nhìn nhận thế giới. Với hơn 4 tỷ người dùng, đây là cuộc cách mạng truyền thông lớn nhất kể từ khi phát minh ra máy in.",
+            },
+            {
+                id: 2, startTime: 20, endTime: 45,
+                text: "On the positive side, social media has democratized information sharing. Anyone with a smartphone can now broadcast their voice to a global audience. Citizen journalists have exposed corruption, social movements like climate activism have gained momentum, and people around the world can connect with friends and family across vast distances at no cost.",
+                textVi: "Về mặt tích cực, mạng xã hội đã dân chủ hóa việc chia sẻ thông tin. Bất kỳ ai có điện thoại thông minh đều có thể truyền tải tiếng nói đến khán giả toàn cầu.",
+            },
+            {
+                id: 3, startTime: 45, endTime: 70,
+                text: "However, researchers have identified several concerning effects. Studies show that excessive social media use is associated with increased rates of anxiety and depression, particularly among teenagers. The constant comparison with carefully curated online personas can erode self-esteem. The dopamine-driven feedback loops of likes and shares create addictive patterns similar to those observed in gambling.",
+                textVi: "Tuy nhiên, các nhà nghiên cứu đã xác định nhiều tác động đáng lo ngại. Nghiên cứu cho thấy sử dụng mạng xã hội quá mức liên quan đến tăng tỷ lệ lo âu và trầm cảm, đặc biệt ở thanh thiếu niên.",
+            },
+            {
+                id: 4, startTime: 70, endTime: 95,
+                text: "Perhaps the most significant concern is the spread of misinformation. False stories spread six times faster than true ones on platforms like X and Facebook. Algorithmic echo chambers reinforce existing beliefs, making it harder for people to encounter diverse perspectives. This polarization poses a genuine threat to democratic discourse.",
+                textVi: "Có lẽ mối lo ngại lớn nhất là lan truyền thông tin sai lệch. Tin giả lan truyền nhanh gấp 6 lần tin thật. Các bong bóng lọc thuật toán củng cố niềm tin sẵn có, gây phân cực.",
+            },
+        ],
+        vocabulary: [
+            { word: 'democratized', meaning: 'dân chủ hóa', example: 'Social media democratized information.' },
+            { word: 'curated', meaning: 'được chọn lọc', example: 'Carefully curated online profiles.' },
+            { word: 'echo chambers', meaning: 'bong bóng thông tin', example: 'Algorithm echo chambers limit perspectives.' },
+            { word: 'polarization', meaning: 'phân cực', example: 'Social polarization threatens democracy.' },
+            { word: 'misinformation', meaning: 'thông tin sai lệch', example: 'Misinformation spreads rapidly online.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many people use social media worldwide?', options: ['1 billion', '2 billion', '4 billion', '6 billion'], correct: 2 },
+            { type: 'true_false', question: 'False stories spread three times faster than true ones.', answer: false, explanation: 'The speaker says six times faster, not three.' },
+            { type: 'gap_fill', question: 'The dopamine-driven feedback loops create _______ patterns similar to gambling.', answer: 'addictive', hint: 'Something hard to stop doing' },
+            { type: 'mcq', question: 'What group is particularly affected by social media?', options: ['Seniors', 'Children under 5', 'Teenagers', 'Business professionals'], correct: 2 },
+            { type: 'mcq', question: 'What is an "echo chamber" in the context of social media?', options: ['A music app', 'Reinforcement of existing beliefs', 'A chat room', 'A voice recording tool'], correct: 1 },
+        ],
+    },
+    // ============ C1 Level — Academic ============
+    {
+        id: 'university-lecture-psychology',
+        title: 'Psychology: Memory & Learning',
+        titleVi: 'Tâm lý học: Trí nhớ & Học tập',
+        level: 'C1',
+        duration: '5:00',
+        topic: 'Education',
+        emoji: '🧠',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 25,
+                text: "Good morning everyone. Today we'll continue our exploration of cognitive psychology by examining how memory works and its implications for effective learning. Now, most of you probably think of memory as a single system — like a filing cabinet where you store and retrieve information. But in reality, memory is far more complex and involves multiple interconnected systems.",
+                textVi: "Chào buổi sáng. Hôm nay chúng ta tiếp tục khám phá tâm lý nhận thức bằng cách xem xét cách trí nhớ hoạt động và ý nghĩa đối với việc học hiệu quả.",
+            },
+            {
+                id: 2, startTime: 25, endTime: 55,
+                text: "The Atkinson-Shiffrin model, proposed in 1968, identifies three main stages of memory: sensory memory, which holds information for just a fraction of a second; short-term memory, which can maintain about seven items — plus or minus two — for approximately twenty to thirty seconds; and long-term memory, which has essentially unlimited capacity and can store information for decades. The critical process is how information moves from short-term to long-term memory — and this is where effective study techniques become crucial.",
+                textVi: "Mô hình Atkinson-Shiffrin, đề xuất năm 1968, xác định ba giai đoạn chính: trí nhớ cảm giác, trí nhớ ngắn hạn (7±2 mục, 20-30 giây), và trí nhớ dài hạn (dung lượng không giới hạn).",
+            },
+            {
+                id: 3, startTime: 55, endTime: 85,
+                text: "Research by Hermann Ebbinghaus in the 1880s established what we now call the 'forgetting curve' — the rate at which we lose information from memory. His research showed that without any review, we forget approximately 70% of new information within 24 hours. However — and this is the key insight — spaced repetition can dramatically reduce this forgetting. Reviewing material at increasing intervals — say, one day, three days, one week, two weeks — transfers information into long-term memory far more effectively than cramming.",
+                textVi: "Nghiên cứu của Ebbinghaus những năm 1880 thiết lập 'đường cong lãng quên.' Không ôn tập, chúng ta quên khoảng 70% thông tin mới trong 24 giờ. Nhưng ôn tập cách quãng giúp chuyển thông tin vào trí nhớ dài hạn hiệu quả hơn nhồi nhét.",
+            },
+            {
+                id: 4, startTime: 85, endTime: 120,
+                text: "Now, another powerful finding is the testing effect — sometimes called retrieval practice. Research consistently shows that being tested on material actually strengthens memory more than re-reading or highlighting. When you actively try to recall information, you're strengthening the neural pathways that allow you to access that memory. This is why practice tests are so effective — they're not just measuring what you know, they're actually helping you learn. The implications for your own study habits should be clear: put away the highlighter and start testing yourself.",
+                textVi: "Một phát hiện quan trọng khác là hiệu ứng kiểm tra. Nghiên cứu cho thấy kiểm tra thực sự củng cố trí nhớ hơn đọc lại hay gạch chân. Khi chủ động nhớ lại, bạn củng cố đường dẫn thần kinh truy cập trí nhớ đó.",
+            },
+        ],
+        vocabulary: [
+            { word: 'cognitive psychology', meaning: 'tâm lý nhận thức', example: 'Cognitive psychology studies mental processes.' },
+            { word: 'forgetting curve', meaning: 'đường cong lãng quên', example: 'Ebbinghaus discovered the forgetting curve.' },
+            { word: 'spaced repetition', meaning: 'ôn tập cách quãng', example: 'Spaced repetition improves long-term memory.' },
+            { word: 'retrieval practice', meaning: 'luyện truy xuất trí nhớ', example: 'Retrieval practice strengthens learning.' },
+            { word: 'cramming', meaning: 'nhồi nhét', example: 'Cramming is less effective than spaced review.' },
+            { word: 'neural pathways', meaning: 'đường dẫn thần kinh', example: 'Testing strengthens neural pathways.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many stages does the Atkinson-Shiffrin memory model have?', options: ['Two', 'Three', 'Four', 'Five'], correct: 1 },
+            { type: 'gap_fill', question: 'Without any review, we forget approximately _______% of new information within 24 hours.', answer: '70', hint: 'A two-digit number above 60' },
+            { type: 'mcq', question: 'How many items can short-term memory hold?', options: ['3 ± 1', '5 ± 2', '7 ± 2', '10 ± 3'], correct: 2 },
+            { type: 'true_false', question: 'Highlighting is more effective than self-testing for memory.', answer: false, explanation: 'The professor says testing (retrieval practice) is more effective than highlighting.' },
+            { type: 'mcq', question: 'When was the Atkinson-Shiffrin model proposed?', options: ['1948', '1958', '1968', '1988'], correct: 2 },
+            { type: 'true_false', question: 'Long-term memory has essentially unlimited capacity.', answer: true, explanation: 'The professor states long-term memory has "essentially unlimited capacity."' },
+        ],
+    },
+    // ============ IELTS Section 1 Style — Practical ============
+    {
+        id: 'apartment-rental',
+        title: 'Renting an Apartment',
+        titleVi: 'Thuê căn hộ',
+        level: 'B1',
+        duration: '3:00',
+        topic: 'Housing',
+        emoji: '🏢',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 15,
+                text: "Good afternoon, this is Property Solutions. My name is Sarah. How can I help you today?",
+                textVi: "Chào buổi chiều, đây là Property Solutions. Tôi là Sarah. Tôi giúp gì được bạn?",
+            },
+            {
+                id: 2, startTime: 15, endTime: 35,
+                text: "Hi Sarah, I'm looking for a two-bedroom apartment near the university. I'm a postgraduate student, so I need something affordable — my budget is about eight hundred pounds per month including bills. Is there anything available?",
+                textVi: "Chào Sarah, tôi đang tìm căn hộ 2 phòng ngủ gần trường đại học. Tôi là sinh viên cao học, nên cần giá phải chăng — ngân sách khoảng £800/tháng bao gồm hóa đơn.",
+            },
+            {
+                id: 3, startTime: 35, endTime: 55,
+                text: "Let me check... Yes, we have a lovely two-bedroom flat on Victoria Street, just a ten-minute walk from campus. The rent is seven hundred and fifty pounds per month, but that doesn't include electricity, which is usually about forty to fifty pounds. The flat has a modern kitchen, a shared garden, and one parking space.",
+                textVi: "Để tôi kiểm tra... Có, chúng tôi có căn hộ 2 phòng ngủ đẹp trên Victoria Street, cách trường 10 phút đi bộ. Giá £750/tháng, chưa bao gồm điện (~£40-50). Có bếp hiện đại, vườn chung, và 1 chỗ đậu xe.",
+            },
+            {
+                id: 4, startTime: 55, endTime: 75,
+                text: "That sounds good. What's the lease period? And is there a deposit?",
+                textVi: "Nghe tốt đấy. Thời hạn thuê bao lâu? Và có tiền đặt cọc không?",
+            },
+            {
+                id: 5, startTime: 75, endTime: 95,
+                text: "The minimum lease is twelve months. There's a deposit of one month's rent — so seven hundred and fifty — which you'll get back at the end if there's no damage. The property is available from the first of September. Would you like to arrange a viewing?",
+                textVi: "Thời hạn tối thiểu 12 tháng. Tiền cọc bằng 1 tháng thuê — £750 — sẽ được trả lại nếu không hư hại. Có thể vào ở từ 1/9. Bạn có muốn xếp lịch xem nhà không?",
+            },
+        ],
+        vocabulary: [
+            { word: 'lease', meaning: 'hợp đồng thuê', example: 'The minimum lease is 12 months.' },
+            { word: 'deposit', meaning: 'tiền đặt cọc', example: 'The deposit is one month\'s rent.' },
+            { word: 'viewing', meaning: 'xem nhà', example: 'Would you like to arrange a viewing?' },
+            { word: 'including bills', meaning: 'bao gồm hóa đơn', example: 'Rent including bills is £800.' },
+        ],
+        quiz: [
+            { type: 'gap_fill', question: 'The apartment is on _______ Street.', answer: 'Victoria', hint: 'A royal name' },
+            { type: 'mcq', question: 'How much is the monthly rent?', options: ['£700', '£750', '£800', '£850'], correct: 1 },
+            { type: 'true_false', question: 'The rent includes electricity.', answer: false, explanation: 'The rent doesn\'t include electricity, which costs £40-50 extra.' },
+            { type: 'mcq', question: 'How long is the minimum lease?', options: ['6 months', '9 months', '12 months', '24 months'], correct: 2 },
+            { type: 'gap_fill', question: 'The flat is available from the _______ of September.', answer: 'first / 1st', hint: 'The beginning of the month' },
+        ],
+    },
+    // ============ B2 — Digital Wellbeing ============
+    {
+        id: 'digital-wellbeing',
+        title: 'Digital Wellbeing & Screen Time',
+        titleVi: 'Sức khỏe số & Thời gian màn hình',
+        level: 'B2',
+        duration: '3:30',
+        topic: 'Health',
+        emoji: '🧘',
+        mode: 'adult',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 20,
+                text: "The average person now spends over seven hours per day looking at a screen. That's roughly half of our waking hours. While technology has brought incredible benefits, mental health professionals are increasingly concerned about the impact of excessive screen time on our psychological wellbeing.",
+                textVi: "Người trung bình dành hơn 7 giờ mỗi ngày nhìn màn hình. Đó là gần nửa thời gian thức. Các chuyên gia sức khỏe tâm thần ngày càng lo ngại về tác động của thời gian màn hình quá mức.",
+            },
+            {
+                id: 2, startTime: 20, endTime: 45,
+                text: "The concept of 'digital wellbeing' refers to maintaining a healthy relationship with technology. It's not about eliminating screen use entirely — that's neither realistic nor desirable in the modern world. Instead, it's about being intentional about when, how, and why we use our devices. This means distinguishing between productive screen time — like online learning or work — and passive consumption, such as endlessly scrolling through social media feeds.",
+                textVi: "Khái niệm 'sức khỏe số' là duy trì mối quan hệ lành mạnh với công nghệ. Không phải loại bỏ hoàn toàn, mà chủ ý về khi nào, cách nào, và tại sao dùng thiết bị.",
+            },
+            {
+                id: 3, startTime: 45, endTime: 70,
+                text: "Research suggests several practical strategies for improving digital wellbeing. First, implement a 'digital sunset' — turning off all screens at least one hour before bedtime. Blue light from screens suppresses melatonin production and disrupts sleep quality. Second, use the 20-20-20 rule to reduce eye strain: every twenty minutes, look at something twenty feet away for twenty seconds.",
+                textVi: "Nghiên cứu đề xuất nhiều chiến lược thực tế. Một là 'hoàng hôn số' — tắt màn hình ít nhất 1 giờ trước khi ngủ. Hai là quy tắc 20-20-20: mỗi 20 phút, nhìn xa 20 feet trong 20 giây.",
+            },
+        ],
+        vocabulary: [
+            { word: 'digital wellbeing', meaning: 'sức khỏe số', example: 'Digital wellbeing means healthy tech use.' },
+            { word: 'intentional', meaning: 'có chủ đích', example: 'Be intentional about screen time.' },
+            { word: 'passive consumption', meaning: 'tiêu thụ thụ động', example: 'Scrolling social media is passive consumption.' },
+        ],
+        quiz: [
+            { type: 'gap_fill', question: 'The average person spends over _______ hours per day on screens.', answer: 'seven / 7', hint: 'A single digit above 6' },
+            { type: 'mcq', question: 'What is a "digital sunset"?', options: ['Sunset photo on Instagram', 'Turning off screens before bed', 'A screen filter app', 'A type of wallpaper'], correct: 1 },
+            { type: 'true_false', question: 'The 20-20-20 rule means looking 20 meters away.', answer: false, explanation: 'It says 20 feet away, not 20 meters.' },
+            { type: 'mcq', question: 'What does "passive consumption" refer to?', options: ['Online shopping', 'Reading ebooks', 'Endlessly scrolling feeds', 'Video calling friends'], correct: 2 },
+        ],
+    },
+    // ============ More Kids-friendly ============
+    {
+        id: 'at-the-zoo',
+        title: 'A Day at the Zoo',
+        titleVi: 'Một ngày ở sở thú',
+        level: 'A1',
+        duration: '1:30',
+        topic: 'Animals',
+        emoji: '🦁',
+        mode: 'kids',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 12,
+                text: "Hi! Today my class went to the zoo. It was so much fun! We saw many different animals. Let me tell you about them!",
+                textVi: "Xin chào! Hôm nay lớp mình đi sở thú. Vui lắm! Bọn mình thấy nhiều động vật khác nhau!",
+            },
+            {
+                id: 2, startTime: 12, endTime: 25,
+                text: "First, we saw the elephants. They were very big and gray. One elephant was eating bananas. Then we saw the monkeys. They were jumping from tree to tree. They were very funny!",
+                textVi: "Đầu tiên, bọn mình thấy mấy con voi. Chúng rất to và xám. Một con voi đang ăn chuối. Rồi bọn mình thấy mấy con khỉ. Chúng nhảy từ cây này sang cây khác. Chúng rất buồn cười!",
+            },
+            {
+                id: 3, startTime: 25, endTime: 40,
+                text: "My favorite animal was the giraffe. It was very, very tall. It had a long neck and it was eating leaves from the top of the tree. I also liked the penguins. They walk in a funny way — like this!",
+                textVi: "Động vật mình thích nhất là hươu cao cổ. Nó rất rất cao. Nó có cổ dài và đang ăn lá trên ngọn cây. Mình còn thích chim cánh cụt. Chúng đi bộ rất buồn cười!",
+            },
+            {
+                id: 4, startTime: 40, endTime: 55,
+                text: "At the end, we ate ice cream in the park. My teacher took a photo of our class with the lion statue. It was the best day ever! I want to go to the zoo again!",
+                textVi: "Cuối cùng, bọn mình ăn kem ở công viên. Cô giáo chụp ảnh lớp mình với tượng sư tử. Đó là ngày tuyệt nhất! Mình muốn đi sở thú nữa!",
+            },
+        ],
+        vocabulary: [
+            { word: 'giraffe', meaning: 'hươu cao cổ', example: 'The giraffe has a long neck.' },
+            { word: 'penguin', meaning: 'chim cánh cụt', example: 'Penguins walk in a funny way.' },
+            { word: 'elephant', meaning: 'voi', example: 'Elephants are very big.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'What was eating bananas?', options: ['A monkey', 'An elephant', 'A giraffe', 'A penguin'], correct: 1 },
+            { type: 'mcq', question: 'What was the child\'s favorite animal?', options: ['Elephant', 'Monkey', 'Giraffe', 'Penguin'], correct: 2 },
+            { type: 'true_false', question: 'The class ate cake at the zoo.', answer: false, explanation: 'The class ate ice cream, not cake.' },
+        ],
+    },
+    {
+        id: 'weather-and-seasons',
+        title: 'Weather and Seasons',
+        titleVi: 'Thời tiết và mùa',
+        level: 'A2',
+        duration: '1:45',
+        topic: 'Nature',
+        emoji: '🌈',
+        mode: 'kids',
+        segments: [
+            {
+                id: 1, startTime: 0, endTime: 15,
+                text: "Do you know the four seasons? They are spring, summer, autumn, and winter. In Vietnam, the weather is different in the north and the south. Let me tell you about each season!",
+                textVi: "Bạn biết bốn mùa không? Đó là xuân, hạ, thu, đông. Ở Việt Nam, thời tiết khác nhau giữa miền Bắc và miền Nam. Để mình kể về mỗi mùa nhé!",
+            },
+            {
+                id: 2, startTime: 15, endTime: 30,
+                text: "In spring, the weather is warm and the flowers bloom. Children fly kites in the park. In summer, it is very hot and sunny. We go swimming at the beach and eat lots of ice cream!",
+                textVi: "Mùa xuân, thời tiết ấm áp và hoa nở. Trẻ con thả diều ở công viên. Mùa hè rất nóng và nắng. Bọn mình đi bơi ở biển và ăn nhiều kem!",
+            },
+            {
+                id: 3, startTime: 30, endTime: 45,
+                text: "Autumn is cool and the leaves change color — from green to yellow, orange, and red. It is very beautiful! In winter, it is cold. In Hanoi, people wear jackets and scarves. In Sa Pa, sometimes it snows!",
+                textVi: "Mùa thu mát mẻ và lá đổi màu — từ xanh sang vàng, cam, và đỏ. Rất đẹp! Mùa đông trời lạnh. Ở Hà Nội, người ta mặc áo khoác và khăn quàng. Ở Sa Pa, đôi khi có tuyết!",
+            },
+        ],
+        vocabulary: [
+            { word: 'season', meaning: 'mùa', example: 'Spring is my favorite season.' },
+            { word: 'bloom', meaning: 'nở (hoa)', example: 'Flowers bloom in spring.' },
+            { word: 'scarf', meaning: 'khăn quàng cổ', example: 'Wear a scarf in winter.' },
+        ],
+        quiz: [
+            { type: 'mcq', question: 'How many seasons are there?', options: ['Two', 'Three', 'Four', 'Five'], correct: 2 },
+            { type: 'mcq', question: 'What do children do in spring?', options: ['Go swimming', 'Fly kites', 'Make snowmen', 'Pick apples'], correct: 1 },
+            { type: 'true_false', question: 'It snows in Ho Chi Minh City in winter.', answer: false, explanation: 'The speaker says it sometimes snows in Sa Pa, not in Ho Chi Minh City.' },
+            { type: 'gap_fill', question: 'In autumn, leaves change from green to yellow, orange, and _______.', answer: 'red', hint: 'A warm color' },
+        ],
+    },
 ];
 
 // Flatten for search

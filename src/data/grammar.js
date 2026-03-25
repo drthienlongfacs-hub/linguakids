@@ -182,6 +182,411 @@ export const GRAMMAR_TOPICS = [
             { type: 'transformation', original: '"We are leaving now," they said.', target: 'They said that they were leaving then.', hint: 'Shift tense, now→then' },
         ],
     },
+    {
+        id: 'future-tenses',
+        title: 'Future Tenses',
+        titleVi: 'Các thì tương lai',
+        level: 'B1',
+        emoji: '⏩',
+        summary: 'Will, Going to, Present Continuous for future, Future Perfect',
+        sections: [
+            {
+                name: 'Will (Simple Future)',
+                rule: 'For predictions, promises, spontaneous decisions, and offers.',
+                formula: 'S + will + V (base form)',
+                examples: [
+                    { en: 'I think it will rain tomorrow.', vi: 'Tôi nghĩ ngày mai trời sẽ mưa.' },
+                    { en: "Don't worry, I will help you.", vi: 'Đừng lo, tôi sẽ giúp bạn.' },
+                ],
+                signalWords: ['tomorrow', 'next week', 'I think', 'probably', 'perhaps'],
+            },
+            {
+                name: 'Going to',
+                rule: 'For planned intentions and evidence-based predictions.',
+                formula: 'S + am/is/are + going to + V',
+                examples: [
+                    { en: 'I am going to study medicine next year.', vi: 'Tôi sẽ học y khoa năm sau.' },
+                    { en: 'Look at those clouds! It is going to rain.', vi: 'Nhìn mây kìa! Trời sắp mưa.' },
+                ],
+                signalWords: ['plan', 'intend', 'going to'],
+            },
+            {
+                name: 'Future Perfect',
+                rule: 'For actions completed before a point in the future.',
+                formula: 'S + will have + V3',
+                examples: [
+                    { en: 'By 2030, I will have finished my PhD.', vi: 'Đến 2030, tôi sẽ hoàn thành tiến sĩ.' },
+                    { en: 'She will have left by the time you arrive.', vi: 'Cô ấy sẽ đi rồi khi bạn đến.' },
+                ],
+                signalWords: ['by', 'by the time', 'before', 'by next year'],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'I _______ (visit) my grandmother this weekend. I already bought the ticket.', answer: 'am going to visit', hint: 'Planned intention' },
+            { type: 'gap_fill', question: 'By December, they _______ (complete) the project.', answer: 'will have completed', hint: 'Future perfect — before a future point' },
+            { type: 'gap_fill', question: "Someone's at the door. I _______ (get) it.", answer: 'will get', hint: 'Spontaneous decision' },
+            { type: 'mcq', question: 'Which expresses a planned future?', options: ["I'll go", "I'm going to go", "I go", "I gone"], correct: 1 },
+            { type: 'error_correction', sentence: 'By next month, I will finish the book.', correct: 'By next month, I will have finished the book.', rule: "Use future perfect with 'by + future time'" },
+        ],
+    },
+    {
+        id: 'articles',
+        title: 'Articles (A, An, The)',
+        titleVi: 'Mạo từ',
+        level: 'B1',
+        emoji: '📌',
+        summary: 'Definite, Indefinite articles, and zero article',
+        sections: [
+            {
+                name: 'Indefinite Articles (a/an)',
+                rule: 'For non-specific countable nouns mentioned for the first time.',
+                formula: 'a + consonant sound | an + vowel sound',
+                examples: [
+                    { en: 'I saw a dog in the park.', vi: 'Tôi thấy một con chó trong công viên.' },
+                    { en: 'She is an honest person.', vi: 'Cô ấy là người thật thà.' },
+                ],
+            },
+            {
+                name: 'Definite Article (the)',
+                rule: 'For specific or previously mentioned nouns.',
+                formula: 'the + specific noun',
+                examples: [
+                    { en: 'The book you lent me was great.', vi: 'Cuốn sách bạn cho tôi mượn rất hay.' },
+                    { en: 'The sun rises in the east.', vi: 'Mặt trời mọc ở phía đông.' },
+                ],
+            },
+            {
+                name: 'Zero Article',
+                rule: 'No article with uncountable nouns (general), plural nouns (general), meals, sports, languages.',
+                formula: 'Ø + noun',
+                examples: [
+                    { en: 'Water is essential for life.', vi: 'Nước cần thiết cho sự sống.' },
+                    { en: 'She plays tennis every Sunday.', vi: 'Cô ấy chơi tennis mỗi Chủ nhật.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'I need _______ umbrella because it is raining.', answer: 'an', hint: 'Vowel sound' },
+            { type: 'gap_fill', question: '_______ Nile is the longest river in Africa.', answer: 'The', hint: 'Specific river' },
+            { type: 'gap_fill', question: 'She speaks _______ French fluently.', answer: '', hint: 'No article with languages' },
+            { type: 'mcq', question: 'Which sentence is correct?', options: ['I love the music.', 'I love music.', 'I love a music.', 'I love an music.'], correct: 1 },
+            { type: 'error_correction', sentence: 'He is the honest man.', correct: 'He is an honest man.', rule: "'Honest' starts with a vowel sound, use 'an'" },
+        ],
+    },
+    {
+        id: 'modal-verbs',
+        title: 'Modal Verbs',
+        titleVi: 'Động từ khiếm khuyết',
+        level: 'B2',
+        emoji: '💪',
+        summary: 'Can, Could, May, Might, Must, Should, Would, Shall',
+        sections: [
+            {
+                name: 'Ability & Permission (can/could/may)',
+                rule: 'Can for ability/permission. Could for past ability or polite requests. May for formal permission.',
+                formula: 'S + modal + V (base)',
+                examples: [
+                    { en: 'She can speak three languages.', vi: 'Cô ấy nói được ba thứ tiếng.' },
+                    { en: 'Could you pass the salt, please?', vi: 'Bạn có thể đưa muối cho tôi không?' },
+                    { en: 'May I use your phone?', vi: 'Tôi có thể dùng điện thoại bạn không?' },
+                ],
+            },
+            {
+                name: 'Obligation & Advice (must/should/have to)',
+                rule: 'Must for strong obligation. Should for advice. Have to for external obligation.',
+                formula: 'S + must/should/have to + V',
+                examples: [
+                    { en: 'You must wear a seatbelt.', vi: 'Bạn phải thắt dây an toàn.' },
+                    { en: 'You should see a doctor.', vi: 'Bạn nên đi khám bác sĩ.' },
+                    { en: "I have to finish this report by Friday.", vi: 'Tôi phải hoàn thành báo cáo trước thứ Sáu.' },
+                ],
+            },
+            {
+                name: 'Deduction (must/might/can\'t)',
+                rule: 'Must for logical conclusion. Might/could for possibility. Can\'t for impossibility.',
+                formula: 'S + must/might/can\'t + V / have V3',
+                examples: [
+                    { en: "He must be at home — his car is here.", vi: 'Anh ấy chắc ở nhà — xe anh ấy đây.' },
+                    { en: 'She might have forgotten about the meeting.', vi: 'Cô ấy có thể đã quên cuộc họp.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'You _______ drive without a license. It is illegal.', answer: "must not / mustn't", hint: 'Strong prohibition' },
+            { type: 'gap_fill', question: 'She _______ be at work now; she left an hour ago.', answer: 'must', hint: 'Logical deduction' },
+            { type: 'gap_fill', question: 'You _______ try the new restaurant. The food is amazing.', answer: 'should', hint: 'Advice/recommendation' },
+            { type: 'mcq', question: '"You _______ have told me earlier!" expresses:', options: ['Permission', 'Ability', 'Criticism/regret', 'Prediction'], correct: 2 },
+            { type: 'gap_fill', question: 'When I was young, I _______ run very fast.', answer: 'could', hint: 'Past ability' },
+        ],
+    },
+    {
+        id: 'relative-clauses',
+        title: 'Relative Clauses',
+        titleVi: 'Mệnh đề quan hệ',
+        level: 'B2',
+        emoji: '🔗',
+        summary: 'Defining and non-defining relative clauses with who, which, that, whose, where, when',
+        sections: [
+            {
+                name: 'Defining Relative Clauses',
+                rule: 'Essential information — no commas. Can use that instead of who/which.',
+                formula: 'noun + who/which/that + clause',
+                examples: [
+                    { en: 'The man who lives next door is a doctor.', vi: 'Người đàn ông sống cạnh nhà là bác sĩ.' },
+                    { en: 'The book that I bought yesterday is interesting.', vi: 'Cuốn sách tôi mua hôm qua rất hay.' },
+                ],
+            },
+            {
+                name: 'Non-defining Relative Clauses',
+                rule: 'Extra information — use commas. Cannot use that.',
+                formula: 'noun, + who/which + clause, + ...',
+                examples: [
+                    { en: 'My sister, who lives in London, is visiting us.', vi: 'Chị tôi, người sống ở London, đang đến thăm.' },
+                    { en: 'The Mekong River, which flows through Vietnam, is very long.', vi: 'Sông Mê Kông, chảy qua Việt Nam, rất dài.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'The woman _______ is standing there is my teacher.', answer: 'who', hint: 'Person — subject' },
+            { type: 'gap_fill', question: 'This is the restaurant _______ we had dinner last night.', answer: 'where', hint: 'Place' },
+            { type: 'gap_fill', question: "The car _______ engine broke down has been repaired.", answer: 'whose', hint: 'Possession' },
+            { type: 'mcq', question: 'Which is a non-defining clause?', options: ['The man who called is my boss.', 'My boss, who called earlier, wants to see you.', 'The man that called is here.', 'Anyone who calls should leave a message.'], correct: 1 },
+        ],
+    },
+    {
+        id: 'comparatives-superlatives',
+        title: 'Comparatives & Superlatives',
+        titleVi: 'So sánh hơn & nhất',
+        level: 'B1',
+        emoji: '📏',
+        summary: 'Comparison of adjectives and adverbs',
+        sections: [
+            {
+                name: 'Comparative',
+                rule: 'Short adj: adj+er + than. Long adj: more + adj + than.',
+                formula: 'S + be + adj-er / more adj + than + O',
+                examples: [
+                    { en: 'Tokyo is bigger than Hanoi.', vi: 'Tokyo lớn hơn Hà Nội.' },
+                    { en: 'This book is more interesting than that one.', vi: 'Cuốn sách này thú vị hơn cuốn kia.' },
+                ],
+            },
+            {
+                name: 'Superlative',
+                rule: 'Short adj: the + adj+est. Long adj: the most + adj.',
+                formula: 'S + be + the adj-est / the most adj',
+                examples: [
+                    { en: 'Mount Everest is the highest mountain in the world.', vi: 'Everest là ngọn núi cao nhất thế giới.' },
+                    { en: 'This is the most expensive restaurant in town.', vi: 'Đây là nhà hàng đắt nhất thành phố.' },
+                ],
+            },
+            {
+                name: 'Irregular Comparisons',
+                rule: 'Some adjectives have irregular forms.',
+                formula: 'good → better → best | bad → worse → worst | far → farther/further → farthest/furthest',
+                examples: [
+                    { en: 'Her English is better than mine.', vi: 'Tiếng Anh cô ấy giỏi hơn tôi.' },
+                    { en: 'This is the worst movie I have ever seen.', vi: 'Đây là phim tệ nhất tôi từng xem.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'She is _______ (tall) than her sister.', answer: 'taller', hint: 'Short adjective + er' },
+            { type: 'gap_fill', question: 'This is the _______ (beautiful) place I have ever visited.', answer: 'most beautiful', hint: 'Long adjective superlative' },
+            { type: 'gap_fill', question: 'His grades are _______ (good) than last year.', answer: 'better', hint: 'Irregular: good → better' },
+            { type: 'mcq', question: 'Which is correct?', options: ['She is more prettier.', 'She is more pretty.', 'She is prettier.', 'She is most pretty.'], correct: 2 },
+            { type: 'error_correction', sentence: 'This is the most cheapest phone.', correct: 'This is the cheapest phone.', rule: "Don't use 'most' with '-est' form" },
+        ],
+    },
+    {
+        id: 'prepositions',
+        title: 'Prepositions',
+        titleVi: 'Giới từ',
+        level: 'B1',
+        emoji: '📍',
+        summary: 'Prepositions of time, place, and movement',
+        sections: [
+            {
+                name: 'Time: in, on, at',
+                rule: 'At for specific times, On for days/dates, In for months/years/seasons.',
+                formula: 'at + time | on + day | in + month/year',
+                examples: [
+                    { en: 'The meeting is at 3 PM on Monday.', vi: 'Cuộc họp lúc 3 giờ chiều thứ Hai.' },
+                    { en: 'She was born in 1995.', vi: 'Cô ấy sinh năm 1995.' },
+                ],
+            },
+            {
+                name: 'Place: in, on, at',
+                rule: 'At for specific location, On for surface, In for enclosed space.',
+                formula: 'at + specific place | on + surface | in + enclosed area',
+                examples: [
+                    { en: 'She is at the airport.', vi: 'Cô ấy ở sân bay.' },
+                    { en: 'The book is on the table.', vi: 'Cuốn sách ở trên bàn.' },
+                    { en: 'He lives in Ho Chi Minh City.', vi: 'Anh ấy sống ở TP.HCM.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'I was born _______ March 15th, 1990.', answer: 'on', hint: 'Specific date' },
+            { type: 'gap_fill', question: 'She arrived _______ the airport at noon.', answer: 'at', hint: 'Specific location' },
+            { type: 'gap_fill', question: 'We usually go on holiday _______ summer.', answer: 'in', hint: 'Season' },
+            { type: 'mcq', question: 'Which is correct?', options: ['I live in 25 Baker Street.', 'I live at 25 Baker Street.', 'I live on 25 Baker Street.', 'I live to 25 Baker Street.'], correct: 1 },
+        ],
+    },
+    {
+        id: 'gerunds-infinitives',
+        title: 'Gerunds & Infinitives',
+        titleVi: 'Danh động từ & Động từ nguyên mẫu',
+        level: 'B2',
+        emoji: '🔧',
+        summary: 'When to use V-ing vs to + V after verbs',
+        sections: [
+            {
+                name: 'Verbs + Gerund (-ing)',
+                rule: 'Some verbs are always followed by gerund: enjoy, avoid, consider, finish, keep, mind, suggest.',
+                formula: 'V + V-ing',
+                examples: [
+                    { en: 'I enjoy playing football.', vi: 'Tôi thích chơi bóng đá.' },
+                    { en: 'She avoids eating junk food.', vi: 'Cô ấy tránh ăn đồ ăn nhanh.' },
+                ],
+            },
+            {
+                name: 'Verbs + Infinitive (to V)',
+                rule: 'Some verbs are followed by infinitive: want, hope, decide, plan, agree, refuse, learn.',
+                formula: 'V + to V',
+                examples: [
+                    { en: 'I want to learn Vietnamese.', vi: 'Tôi muốn học tiếng Việt.' },
+                    { en: 'She decided to quit her job.', vi: 'Cô ấy quyết định nghỉ việc.' },
+                ],
+            },
+            {
+                name: 'Verbs + Both (different meaning)',
+                rule: 'Some verbs change meaning: remember, forget, stop, try, regret.',
+                formula: 'V + V-ing (past action) | V + to V (future action)',
+                examples: [
+                    { en: 'I remember locking the door. (I did it)', vi: 'Tôi nhớ đã khóa cửa. (Đã làm)' },
+                    { en: 'Remember to lock the door. (Please do it)', vi: 'Nhớ khóa cửa nhé. (Chưa làm)' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'She enjoys _______ (read) novels.', answer: 'reading', hint: 'enjoy + gerund' },
+            { type: 'gap_fill', question: 'He decided _______ (move) to another city.', answer: 'to move', hint: 'decide + infinitive' },
+            { type: 'gap_fill', question: 'I stopped _______ (smoke) last year.', answer: 'smoking', hint: 'stop + gerund = quit the action' },
+            { type: 'mcq', question: '"I remember meeting her" means:', options: ['I will meet her', 'I recall that I met her', 'I need to meet her', 'I forgot to meet her'], correct: 1 },
+            { type: 'gap_fill', question: 'Would you mind _______ (open) the window?', answer: 'opening', hint: 'mind + gerund' },
+        ],
+    },
+    {
+        id: 'linking-words',
+        title: 'Linking Words & Connectors',
+        titleVi: 'Từ nối & Liên từ',
+        level: 'B2',
+        emoji: '🔗',
+        summary: 'Addition, Contrast, Cause/Effect, Sequence connectors',
+        sections: [
+            {
+                name: 'Addition',
+                rule: 'To add similar ideas.',
+                formula: 'Also / Furthermore / Moreover / In addition / Besides',
+                examples: [
+                    { en: 'She speaks English. Moreover, she can speak French.', vi: 'Cô ấy nói tiếng Anh. Hơn nữa, cô ấy nói được tiếng Pháp.' },
+                ],
+            },
+            {
+                name: 'Contrast',
+                rule: 'To show opposing ideas.',
+                formula: 'However / Nevertheless / Although / Despite / On the other hand',
+                examples: [
+                    { en: 'The movie was long. However, it was very engaging.', vi: 'Phim dài. Tuy nhiên, rất hấp dẫn.' },
+                    { en: 'Despite the rain, we went hiking.', vi: 'Mặc dù trời mưa, chúng tôi vẫn đi leo núi.' },
+                ],
+            },
+            {
+                name: 'Cause & Effect',
+                rule: 'To show reasons and results.',
+                formula: 'Because / Since / Therefore / As a result / Consequently',
+                examples: [
+                    { en: 'She studied hard. Therefore, she passed the exam.', vi: 'Cô ấy học chăm. Vì vậy, cô ấy đỗ kỳ thi.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: '_______ the bad weather, the event was cancelled.', answer: 'Due to / Because of', hint: 'Cause — followed by noun' },
+            { type: 'gap_fill', question: 'He is very talented. _______, he is also hardworking.', answer: 'Moreover / Furthermore', hint: 'Addition' },
+            { type: 'gap_fill', question: 'She was tired. _______, she continued working.', answer: 'However / Nevertheless', hint: 'Contrast' },
+            { type: 'mcq', question: 'Which word shows contrast?', options: ['Therefore', 'Moreover', 'Nevertheless', 'Consequently'], correct: 2 },
+        ],
+    },
+    {
+        id: 'subject-verb-agreement',
+        title: 'Subject-Verb Agreement',
+        titleVi: 'Hòa hợp chủ-vị',
+        level: 'B1',
+        emoji: '🤝',
+        summary: 'Matching subjects with correct verb forms',
+        sections: [
+            {
+                name: 'Basic Rules',
+                rule: 'Singular subject → singular verb. Plural subject → plural verb.',
+                formula: 'He/She/It + V-s | They/We + V',
+                examples: [
+                    { en: 'The dog runs fast.', vi: 'Con chó chạy nhanh.' },
+                    { en: 'The dogs run fast.', vi: 'Những con chó chạy nhanh.' },
+                ],
+            },
+            {
+                name: 'Tricky Cases',
+                rule: 'Either...or, Neither...nor → verb agrees with nearest subject. Collective nouns can be singular or plural.',
+                formula: 'Neither A nor B + V (agrees with B)',
+                examples: [
+                    { en: 'Neither the teacher nor the students were ready.', vi: 'Cả giáo viên lẫn học sinh đều chưa sẵn sàng.' },
+                    { en: 'Everyone is welcome.', vi: 'Mọi người đều được chào đón.' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'Each of the students _______ (have) a textbook.', answer: 'has', hint: 'Each → singular' },
+            { type: 'gap_fill', question: 'The news _______ (be) shocking.', answer: 'is', hint: 'News is uncountable/singular' },
+            { type: 'gap_fill', question: 'Neither John nor his friends _______ (be) coming.', answer: 'are', hint: 'Agrees with nearest subject (friends = plural)' },
+            { type: 'mcq', question: 'Which is correct?', options: ['The team are winning.', 'The team is winning.', 'Both are acceptable', 'Neither is correct'], correct: 2 },
+            { type: 'error_correction', sentence: 'Everybody have finished their work.', correct: 'Everybody has finished their work.', rule: 'Everybody/Everyone/Everything → singular verb' },
+        ],
+    },
+    {
+        id: 'question-tags',
+        title: 'Question Tags',
+        titleVi: 'Câu hỏi đuôi',
+        level: 'B1',
+        emoji: '❓',
+        summary: 'Forming and using question tags for confirmation',
+        sections: [
+            {
+                name: 'Basic Rule',
+                rule: 'Positive statement → negative tag. Negative statement → positive tag.',
+                formula: 'Positive, + negative tag? | Negative, + positive tag?',
+                examples: [
+                    { en: "You are a student, aren't you?", vi: 'Bạn là sinh viên, phải không?' },
+                    { en: "She doesn't like coffee, does she?", vi: 'Cô ấy không thích cà phê, phải không?' },
+                    { en: "They went home, didn't they?", vi: 'Họ về nhà rồi, phải không?' },
+                ],
+            },
+            {
+                name: 'Special Cases',
+                rule: "I am → aren't I? | Let's → shall we? | Imperative → will you?",
+                formula: 'Special patterns',
+                examples: [
+                    { en: "I'm right, aren't I?", vi: 'Tôi đúng, phải không?' },
+                    { en: "Let's go, shall we?", vi: 'Đi thôi, nhé?' },
+                ],
+            },
+        ],
+        exercises: [
+            { type: 'gap_fill', question: 'She can swim, _______?', answer: "can't she", hint: 'Positive → negative' },
+            { type: 'gap_fill', question: "They haven't finished, _______?", answer: 'have they', hint: 'Negative → positive' },
+            { type: 'gap_fill', question: "I'm late, _______?", answer: "aren't I", hint: 'Special case for I am' },
+            { type: 'mcq', question: '"He rarely comes here, ___?" — Which tag?', options: ["doesn't he", 'does he', "isn't he", 'is he'], correct: 1 },
+        ],
+    },
 ];
 
 export function getGrammarByLevel(level) {
