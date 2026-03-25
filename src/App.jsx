@@ -26,6 +26,7 @@ import ListeningLesson from './modules/listening/ListeningLesson';
 import SpeakingHub from './modules/speaking/SpeakingHub';
 import ListeningCnHub from './modules/listening_cn/ListeningCnHub';
 import SpeakingCnHub from './modules/speaking_cn/SpeakingCnHub';
+import SpeakingCnExercise from './modules/speaking_cn/SpeakingCnExercise';
 import ReadingHub from './modules/reading/ReadingHub';
 import WritingHub from './modules/writing/WritingHub';
 import GrammarHub from './modules/grammar/GrammarHub';
@@ -85,6 +86,7 @@ function AppContent() {
         <Route path="/listening-cn" element={<ListeningCnHub />} />
         <Route path="/speaking" element={<SpeakingHub />} />
         <Route path="/speaking-cn" element={<SpeakingCnHub />} />
+        <Route path="/speaking-cn/:lessonId" element={<SpeakingCnExercise />} />
         <Route path="/reading" element={<ReadingHub />} />
         <Route path="/writing" element={<WritingHub />} />
         <Route path="/grammar" element={<GrammarHub />} />
