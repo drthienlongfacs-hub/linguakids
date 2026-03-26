@@ -83,6 +83,16 @@ const SECTIONS = [
             { id: 'dictation-cn', title: 'Dictation CN', titleVi: '🎧 Chính tả 🇨🇳', desc: 'Listen & type', descVi: 'Nghe câu → gõ lại', emoji: '🎧', path: '/dictation/cn', color: '#DC2626' },
         ],
     },
+    {
+        title: '🎓 AI Teacher Suite',
+        titleVi: '🎓 Giáo viên AI',
+        desc: 'Native-teacher-level practice tools',
+        descVi: 'Công cụ luyện tập như giáo viên bản ngữ',
+        items: [
+            { id: 'reading', title: 'Reading Comprehension', titleVi: '📖 Đọc hiểu A2→B2', desc: '4 passages + questions', descVi: '4 bài đọc + câu hỏi', emoji: '📖', path: '/reading', color: '#10B981' },
+            { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
+        ],
+    },
 ];
 
 export default function Games() {

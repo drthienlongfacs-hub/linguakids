@@ -150,6 +150,38 @@ export default function Home() {
                 <span style={{ marginLeft: 'auto', fontSize: '1.2rem' }}>➤</span>
             </Link>
 
+            {/* 🎓 AI Teacher Suite — prominent access */}
+            <div style={{ marginBottom: '16px' }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    🎓 AI Teacher Suite
+                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', fontWeight: 400 }}>— Giáo viên AI</span>
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    {[
+                        { emoji: '🎙️', title: 'Phát âm', desc: 'AI chấm điểm', path: '/pronunciation/en', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
+                        { emoji: '📐', title: 'Ngữ pháp', desc: '8 bài A1→B2', path: '/grammar-explainer', bg: 'linear-gradient(135deg, #7C3AED20, #8B5CF620)' },
+                        { emoji: '🎧', title: 'Chính tả', desc: 'Nghe → Gõ', path: '/dictation/en', bg: 'linear-gradient(135deg, #3B82F620, #6366F120)' },
+                        { emoji: '📖', title: 'Đọc hiểu', desc: '4 bài A2→B2', path: '/reading', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
+                        { emoji: '📊', title: 'Thống kê', desc: 'XP & kỹ năng', path: '/study-stats', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
+                        { emoji: '🎮', title: 'Trò chơi', desc: '12 loại game', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
+                    ].map(item => (
+                        <Link key={item.path} to={item.path} style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '12px 14px', borderRadius: 'var(--radius-lg)',
+                            background: item.bg, border: '1px solid var(--color-border)',
+                            textDecoration: 'none', color: 'var(--color-text)',
+                            transition: 'transform 0.15s',
+                        }}>
+                            <span style={{ fontSize: '1.5rem' }}>{item.emoji}</span>
+                            <div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.85rem' }}>{item.title}</div>
+                                <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)' }}>{item.desc}</div>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
             {/* Word of the Day */}
             <Suspense fallback={null}>
                 <WordOfDay />
