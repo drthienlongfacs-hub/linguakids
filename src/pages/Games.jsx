@@ -54,6 +54,9 @@ const SECTIONS = [
             { id: 'quiz-cn', title: 'Chinese Quiz', titleVi: '🧠 Đố Vui 🇨🇳', desc: 'Listen and match', descVi: 'Nghe và chọn chữ Hán', emoji: '🎧', path: '/game/quiz/cn', color: '#F59E0B' },
             { id: 'memory-en', title: 'English Memory', titleVi: '🃏 Lật Thẻ 🇬🇧', desc: 'Match words with images', descVi: 'Ghép từ với hình ảnh', emoji: '🃏', path: '/game/memory/en', color: '#6366F1' },
             { id: 'memory-cn', title: 'Chinese Memory', titleVi: '🃏 Lật Thẻ 🇨🇳', desc: 'Match characters', descVi: 'Ghép chữ Hán với hình', emoji: '🀄', path: '/game/memory/cn', color: '#EC4899' },
+            { id: 'typing-en', title: 'Typing EN', titleVi: '⌨️ Gõ nhanh 🇬🇧', desc: 'Type words fast', descVi: 'Gõ từ nhanh, tính WPM', emoji: '⌨️', path: '/typing/en', color: '#0891B2' },
+            { id: 'typing-cn', title: 'Typing CN', titleVi: '⌨️ Gõ nhanh 🇨🇳', desc: 'Type characters', descVi: 'Gõ chữ Hán nhanh', emoji: '⌨️', path: '/typing/cn', color: '#DC2626' },
+            { id: 'matching', title: 'Matching', titleVi: '🔗 Ghép đôi EN↔VN', desc: 'Match translations', descVi: 'Nối từ EN với nghĩa VN', emoji: '🔗', path: '/matching', color: '#7C3AED' },
         ],
     },
     {
