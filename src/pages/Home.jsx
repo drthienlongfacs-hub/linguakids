@@ -159,11 +159,13 @@ export default function Home() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                     {[
                         { emoji: '🎙️', title: 'Phát âm', desc: 'AI chấm điểm', path: '/pronunciation/en', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
+                        { emoji: '🌍', title: 'Accent', desc: 'US/UK/AU giọng', path: '/accent-practice', bg: 'linear-gradient(135deg, #3B82F620, #6366F120)' },
+                        { emoji: '🎭', title: 'Shadowing', desc: '5 phong cách nói', path: '/shadowing', bg: 'linear-gradient(135deg, #EF444420, #DC262620)' },
                         { emoji: '📐', title: 'Ngữ pháp', desc: '8 bài A1→B2', path: '/grammar-explainer', bg: 'linear-gradient(135deg, #7C3AED20, #8B5CF620)' },
                         { emoji: '🎧', title: 'Chính tả', desc: 'Nghe → Gõ', path: '/dictation/en', bg: 'linear-gradient(135deg, #3B82F620, #6366F120)' },
                         { emoji: '📖', title: 'Đọc hiểu', desc: '4 bài A2→B2', path: '/reading', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
                         { emoji: '📊', title: 'Thống kê', desc: 'XP & kỹ năng', path: '/study-stats', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
-                        { emoji: '🎮', title: 'Trò chơi', desc: '12 loại game', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
+                        { emoji: '🎮', title: 'Trò chơi', desc: '14 loại game', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
                     ].map(item => (
                         <Link key={item.path} to={item.path} style={{
                             display: 'flex', alignItems: 'center', gap: '10px',

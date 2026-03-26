@@ -91,6 +91,8 @@ const SECTIONS = [
         items: [
             { id: 'reading', title: 'Reading Comprehension', titleVi: '📖 Đọc hiểu A2→B2', desc: '4 passages + questions', descVi: '4 bài đọc + câu hỏi', emoji: '📖', path: '/reading', color: '#10B981' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
+            { id: 'accent', title: 'Accent Practice', titleVi: '🌍 Luyện giọng US/UK/AU', desc: '3 accents × 10 sentences', descVi: '3 giọng × 10 câu', emoji: '🌍', path: '/accent-practice', color: '#3B82F6' },
+            { id: 'shadowing', title: 'Shadowing Speaker', titleVi: '🎭 Shadowing 5 phong cách', desc: 'Professional, casual, academic...', descVi: 'Chuyên nghiệp, thường ngày, học thuật...', emoji: '🎭', path: '/shadowing', color: '#EF4444' },
         ],
     },
 ];
