@@ -108,6 +108,7 @@ const SECTIONS = [
             { id: 'tense', title: 'Tense Quiz', titleVi: '⏱️ 12 thì', desc: 'All 12 English tenses', descVi: 'Tất cả 12 thì tiếng Anh', emoji: '⏱️', path: '/tense-quiz', color: '#7C3AED' },
             { id: 'preposition', title: 'Prepositions', titleVi: '📍 Giới từ', desc: '20 prep exercises', descVi: '20 bài giới từ in/on/at', emoji: '📍', path: '/prepositions', color: '#0891B2' },
             { id: 'article', title: 'Articles', titleVi: '📌 Mạo từ a/an/the', desc: '15 article exercises', descVi: '15 bài mạo từ', emoji: '📌', path: '/articles', color: '#6366F1' },
+            { id: 'conditional', title: 'Conditionals', titleVi: '🔀 Câu điều kiện', desc: 'If Type 0-3', descVi: 'Mệnh đề If loại 0-3', emoji: '🔀', path: '/conditionals', color: '#F59E0B' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
