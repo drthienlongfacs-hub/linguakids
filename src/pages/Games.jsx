@@ -90,9 +90,12 @@ const SECTIONS = [
         descVi: 'Công cụ luyện tập như giáo viên bản ngữ',
         items: [
             { id: 'reading', title: 'Reading Comprehension', titleVi: '📖 Đọc hiểu A2→B2', desc: '4 passages + questions', descVi: '4 bài đọc + câu hỏi', emoji: '📖', path: '/reading', color: '#10B981' },
-            { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
             { id: 'accent', title: 'Accent Practice', titleVi: '🌍 Luyện giọng US/UK/AU', desc: '3 accents × 10 sentences', descVi: '3 giọng × 10 câu', emoji: '🌍', path: '/accent-practice', color: '#3B82F6' },
             { id: 'shadowing', title: 'Shadowing Speaker', titleVi: '🎭 Shadowing 5 phong cách', desc: 'Professional, casual, academic...', descVi: 'Chuyên nghiệp, thường ngày, học thuật...', emoji: '🎭', path: '/shadowing', color: '#EF4444' },
+            { id: 'roleplay', title: 'Role-play 1:1', titleVi: '🗣️ Hội thoại tình huống', desc: '5 real-life scenarios', descVi: '5 tình huống thực tế', emoji: '🗣️', path: '/roleplay', color: '#6366F1' },
+            { id: 'error-correction', title: 'Error Correction', titleVi: '✏️ Sửa lỗi ngữ pháp', desc: '15 common mistakes', descVi: '15 lỗi thường gặp + giải thích', emoji: '✏️', path: '/error-correction', color: '#F59E0B' },
+            { id: 'idiom', title: 'Idiom Trainer', titleVi: '🎭 20 thành ngữ', desc: 'Learn & quiz idioms', descVi: 'Học & đố thành ngữ', emoji: '🎭', path: '/idiom-trainer', color: '#8B5CF6' },
+            { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
 ];
