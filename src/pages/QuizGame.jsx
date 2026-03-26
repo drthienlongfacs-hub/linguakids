@@ -36,6 +36,7 @@ export default function QuizGame() {
     const [score, setScore] = useState(0);
     const [celebration, setCelebration] = useState(0);
     const [gameComplete, setGameComplete] = useState(false);
+    const [streak, setStreak] = useState(0);
 
     // Generate questions on mount
     useEffect(() => {
@@ -83,8 +84,11 @@ export default function QuizGame() {
 
         if (correct) {
             setScore(s => s + 1);
+            setStreak(s => s + 1);
             addXP(5);
             setCelebration(c => c + 1);
+        } else {
+            setStreak(0);
         }
 
         // Auto-advance after delay
@@ -167,6 +171,17 @@ export default function QuizGame() {
                 </div>
                 <span className="lesson-progress__text">{currentQ + 1}/{TOTAL_QUESTIONS}</span>
             </div>
+
+            {/* Streak indicator */}
+            {streak >= 2 && (
+                <div className="animate-pop-in" style={{
+                    textAlign: 'center', marginBottom: '8px',
+                    fontFamily: 'var(--font-display)', fontWeight: 700,
+                    color: streak >= 5 ? '#EF4444' : '#F59E0B', fontSize: '1rem',
+                }}>
+                    {'🔥'.repeat(Math.min(streak, 5))} {streak} liên tiếp!
+                </div>
+            )}
 
             {/* Question */}
             <div style={{ textAlign: 'center', margin: '24px 0' }}>
