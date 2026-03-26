@@ -46,6 +46,7 @@ const HSKSimulator = lazy(() => import('./modules/exam/HSKSimulator'));
 const PlacementTest = lazy(() => import('./modules/exam/PlacementTest'));
 const ClozeExercise = lazy(() => import('./modules/exercises/ClozeExercise'));
 const ConversationAI = lazy(() => import('./modules/conversation/ConversationAI'));
+const Leaderboard = lazy(() => import('./pages/Leaderboard'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -130,6 +131,7 @@ function AppContent() {
             <Route path="/cloze/:lang/:level" element={<ClozeExercise />} />
             <Route path="/placement" element={<PlacementTest />} />
             <Route path="/conversation-ai" element={<ConversationAI />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
