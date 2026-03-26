@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { GameStateProvider, useGame } from './context/GameStateContext';
 import NavBar from './components/NavBar';
+import InstallPrompt from './components/InstallPrompt';
 import Home from './pages/Home';
 import { isAdultMode } from './utils/userMode';
 import './index.css';
@@ -84,6 +85,7 @@ function AppContent() {
         <div className="shape" />
       </div>
 
+      <InstallPrompt />
       <Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<Home />} />
