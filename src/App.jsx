@@ -62,6 +62,7 @@ const ShadowingSpeaker = lazy(() => import('./pages/ShadowingSpeaker'));
 const SituationalDialogue = lazy(() => import('./pages/SituationalDialogue'));
 const ErrorCorrection = lazy(() => import('./pages/ErrorCorrection'));
 const IdiomTrainer = lazy(() => import('./pages/IdiomTrainer'));
+const ListeningComprehension = lazy(() => import('./pages/ListeningComprehension'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -162,6 +163,7 @@ function AppContent() {
             <Route path="/roleplay" element={<SituationalDialogue />} />
             <Route path="/error-correction" element={<ErrorCorrection />} />
             <Route path="/idiom-trainer" element={<IdiomTrainer />} />
+            <Route path="/listening" element={<ListeningComprehension />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
