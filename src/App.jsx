@@ -50,6 +50,7 @@ const ConversationAI = lazy(() => import('./modules/conversation/ConversationAI'
 const Leaderboard = lazy(() => import('./pages/Leaderboard'));
 const Settings = lazy(() => import('./pages/Settings'));
 const TypingPractice = lazy(() => import('./pages/TypingPractice'));
+const MatchingGame = lazy(() => import('./pages/MatchingGame'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -138,6 +139,7 @@ function AppContent() {
             <Route path="/leaderboard" element={<Leaderboard />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/typing/:lang" element={<TypingPractice />} />
+            <Route path="/matching" element={<MatchingGame />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
