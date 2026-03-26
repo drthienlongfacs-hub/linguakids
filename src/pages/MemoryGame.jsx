@@ -1,5 +1,6 @@
 // Memory Match Game — flip cards to match emoji ↔ word
-import { useState, useEffect } from 'react';
+// Now with difficulty selector, timer, and best-time tracking
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ALL_ENGLISH_WORDS } from '../data/english';
 import { ALL_CHINESE_WORDS } from '../data/chinese';
@@ -15,41 +16,54 @@ function shuffle(arr) {
     return a;
 }
 
+const DIFFICULTIES = [
+    { key: 'easy', label: '😊 Dễ', pairs: 6, color: '#10B981' },
+    { key: 'medium', label: '💪 Vừa', pairs: 8, color: '#F59E0B' },
+    { key: 'hard', label: '🔥 Khó', pairs: 10, color: '#EF4444' },
+];
+
 export default function MemoryGame() {
     const { lang } = useParams();
     const navigate = useNavigate();
     const { addXP, recordGame, state } = useGame();
+    const [difficulty, setDifficulty] = useState(null);
     const [cards, setCards] = useState([]);
     const [flippedIds, setFlippedIds] = useState([]);
     const [matchedIds, setMatchedIds] = useState([]);
     const [celebration, setCelebration] = useState(0);
     const [moves, setMoves] = useState(0);
     const [gameComplete, setGameComplete] = useState(false);
+    const [elapsed, setElapsed] = useState(0);
+    const timerRef = useRef(null);
 
     const isEnglish = lang === 'en';
     const allWords = isEnglish ? ALL_ENGLISH_WORDS : ALL_CHINESE_WORDS;
 
-    useEffect(() => {
-        // Pick 6 random words and create pairs
-        const selected = shuffle(allWords).slice(0, 6);
+    const bestKey = `memory-best-${lang}-${difficulty?.key || 'easy'}`;
+    const bestTime = parseInt(localStorage.getItem(bestKey) || '9999', 10);
+
+    // Start game with chosen difficulty
+    const startGame = (diff) => {
+        setDifficulty(diff);
+        setMoves(0);
+        setMatchedIds([]);
+        setFlippedIds([]);
+        setGameComplete(false);
+        setElapsed(0);
+
+        const selected = shuffle(allWords).slice(0, diff.pairs);
         const pairs = selected.flatMap((w, i) => [
-            {
-                id: `emoji-${i}`,
-                pairId: i,
-                type: 'emoji',
-                display: w.emoji,
-                text: '',
-            },
-            {
-                id: `word-${i}`,
-                pairId: i,
-                type: 'word',
-                display: isEnglish ? w.word : w.character,
-                text: isEnglish ? '' : w.pinyin || '',
-            },
+            { id: `emoji-${i}`, pairId: i, type: 'emoji', display: w.emoji, text: '' },
+            { id: `word-${i}`, pairId: i, type: 'word', display: isEnglish ? w.word : w.character, text: isEnglish ? '' : w.pinyin || '' },
         ]);
         setCards(shuffle(pairs));
-    }, []);
+
+        // Start timer
+        if (timerRef.current) clearInterval(timerRef.current);
+        timerRef.current = setInterval(() => setElapsed(e => e + 1), 1000);
+    };
+
+    useEffect(() => () => { if (timerRef.current) clearInterval(timerRef.current); }, []);
 
     const handleCardClick = (card) => {
         if (flippedIds.length >= 2) return;
@@ -64,43 +78,121 @@ export default function MemoryGame() {
             const [first, second] = newFlipped.map(id => cards.find(c => c.id === id));
 
             if (first.pairId === second.pairId && first.type !== second.type) {
-                // Match!
                 setTimeout(() => {
-                    setMatchedIds(prev => [...prev, first.id, second.id]);
+                    const newMatched = [...matchedIds, first.id, second.id];
+                    setMatchedIds(newMatched);
                     setFlippedIds([]);
                     addXP(5);
                     setCelebration(c => c + 1);
 
-                    // Check game complete
-                    if (matchedIds.length + 2 === cards.length) {
+                    if (newMatched.length === cards.length) {
                         setGameComplete(true);
-                        recordGame(moves + 1 <= 10);
+                        if (timerRef.current) clearInterval(timerRef.current);
+                        recordGame(moves + 1 <= difficulty.pairs + 4);
+                        // Save best time
+                        if (elapsed < bestTime) {
+                            localStorage.setItem(bestKey, String(elapsed));
+                        }
                     }
                 }, 600);
             } else {
-                // No match — flip back
                 setTimeout(() => setFlippedIds([]), 1000);
             }
         }
     };
 
+    // ─── Difficulty Selector ───
+    if (!difficulty) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '60px' }}>
+                <div style={{ fontSize: '5rem', marginBottom: '16px' }}>🃏</div>
+                <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>
+                    Lật Thẻ {isEnglish ? '🇬🇧' : '🇨🇳'}
+                </h2>
+                <p style={{ color: 'var(--color-text-light)', marginBottom: '32px' }}>
+                    Ghép emoji với từ vựng! Chọn độ khó:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: '300px', margin: '0 auto' }}>
+                    {DIFFICULTIES.map(d => (
+                        <button
+                            key={d.key}
+                            className="glass-card"
+                            onClick={() => startGame(d)}
+                            style={{
+                                padding: '18px 24px', textAlign: 'left', cursor: 'pointer',
+                                border: `2px solid ${d.color}33`, display: 'flex', alignItems: 'center',
+                                gap: '16px', transition: 'var(--transition-normal)',
+                            }}
+                        >
+                            <div style={{
+                                width: '48px', height: '48px', borderRadius: '14px',
+                                background: `${d.color}15`, display: 'flex', alignItems: 'center',
+                                justifyContent: 'center', fontSize: '1.5rem', flexShrink: 0,
+                            }}>
+                                {d.label.split(' ')[0]}
+                            </div>
+                            <div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.1rem', color: d.color }}>
+                                    {d.label.split(' ')[1]}
+                                </div>
+                                <div style={{ fontSize: '0.85rem', color: 'var(--color-text-light)' }}>
+                                    {d.pairs} cặp thẻ
+                                </div>
+                            </div>
+                        </button>
+                    ))}
+                </div>
+                <button className="btn btn--outline" onClick={() => navigate('/games')} style={{ marginTop: '24px' }}>
+                    ← Trò chơi khác
+                </button>
+            </div>
+        );
+    }
+
+    // ─── Game Complete ───
     if (gameComplete) {
+        const isNewBest = elapsed < bestTime || bestTime >= 9999;
         return (
             <div className="page" style={{ textAlign: 'center', paddingTop: '60px' }}>
                 <StarBurst trigger={celebration} />
-                <div style={{ fontSize: '6rem', marginBottom: '16px' }}>🏆</div>
+                <div style={{ fontSize: '6rem', marginBottom: '16px' }}>{isNewBest ? '🥇' : '🏆'}</div>
                 <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>
-                    Giỏi quá!
+                    {isNewBest ? 'Kỷ lục mới!' : 'Giỏi quá!'}
                 </h2>
                 <p style={{ color: 'var(--color-text-light)', marginBottom: '8px', fontSize: '1.1rem' }}>
-                    Con đã ghép hết {cards.length / 2} cặp thẻ!
+                    {difficulty.label} · {cards.length / 2} cặp thẻ
                 </p>
-                <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '32px' }}>
-                    {moves} lượt · +{(cards.length / 2) * 5} XP ⭐
-                </p>
+                <div style={{
+                    display: 'flex', justifyContent: 'center', gap: '24px', marginBottom: '24px',
+                    fontFamily: 'var(--font-display)', fontSize: '1.2rem',
+                }}>
+                    <div>
+                        <div style={{ fontSize: '2rem', color: 'var(--color-primary)' }}>{moves}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Lượt</div>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '2rem', color: 'var(--color-xp)' }}>{elapsed}s</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Thời gian</div>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '2rem', color: 'var(--color-success)' }}>+{(cards.length / 2) * 5}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>XP ⭐</div>
+                    </div>
+                </div>
+                {isNewBest && (
+                    <div className="animate-pop-in" style={{
+                        background: '#FFF7ED', border: '2px solid #F59E0B', borderRadius: 'var(--radius-lg)',
+                        padding: '10px 20px', marginBottom: '20px', display: 'inline-block',
+                    }}>
+                        🏅 Kỷ lục: <strong>{elapsed}s</strong> (trước: {bestTime >= 9999 ? '--' : bestTime + 's'})
+                    </div>
+                )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '300px', margin: '0 auto' }}>
-                    <button className="btn btn--primary btn--block btn--large" onClick={() => window.location.reload()}>
+                    <button className="btn btn--primary btn--block btn--large" onClick={() => startGame(difficulty)}>
                         🔄 Chơi lại
+                    </button>
+                    <button className="btn btn--outline btn--block" onClick={() => setDifficulty(null)}>
+                        🎚️ Đổi độ khó
                     </button>
                     <button className="btn btn--outline btn--block" onClick={() => navigate('/games')}>
                         🎮 Trò chơi khác
@@ -110,6 +202,7 @@ export default function MemoryGame() {
         );
     }
 
+    // ─── Game Board ───
     return (
         <div className="page">
             <StarBurst trigger={celebration} />
@@ -122,8 +215,21 @@ export default function MemoryGame() {
                 <div className="xp-badge">⭐ {state.xp}</div>
             </div>
 
-            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
-                <span style={{ fontFamily: 'var(--font-display)', color: 'var(--color-text-light)' }}>
+            {/* Stats bar */}
+            <div style={{
+                display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '16px',
+                fontFamily: 'var(--font-display)', flexWrap: 'wrap',
+            }}>
+                <span style={{
+                    background: `${difficulty.color}15`, color: difficulty.color,
+                    padding: '4px 12px', borderRadius: 'var(--radius-full)', fontSize: '0.85rem', fontWeight: 700,
+                }}>
+                    {difficulty.label}
+                </span>
+                <span style={{ color: 'var(--color-text-light)', fontSize: '0.9rem' }}>
+                    ⏱️ {elapsed}s
+                </span>
+                <span style={{ color: 'var(--color-text-light)', fontSize: '0.9rem' }}>
                     Lượt: {moves} · Ghép: {matchedIds.length / 2}/{cards.length / 2}
                 </span>
             </div>

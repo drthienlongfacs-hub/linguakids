@@ -119,7 +119,7 @@ export default function Conversation() {
             // Add child response to chat with word-level data
             setChatHistory(prev => [...prev, {
                 type: 'child',
-                text: spoken,
+                text: spokenText,
                 result,
             }]);
 
