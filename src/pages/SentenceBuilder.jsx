@@ -169,7 +169,7 @@ export default function SentenceBuilder() {
             {/* Selected words (answer area) */}
             <div style={{
                 minHeight: '70px',
-                background: result === 'correct' ? '#ECFDF5' : result === 'wrong' ? '#FFF1F2' : '#F8FAFC',
+                background: result === 'correct' ? '#ECFDF5' : result === 'wrong' ? '#FFF1F2' : 'var(--color-card)',
                 border: `2px dashed ${result === 'correct' ? 'var(--color-success)' : result === 'wrong' ? 'var(--color-error)' : 'var(--color-border)'}`,
                 borderRadius: 'var(--radius-lg)',
                 padding: '12px',
