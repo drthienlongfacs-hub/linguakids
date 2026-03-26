@@ -54,6 +54,7 @@ const MatchingGame = lazy(() => import('./pages/MatchingGame'));
 const DailyChallenge = lazy(() => import('./pages/DailyChallenge'));
 const PronunciationLab = lazy(() => import('./pages/PronunciationLab'));
 const GrammarExplainer = lazy(() => import('./pages/GrammarExplainer'));
+const DictationExercise = lazy(() => import('./pages/DictationExercise'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -146,6 +147,7 @@ function AppContent() {
             <Route path="/daily-challenge" element={<DailyChallenge />} />
             <Route path="/pronunciation/:lang" element={<PronunciationLab />} />
             <Route path="/grammar-explainer" element={<GrammarExplainer />} />
+            <Route path="/dictation/:lang" element={<DictationExercise />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

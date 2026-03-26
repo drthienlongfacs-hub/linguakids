@@ -78,6 +78,9 @@ const SECTIONS = [
         items: [
             { id: 'cloze-en', title: 'English Cloze', titleVi: '📝 Điền khuyết 🇬🇧', desc: '40+ exercises, A1→B2', descVi: '40+ bài, A1→B2', emoji: '🇬🇧', path: '/cloze/en', color: '#3B82F6' },
             { id: 'cloze-cn', title: 'Chinese Cloze', titleVi: '📝 Điền khuyết 🇨🇳', desc: '15+ exercises, HSK1→3', descVi: '15+ bài, HSK1→3', emoji: '🇨🇳', path: '/cloze/cn', color: '#EF4444' },
+            { id: 'grammar', title: 'Grammar Explainer', titleVi: '📚 Ngữ pháp A1→B2', desc: '8 lessons + quiz', descVi: '8 bài với công thức + quiz', emoji: '📐', path: '/grammar-explainer', color: '#7C3AED' },
+            { id: 'dictation-en', title: 'Dictation EN', titleVi: '🎧 Chính tả 🇬🇧', desc: 'Listen & type', descVi: 'Nghe câu → gõ lại', emoji: '🎧', path: '/dictation/en', color: '#0891B2' },
+            { id: 'dictation-cn', title: 'Dictation CN', titleVi: '🎧 Chính tả 🇨🇳', desc: 'Listen & type', descVi: 'Nghe câu → gõ lại', emoji: '🎧', path: '/dictation/cn', color: '#DC2626' },
         ],
     },
 ];
