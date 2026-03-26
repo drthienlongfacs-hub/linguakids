@@ -168,8 +168,11 @@ export default function Home() {
                         { emoji: '🔄', title: 'Dịch thuật', desc: 'EN↔VN 12 câu', path: '/translation', bg: 'linear-gradient(135deg, #DC262620, #EF444420)' },
                         { emoji: '📖', title: 'Đọc hiểu', desc: '4 bài A2→B2', path: '/reading', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
                         { emoji: '🎭', title: 'Thành ngữ', desc: '20 idiom + quiz', path: '/idiom-trainer', bg: 'linear-gradient(135deg, #8B5CF620, #7C3AED20)' },
+                        { emoji: '🏮', title: 'Thanh điệu', desc: '4 tone luyện nói', path: '/tone-drill', bg: 'linear-gradient(135deg, #DC262620, #EF444420)' },
+                        { emoji: '🌳', title: 'Hội thoại', desc: 'Phân nhánh 3 stories', path: '/conversation-tree', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
+                        { emoji: '📝', title: 'Ngữ cảnh', desc: 'Từ vựng trong câu', path: '/vocab-context', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
                         { emoji: '📊', title: 'Thống kê', desc: 'XP & kỹ năng', path: '/study-stats', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
-                        { emoji: '🎮', title: 'Tất cả', desc: '20+ game & tools', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
+                        { emoji: '🎮', title: 'Tất cả', desc: '25+ game & tools', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
                     ].map(item => (
                         <Link key={item.path} to={item.path} style={{
                             display: 'flex', alignItems: 'center', gap: '10px',
