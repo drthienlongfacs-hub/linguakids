@@ -65,6 +65,7 @@ const IdiomTrainer = lazy(() => import('./pages/IdiomTrainer'));
 const ListeningComprehension = lazy(() => import('./pages/ListeningComprehension'));
 const SentenceTranslation = lazy(() => import('./pages/SentenceTranslation'));
 const ChineseToneDrill = lazy(() => import('./pages/ChineseToneDrill'));
+const ConversationTree = lazy(() => import('./pages/ConversationTree'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -168,6 +169,7 @@ function AppContent() {
             <Route path="/listening" element={<ListeningComprehension />} />
             <Route path="/translation" element={<SentenceTranslation />} />
             <Route path="/tone-drill" element={<ChineseToneDrill />} />
+            <Route path="/conversation-tree" element={<ConversationTree />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

@@ -97,6 +97,8 @@ const SECTIONS = [
             { id: 'idiom', title: 'Idiom Trainer', titleVi: '🎭 20 thành ngữ', desc: 'Learn & quiz idioms', descVi: 'Học & đố thành ngữ', emoji: '🎭', path: '/idiom-trainer', color: '#8B5CF6' },
             { id: 'listening', title: 'Listening', titleVi: '🎧 Nghe hiểu A2→B2', desc: '5 passages + quiz', descVi: '5 bài nghe + câu hỏi', emoji: '🎧', path: '/listening', color: '#0891B2' },
             { id: 'translation', title: 'Translation', titleVi: '🔄 Dịch EN↔VN', desc: '12 bilingual exercises', descVi: '12 bài dịch song ngữ', emoji: '🔄', path: '/translation', color: '#DC2626' },
+            { id: 'tone-drill', title: 'Tone Drill', titleVi: '🏮 Luyện thanh điệu', desc: '20 Chinese tone exercises', descVi: '20 bài luyện 4 thanh', emoji: '🏮', path: '/tone-drill', color: '#DC2626' },
+            { id: 'conv-tree', title: 'Conversation Tree', titleVi: '🌳 Hội thoại phân nhánh', desc: '3 stories with choices', descVi: '3 câu chuyện nhiều lựa chọn', emoji: '🌳', path: '/conversation-tree', color: '#10B981' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
