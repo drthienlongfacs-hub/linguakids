@@ -74,6 +74,7 @@ const SpellingBee = lazy(() => import('./pages/SpellingBee'));
 const SentenceBuilder = lazy(() => import('./pages/SentenceBuilder'));
 const TenseQuiz = lazy(() => import('./pages/TenseQuiz'));
 const PrepositionTrainer = lazy(() => import('./pages/PrepositionTrainer'));
+const ArticleTrainer = lazy(() => import('./pages/ArticleTrainer'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -186,6 +187,7 @@ function AppContent() {
             <Route path="/sentence-builder" element={<SentenceBuilder />} />
             <Route path="/tense-quiz" element={<TenseQuiz />} />
             <Route path="/prepositions" element={<PrepositionTrainer />} />
+            <Route path="/articles" element={<ArticleTrainer />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
