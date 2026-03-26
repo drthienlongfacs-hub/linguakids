@@ -102,6 +102,9 @@ export default function Home() {
                 >
                     {isDark ? '☀️' : '🌙'}
                 </button>
+                <Link to="/settings" className="mode-toggle" title="Cài đặt" style={{ marginLeft: '6px' }}>
+                    ⚙️
+                </Link>
                 <div className="home-hero__badges">
                     <div className="coin-badge">🪙 {state.xp}</div>
                     <div className="xp-badge">⭐ {state.xp} XP</div>
