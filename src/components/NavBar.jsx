@@ -14,8 +14,8 @@ const NAV_ADULT = [
     { path: '/', icon: '🏠', label: 'Home' },
     { path: '/english', icon: '🇬🇧', label: 'English' },
     { path: '/chinese', icon: '🇨🇳', label: '中文' },
-    { path: '/games', icon: '🧩', label: 'Practice' },
-    { path: '/achievements', icon: '📊', label: 'Progress' },
+    { path: '/leaderboard', icon: '🏆', label: 'Ranking' },
+    { path: '/progress', icon: '📊', label: 'Progress' },
 ];
 
 export default function NavBar() {
