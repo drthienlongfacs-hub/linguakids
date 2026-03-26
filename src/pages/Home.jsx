@@ -27,6 +27,18 @@ export default function Home() {
         getDailyQuote().then(setDailyQuote).catch(() => { });
     }, []);
 
+    // Dark mode toggle
+    const [isDark, setIsDark] = useState(() => {
+        const saved = localStorage.getItem('linguakids-dark');
+        if (saved !== null) return saved === 'true';
+        return window.matchMedia?.('(prefers-color-scheme: dark)').matches || false;
+    });
+
+    useEffect(() => {
+        document.documentElement.classList.toggle('dark-mode', isDark);
+        localStorage.setItem('linguakids-dark', String(isDark));
+    }, [isDark]);
+
     const greetingByTime = () => {
         const h = new Date().getHours();
         if (h < 12) return 'Chào buổi sáng';
@@ -80,6 +92,14 @@ export default function Home() {
                 </div>
                 <button className="mode-toggle" onClick={toggleMode} title="Chuyển chế độ">
                     {isAdult ? '🧒 Chế độ Bé' : '🧑 Người lớn'}
+                </button>
+                <button
+                    className="mode-toggle"
+                    onClick={() => setIsDark(d => !d)}
+                    title={isDark ? 'Chế độ sáng' : 'Chế độ tối'}
+                    style={{ marginLeft: '6px' }}
+                >
+                    {isDark ? '☀️' : '🌙'}
                 </button>
                 <div className="home-hero__badges">
                     <div className="coin-badge">🪙 {state.xp}</div>
