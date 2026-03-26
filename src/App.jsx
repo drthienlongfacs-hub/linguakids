@@ -67,6 +67,8 @@ const SentenceTranslation = lazy(() => import('./pages/SentenceTranslation'));
 const ChineseToneDrill = lazy(() => import('./pages/ChineseToneDrill'));
 const ConversationTree = lazy(() => import('./pages/ConversationTree'));
 const VocabInContext = lazy(() => import('./pages/VocabInContext'));
+const PhrasalVerbTrainer = lazy(() => import('./pages/PhrasalVerbTrainer'));
+const MinimalPairDrill = lazy(() => import('./pages/MinimalPairDrill'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -172,6 +174,8 @@ function AppContent() {
             <Route path="/tone-drill" element={<ChineseToneDrill />} />
             <Route path="/conversation-tree" element={<ConversationTree />} />
             <Route path="/vocab-context" element={<VocabInContext />} />
+            <Route path="/phrasal-verbs" element={<PhrasalVerbTrainer />} />
+            <Route path="/minimal-pairs" element={<MinimalPairDrill />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

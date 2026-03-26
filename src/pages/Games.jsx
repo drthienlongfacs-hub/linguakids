@@ -100,6 +100,8 @@ const SECTIONS = [
             { id: 'tone-drill', title: 'Tone Drill', titleVi: '🏮 Luyện thanh điệu', desc: '20 Chinese tone exercises', descVi: '20 bài luyện 4 thanh', emoji: '🏮', path: '/tone-drill', color: '#DC2626' },
             { id: 'conv-tree', title: 'Conversation Tree', titleVi: '🌳 Hội thoại phân nhánh', desc: '3 stories with choices', descVi: '3 câu chuyện nhiều lựa chọn', emoji: '🌳', path: '/conversation-tree', color: '#10B981' },
             { id: 'vocab-ctx', title: 'Vocab in Context', titleVi: '📝 Từ vựng ngữ cảnh', desc: '12 fill-in-the-blank', descVi: '12 bài điền từ trong câu', emoji: '📝', path: '/vocab-context', color: '#0891B2' },
+            { id: 'phrasal', title: 'Phrasal Verbs', titleVi: '🔗 Cụm động từ', desc: '20 essential verbs', descVi: '20 cụm động từ thiết yếu', emoji: '🔗', path: '/phrasal-verbs', color: '#7C3AED' },
+            { id: 'minimal', title: 'Minimal Pairs', titleVi: '👂 Phân biệt âm', desc: '15 sound pairs', descVi: '15 cặp âm dễ nhầm', emoji: '👂', path: '/minimal-pairs', color: '#0891B2' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
