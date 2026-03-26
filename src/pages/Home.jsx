@@ -129,6 +129,27 @@ export default function Home() {
                 )}
             </div>
 
+            {/* Daily Challenge banner */}
+            <Link to="/daily-challenge" style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '14px 16px', borderRadius: 'var(--radius-lg)',
+                background: 'linear-gradient(135deg, #F59E0B20, #EF444420)',
+                border: '1px solid #F59E0B40', marginBottom: '16px',
+                textDecoration: 'none', color: 'var(--color-text)',
+                transition: 'transform var(--transition-fast)',
+            }}>
+                <span style={{ fontSize: '1.8rem' }}>🎯</span>
+                <div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem' }}>
+                        Thử thách hôm nay
+                    </div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>
+                        Hoàn thành 5 câu hỏi → +50 XP ⭐
+                    </div>
+                </div>
+                <span style={{ marginLeft: 'auto', fontSize: '1.2rem' }}>➤</span>
+            </Link>
+
             {/* Word of the Day */}
             <Suspense fallback={null}>
                 <WordOfDay />
