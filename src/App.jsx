@@ -77,6 +77,7 @@ const PrepositionTrainer = lazy(() => import('./pages/PrepositionTrainer'));
 const ArticleTrainer = lazy(() => import('./pages/ArticleTrainer'));
 const ConditionalTrainer = lazy(() => import('./pages/ConditionalTrainer'));
 const PassiveVoiceTrainer = lazy(() => import('./pages/PassiveVoiceTrainer'));
+const CollocationTrainer = lazy(() => import('./pages/CollocationTrainer'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -192,6 +193,7 @@ function AppContent() {
             <Route path="/articles" element={<ArticleTrainer />} />
             <Route path="/conditionals" element={<ConditionalTrainer />} />
             <Route path="/passive-voice" element={<PassiveVoiceTrainer />} />
+            <Route path="/collocations" element={<CollocationTrainer />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
