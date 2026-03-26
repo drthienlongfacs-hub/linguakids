@@ -60,6 +60,7 @@ const StudyStats = lazy(() => import('./pages/StudyStats'));
 const AccentPractice = lazy(() => import('./pages/AccentPractice'));
 const ShadowingSpeaker = lazy(() => import('./pages/ShadowingSpeaker'));
 const SituationalDialogue = lazy(() => import('./pages/SituationalDialogue'));
+const ErrorCorrection = lazy(() => import('./pages/ErrorCorrection'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -158,6 +159,7 @@ function AppContent() {
             <Route path="/accent-practice" element={<AccentPractice />} />
             <Route path="/shadowing" element={<ShadowingSpeaker />} />
             <Route path="/roleplay" element={<SituationalDialogue />} />
+            <Route path="/error-correction" element={<ErrorCorrection />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
