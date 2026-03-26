@@ -5,6 +5,7 @@ import NavBar from './components/NavBar';
 import InstallPrompt from './components/InstallPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
+import StudyReminder from './components/StudyReminder';
 import Home from './pages/Home';
 import { isAdultMode } from './utils/userMode';
 import './index.css';
@@ -90,6 +91,7 @@ function AppContent() {
 
       <InstallPrompt />
       <ScrollToTop />
+      <StudyReminder />
       <ErrorBoundary>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
