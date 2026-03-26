@@ -166,6 +166,7 @@ export default function Home() {
                         { emoji: '📖', title: 'Đọc hiểu', desc: '4 bài A2→B2', path: '/reading', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
                         { emoji: '📊', title: 'Thống kê', desc: 'XP & kỹ năng', path: '/study-stats', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
                         { emoji: '🎮', title: 'Trò chơi', desc: '14 loại game', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
+                        { emoji: '🗣️', title: 'Role-play 1:1', desc: '5 tình huống thực', path: '/roleplay', bg: 'linear-gradient(135deg, #6366F120, #818CF820)' },
                     ].map(item => (
                         <Link key={item.path} to={item.path} style={{
                             display: 'flex', alignItems: 'center', gap: '10px',
