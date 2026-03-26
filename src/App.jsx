@@ -48,6 +48,7 @@ const PlacementTest = lazy(() => import('./modules/exam/PlacementTest'));
 const ClozeExercise = lazy(() => import('./modules/exercises/ClozeExercise'));
 const ConversationAI = lazy(() => import('./modules/conversation/ConversationAI'));
 const Leaderboard = lazy(() => import('./pages/Leaderboard'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -134,6 +135,7 @@ function AppContent() {
             <Route path="/placement" element={<PlacementTest />} />
             <Route path="/conversation-ai" element={<ConversationAI />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
