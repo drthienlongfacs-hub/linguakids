@@ -21,7 +21,7 @@ const MemoryGame = lazy(() => import('./pages/MemoryGame'));
 const QuizGame = lazy(() => import('./pages/QuizGame'));
 const Conversation = lazy(() => import('./pages/Conversation'));
 const ConversationList = lazy(() => import('./pages/ConversationList'));
-const SentenceBuilder = lazy(() => import('./pages/SentenceBuilder'));
+const SentenceBuilderOld = lazy(() => import('./pages/SentenceBuilder'));
 const StoryMode = lazy(() => import('./pages/StoryMode'));
 const StoryList = lazy(() => import('./pages/StoryList'));
 const StrokeWriter = lazy(() => import('./pages/StrokeWriter'));
@@ -71,6 +71,7 @@ const PhrasalVerbTrainer = lazy(() => import('./pages/PhrasalVerbTrainer'));
 const MinimalPairDrill = lazy(() => import('./pages/MinimalPairDrill'));
 const WordFormation = lazy(() => import('./pages/WordFormation'));
 const SpellingBee = lazy(() => import('./pages/SpellingBee'));
+const SentenceBuilder = lazy(() => import('./pages/SentenceBuilder'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -180,6 +181,7 @@ function AppContent() {
             <Route path="/minimal-pairs" element={<MinimalPairDrill />} />
             <Route path="/word-formation" element={<WordFormation />} />
             <Route path="/spelling-bee" element={<SpellingBee />} />
+            <Route path="/sentence-builder" element={<SentenceBuilder />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

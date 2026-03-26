@@ -104,6 +104,7 @@ const SECTIONS = [
             { id: 'minimal', title: 'Minimal Pairs', titleVi: '👂 Phân biệt âm', desc: '15 sound pairs', descVi: '15 cặp âm dễ nhầm', emoji: '👂', path: '/minimal-pairs', color: '#0891B2' },
             { id: 'word-form', title: 'Word Forms', titleVi: '🔠 Biến đổi từ', desc: 'noun↔verb↔adj↔adv', descVi: 'Danh↔Động↔Tính↔Trạng', emoji: '🔠', path: '/word-formation', color: '#6366F1' },
             { id: 'spelling', title: 'Spelling Bee', titleVi: '🐝 Chính tả', desc: '20 tricky words', descVi: '20 từ hay viết sai', emoji: '🐝', path: '/spelling-bee', color: '#F59E0B' },
+            { id: 'sentence', title: 'Sentence Builder', titleVi: '🏗️ Xếp câu', desc: '12 scrambled sentences', descVi: '12 câu xáo trộn', emoji: '🏗️', path: '/sentence-builder', color: '#10B981' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
