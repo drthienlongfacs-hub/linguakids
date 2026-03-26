@@ -116,7 +116,7 @@ export default function PhrasePractice() {
 
             {/* Sentence card */}
             <div style={{
-                background: 'white', borderRadius: 'var(--radius-xl)', padding: '24px',
+                background: 'var(--color-card)', borderRadius: 'var(--radius-xl)', padding: '24px',
                 boxShadow: 'var(--shadow-lg)', marginBottom: '16px', textAlign: 'center',
             }}>
                 {/* Word-by-word display with colors */}

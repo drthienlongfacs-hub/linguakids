@@ -160,7 +160,7 @@ export default function StrokeWriter() {
                 display: 'flex', justifyContent: 'center', marginBottom: '16px',
             }}>
                 <div ref={containerRef} style={{
-                    background: 'white',
+                    background: 'var(--color-card)',
                     borderRadius: 'var(--radius-xl)',
                     boxShadow: 'var(--shadow-lg)',
                     border: mode === 'quiz' ? '3px solid var(--color-primary)' : '3px solid var(--color-border)',

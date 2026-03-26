@@ -32,7 +32,7 @@ export default function StoryList() {
                         className={`animate-slide-up delay-${(i % 5) + 1}`}
                         onClick={() => navigate(`/story/${lang}/${story.id}`)}
                         style={{
-                            background: 'white', borderRadius: 'var(--radius-xl)', overflow: 'hidden',
+                            background: 'var(--color-card)', borderRadius: 'var(--radius-xl)', overflow: 'hidden',
                             boxShadow: 'var(--shadow-md)', cursor: 'pointer',
                             transition: 'all var(--transition-normal)',
                             border: '2px solid transparent',

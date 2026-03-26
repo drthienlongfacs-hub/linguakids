@@ -127,7 +127,7 @@ export default function StoryMode() {
             <div style={{
                 textAlign: 'center', fontSize: '4rem', margin: '16px 0',
                 padding: '24px', borderRadius: 'var(--radius-xl)',
-                background: 'white', boxShadow: 'var(--shadow-md)',
+                background: 'var(--color-card)', boxShadow: 'var(--shadow-md)',
                 userSelect: 'none',
             }}>
                 {scene.image}
@@ -135,7 +135,7 @@ export default function StoryMode() {
 
             {/* Narration */}
             <div style={{
-                background: 'white', borderRadius: 'var(--radius-lg)', padding: '16px 20px',
+                background: 'var(--color-card)', borderRadius: 'var(--radius-lg)', padding: '16px 20px',
                 boxShadow: 'var(--shadow-sm)', marginBottom: '16px',
             }}>
                 <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 700, lineHeight: 1.5, marginBottom: '8px' }}>
