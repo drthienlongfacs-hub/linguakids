@@ -69,6 +69,8 @@ const ConversationTree = lazy(() => import('./pages/ConversationTree'));
 const VocabInContext = lazy(() => import('./pages/VocabInContext'));
 const PhrasalVerbTrainer = lazy(() => import('./pages/PhrasalVerbTrainer'));
 const MinimalPairDrill = lazy(() => import('./pages/MinimalPairDrill'));
+const WordFormation = lazy(() => import('./pages/WordFormation'));
+const SpellingBee = lazy(() => import('./pages/SpellingBee'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -176,6 +178,8 @@ function AppContent() {
             <Route path="/vocab-context" element={<VocabInContext />} />
             <Route path="/phrasal-verbs" element={<PhrasalVerbTrainer />} />
             <Route path="/minimal-pairs" element={<MinimalPairDrill />} />
+            <Route path="/word-formation" element={<WordFormation />} />
+            <Route path="/spelling-bee" element={<SpellingBee />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

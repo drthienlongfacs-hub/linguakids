@@ -102,6 +102,8 @@ const SECTIONS = [
             { id: 'vocab-ctx', title: 'Vocab in Context', titleVi: '📝 Từ vựng ngữ cảnh', desc: '12 fill-in-the-blank', descVi: '12 bài điền từ trong câu', emoji: '📝', path: '/vocab-context', color: '#0891B2' },
             { id: 'phrasal', title: 'Phrasal Verbs', titleVi: '🔗 Cụm động từ', desc: '20 essential verbs', descVi: '20 cụm động từ thiết yếu', emoji: '🔗', path: '/phrasal-verbs', color: '#7C3AED' },
             { id: 'minimal', title: 'Minimal Pairs', titleVi: '👂 Phân biệt âm', desc: '15 sound pairs', descVi: '15 cặp âm dễ nhầm', emoji: '👂', path: '/minimal-pairs', color: '#0891B2' },
+            { id: 'word-form', title: 'Word Forms', titleVi: '🔠 Biến đổi từ', desc: 'noun↔verb↔adj↔adv', descVi: 'Danh↔Động↔Tính↔Trạng', emoji: '🔠', path: '/word-formation', color: '#6366F1' },
+            { id: 'spelling', title: 'Spelling Bee', titleVi: '🐝 Chính tả', desc: '20 tricky words', descVi: '20 từ hay viết sai', emoji: '🐝', path: '/spelling-bee', color: '#F59E0B' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },
