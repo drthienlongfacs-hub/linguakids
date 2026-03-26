@@ -95,6 +95,8 @@ const SECTIONS = [
             { id: 'roleplay', title: 'Role-play 1:1', titleVi: '🗣️ Hội thoại tình huống', desc: '5 real-life scenarios', descVi: '5 tình huống thực tế', emoji: '🗣️', path: '/roleplay', color: '#6366F1' },
             { id: 'error-correction', title: 'Error Correction', titleVi: '✏️ Sửa lỗi ngữ pháp', desc: '15 common mistakes', descVi: '15 lỗi thường gặp + giải thích', emoji: '✏️', path: '/error-correction', color: '#F59E0B' },
             { id: 'idiom', title: 'Idiom Trainer', titleVi: '🎭 20 thành ngữ', desc: 'Learn & quiz idioms', descVi: 'Học & đố thành ngữ', emoji: '🎭', path: '/idiom-trainer', color: '#8B5CF6' },
+            { id: 'listening', title: 'Listening', titleVi: '🎧 Nghe hiểu A2→B2', desc: '5 passages + quiz', descVi: '5 bài nghe + câu hỏi', emoji: '🎧', path: '/listening', color: '#0891B2' },
+            { id: 'translation', title: 'Translation', titleVi: '🔄 Dịch EN↔VN', desc: '12 bilingual exercises', descVi: '12 bài dịch song ngữ', emoji: '🔄', path: '/translation', color: '#DC2626' },
             { id: 'study-stats', title: 'Study Statistics', titleVi: '📊 Thống kê học tập', desc: 'XP, milestones, skills', descVi: 'XP, cột mốc, kỹ năng', emoji: '📊', path: '/study-stats', color: '#F59E0B' },
         ],
     },

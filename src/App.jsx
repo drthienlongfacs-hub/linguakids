@@ -63,6 +63,7 @@ const SituationalDialogue = lazy(() => import('./pages/SituationalDialogue'));
 const ErrorCorrection = lazy(() => import('./pages/ErrorCorrection'));
 const IdiomTrainer = lazy(() => import('./pages/IdiomTrainer'));
 const ListeningComprehension = lazy(() => import('./pages/ListeningComprehension'));
+const SentenceTranslation = lazy(() => import('./pages/SentenceTranslation'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -164,6 +165,7 @@ function AppContent() {
             <Route path="/error-correction" element={<ErrorCorrection />} />
             <Route path="/idiom-trainer" element={<IdiomTrainer />} />
             <Route path="/listening" element={<ListeningComprehension />} />
+            <Route path="/translation" element={<SentenceTranslation />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
