@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useGame } from '../context/GameStateContext';
 import MascotBuddy from '../components/MascotBuddy';
+const WordOfDay = lazy(() => import('../components/WordOfDay'));
 import { isAdultMode } from '../utils/userMode';
 import { getDailyQuote, getDailyFallbackQuote } from '../services/quoteService';
 import { getXPData } from '../services/xpEngine';
@@ -124,6 +125,11 @@ export default function Home() {
                     </div>
                 )}
             </div>
+
+            {/* Word of the Day */}
+            <Suspense fallback={null}>
+                <WordOfDay />
+            </Suspense>
 
             {/* Mascot — hidden in adult mode */}
             {!isAdult && <MascotBuddy message={`${greetingByTime()}, ${userName}! 🎉`} />}
