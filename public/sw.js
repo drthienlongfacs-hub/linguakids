@@ -1,7 +1,7 @@
-// LinguaKids Progressive Service Worker v3
+// LinguaKids Progressive Service Worker v4
 // Strategy: Stale-While-Revalidate for assets, Cache-First for data files
-const CACHE_NAME = 'linguakids-v3';
-const DATA_CACHE = 'linguakids-data-v2';
+const CACHE_NAME = 'linguakids-v4';
+const DATA_CACHE = 'linguakids-data-v3';
 
 // Core shell assets
 const SHELL_ASSETS = [

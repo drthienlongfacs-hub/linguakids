@@ -998,7 +998,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'travel_b1', title: 'Travel & Tourism', emoji: '✈️', color: '#0EA5E9', mode: 'adult', cefrLevel: 'B1', 
+        id: 'travel_b1', title: 'Travel & Tourism', emoji: '✈️', color: '#0EA5E9', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Passport', emoji: '🛂', vietnamese: 'Hộ chiếu', example: 'I need to renew my passport.', exampleVi: 'Tôi cần gia hạn hộ chiếu.' },
             { word: 'Boarding pass', emoji: '🎫', vietnamese: 'Thẻ lên máy bay', example: 'Show your boarding pass at the gate.', exampleVi: 'Xuất trình thẻ lên máy bay tại cổng.' },
@@ -1018,7 +1018,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'workplace_b1', title: 'Workplace & Office', emoji: '💼', color: '#6366F1', mode: 'adult', cefrLevel: 'B1', 
+        id: 'workplace_b1', title: 'Workplace & Office', emoji: '💼', color: '#6366F1', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Colleague', emoji: '👥', vietnamese: 'Đồng nghiệp', example: 'My colleague helped me with the report.', exampleVi: 'Đồng nghiệp giúp tôi làm báo cáo.' },
             { word: 'Deadline', emoji: '⏰', vietnamese: 'Hạn chót', example: 'The deadline is next Friday.', exampleVi: 'Hạn chót là thứ Sáu tới.' },
@@ -1038,7 +1038,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'health_b1', title: 'Health & Wellness', emoji: '🏥', color: '#10B981', mode: 'adult', cefrLevel: 'B1', 
+        id: 'health_b1', title: 'Health & Wellness', emoji: '🏥', color: '#10B981', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Symptom', emoji: '🤒', vietnamese: 'Triệu chứng', example: 'What are your symptoms?', exampleVi: 'Triệu chứng của bạn là gì?' },
             { word: 'Prescription', emoji: '💊', vietnamese: 'Đơn thuốc', example: 'The doctor wrote a prescription.', exampleVi: 'Bác sĩ kê đơn thuốc.' },
@@ -1058,7 +1058,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'education_b1', title: 'Education & Learning', emoji: '🎓', color: '#8B5CF6', mode: 'adult', cefrLevel: 'B1', 
+        id: 'education_b1', title: 'Education & Learning', emoji: '🎓', color: '#8B5CF6', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Scholarship', emoji: '🏆', vietnamese: 'Học bổng', example: 'She won a full scholarship.', exampleVi: 'Cô ấy đạt học bổng toàn phần.' },
             { word: 'Tuition', emoji: '💲', vietnamese: 'Học phí', example: 'Tuition fees are increasing.', exampleVi: 'Học phí đang tăng.' },
@@ -1078,7 +1078,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'finance_b1', title: 'Finance & Banking', emoji: '🏦', color: '#F59E0B', mode: 'adult', cefrLevel: 'B1', 
+        id: 'finance_b1', title: 'Finance & Banking', emoji: '🏦', color: '#F59E0B', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Account', emoji: '🏦', vietnamese: 'Tài khoản', example: 'Open a savings account.', exampleVi: 'Mở tài khoản tiết kiệm.' },
             { word: 'Loan', emoji: '💳', vietnamese: 'Khoản vay', example: 'She applied for a loan.', exampleVi: 'Cô ấy xin vay.' },
@@ -1098,7 +1098,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'law_b2', title: 'Law & Justice', emoji: '⚖️', color: '#DC2626', mode: 'adult', cefrLevel: 'B2', 
+        id: 'law_b2', title: 'Law & Justice', emoji: '⚖️', color: '#DC2626', mode: 'adult', cefrLevel: 'B2',
         words: [
             { word: 'Lawsuit', emoji: '⚖️', vietnamese: 'Vụ kiện', example: 'She filed a lawsuit.', exampleVi: 'Cô ấy nộp đơn kiện.' },
             { word: 'Attorney', emoji: '👨‍⚖️', vietnamese: 'Luật sư', example: 'Hire a good attorney.', exampleVi: 'Thuê luật sư giỏi.' },
@@ -1118,7 +1118,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'psychology_b2', title: 'Psychology & Mind', emoji: '🧠', color: '#A855F7', mode: 'adult', cefrLevel: 'B2', 
+        id: 'psychology_b2', title: 'Psychology & Mind', emoji: '🧠', color: '#A855F7', mode: 'adult', cefrLevel: 'B2',
         words: [
             { word: 'Anxiety', emoji: '😰', vietnamese: 'Lo âu', example: 'She suffers from anxiety.', exampleVi: 'Cô ấy bị lo âu.' },
             { word: 'Depression', emoji: '😞', vietnamese: 'Trầm cảm', example: 'Depression is treatable.', exampleVi: 'Trầm cảm có thể điều trị.' },
@@ -1138,7 +1138,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'media_b1', title: 'Media & News', emoji: '📰', color: '#14B8A6', mode: 'adult', cefrLevel: 'B1', 
+        id: 'media_b1', title: 'Media & News', emoji: '📰', color: '#14B8A6', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Headline', emoji: '📰', vietnamese: 'Tiêu đề', example: 'The headline shocked everyone.', exampleVi: 'Tiêu đề gây sốc mọi người.' },
             { word: 'Journalist', emoji: '✍️', vietnamese: 'Nhà báo', example: 'The journalist investigated the story.', exampleVi: 'Nhà báo điều tra câu chuyện.' },
@@ -1158,7 +1158,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'nature_a2', title: 'Nature & Weather', emoji: '🌿', color: '#22C55E', cefrLevel: 'A2', 
+        id: 'nature_a2', title: 'Nature & Weather', emoji: '🌿', color: '#22C55E', cefrLevel: 'A2',
         words: [
             { word: 'Mountain', emoji: '⛰️', vietnamese: 'Núi', example: 'The mountain is very high.', exampleVi: 'Ngọn núi rất cao.' },
             { word: 'River', emoji: '🏞️', vietnamese: 'Sông', example: 'The river flows to the sea.', exampleVi: 'Sông chảy ra biển.' },
@@ -1178,7 +1178,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'cooking_a2', title: 'Cooking & Kitchen', emoji: '👨‍🍳', color: '#F97316', cefrLevel: 'A2', 
+        id: 'cooking_a2', title: 'Cooking & Kitchen', emoji: '👨‍🍳', color: '#F97316', cefrLevel: 'A2',
         words: [
             { word: 'Recipe', emoji: '📖', vietnamese: 'Công thức', example: 'Follow the recipe carefully.', exampleVi: 'Làm theo công thức cẩn thận.' },
             { word: 'Ingredient', emoji: '🧅', vietnamese: 'Nguyên liệu', example: 'Buy fresh ingredients.', exampleVi: 'Mua nguyên liệu tươi.' },
@@ -1198,7 +1198,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'sports_a2', title: 'Sports & Fitness', emoji: '⚽', color: '#EF4444', cefrLevel: 'A2', 
+        id: 'sports_a2', title: 'Sports & Fitness', emoji: '⚽', color: '#EF4444', cefrLevel: 'A2',
         words: [
             { word: 'Score', emoji: '🏆', vietnamese: 'Điểm số', example: 'The final score was 3-1.', exampleVi: 'Tỷ số cuối cùng là 3-1.' },
             { word: 'Coach', emoji: '👨‍🏫', vietnamese: 'Huấn luyện viên', example: 'The coach planned a new strategy.', exampleVi: 'HLV lên chiến thuật mới.' },
@@ -1218,7 +1218,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'technology_b2', title: 'Advanced Technology', emoji: '🤖', color: '#6366F1', mode: 'adult', cefrLevel: 'B2', 
+        id: 'technology_b2', title: 'Advanced Technology', emoji: '🤖', color: '#6366F1', mode: 'adult', cefrLevel: 'B2',
         words: [
             { word: 'Algorithm', emoji: '🧮', vietnamese: 'Thuật toán', example: 'The algorithm optimizes search results.', exampleVi: 'Thuật toán tối ưu kết quả tìm kiếm.' },
             { word: 'Encryption', emoji: '🔐', vietnamese: 'Mã hóa', example: 'Encryption protects your data.', exampleVi: 'Mã hóa bảo vệ dữ liệu.' },
@@ -1238,7 +1238,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'culture_b1', title: 'Culture & Society', emoji: '🎭', color: '#EC4899', mode: 'adult', cefrLevel: 'B1', 
+        id: 'culture_b1', title: 'Culture & Society', emoji: '🎭', color: '#EC4899', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Tradition', emoji: '🏮', vietnamese: 'Truyền thống', example: 'We celebrate many traditions.', exampleVi: 'Chúng tôi giữ nhiều truyền thống.' },
             { word: 'Festival', emoji: '🎊', vietnamese: 'Lễ hội', example: 'The festival attracts millions.', exampleVi: 'Lễ hội thu hút hàng triệu người.' },
@@ -1258,7 +1258,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'politics_b2', title: 'Politics & Government', emoji: '🏛️', color: '#0369A1', mode: 'adult', cefrLevel: 'B2', 
+        id: 'politics_b2', title: 'Politics & Government', emoji: '🏛️', color: '#0369A1', mode: 'adult', cefrLevel: 'B2',
         words: [
             { word: 'Democracy', emoji: '🗳️', vietnamese: 'Dân chủ', example: 'Democracy requires participation.', exampleVi: 'Dân chủ cần sự tham gia.' },
             { word: 'Election', emoji: '🗳️', vietnamese: 'Bầu cử', example: 'The election is next month.', exampleVi: 'Bầu cử tháng tới.' },
@@ -1278,7 +1278,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'transport_a2', title: 'Transportation', emoji: '🚌', color: '#F97316', cefrLevel: 'A2', 
+        id: 'transport_a2', title: 'Transportation', emoji: '🚌', color: '#F97316', cefrLevel: 'A2',
         words: [
             { word: 'Bus stop', emoji: '🚏', vietnamese: 'Trạm xe buýt', example: 'Wait at the bus stop.', exampleVi: 'Đợi ở trạm xe buýt.' },
             { word: 'Train station', emoji: '🚉', vietnamese: 'Ga tàu', example: 'The train station is nearby.', exampleVi: 'Ga tàu ở gần đây.' },
@@ -1298,7 +1298,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'emergency_a2', title: 'Emergency & Safety', emoji: '🚨', color: '#EF4444', cefrLevel: 'A2', 
+        id: 'emergency_a2', title: 'Emergency & Safety', emoji: '🚨', color: '#EF4444', cefrLevel: 'A2',
         words: [
             { word: 'Emergency', emoji: '🚨', vietnamese: 'Khẩn cấp', example: 'Call 115 in an emergency.', exampleVi: 'Gọi 115 khi khẩn cấp.' },
             { word: 'Fire', emoji: '🔥', vietnamese: 'Cháy', example: 'There is a fire in the building!', exampleVi: 'Cháy trong tòa nhà!' },
@@ -1318,7 +1318,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'shopping_a2', title: 'Shopping & Commerce', emoji: '🛍️', color: '#EC4899', cefrLevel: 'A2', 
+        id: 'shopping_a2', title: 'Shopping & Commerce', emoji: '🛍️', color: '#EC4899', cefrLevel: 'A2',
         words: [
             { word: 'Receipt', emoji: '🧾', vietnamese: 'Hóa đơn', example: 'Keep the receipt for return.', exampleVi: 'Giữ hóa đơn để đổi trả.' },
             { word: 'Discount', emoji: '🏷️', vietnamese: 'Giảm giá', example: 'There is a 20% discount today.', exampleVi: 'Hôm nay giảm giá 20%.' },
@@ -1338,7 +1338,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'environment_b2', title: 'Advanced Environment', emoji: '🌏', color: '#059669', mode: 'adult', cefrLevel: 'B2', 
+        id: 'environment_b2', title: 'Advanced Environment', emoji: '🌏', color: '#059669', mode: 'adult', cefrLevel: 'B2',
         words: [
             { word: 'Ecosystem', emoji: '🌿', vietnamese: 'Hệ sinh thái', example: 'The ecosystem is fragile.', exampleVi: 'Hệ sinh thái rất mong manh.' },
             { word: 'Conservation', emoji: '🦁', vietnamese: 'Bảo tồn', example: 'Wildlife conservation is vital.', exampleVi: 'Bảo tồn động vật hoang dã quan trọng.' },
@@ -1358,7 +1358,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'housing_a2', title: 'Home & Housing', emoji: '🏠', color: '#A855F7', cefrLevel: 'A2', 
+        id: 'housing_a2', title: 'Home & Housing', emoji: '🏠', color: '#A855F7', cefrLevel: 'A2',
         words: [
             { word: 'Apartment', emoji: '🏢', vietnamese: 'Căn hộ', example: 'We live in an apartment.', exampleVi: 'Chúng tôi sống trong căn hộ.' },
             { word: 'Rent', emoji: '💰', vietnamese: 'Thuê', example: 'The rent is $500 per month.', exampleVi: 'Tiền thuê $500/tháng.' },
@@ -1378,7 +1378,7 @@ export const ENGLISH_TOPICS = [
         ],
     },
     {
-        id: 'relationships_b1', title: 'Relationships', emoji: '❤️', color: '#F43F5E', mode: 'adult', cefrLevel: 'B1', 
+        id: 'relationships_b1', title: 'Relationships', emoji: '❤️', color: '#F43F5E', mode: 'adult', cefrLevel: 'B1',
         words: [
             { word: 'Friendship', emoji: '🤝', vietnamese: 'Tình bạn', example: 'True friendship lasts forever.', exampleVi: 'Tình bạn thật sự bền vững.' },
             { word: 'Trust', emoji: '🙏', vietnamese: 'Tin tưởng', example: 'Trust is the foundation.', exampleVi: 'Tin tưởng là nền tảng.' },
@@ -1395,6 +1395,46 @@ export const ENGLISH_TOPICS = [
             { word: 'Support', emoji: '💪', vietnamese: 'Hỗ trợ', example: 'Support each other through tough times.', exampleVi: 'Hỗ trợ nhau qua khó khăn.' },
             { word: 'Breakup', emoji: '💔', vietnamese: 'Chia tay', example: 'The breakup was difficult.', exampleVi: 'Việc chia tay rất khó khăn.' },
             { word: 'Reunion', emoji: '🫂', vietnamese: 'Đoàn tụ', example: 'The family reunion was joyful.', exampleVi: 'Buổi đoàn tụ gia đình vui vẻ.' },
+        ],
+    },
+    {
+        id: 'finance-business', title: 'Finance & Business', emoji: '💰', color: '#059669', mode: 'adult',
+        words: [
+            { word: 'Revenue', emoji: '💵', vietnamese: 'Doanh thu', example: 'The company reported record revenue.', exampleVi: 'Công ty ghi nhận doanh thu kỷ lục.' },
+            { word: 'Investment', emoji: '📈', vietnamese: 'Đầu tư', example: 'Real estate is a safe investment.', exampleVi: 'Bất động sản là khoản đầu tư an toàn.' },
+            { word: 'Dividend', emoji: '💸', vietnamese: 'Cổ tức', example: 'Shareholders receive quarterly dividends.', exampleVi: 'Cổ đông nhận cổ tức hàng quý.' },
+            { word: 'Inflation', emoji: '📊', vietnamese: 'Lạm phát', example: 'Inflation reduces purchasing power.', exampleVi: 'Lạm phát giảm sức mua.' },
+            { word: 'Budget', emoji: '📋', vietnamese: 'Ngân sách', example: 'Stick to your monthly budget.', exampleVi: 'Bám sát ngân sách hàng tháng.' },
+            { word: 'Profit margin', emoji: '📏', vietnamese: 'Biên lợi nhuận', example: 'The profit margin is 15%.', exampleVi: 'Biên lợi nhuận là 15%.' },
+            { word: 'Entrepreneur', emoji: '🚀', vietnamese: 'Doanh nhân', example: 'She is a successful entrepreneur.', exampleVi: 'Cô ấy là doanh nhân thành đạt.' },
+            { word: 'Liability', emoji: '⚠️', vietnamese: 'Khoản nợ', example: 'Minimize your financial liabilities.', exampleVi: 'Giảm thiểu các khoản nợ tài chính.' },
+            { word: 'Asset', emoji: '🏠', vietnamese: 'Tài sản', example: 'Property is a valuable asset.', exampleVi: 'Bất động sản là tài sản có giá trị.' },
+            { word: 'Stock market', emoji: '📉', vietnamese: 'Thị trường chứng khoán', example: 'The stock market crashed yesterday.', exampleVi: 'Thị trường chứng khoán sụp đổ hôm qua.' },
+            { word: 'Currency', emoji: '💱', vietnamese: 'Tiền tệ', example: 'Exchange rates affect currency value.', exampleVi: 'Tỷ giá ảnh hưởng giá trị tiền tệ.' },
+            { word: 'Startup', emoji: '💡', vietnamese: 'Công ty khởi nghiệp', example: 'Their startup raised $5 million.', exampleVi: 'Startup của họ huy động 5 triệu đô.' },
+            { word: 'Bankruptcy', emoji: '🏴', vietnamese: 'Phá sản', example: 'The company filed for bankruptcy.', exampleVi: 'Công ty nộp đơn phá sản.' },
+            { word: 'Interest rate', emoji: '🏦', vietnamese: 'Lãi suất', example: 'The central bank lowered interest rates.', exampleVi: 'Ngân hàng trung ương hạ lãi suất.' },
+            { word: 'Portfolio', emoji: '📁', vietnamese: 'Danh mục đầu tư', example: 'Diversify your investment portfolio.', exampleVi: 'Đa dạng hóa danh mục đầu tư.' },
+        ],
+    },
+    {
+        id: 'psychology-mind', title: 'Psychology & Mind', emoji: '🧠', color: '#7C3AED', mode: 'adult',
+        words: [
+            { word: 'Cognition', emoji: '🧠', vietnamese: 'Nhận thức', example: 'Cognition develops throughout life.', exampleVi: 'Nhận thức phát triển suốt đời.' },
+            { word: 'Emotion', emoji: '😢', vietnamese: 'Cảm xúc', example: 'Manage your emotions wisely.', exampleVi: 'Quản lý cảm xúc khôn ngoan.' },
+            { word: 'Motivation', emoji: '🔥', vietnamese: 'Động lực', example: 'Intrinsic motivation lasts longer.', exampleVi: 'Động lực nội tại bền vững hơn.' },
+            { word: 'Anxiety', emoji: '😰', vietnamese: 'Lo âu', example: 'Practice meditation to reduce anxiety.', exampleVi: 'Tập thiền để giảm lo âu.' },
+            { word: 'Resilience', emoji: '💪', vietnamese: 'Khả năng phục hồi', example: 'Build mental resilience through challenges.', exampleVi: 'Xây dựng sức bền tinh thần qua thử thách.' },
+            { word: 'Subconscious', emoji: '🌊', vietnamese: 'Tiềm thức', example: 'The subconscious influences decisions.', exampleVi: 'Tiềm thức ảnh hưởng quyết định.' },
+            { word: 'Empathy', emoji: '🤲', vietnamese: 'Đồng cảm', example: 'Show empathy to those struggling.', exampleVi: 'Đồng cảm với người đang khó khăn.' },
+            { word: 'Mindfulness', emoji: '🧘', vietnamese: 'Chánh niệm', example: 'Mindfulness reduces stress significantly.', exampleVi: 'Chánh niệm giảm stress đáng kể.' },
+            { word: 'Behavior', emoji: '🎭', vietnamese: 'Hành vi', example: 'Behavior can be learned and changed.', exampleVi: 'Hành vi có thể học và thay đổi.' },
+            { word: 'Habit', emoji: '🔄', vietnamese: 'Thói quen', example: 'Form good habits early in life.', exampleVi: 'Hình thành thói quen tốt sớm.' },
+            { word: 'Self-esteem', emoji: '⭐', vietnamese: 'Lòng tự trọng', example: 'High self-esteem boosts confidence.', exampleVi: 'Lòng tự trọng cao tăng tự tin.' },
+            { word: 'Therapy', emoji: '🛋️', vietnamese: 'Liệu pháp', example: 'Cognitive therapy helps many patients.', exampleVi: 'Liệu pháp nhận thức giúp nhiều bệnh nhân.' },
+            { word: 'Perception', emoji: '👁️', vietnamese: 'Nhận thức/chi giác', example: 'Perception shapes our reality.', exampleVi: 'Chi giác định hình thực tại.' },
+            { word: 'Trauma', emoji: '💔', vietnamese: 'Chấn thương tâm lý', example: 'Trauma requires professional support.', exampleVi: 'Chấn thương tâm lý cần hỗ trợ chuyên môn.' },
+            { word: 'Introvert', emoji: '📖', vietnamese: 'Hướng nội', example: 'Introverts recharge by being alone.', exampleVi: 'Người hướng nội nạp năng lượng khi ở một mình.' },
         ],
     },
 ];
