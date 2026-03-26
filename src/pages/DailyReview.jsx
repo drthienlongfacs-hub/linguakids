@@ -1,6 +1,6 @@
 // DailyReview — Spaced Repetition Review Queue
 // Shows words due for review, flashcard + speak practice, SM-2 scoring
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
@@ -118,6 +118,24 @@ export default function DailyReview() {
     };
 
     const isLast = currentIndex >= reviewWords.length - 1;
+
+    // Keyboard shortcuts for power users
+    useEffect(() => {
+        const handler = (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                if (e.key === ' ') handleFlip();
+                if (e.key === 'Enter') handleNext();
+            }
+            if (e.key === '1') { reviewWord(currentWord.word, currentWord.lang, 1); handleNext(); }
+            if (e.key === '2') { reviewWord(currentWord.word, currentWord.lang, 2); handleNext(); }
+            if (e.key === '3') { reviewWord(currentWord.word, currentWord.lang, 3); handleNext(); }
+            if (e.key === '4') { reviewWord(currentWord.word, currentWord.lang, 4); handleNext(); }
+            if (e.key === '5') { reviewWord(currentWord.word, currentWord.lang, 5); handleNext(); }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    });
 
     return (
         <div className="page">
