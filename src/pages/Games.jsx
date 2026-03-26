@@ -31,6 +31,8 @@ const SECTIONS = [
         items: [
             { id: 'conv-en', title: 'English Conversations', titleVi: '💬 Hội thoại Tiếng Anh', desc: 'Meeting friends, restaurant, school...', descVi: 'Gặp bạn, nhà hàng, trường học...', emoji: '🗣️', path: '/conversations/en', color: '#6366F1' },
             { id: 'conv-cn', title: 'Chinese Conversations', titleVi: '💬 Hội thoại Tiếng Trung', desc: 'Meeting friends, food, family...', descVi: 'Gặp bạn, đồ ăn, gia đình...', emoji: '🐲', path: '/conversations/cn', color: '#EC4899' },
+            { id: 'pronun-en', title: 'Pronunciation Lab EN', titleVi: '🎙️ Luyện phát âm 🇬🇧', desc: 'AI scores your pronunciation', descVi: 'AI chấm điểm phát âm', emoji: '🎙️', path: '/pronunciation/en', color: '#0891B2' },
+            { id: 'pronun-cn', title: 'Pronunciation Lab CN', titleVi: '🎙️ Luyện phát âm 🇨🇳', desc: 'Practice tones + characters', descVi: 'Luyện thanh điệu + chữ Hán', emoji: '🎙️', path: '/pronunciation/cn', color: '#DC2626' },
         ],
     },
     {
