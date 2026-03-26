@@ -171,8 +171,17 @@ export default function Home() {
                         { emoji: '🏮', title: 'Thanh điệu', desc: '4 tone luyện nói', path: '/tone-drill', bg: 'linear-gradient(135deg, #DC262620, #EF444420)' },
                         { emoji: '🌳', title: 'Hội thoại', desc: 'Phân nhánh 3 stories', path: '/conversation-tree', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
                         { emoji: '📝', title: 'Ngữ cảnh', desc: 'Từ vựng trong câu', path: '/vocab-context', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
+                        { emoji: '🔗', title: 'Phrasal', desc: '20 cụm động từ', path: '/phrasal-verbs', bg: 'linear-gradient(135deg, #7C3AED20, #8B5CF620)' },
+                        { emoji: '👂', title: 'Tối thiểu', desc: '15 cặp âm', path: '/minimal-pairs', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
+                        { emoji: '🔠', title: 'Biến từ', desc: 'N↔V↔Adj↔Adv', path: '/word-formation', bg: 'linear-gradient(135deg, #6366F120, #818CF820)' },
+                        { emoji: '🐝', title: 'Chính tả', desc: '20 từ khó', path: '/spelling-bee', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
+                        { emoji: '🏗️', title: 'Xếp câu', desc: '12 câu xáo trộn', path: '/sentence-builder', bg: 'linear-gradient(135deg, #10B98120, #22C55E20)' },
+                        { emoji: '⏱️', title: '12 thì EN', desc: 'Tất cả 12 thì', path: '/tense-quiz', bg: 'linear-gradient(135deg, #7C3AED20, #8B5CF620)' },
+                        { emoji: '📍', title: 'Giới từ', desc: '20 bài in/on/at', path: '/prepositions', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
+                        { emoji: '📌', title: 'Mạo từ', desc: 'a/an/the/∅', path: '/articles', bg: 'linear-gradient(135deg, #6366F120, #818CF820)' },
+                        { emoji: '🔀', title: 'Điều kiện', desc: 'If Type 0-3', path: '/conditionals', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
                         { emoji: '📊', title: 'Thống kê', desc: 'XP & kỹ năng', path: '/study-stats', bg: 'linear-gradient(135deg, #F59E0B20, #EAB30820)' },
-                        { emoji: '🎮', title: 'Tất cả', desc: '25+ game & tools', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
+                        { emoji: '🎮', title: 'Tất cả', desc: '30+ game & tools', path: '/games', bg: 'linear-gradient(135deg, #EC489920, #F4389920)' },
                     ].map(item => (
                         <Link key={item.path} to={item.path} style={{
                             display: 'flex', alignItems: 'center', gap: '10px',
