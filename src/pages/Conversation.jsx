@@ -246,7 +246,7 @@ export default function Conversation() {
                                     {msg.emoji}
                                 </div>
                                 <div style={{
-                                    background: 'white', borderRadius: '16px 16px 16px 4px', padding: '12px 16px',
+                                    background: 'var(--color-card)', borderRadius: '16px 16px 16px 4px', padding: '12px 16px',
                                     boxShadow: 'var(--shadow-sm)', maxWidth: '80%',
                                 }}>
                                     <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1.05rem' }}>
