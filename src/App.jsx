@@ -72,6 +72,7 @@ const MinimalPairDrill = lazy(() => import('./pages/MinimalPairDrill'));
 const WordFormation = lazy(() => import('./pages/WordFormation'));
 const SpellingBee = lazy(() => import('./pages/SpellingBee'));
 const SentenceBuilder = lazy(() => import('./pages/SentenceBuilder'));
+const TenseQuiz = lazy(() => import('./pages/TenseQuiz'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -182,6 +183,7 @@ function AppContent() {
             <Route path="/word-formation" element={<WordFormation />} />
             <Route path="/spelling-bee" element={<SpellingBee />} />
             <Route path="/sentence-builder" element={<SentenceBuilder />} />
+            <Route path="/tense-quiz" element={<TenseQuiz />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
