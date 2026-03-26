@@ -56,6 +56,7 @@ const PronunciationLab = lazy(() => import('./pages/PronunciationLab'));
 const GrammarExplainer = lazy(() => import('./pages/GrammarExplainer'));
 const DictationExercise = lazy(() => import('./pages/DictationExercise'));
 const ReadingComprehension = lazy(() => import('./pages/ReadingComprehension'));
+const StudyStats = lazy(() => import('./pages/StudyStats'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -150,6 +151,7 @@ function AppContent() {
             <Route path="/grammar-explainer" element={<GrammarExplainer />} />
             <Route path="/dictation/:lang" element={<DictationExercise />} />
             <Route path="/reading" element={<ReadingComprehension />} />
+            <Route path="/study-stats" element={<StudyStats />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
