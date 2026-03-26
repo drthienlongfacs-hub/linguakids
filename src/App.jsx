@@ -3,6 +3,8 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import { GameStateProvider, useGame } from './context/GameStateContext';
 import NavBar from './components/NavBar';
 import InstallPrompt from './components/InstallPrompt';
+import ErrorBoundary from './components/ErrorBoundary';
+import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import { isAdultMode } from './utils/userMode';
 import './index.css';
@@ -86,48 +88,51 @@ function AppContent() {
       </div>
 
       <InstallPrompt />
-      <Suspense fallback={<LoadingFallback />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/review" element={<DailyReview />} />
-          <Route path="/achievements" element={<Achievements />} />
-          <Route path="/vocabulary" element={<VocabularyDashboard />} />
-          <Route path="/english" element={<LearnEnglish />} />
-          <Route path="/chinese" element={<LearnChinese />} />
-          <Route path="/games" element={<Games />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/lesson/:lang/:topicId" element={<Lesson />} />
-          <Route path="/lesson-cn/:topicId" element={<LessonChinese />} />
-          <Route path="/game/memory/:lang" element={<MemoryGame />} />
-          <Route path="/game/quiz/:lang" element={<QuizGame />} />
-          <Route path="/game/sentence/:lang" element={<SentenceBuilder />} />
-          <Route path="/game/stroke" element={<StrokeWriter />} />
-          <Route path="/conversations/:lang" element={<ConversationList />} />
-          <Route path="/conversation/:lang/:convId" element={<Conversation />} />
-          <Route path="/stories/:lang" element={<StoryList />} />
-          <Route path="/story/:lang/:storyId" element={<StoryMode />} />
-          <Route path="/phrases/:lang" element={<PhraseTopicList />} />
-          <Route path="/phrases/:lang/:topicId" element={<PhrasePractice />} />
-          <Route path="/listening" element={<ListeningHub />} />
-          <Route path="/listening/:lessonId" element={<ListeningLesson />} />
-          <Route path="/listening-cn" element={<ListeningCnHub />} />
-          <Route path="/speaking" element={<SpeakingHub />} />
-          <Route path="/speaking-cn" element={<SpeakingCnHub />} />
-          <Route path="/speaking-cn/:lessonId" element={<SpeakingCnExercise />} />
-          <Route path="/reading" element={<ReadingHub />} />
-          <Route path="/writing" element={<WritingHub />} />
-          <Route path="/grammar" element={<GrammarHub />} />
-          <Route path="/grammar-cn" element={<GrammarCnHub />} />
-          <Route path="/roadmap" element={<RoadmapHub />} />
-          <Route path="/exam-prep" element={<MockTestHub />} />
-          <Route path="/ielts-sim" element={<IELTSSimulator />} />
-          <Route path="/hsk-sim" element={<HSKSimulator />} />
-          <Route path="/cloze/:lang" element={<ClozeExercise />} />
-          <Route path="/cloze/:lang/:level" element={<ClozeExercise />} />
-          <Route path="/placement" element={<PlacementTest />} />
-          <Route path="/conversation-ai" element={<ConversationAI />} />
-        </Routes>
-      </Suspense>
+      <ScrollToTop />
+      <ErrorBoundary>
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/review" element={<DailyReview />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="/vocabulary" element={<VocabularyDashboard />} />
+            <Route path="/english" element={<LearnEnglish />} />
+            <Route path="/chinese" element={<LearnChinese />} />
+            <Route path="/games" element={<Games />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route path="/lesson/:lang/:topicId" element={<Lesson />} />
+            <Route path="/lesson-cn/:topicId" element={<LessonChinese />} />
+            <Route path="/game/memory/:lang" element={<MemoryGame />} />
+            <Route path="/game/quiz/:lang" element={<QuizGame />} />
+            <Route path="/game/sentence/:lang" element={<SentenceBuilder />} />
+            <Route path="/game/stroke" element={<StrokeWriter />} />
+            <Route path="/conversations/:lang" element={<ConversationList />} />
+            <Route path="/conversation/:lang/:convId" element={<Conversation />} />
+            <Route path="/stories/:lang" element={<StoryList />} />
+            <Route path="/story/:lang/:storyId" element={<StoryMode />} />
+            <Route path="/phrases/:lang" element={<PhraseTopicList />} />
+            <Route path="/phrases/:lang/:topicId" element={<PhrasePractice />} />
+            <Route path="/listening" element={<ListeningHub />} />
+            <Route path="/listening/:lessonId" element={<ListeningLesson />} />
+            <Route path="/listening-cn" element={<ListeningCnHub />} />
+            <Route path="/speaking" element={<SpeakingHub />} />
+            <Route path="/speaking-cn" element={<SpeakingCnHub />} />
+            <Route path="/speaking-cn/:lessonId" element={<SpeakingCnExercise />} />
+            <Route path="/reading" element={<ReadingHub />} />
+            <Route path="/writing" element={<WritingHub />} />
+            <Route path="/grammar" element={<GrammarHub />} />
+            <Route path="/grammar-cn" element={<GrammarCnHub />} />
+            <Route path="/roadmap" element={<RoadmapHub />} />
+            <Route path="/exam-prep" element={<MockTestHub />} />
+            <Route path="/ielts-sim" element={<IELTSSimulator />} />
+            <Route path="/hsk-sim" element={<HSKSimulator />} />
+            <Route path="/cloze/:lang" element={<ClozeExercise />} />
+            <Route path="/cloze/:lang/:level" element={<ClozeExercise />} />
+            <Route path="/placement" element={<PlacementTest />} />
+            <Route path="/conversation-ai" element={<ConversationAI />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
 
       <NavBar />
     </div>
