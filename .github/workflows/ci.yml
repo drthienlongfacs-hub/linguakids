@@ -1,0 +1,40 @@
+# CI Pipeline — LinguaKids Quality Gate
+# Added by MBP M1 (QA Guardian)
+# Does NOT replace deploy.yml — runs on PRs + pushes for quality checks
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
+
+      - name: Bundle Size Check
+        run: |
+          DIST_SIZE=$(du -sk dist | cut -f1)
+          echo "📦 Bundle size: ${DIST_SIZE}KB"
+          if [ "$DIST_SIZE" -gt 5120 ]; then
+            echo "⚠️ Warning: Bundle >5MB (${DIST_SIZE}KB)"
+          fi
