@@ -21,7 +21,7 @@ const MemoryGame = lazy(() => import('./pages/MemoryGame'));
 const QuizGame = lazy(() => import('./pages/QuizGame'));
 const Conversation = lazy(() => import('./pages/Conversation'));
 const ConversationList = lazy(() => import('./pages/ConversationList'));
-const SentenceBuilderOld = lazy(() => import('./pages/SentenceBuilder'));
+// SentenceBuilderOld removed — dead code (audit 27/03/2026)
 const StoryMode = lazy(() => import('./pages/StoryMode'));
 const StoryList = lazy(() => import('./pages/StoryList'));
 const StrokeWriter = lazy(() => import('./pages/StrokeWriter'));
@@ -171,14 +171,14 @@ function AppContent() {
             <Route path="/pronunciation/:lang" element={<PronunciationLab />} />
             <Route path="/grammar-explainer" element={<GrammarExplainer />} />
             <Route path="/dictation/:lang" element={<DictationExercise />} />
-            <Route path="/reading" element={<ReadingComprehension />} />
+            <Route path="/reading-practice" element={<ReadingComprehension />} />
             <Route path="/study-stats" element={<StudyStats />} />
             <Route path="/accent-practice" element={<AccentPractice />} />
             <Route path="/shadowing" element={<ShadowingSpeaker />} />
             <Route path="/roleplay" element={<SituationalDialogue />} />
             <Route path="/error-correction" element={<ErrorCorrection />} />
             <Route path="/idiom-trainer" element={<IdiomTrainer />} />
-            <Route path="/listening" element={<ListeningComprehension />} />
+            <Route path="/listening-practice" element={<ListeningComprehension />} />
             <Route path="/translation" element={<SentenceTranslation />} />
             <Route path="/tone-drill" element={<ChineseToneDrill />} />
             <Route path="/conversation-tree" element={<ConversationTree />} />
