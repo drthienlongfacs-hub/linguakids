@@ -1,7 +1,8 @@
-// LinguaKids Progressive Service Worker v5
+// LinguaKids Progressive Service Worker v6
+// Copyright © 2026 ThS.BS CK2. Lê Trọng Thiên Long. All rights reserved.
 // Strategy: Stale-While-Revalidate for assets, Cache-First for data files
-const CACHE_NAME = 'linguakids-v5';
-const DATA_CACHE = 'linguakids-data-v4';
+const CACHE_NAME = 'linguakids-v6';
+const DATA_CACHE = 'linguakids-data-v5';
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
 const INDEX_URL = `${BASE_PATH}/index.html`;
 
@@ -10,6 +11,7 @@ const SHELL_ASSETS = [
     `${BASE_PATH}/`,
     INDEX_URL,
     `${BASE_PATH}/manifest.json`,
+    `${BASE_PATH}/copyright-notice.txt`,
 ];
 
 // Data file patterns to cache aggressively

@@ -2,6 +2,8 @@
   "name": "linguakids",
   "private": true,
   "version": "25.0.0",
+  "author": "ThS.BS CK2. Lê Trọng Thiên Long",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -6,6 +6,7 @@ import InstallPrompt from './components/InstallPrompt';
 import ErrorBoundary from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
 import StudyReminder from './components/StudyReminder';
+import CopyrightSeal from './components/CopyrightSeal';
 import Home from './pages/Home';
 import { isAdultMode } from './utils/userMode';
 import './index.css';
@@ -80,6 +81,7 @@ const ArticleTrainer = lazy(() => import('./pages/ArticleTrainer'));
 const ConditionalTrainer = lazy(() => import('./pages/ConditionalTrainer'));
 const PassiveVoiceTrainer = lazy(() => import('./pages/PassiveVoiceTrainer'));
 const CollocationTrainer = lazy(() => import('./pages/CollocationTrainer'));
+const LegalNotice = lazy(() => import('./pages/LegalNotice'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -124,10 +126,12 @@ function AppContent() {
       <InstallPrompt />
       <ScrollToTop />
       <StudyReminder />
+      <CopyrightSeal />
       <ErrorBoundary>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="/review" element={<DailyReview />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/vocabulary" element={<VocabularyDashboard />} />

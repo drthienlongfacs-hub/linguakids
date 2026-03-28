@@ -1,7 +1,12 @@
 {
     "name": "LinguaKids — Học Tiếng Anh & Trung",
     "short_name": "LinguaKids",
+    "id": "/linguakids/",
     "description": "Ứng dụng học Tiếng Anh & Tiếng Trung song ngữ cho trẻ em và người lớn. Gamification, SM-2 Spaced Repetition, offline-first PWA.",
+    "developer": {
+        "name": "ThS.BS CK2. Lê Trọng Thiên Long"
+    },
+    "copyright": "Copyright © 2026 ThS.BS CK2. Lê Trọng Thiên Long. All rights reserved.",
     "start_url": "/linguakids/",
     "scope": "/linguakids/",
     "display": "standalone",

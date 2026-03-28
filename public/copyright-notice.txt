@@ -1,0 +1,6 @@
+LinguaKids
+Copyright © 2026 ThS.BS CK2. Le Trong Thien Long. All rights reserved.
+
+Nguon code, UI/UX, cau truc du lieu, chuong trinh hoc va nhan dien thuong hieu cua LinguaKids thuoc quyen so huu cua ThS.BS CK2. Le Trong Thien Long, tru cac thanh phan open-source ben thu ba co giay phep rieng.
+
+Nghiem cam sao chep, clone giao dien, tai phat hanh, trich xuat du lieu he thong hoac tao phien ban phai sinh khi chua co su dong y bang van ban.

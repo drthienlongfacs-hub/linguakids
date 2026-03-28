@@ -97,9 +97,13 @@ npm run verify:live
 
 Nếu lệnh này fail thì không được coi là đã phát hành xong, dù `git push` hoặc build local đã pass.
 
-## 📄 License
+## 📄 Rights
 
-MIT © 2026 Dr. Thiên Long
+Copyright © 2026 ThS.BS CK2. Lê Trọng Thiên Long. All rights reserved.
+
+Repository này không phát hành theo giấy phép MIT. Nguồn code, UI/UX, chương trình học, pipeline dữ liệu và nhận diện thương hiệu được bảo lưu quyền sở hữu, ngoại trừ các thư viện hoặc nguồn dữ liệu open-source của bên thứ ba có giấy phép riêng.
+
+Chi tiết xem tại `COPYRIGHT.md`.
 
 ---
 

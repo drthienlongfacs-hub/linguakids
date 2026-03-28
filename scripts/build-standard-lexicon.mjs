@@ -1,3 +1,5 @@
+// LinguaKids data pipeline
+// Copyright © 2026 ThS.BS CK2. Lê Trọng Thiên Long. All rights reserved.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
