@@ -6,6 +6,8 @@ import { ALL_CHINESE_WORDS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
 import { useGameStore } from '../store/useGameStore';
 import { useSpeech } from '../hooks/useSpeech';
+import { usePracticeLexicon } from '../hooks/usePracticeLexicon';
+import { isAdultMode } from '../utils/userMode';
 import StarBurst from '../components/StarBurst';
 
 function shuffle(arr) {
@@ -19,6 +21,20 @@ function shuffle(arr) {
 
 const TOTAL_QUESTIONS = 8;
 
+function buildQuestions(allWords, isEnglish) {
+    const shuffled = shuffle(allWords);
+    return shuffled.slice(0, TOTAL_QUESTIONS).map((correctWord) => {
+        const wrongs = shuffle(allWords.filter((word) =>
+            isEnglish ? word.word !== correctWord.word : word.character !== correctWord.character
+        )).slice(0, 3);
+
+        return {
+            correct: correctWord,
+            options: shuffle([correctWord, ...wrongs]),
+        };
+    });
+}
+
 export default function QuizGame() {
     const { lang } = useParams();
     const navigate = useNavigate();
@@ -27,9 +43,57 @@ export default function QuizGame() {
     const { speakEnglish, speakChinese } = useSpeech();
 
     const isEnglish = lang === 'en';
-    const allWords = isEnglish ? ALL_ENGLISH_WORDS : ALL_CHINESE_WORDS;
+    const adult = isAdultMode(state.userMode);
+    const { items: allWords, loading: lexiconLoading, sourceLabel } = usePracticeLexicon({
+        lang,
+        adult,
+        fallbackEnglish: ALL_ENGLISH_WORDS,
+        fallbackChinese: ALL_CHINESE_WORDS,
+    });
 
-    const [questions, setQuestions] = useState([]);
+    const sessionKey = `${lang}:${sourceLabel}:${allWords.length}:${allWords[0]?.id || allWords[0]?.word || allWords[0]?.character || 'empty'}`;
+
+    if (lexiconLoading || allWords.length === 0) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <div className="mascot__character">🐼</div>
+                <p style={{ fontFamily: 'var(--font-display)', marginTop: '16px' }}>
+                    {adult ? 'Đang tải ngân hàng dữ liệu chuẩn...' : 'Đang chuẩn bị...'}
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <QuizGameSession
+            key={sessionKey}
+            allWords={allWords}
+            isEnglish={isEnglish}
+            navigate={navigate}
+            addXP={addXP}
+            recordGame={recordGame}
+            state={state}
+            sourceLabel={sourceLabel}
+            updateSkillScore={updateSkillScore}
+            speakEnglish={speakEnglish}
+            speakChinese={speakChinese}
+        />
+    );
+}
+
+function QuizGameSession({
+    addXP,
+    allWords,
+    isEnglish,
+    navigate,
+    recordGame,
+    sourceLabel,
+    speakChinese,
+    speakEnglish,
+    state,
+    updateSkillScore,
+}) {
+    const [questions] = useState(() => buildQuestions(allWords, isEnglish));
     const [currentQ, setCurrentQ] = useState(0);
     const [selected, setSelected] = useState(null);
     const [isCorrect, setIsCorrect] = useState(null);
@@ -37,21 +101,6 @@ export default function QuizGame() {
     const [celebration, setCelebration] = useState(0);
     const [gameComplete, setGameComplete] = useState(false);
     const [streak, setStreak] = useState(0);
-
-    // Generate questions on mount
-    useEffect(() => {
-        const shuffled = shuffle(allWords);
-        const qs = shuffled.slice(0, TOTAL_QUESTIONS).map(correctWord => {
-            // Pick 3 wrong options
-            const wrongs = shuffle(allWords.filter(w =>
-                isEnglish ? w.word !== correctWord.word : w.character !== correctWord.character
-            )).slice(0, 3);
-
-            const options = shuffle([correctWord, ...wrongs]);
-            return { correct: correctWord, options };
-        });
-        setQuestions(qs);
-    }, []);
 
     const currentQuestion = questions[currentQ];
 
@@ -64,16 +113,14 @@ export default function QuizGame() {
         }
     }, [currentQuestion, isEnglish, speakEnglish, speakChinese]);
 
-    // Auto-play sound for each question
     useEffect(() => {
-        if (currentQuestion) {
-            const timer = setTimeout(playSound, 400);
-            return () => clearTimeout(timer);
-        }
-    }, [currentQ, questions]);
+        if (!currentQuestion) return undefined;
+        const timer = setTimeout(playSound, 400);
+        return () => clearTimeout(timer);
+    }, [currentQuestion, playSound]);
 
-    const handleSelect = (option) => {
-        if (selected !== null) return; // Already selected
+    function handleSelect(option) {
+        if (selected !== null) return;
 
         const correct = isEnglish
             ? option.word === currentQuestion.correct.word
@@ -83,37 +130,28 @@ export default function QuizGame() {
         setIsCorrect(correct);
 
         if (correct) {
-            setScore(s => s + 1);
-            setStreak(s => s + 1);
+            setScore((value) => value + 1);
+            setStreak((value) => value + 1);
             addXP(5);
-            setCelebration(c => c + 1);
+            setCelebration((value) => value + 1);
         } else {
             setStreak(0);
         }
 
-        // Auto-advance after delay
         setTimeout(() => {
             if (currentQ + 1 >= questions.length) {
-                const isPerfect = score + (correct ? 1 : 0) === TOTAL_QUESTIONS;
-                const pct = Math.round(((score + (correct ? 1 : 0)) / TOTAL_QUESTIONS) * 100);
+                const finalScore = score + (correct ? 1 : 0);
+                const isPerfect = finalScore === TOTAL_QUESTIONS;
+                const pct = Math.round((finalScore / TOTAL_QUESTIONS) * 100);
                 recordGame(isPerfect);
                 updateSkillScore('vocabulary', pct);
                 setGameComplete(true);
             } else {
-                setCurrentQ(q => q + 1);
+                setCurrentQ((value) => value + 1);
                 setSelected(null);
                 setIsCorrect(null);
             }
         }, 1200);
-    };
-
-    if (questions.length === 0) {
-        return (
-            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
-                <div className="mascot__character">🐼</div>
-                <p style={{ fontFamily: 'var(--font-display)', marginTop: '16px' }}>Đang chuẩn bị...</p>
-            </div>
-        );
     }
 
     if (gameComplete) {
@@ -188,6 +226,9 @@ export default function QuizGame() {
                 <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: 'var(--color-text-light)', marginBottom: '16px' }}>
                     🔊 Nghe và chọn đáp án đúng!
                 </p>
+                <div style={{ fontSize: '0.78rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
+                    {sourceLabel === 'standard' ? 'Nguồn: Standard lexicon' : 'Nguồn: Curriculum'}
+                </div>
 
                 {/* Big play button */}
                 <button

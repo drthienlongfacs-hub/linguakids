@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-03-28T12:38:11.212Z",
+  "sources": [
+    {
+      "id": "open-english-wordnet",
+      "label": "Open English WordNet",
+      "url": "https://github.com/globalwordnet/english-wordnet",
+      "license": "WordNet License + CC BY 4.0"
+    },
+    {
+      "id": "cmudict",
+      "label": "CMU Pronouncing Dictionary",
+      "url": "https://github.com/cmusphinx/cmudict",
+      "license": "BSD-style license"
+    },
+    {
+      "id": "cc-cedict",
+      "label": "CC-CEDICT",
+      "url": "https://www.mdbg.net/chinese/dictionary?page=cc-cedict",
+      "license": "CC BY-SA 4.0"
+    },
+    {
+      "id": "cow",
+      "label": "Chinese Open Wordnet",
+      "url": "https://bond-lab.github.io/cow/",
+      "license": "WordNet license (via OMW)"
+    }
+  ],
+  "english": {
+    "total": 32000,
+    "practice": 12000,
+    "sample": [
+      "Art",
+      "Bed",
+      "Bus",
+      "Car",
+      "Cat"
+    ],
+    "topDomains": [
+      {
+        "label": "Adjective: All",
+        "count": 9691
+      },
+      {
+        "label": "Noun: Artifact",
+        "count": 3843
+      },
+      {
+        "label": "Noun: Person",
+        "count": 3802
+      },
+      {
+        "label": "Noun: Communication",
+        "count": 2385
+      },
+      {
+        "label": "Adverb: All",
+        "count": 1327
+      },
+      {
+        "label": "Verb: Change",
+        "count": 1114
+      },
+      {
+        "label": "Noun: Animal",
+        "count": 945
+      },
+      {
+        "label": "Verb: Contact",
+        "count": 939
+      },
+      {
+        "label": "Verb: Communication",
+        "count": 881
+      },
+      {
+        "label": "Noun: Food",
+        "count": 787
+      },
+      {
+        "label": "Noun: Group",
+        "count": 755
+      },
+      {
+        "label": "Noun: Plant",
+        "count": 739
+      }
+    ]
+  },
+  "chinese": {
+    "total": 12000,
+    "practice": 8000,
+    "sample": [
+      "爱",
+      "爸爸",
+      "百",
+      "包子",
+      "宝宝"
+    ],
+    "topDomains": [
+      {
+        "label": "General Concepts",
+        "count": 11850
+      },
+      {
+        "label": "Noun: Artifact",
+        "count": 35
+      },
+      {
+        "label": "Verb: Body",
+        "count": 31
+      },
+      {
+        "label": "Verb: Motion",
+        "count": 11
+      },
+      {
+        "label": "Verb: Perception",
+        "count": 10
+      },
+      {
+        "label": "Verb: Social",
+        "count": 8
+      },
+      {
+        "label": "Noun: Plant",
+        "count": 8
+      },
+      {
+        "label": "Noun: State",
+        "count": 6
+      },
+      {
+        "label": "Noun: Animal",
+        "count": 5
+      },
+      {
+        "label": "Noun: Substance",
+        "count": 5
+      },
+      {
+        "label": "Noun: Act",
+        "count": 4
+      },
+      {
+        "label": "Verb: Possession",
+        "count": 4
+      }
+    ]
+  },
+  "comparison": {
+    "currentEnglishCurriculum": 952,
+    "currentChineseCurriculum": 541,
+    "upgradedEnglishMultiplier": 33.6,
+    "upgradedChineseMultiplier": 22.2,
+    "upgradedCombinedMultiplier": 29.5
+  }
+}

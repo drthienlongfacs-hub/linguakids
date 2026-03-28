@@ -1,12 +1,33 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { CHINESE_TOPICS } from '../data/chinese';
 import { isAdultMode } from '../utils/userMode';
+import { loadStandardLexiconMeta } from '../services/standardLexiconService';
 
 export default function LearnChinese() {
     const navigate = useNavigate();
     const { state } = useGame();
     const isAdult = isAdultMode(state.userMode);
+    const [standardCount, setStandardCount] = useState(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        loadStandardLexiconMeta()
+            .then((meta) => {
+                if (!cancelled) {
+                    setStandardCount(meta?.chinese?.total || null);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setStandardCount(null);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     // Filter by mode — adults see all, kids see only kids topics
     const filteredTopics = isAdult
@@ -84,8 +105,24 @@ export default function LearnChinese() {
                 textAlign: 'center', color: 'var(--color-text-light)',
                 marginBottom: '24px', fontFamily: 'var(--font-display)', fontSize: '1.1rem'
             }}>
-                {isAdult ? `${filteredTopics.length} chủ đề · ${filteredTopics.reduce((a, t) => a + t.words.length, 0)} từ vựng` : 'Khám phá tiếng Trung nào! 🐉'}
+                {isAdult
+                    ? `${filteredTopics.length} chủ đề · ${filteredTopics.reduce((a, t) => a + t.words.length, 0)} từ curriculum · ${standardCount ? standardCount.toLocaleString('en-US') : '...'} mục lexicon chuẩn`
+                    : 'Khám phá tiếng Trung nào! 🐉'}
             </p>
+
+            <div className="topic-grid" style={{ marginBottom: '20px' }}>
+                <div
+                    className="topic-card"
+                    onClick={() => navigate('/lexicon/cn')}
+                    style={{ cursor: 'pointer', textAlign: 'center', padding: '16px 12px' }}
+                >
+                    <div className="topic-card__emoji">🗂️</div>
+                    <div className="topic-card__title">{isAdult ? 'Standard Lexicon' : 'Kho dữ liệu chuẩn'}</div>
+                    <div className="topic-card__count">
+                        {standardCount ? `${standardCount.toLocaleString('en-US')} mục` : 'Đang tải...'}
+                    </div>
+                </div>
+            </div>
 
             {isAdult && adultTopics.length > 0 && (
                 <>

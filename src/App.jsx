@@ -13,6 +13,7 @@ import './index.css';
 // Lazy load all route components for code splitting
 const LearnEnglish = lazy(() => import('./pages/LearnEnglish'));
 const LearnChinese = lazy(() => import('./pages/LearnChinese'));
+const StandardLexicon = lazy(() => import('./pages/StandardLexicon'));
 const Games = lazy(() => import('./pages/Games'));
 const Progress = lazy(() => import('./pages/Progress'));
 const Lesson = lazy(() => import('./pages/Lesson'));
@@ -131,6 +132,7 @@ function AppContent() {
             <Route path="/vocabulary" element={<VocabularyDashboard />} />
             <Route path="/english" element={<LearnEnglish />} />
             <Route path="/chinese" element={<LearnChinese />} />
+            <Route path="/lexicon/:lang" element={<StandardLexicon />} />
             <Route path="/games" element={<Games />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/lesson/:lang/:topicId" element={<Lesson />} />

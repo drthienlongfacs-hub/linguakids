@@ -1,9 +1,11 @@
 // TypingPractice — Speed typing game for vocabulary reinforcement
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ALL_ENGLISH_WORDS } from '../data/english';
 import { ALL_CHINESE_WORDS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
+import { usePracticeLexicon } from '../hooks/usePracticeLexicon';
+import { isAdultMode } from '../utils/userMode';
 import StarBurst from '../components/StarBurst';
 
 function shuffle(arr) {
@@ -22,9 +24,41 @@ export default function TypingPractice() {
     const navigate = useNavigate();
     const { addXP, state } = useGame();
     const isEnglish = lang === 'en';
-    const allWords = isEnglish ? ALL_ENGLISH_WORDS : ALL_CHINESE_WORDS;
+    const adult = isAdultMode(state.userMode);
+    const { items: allWords, loading: lexiconLoading, sourceLabel } = usePracticeLexicon({
+        lang,
+        adult,
+        fallbackEnglish: ALL_ENGLISH_WORDS,
+        fallbackChinese: ALL_CHINESE_WORDS,
+    });
+    const sessionKey = `${lang}:${sourceLabel}:${allWords.length}:${allWords[0]?.id || allWords[0]?.word || allWords[0]?.character || 'empty'}`;
 
-    const [words, setWords] = useState([]);
+    if (lexiconLoading || allWords.length === 0) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <div className="mascot__character">⌨️</div>
+                <p style={{ fontFamily: 'var(--font-display)', marginTop: '16px' }}>
+                    {adult ? 'Đang tải ngân hàng dữ liệu chuẩn...' : 'Đang chuẩn bị...'}
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <TypingPracticeSession
+            key={sessionKey}
+            addXP={addXP}
+            allWords={allWords}
+            isEnglish={isEnglish}
+            navigate={navigate}
+            sourceLabel={sourceLabel}
+            state={state}
+        />
+    );
+}
+
+function TypingPracticeSession({ addXP, allWords, isEnglish, navigate, sourceLabel, state }) {
+    const [words] = useState(() => shuffle(allWords).slice(0, TOTAL_WORDS));
     const [currentIdx, setCurrentIdx] = useState(0);
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
@@ -35,44 +69,36 @@ export default function TypingPractice() {
     const [results, setResults] = useState([]);
 
     useEffect(() => {
-        const selected = shuffle(allWords).slice(0, TOTAL_WORDS);
-        setWords(selected);
-    }, []);
-
-    // Timer
-    useEffect(() => {
-        if (!started || complete) return;
-        const interval = setInterval(() => setTimer(t => t + 1), 1000);
+        if (!started || complete) return undefined;
+        const interval = setInterval(() => setTimer((value) => value + 1), 1000);
         return () => clearInterval(interval);
     }, [started, complete]);
 
     const currentWord = words[currentIdx];
 
-    const handleSubmit = useCallback((e) => {
-        e.preventDefault();
+    function handleSubmit(event) {
+        event.preventDefault();
         if (!currentWord) return;
         if (!started) setStarted(true);
 
         const target = isEnglish ? currentWord.word : currentWord.character;
         const correct = input.trim().toLowerCase() === target.toLowerCase();
 
-        setResults(prev => [...prev, { word: target, typed: input.trim(), correct }]);
+        setResults((previous) => [...previous, { word: target, typed: input.trim(), correct }]);
 
         if (correct) {
-            setScore(s => s + 1);
+            setScore((value) => value + 1);
             addXP(5);
-            setCelebration(c => c + 1);
+            setCelebration((value) => value + 1);
         }
 
         if (currentIdx + 1 >= TOTAL_WORDS) {
             setComplete(true);
         } else {
-            setCurrentIdx(i => i + 1);
+            setCurrentIdx((value) => value + 1);
         }
         setInput('');
-    }, [input, currentWord, currentIdx, isEnglish, started]);
-
-    if (words.length === 0) return null;
+    }
 
     if (complete) {
         const pct = Math.round((score / TOTAL_WORDS) * 100);
@@ -141,6 +167,10 @@ export default function TypingPractice() {
                 </div>
             )}
 
+            <div style={{ textAlign: 'center', marginBottom: '10px', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                {sourceLabel === 'standard' ? 'Nguồn: Standard lexicon' : 'Nguồn: Curriculum'}
+            </div>
+
             {/* Word to type */}
             <div style={{
                 textAlign: 'center', margin: '24px 0',
@@ -181,7 +211,9 @@ export default function TypingPractice() {
             </form>
 
             <p style={{ textAlign: 'center', color: 'var(--color-text-light)', fontSize: '0.8rem', marginTop: '12px' }}>
-                💡 Nhìn emoji + nghĩa VN → gõ từ {isEnglish ? 'tiếng Anh' : 'tiếng Trung'}
+                💡 {sourceLabel === 'standard'
+                    ? `Nhìn định nghĩa / gloss → gõ từ ${isEnglish ? 'tiếng Anh' : 'tiếng Trung'}`
+                    : `Nhìn emoji + nghĩa VN → gõ từ ${isEnglish ? 'tiếng Anh' : 'tiếng Trung'}`}
             </p>
         </div>
     );

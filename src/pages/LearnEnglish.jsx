@@ -1,12 +1,33 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { ENGLISH_TOPICS } from '../data/english';
 import { isAdultMode } from '../utils/userMode';
+import { loadStandardLexiconMeta } from '../services/standardLexiconService';
 
 export default function LearnEnglish() {
     const navigate = useNavigate();
     const { state } = useGame();
     const isAdult = isAdultMode(state.userMode);
+    const [standardCount, setStandardCount] = useState(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        loadStandardLexiconMeta()
+            .then((meta) => {
+                if (!cancelled) {
+                    setStandardCount(meta?.english?.total || null);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setStandardCount(null);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     // Filter topics by mode: kids see only kids topics, adults see all topics
     const filteredTopics = isAdult
@@ -78,8 +99,24 @@ export default function LearnEnglish() {
                 fontFamily: 'var(--font-display)',
                 fontSize: '1.1rem'
             }}>
-                {isAdult ? `${filteredTopics.length} chủ đề · ${filteredTopics.reduce((a, t) => a + t.words.length, 0)} từ vựng` : 'Chọn chủ đề để bắt đầu học nào! 🎯'}
+                {isAdult
+                    ? `${filteredTopics.length} chủ đề · ${filteredTopics.reduce((a, t) => a + t.words.length, 0)} từ curriculum · ${standardCount ? standardCount.toLocaleString('en-US') : '...'} mục lexicon chuẩn`
+                    : 'Chọn chủ đề để bắt đầu học nào! 🎯'}
             </p>
+
+            <div className="topic-grid" style={{ marginBottom: '20px' }}>
+                <div
+                    className="topic-card"
+                    onClick={() => navigate('/lexicon/en')}
+                    style={{ cursor: 'pointer', textAlign: 'center', padding: '16px 12px' }}
+                >
+                    <div className="topic-card__emoji">🗂️</div>
+                    <div className="topic-card__title">{isAdult ? 'Standard Lexicon' : 'Kho dữ liệu chuẩn'}</div>
+                    <div className="topic-card__count">
+                        {standardCount ? `${standardCount.toLocaleString('en-US')} mục` : 'Đang tải...'}
+                    </div>
+                </div>
+            </div>
 
             {/* Adult mode: show sections */}
             {isAdult && adultTopics.length > 0 && (

@@ -1,10 +1,12 @@
 // PronunciationLab — Real-time pronunciation practice with Web Speech API feedback
 // Leverages free SpeechRecognition + SpeechSynthesis APIs for native-teacher experience
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ALL_ENGLISH_WORDS } from '../data/english';
 import { ALL_CHINESE_WORDS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
+import { usePracticeLexicon } from '../hooks/usePracticeLexicon';
+import { isAdultMode } from '../utils/userMode';
 import StarBurst from '../components/StarBurst';
 
 function shuffle(arr) {
@@ -52,9 +54,41 @@ export default function PronunciationLab() {
     const navigate = useNavigate();
     const { addXP, state } = useGame();
     const isEN = lang !== 'cn';
-    const allWords = isEN ? ALL_ENGLISH_WORDS : ALL_CHINESE_WORDS;
+    const adult = isAdultMode(state.userMode);
+    const { items: allWords, loading: lexiconLoading, sourceLabel } = usePracticeLexicon({
+        lang,
+        adult,
+        fallbackEnglish: ALL_ENGLISH_WORDS,
+        fallbackChinese: ALL_CHINESE_WORDS,
+    });
+    const sessionKey = `${lang}:${sourceLabel}:${allWords.length}:${allWords[0]?.id || allWords[0]?.word || allWords[0]?.character || 'empty'}`;
 
-    const [words, setWords] = useState([]);
+    if (lexiconLoading || allWords.length === 0) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <div className="mascot__character">🎙️</div>
+                <p style={{ fontFamily: 'var(--font-display)', marginTop: '16px' }}>
+                    {adult ? 'Đang tải ngân hàng dữ liệu chuẩn...' : 'Đang chuẩn bị...'}
+                </p>
+            </div>
+        );
+    }
+
+    return (
+        <PronunciationSession
+            key={sessionKey}
+            addXP={addXP}
+            allWords={allWords}
+            isEN={isEN}
+            navigate={navigate}
+            sourceLabel={sourceLabel}
+            state={state}
+        />
+    );
+}
+
+function PronunciationSession({ addXP, allWords, isEN, navigate, sourceLabel, state }) {
+    const [words] = useState(() => shuffle(allWords).slice(0, TOTAL));
     const [idx, setIdx] = useState(0);
     const [listening, setListening] = useState(false);
     const [spoken, setSpoken] = useState('');
@@ -65,24 +99,21 @@ export default function PronunciationLab() {
     const [error, setError] = useState('');
     const recognizerRef = useRef(null);
 
-    useEffect(() => {
-        setWords(shuffle(allWords).slice(0, TOTAL));
-    }, []);
-
     const speak = useCallback((text) => {
         if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = isEN ? 'en-US' : 'zh-CN';
-        u.rate = 0.85;
-        window.speechSynthesis.speak(u);
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = isEN ? 'en-US' : 'zh-CN';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
     }, [isEN]);
 
-    const startListening = useCallback(() => {
+    function startListening() {
         if (!SpeechRecognition) {
             setError('Trình duyệt không hỗ trợ Speech Recognition. Dùng Chrome/Edge.');
             return;
         }
+
         setError('');
         setSpoken('');
         setScore(null);
@@ -92,43 +123,46 @@ export default function PronunciationLab() {
         rec.interimResults = false;
         rec.maxAlternatives = 1;
 
-        rec.onresult = (e) => {
-            const transcript = e.results[0][0].transcript;
-            setSpoken(transcript);
+        rec.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
             const currentWord = words[idx];
             const target = isEN ? currentWord.word : currentWord.character;
-            const s = getScore(target, transcript);
-            setScore(s);
-            if (s >= 70) {
-                addXP(s >= 90 ? 15 : 10);
-                setCelebration(c => c + 1);
+            const nextScore = getScore(target, transcript);
+
+            setSpoken(transcript);
+            setScore(nextScore);
+
+            if (nextScore >= 70) {
+                addXP(nextScore >= 90 ? 15 : 10);
+                setCelebration((value) => value + 1);
             }
-            setResults(prev => [...prev, { target, spoken: transcript, score: s }]);
+
+            setResults((previous) => [...previous, { target, spoken: transcript, score: nextScore }]);
             setListening(false);
         };
-        rec.onerror = (e) => {
-            if (e.error === 'no-speech') setError('Không nghe thấy. Thử lại?');
-            else setError(`Lỗi: ${e.error}`);
+
+        rec.onerror = (event) => {
+            if (event.error === 'no-speech') setError('Không nghe thấy. Thử lại?');
+            else setError(`Lỗi: ${event.error}`);
             setListening(false);
         };
+
         rec.onend = () => setListening(false);
         recognizerRef.current = rec;
         rec.start();
         setListening(true);
-    }, [isEN, words, idx]);
+    }
 
-    const next = () => {
+    function next() {
         if (idx + 1 >= TOTAL) {
             setComplete(true);
         } else {
-            setIdx(i => i + 1);
+            setIdx((value) => value + 1);
             setSpoken('');
             setScore(null);
             setError('');
         }
-    };
-
-    if (words.length === 0) return null;
+    }
 
     if (complete) {
         const avg = results.length ? Math.round(results.reduce((a, r) => a + r.score, 0) / results.length) : 0;
@@ -182,6 +216,10 @@ export default function PronunciationLab() {
                     <div className="progress-bar__fill" style={{ width: `${(idx / TOTAL) * 100}%`, background: isEN ? 'var(--gradient-english)' : 'var(--gradient-chinese)' }} />
                 </div>
                 <span className="lesson-progress__text">{idx + 1}/{TOTAL}</span>
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: '6px', fontSize: '0.78rem', color: 'var(--color-text-light)' }}>
+                {sourceLabel === 'standard' ? 'Nguồn: Standard lexicon' : 'Nguồn: Curriculum'}
             </div>
 
             {/* Target word */}
