@@ -1,27 +1,24 @@
-# Deploy to GitHub Pages
 name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: "pages"
+  group: gh-pages
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -29,12 +26,24 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npx vite build
+      - run: npm run build
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish dist to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || true
+          rm -rf /tmp/linguakids-gh-pages
+          git worktree add /tmp/linguakids-gh-pages origin/gh-pages
+          find /tmp/linguakids-gh-pages -mindepth 1 -maxdepth 1 \
+            ! -name '.git' \
+            ! -name '.github' \
+            -exec rm -rf {} +
+          cp -R dist/. /tmp/linguakids-gh-pages/
+          touch /tmp/linguakids-gh-pages/.nojekyll
+          cd /tmp/linguakids-gh-pages
+          git add -A
+          git commit -m "Deploy ${GITHUB_SHA}" || echo "No changes to commit"
+          git push origin HEAD:gh-pages
+          cd -
+          git worktree remove /tmp/linguakids-gh-pages --force

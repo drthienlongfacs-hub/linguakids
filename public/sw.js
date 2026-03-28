@@ -1,13 +1,15 @@
-// LinguaKids Progressive Service Worker v4
+// LinguaKids Progressive Service Worker v5
 // Strategy: Stale-While-Revalidate for assets, Cache-First for data files
-const CACHE_NAME = 'linguakids-v4';
-const DATA_CACHE = 'linguakids-data-v3';
+const CACHE_NAME = 'linguakids-v5';
+const DATA_CACHE = 'linguakids-data-v4';
+const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
+const INDEX_URL = `${BASE_PATH}/index.html`;
 
 // Core shell assets
 const SHELL_ASSETS = [
-    '/',
-    '/index.html',
-    '/manifest.json',
+    `${BASE_PATH}/`,
+    INDEX_URL,
+    `${BASE_PATH}/manifest.json`,
 ];
 
 // Data file patterns to cache aggressively
@@ -133,7 +135,7 @@ async function staleWhileRevalidate(request) {
 
     // Ultimate fallback
     if (request.destination === 'document') {
-        return caches.match('/index.html');
+        return caches.match(INDEX_URL);
     }
     return new Response('Offline', { status: 503 });
 }
