@@ -581,6 +581,37 @@ async function writeJson(fileName, value) {
     await fs.writeFile(path.join(PUBLIC_DATA_DIR, fileName), JSON.stringify(value, null, 2), 'utf8');
 }
 
+function buildLookup(entries, lang) {
+    const lookup = {};
+    for (const entry of entries) {
+        const key = lang === 'en' ? entry.wordLower : entry.character;
+        lookup[key] = lang === 'en'
+            ? {
+                word: entry.word,
+                definition: entry.definition,
+                vietnamese: entry.vietnamese,
+                example: entry.example,
+                pronunciation: entry.pronunciation,
+                domainLabel: entry.domainLabel,
+                partOfSpeech: entry.partOfSpeech,
+                emoji: entry.emoji,
+                rank: entry.rank,
+            }
+            : {
+                character: entry.character,
+                pinyin: entry.pinyin,
+                vietnamese: entry.vietnamese,
+                definition: entry.definition,
+                example: entry.example,
+                domainLabel: entry.domainLabel,
+                partOfSpeech: entry.partOfSpeech,
+                emoji: entry.emoji,
+                rank: entry.rank,
+            };
+    }
+    return lookup;
+}
+
 async function main() {
     console.log('Building standard lexicon...');
     await fs.mkdir(PUBLIC_DATA_DIR, { recursive: true });
@@ -633,8 +664,10 @@ async function main() {
         await Promise.all([
             writeJson('standard-lexicon-en.json', english.full),
             writeJson('standard-lexicon-en-practice.json', english.practice),
+            writeJson('standard-lexicon-en-lookup.json', buildLookup(english.full, 'en')),
             writeJson('standard-lexicon-zh.json', chinese.full),
             writeJson('standard-lexicon-zh-practice.json', chinese.practice),
+            writeJson('standard-lexicon-zh-lookup.json', buildLookup(chinese.full, 'zh')),
             writeJson('standard-lexicon-meta.json', meta),
         ]);
 

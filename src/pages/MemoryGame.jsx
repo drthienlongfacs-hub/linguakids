@@ -5,6 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ALL_ENGLISH_WORDS } from '../data/english';
 import { ALL_CHINESE_WORDS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
+import { usePracticeLexicon } from '../hooks/usePracticeLexicon';
+import { isAdultMode } from '../utils/userMode';
 import StarBurst from '../components/StarBurst';
 
 function shuffle(arr) {
@@ -26,6 +28,7 @@ export default function MemoryGame() {
     const { lang } = useParams();
     const navigate = useNavigate();
     const { addXP, recordGame, state } = useGame();
+    const adult = isAdultMode(state.userMode);
     const [difficulty, setDifficulty] = useState(null);
     const [cards, setCards] = useState([]);
     const [flippedIds, setFlippedIds] = useState([]);
@@ -37,7 +40,12 @@ export default function MemoryGame() {
     const timerRef = useRef(null);
 
     const isEnglish = lang === 'en';
-    const allWords = isEnglish ? ALL_ENGLISH_WORDS : ALL_CHINESE_WORDS;
+    const { items: allWords, loading: lexiconLoading, sourceLabel } = usePracticeLexicon({
+        lang,
+        adult,
+        fallbackEnglish: ALL_ENGLISH_WORDS,
+        fallbackChinese: ALL_CHINESE_WORDS,
+    });
 
     const bestKey = `memory-best-${lang}-${difficulty?.key || 'easy'}`;
     const bestTime = parseInt(localStorage.getItem(bestKey) || '9999', 10);
@@ -103,6 +111,20 @@ export default function MemoryGame() {
 
     // ─── Difficulty Selector ───
     if (!difficulty) {
+        if (lexiconLoading || !allWords.length) {
+            return (
+                <div className="page" style={{ textAlign: 'center', paddingTop: '60px' }}>
+                    <div style={{ fontSize: '5rem', marginBottom: '16px' }}>🃏</div>
+                    <h2 style={{ fontFamily: 'var(--font-display)', marginBottom: '8px' }}>
+                        Lật Thẻ {isEnglish ? '🇬🇧' : '🇨🇳'}
+                    </h2>
+                    <p style={{ color: 'var(--color-text-light)' }}>
+                        {adult ? 'Đang tải ngân hàng dữ liệu chuẩn...' : 'Đang chuẩn bị...'}
+                    </p>
+                </div>
+            );
+        }
+
         return (
             <div className="page" style={{ textAlign: 'center', paddingTop: '60px' }}>
                 <div style={{ fontSize: '5rem', marginBottom: '16px' }}>🃏</div>
@@ -112,6 +134,9 @@ export default function MemoryGame() {
                 <p style={{ color: 'var(--color-text-light)', marginBottom: '32px' }}>
                     Ghép emoji với từ vựng! Chọn độ khó:
                 </p>
+                <div style={{ marginBottom: '16px', fontSize: '0.82rem', color: 'var(--color-text-light)' }}>
+                    {sourceLabel === 'standard' ? 'Nguồn: Standard lexicon' : 'Nguồn: Curriculum'}
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: '300px', margin: '0 auto' }}>
                     {DIFFICULTIES.map(d => (
                         <button
@@ -231,6 +256,9 @@ export default function MemoryGame() {
                 </span>
                 <span style={{ color: 'var(--color-text-light)', fontSize: '0.9rem' }}>
                     Lượt: {moves} · Ghép: {matchedIds.length / 2}/{cards.length / 2}
+                </span>
+                <span style={{ color: 'var(--color-text-light)', fontSize: '0.82rem' }}>
+                    {sourceLabel === 'standard' ? 'Standard lexicon' : 'Curriculum'}
                 </span>
             </div>
 

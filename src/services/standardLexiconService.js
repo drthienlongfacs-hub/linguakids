@@ -37,3 +37,9 @@ export async function loadStandardLexicon(lang, { practice = false } = {}) {
     const fileName = `standard-lexicon-${normalizedLang}${practice ? '-practice' : ''}.json`;
     return loadJsonCached(fileName, fileName);
 }
+
+export async function loadStandardLexiconLookup(lang) {
+    const normalizedLang = normalizeLexiconLang(lang);
+    const fileName = `standard-lexicon-${normalizedLang}-lookup.json`;
+    return loadJsonCached(fileName, fileName);
+}

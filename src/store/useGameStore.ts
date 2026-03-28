@@ -36,6 +36,7 @@ export interface GameState {
     dailyWordsToday: number;
     dailyReviewsToday: number;
     lastDailyReset: string | null;
+    lastDailyChallenge: string | null;
     freezesUsedThisWeek: number;
 
     // Coin Economy
@@ -70,6 +71,7 @@ interface GameActions {
     toggleMode: () => void;
     reviewWord: (word: string, lang: 'en' | 'cn', quality: number) => void;
     recordDailyActivity: (type?: 'learn' | 'review') => void;
+    completeDailyChallenge: (date: string) => void;
     resetState: () => void;
     checkAndResetDaily: () => void;
     setExamTarget: (target: string | null) => void;
@@ -102,6 +104,7 @@ const DEFAULT_STATE: GameState = {
     dailyWordsToday: 0,
     dailyReviewsToday: 0,
     lastDailyReset: null,
+    lastDailyChallenge: null,
     freezesUsedThisWeek: 0,
     coins: 0,
     totalCoinsEarned: 0,
@@ -229,6 +232,10 @@ export const useGameStore = create<GameStore>()(
                 dailyWordsToday: type === 'learn' ? state.dailyWordsToday + 1 : state.dailyWordsToday,
                 dailyReviewsToday: type === 'review' ? state.dailyReviewsToday + 1 : state.dailyReviewsToday,
             })),
+
+            completeDailyChallenge: (date: string) => set({
+                lastDailyChallenge: date,
+            }),
 
             resetState: () => {
                 set(DEFAULT_STATE);

@@ -43,8 +43,10 @@ Outputs:
 ```text
 public/data/standard-lexicon-en.json
 public/data/standard-lexicon-en-practice.json
+public/data/standard-lexicon-en-lookup.json
 public/data/standard-lexicon-zh.json
 public/data/standard-lexicon-zh-practice.json
+public/data/standard-lexicon-zh-lookup.json
 public/data/standard-lexicon-meta.json
 ```
 

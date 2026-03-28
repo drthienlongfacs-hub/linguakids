@@ -1,5 +1,5 @@
 // Bridging to Zustand store to avoid breaking 15+ pages at once
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { USER_MODES, getModeConfig } from '../utils/userMode';
 import { useGameStore } from '../store/useGameStore';
 
@@ -47,7 +47,7 @@ export function useGameState() {
     // Trigger daily check on mount
     useEffect(() => {
         store.checkAndResetDaily();
-    }, []);
+    }, [store]);
 
     const activeLevels = store.userMode === USER_MODES.ADULT ? ADULT_LEVELS : LEVELS;
     const currentLevel = activeLevels.reduce((acc, lvl) => {
@@ -64,7 +64,7 @@ export function useGameState() {
     const unlockedBadges = BADGES.filter(badge => badge.condition(store));
     const lockedBadges = BADGES.filter(badge => !badge.condition(store));
 
-    const getDifficulty = useCallback(() => {
+    const getDifficulty = () => {
         const { gamesPlayed, perfectQuizzes, wordsLearned, streak } = store;
         if (gamesPlayed < 3) return 'easy';
 
@@ -76,14 +76,14 @@ export function useGameState() {
         if (score >= 70) return 'hard';
         if (score >= 40) return 'medium';
         return 'easy';
-    }, [store.gamesPlayed, store.perfectQuizzes, store.wordsLearned.length, store.streak]);
+    };
 
-    const getWordsForReview = useCallback(() => {
+    const getWordsForReview = () => {
         const now = Date.now();
         return store.wordsLearned.filter(w => w.nextReview && w.nextReview <= now);
-    }, [store.wordsLearned]);
+    };
 
-    const getDailyStats = useCallback(() => {
+    const getDailyStats = () => {
         const totalToday = store.dailyWordsToday + store.dailyReviewsToday;
         const progress = Math.min(100, Math.round((totalToday / store.dailyGoal) * 100));
         const wordsForReview = store.wordsLearned.filter(w => w.nextReview && w.nextReview <= Date.now()).length;
@@ -97,7 +97,7 @@ export function useGameState() {
             goalReached: totalToday >= store.dailyGoal,
             wordsForReview,
         };
-    }, [store.dailyWordsToday, store.dailyReviewsToday, store.dailyGoal, store.wordsLearned]);
+    };
 
     const modeConfig = getModeConfig(store.userMode);
 
@@ -126,6 +126,7 @@ export function useGameState() {
         getWordsForReview,
         reviewWord: store.reviewWord,
         recordDailyActivity: store.recordDailyActivity,
+        completeDailyChallenge: store.completeDailyChallenge,
         getDailyStats,
     };
 }
