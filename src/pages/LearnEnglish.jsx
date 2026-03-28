@@ -4,12 +4,16 @@ import { useGame } from '../context/GameStateContext';
 import { ENGLISH_TOPICS } from '../data/english';
 import { isAdultMode } from '../utils/userMode';
 import { loadStandardLexiconMeta } from '../services/standardLexiconService';
+import { loadStandardTopicBank } from '../services/standardTopicService';
 
 export default function LearnEnglish() {
     const navigate = useNavigate();
     const { state } = useGame();
     const isAdult = isAdultMode(state.userMode);
     const [standardCount, setStandardCount] = useState(null);
+    const [foundationTopics, setFoundationTopics] = useState(
+        ENGLISH_TOPICS.filter(t => !t.mode || t.mode !== 'adult')
+    );
 
     useEffect(() => {
         let cancelled = false;
@@ -29,24 +33,38 @@ export default function LearnEnglish() {
         };
     }, []);
 
-    // Filter topics by mode: kids see only kids topics, adults see all topics
-    const filteredTopics = isAdult
-        ? ENGLISH_TOPICS  // Adults see ALL topics (kids basics + adult)
-        : ENGLISH_TOPICS.filter(t => !t.mode || t.mode !== 'adult');  // Kids see only non-adult
+    useEffect(() => {
+        let cancelled = false;
+        loadStandardTopicBank('en')
+            .then((topics) => {
+                if (!cancelled && topics?.length) {
+                    setFoundationTopics(topics);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setFoundationTopics(ENGLISH_TOPICS.filter(t => !t.mode || t.mode !== 'adult'));
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
-    const getTopicProgress = (topicId, totalWords) => {
+    const getTopicProgress = (topic) => {
         const learned = state.wordsLearned.filter(
-            w => w.lang === 'en' && ENGLISH_TOPICS.find(t => t.id === topicId)?.words.some(tw => tw.word === w.word)
+            w => w.lang === 'en' && topic.words.some(tw => tw.word === w.word)
         ).length;
+        const totalWords = topic.words.length;
         return { learned, total: totalWords, pct: totalWords > 0 ? (learned / totalWords) * 100 : 0 };
     };
 
-    // Separate topics into sections for adult mode
-    const kidsTopics = filteredTopics.filter(t => !t.mode || t.mode !== 'adult');
-    const adultTopics = filteredTopics.filter(t => t.mode === 'adult');
+    const adultTopics = ENGLISH_TOPICS.filter(t => t.mode === 'adult');
+    const kidsTopics = foundationTopics;
+    const visibleTopics = isAdult ? [...adultTopics, ...kidsTopics] : kidsTopics;
 
     const renderTopicCard = (topic, i) => {
-        const prog = getTopicProgress(topic.id, topic.words.length);
+        const prog = getTopicProgress(topic);
         return (
             <Link
                 key={topic.id}
@@ -63,6 +81,19 @@ export default function LearnEnglish() {
                     <div className="topic-card__emoji">{topic.emoji}</div>
                     <div className="topic-card__title">{topic.title}</div>
                     <div className="topic-card__count">{topic.words.length} từ</div>
+                    {topic.framework && (
+                        <div style={{
+                            fontSize: '0.6rem',
+                            color: 'var(--color-english)',
+                            fontWeight: 700,
+                            background: 'rgba(59,130,246,0.08)',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            marginTop: '4px',
+                        }}>
+                            CEFR A1-A2
+                        </div>
+                    )}
                     {topic.mode === 'adult' && (
                         <div style={{
                             fontSize: '0.6rem', color: '#818CF8', fontWeight: 600,
@@ -100,8 +131,8 @@ export default function LearnEnglish() {
                 fontSize: '1.1rem'
             }}>
                 {isAdult
-                    ? `${filteredTopics.length} chủ đề · ${filteredTopics.reduce((a, t) => a + t.words.length, 0)} từ curriculum · ${standardCount ? standardCount.toLocaleString('en-US') : '...'} mục lexicon chuẩn`
-                    : 'Chọn chủ đề để bắt đầu học nào! 🎯'}
+                    ? `${visibleTopics.length} chủ đề · ${visibleTopics.reduce((a, t) => a + t.words.length, 0)} từ dùng trực tiếp · ${standardCount ? standardCount.toLocaleString('en-US') : '...'} mục lexicon chuẩn`
+                    : `${kidsTopics.length} chủ đề nền tảng · ${kidsTopics.reduce((a, t) => a + t.words.length, 0)} từ đang học trực tiếp`}
             </p>
 
             <div className="topic-grid" style={{ marginBottom: '20px' }}>

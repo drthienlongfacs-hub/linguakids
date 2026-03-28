@@ -1,5 +1,5 @@
 // Lesson page — English flashcard + speaking practice
-import { useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ENGLISH_TOPICS } from '../data/english';
 import { useGame } from '../context/GameStateContext';
@@ -8,20 +8,52 @@ import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
 import WordDetail from '../components/WordDetail';
 import { reviewCard, Rating } from '../services/fsrs';
+import { loadStandardTopicBank } from '../services/standardTopicService';
 
 export default function Lesson() {
     const { topicId } = useParams();
     const navigate = useNavigate();
     const { addXP, learnWord, state } = useGame();
-    const { speakEnglish, speakVietnamese, isSpeaking, startListening, isListening, transcript, checkPronunciation } = useSpeech();
+    const { speakEnglish, isSpeaking, startListening, isListening, checkPronunciation } = useSpeech();
 
-    const topic = ENGLISH_TOPICS.find(t => t.id === topicId);
+    const legacyTopic = ENGLISH_TOPICS.find(t => t.id === topicId);
+    const [standardTopic, setStandardTopic] = useState(null);
+    const [topicLoading, setTopicLoading] = useState(!legacyTopic);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [celebration, setCelebration] = useState(0);
     const [speakResult, setSpeakResult] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
     const [dictWord, setDictWord] = useState(null);
+    const topic = standardTopic || legacyTopic;
+
+    useEffect(() => {
+        let cancelled = false;
+        loadStandardTopicBank('en')
+            .then((topics) => {
+                if (cancelled) {
+                    return;
+                }
+                setStandardTopic(topics.find(t => t.id === topicId) || null);
+                setTopicLoading(false);
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setTopicLoading(false);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [topicId]);
+
+    if (!topic && topicLoading) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <p>Đang tải chủ đề...</p>
+            </div>
+        );
+    }
 
     if (!topic) {
         return (

@@ -1,3 +1,5 @@
+import { KIDS_LISTENING_CURRICULUM_LESSONS } from './listeningKidsCurriculum.js';
+
 // Listening Content Library — Curated lessons for exam prep
 // Sources: Original content inspired by BBC 6 Minute English, VOA, TED-Ed patterns
 // All content is original — no copyright issues
@@ -539,6 +541,9 @@ export const LISTENING_LESSONS = [
             { type: 'mcq', question: 'What does "passive consumption" refer to?', options: ['Online shopping', 'Reading ebooks', 'Endlessly scrolling feeds', 'Video calling friends'], correct: 2 },
         ],
     },
+    // ============ Kids curriculum derived from speaking bank ============
+    ...KIDS_LISTENING_CURRICULUM_LESSONS,
+
     // ============ More Kids-friendly ============
     {
         id: 'at-the-zoo',
@@ -627,7 +632,7 @@ export const ALL_LISTENING_LESSONS = LISTENING_LESSONS;
 
 export function getLessonsByMode(mode) {
     if (mode === 'adult') return LISTENING_LESSONS; // adults see all
-    return LISTENING_LESSONS.filter(l => l.mode === 'kids' || l.level === 'A1' || l.level === 'A2');
+    return LISTENING_LESSONS.filter(l => l.mode === 'kids');
 }
 
 export function getLessonsByLevel(level) {

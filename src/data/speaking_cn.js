@@ -1,5 +1,6 @@
 // Chinese Speaking Content — Tone drills, shadowing, conversation practice
-// Unique to Chinese: tone pair practice (critical for Mandarin learners)
+// Expanded with YCT/HSK-aligned sentence curriculum for real module-scale practice
+import { KIDS_CN_SPEAKING_CURRICULUM_LESSONS } from './speakingCnCurriculum.js';
 
 export const SPEAKING_CN_LESSONS = [
     // === Tone Drills (unique to Chinese) ===
@@ -12,35 +13,31 @@ export const SPEAKING_CN_LESSONS = [
         emoji: '🎵',
         mode: 'kids',
         drills: [
-            { char: '妈', pinyin: 'mā', tone: 1, meaning: 'mẹ', tip: 'Thanh 1: cao + bằng phẳng (giống "a" kéo dài)' },
-            { char: '麻', pinyin: 'má', tone: 2, meaning: 'tê, gai', tip: 'Thanh 2: từ thấp lên cao (giống hỏi "Hả?")' },
-            { char: '马', pinyin: 'mǎ', tone: 3, meaning: 'ngựa', tip: 'Thanh 3: xuống rồi lên (giống ngạc nhiên "Ồ!")' },
-            { char: '骂', pinyin: 'mà', tone: 4, meaning: 'mắng', tip: 'Thanh 4: từ cao xuống thấp (giống quát "Không!")' },
+            { char: '妈', pinyin: 'mā', tone: 1, meaning: 'mẹ', tip: 'Thanh 1: cao và giữ đều, giống một đường ngang.' },
+            { char: '麻', pinyin: 'má', tone: 2, meaning: 'gai, tê', tip: 'Thanh 2: đi từ thấp lên cao, như đang hỏi lại.' },
+            { char: '马', pinyin: 'mǎ', tone: 3, meaning: 'ngựa', tip: 'Thanh 3: xuống rồi nhấc lên, cần làm tròn tiếng.' },
+            { char: '骂', pinyin: 'mà', tone: 4, meaning: 'mắng', tip: 'Thanh 4: từ cao rơi xuống nhanh, dứt khoát.' },
+            { char: '衣', pinyin: 'yī', tone: 1, meaning: 'áo', tip: 'Kéo phẳng âm đầu, không đổi cao độ giữa chừng.' },
+            { char: '鱼', pinyin: 'yú', tone: 2, meaning: 'cá', tip: 'Nâng giọng gọn, không kéo quá dài.' },
+            { char: '雨', pinyin: 'yǔ', tone: 3, meaning: 'mưa', tip: 'Âm xuống rồi bật nhẹ lên ở cuối.' },
+            { char: '玉', pinyin: 'yù', tone: 4, meaning: 'ngọc', tip: 'Rơi giọng nhanh và rõ ngay từ đầu âm.' },
+            { char: '书', pinyin: 'shū', tone: 1, meaning: 'sách', tip: 'Giữ âm tròn và thẳng từ đầu tới cuối.' },
+            { char: '时', pinyin: 'shí', tone: 2, meaning: 'giờ', tip: 'Nhấc giọng lên gọn, tránh thành thanh ngang.' },
+            { char: '水', pinyin: 'shuǐ', tone: 3, meaning: 'nước', tip: 'Hạ giọng giữa âm rồi lên lại nhẹ.' },
+            { char: '睡', pinyin: 'shuì', tone: 4, meaning: 'ngủ', tip: 'Rơi mạnh ở cuối để phân biệt với thanh 3.' },
         ],
         tonePairs: [
-            { pair: '1-2', words: [{ chars: '中国', pinyin: 'Zhōngguó', meaning: 'Trung Quốc' }, { chars: '今天', pinyin: 'jīntiān', meaning: 'hôm nay' }] },
-            { pair: '2-4', words: [{ chars: '学校', pinyin: 'xuéxiào', meaning: 'trường học' }, { chars: '明天', pinyin: 'míngtiān', meaning: 'ngày mai' }] },
-            { pair: '3-3', words: [{ chars: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào' }, { chars: '水果', pinyin: 'shuǐguǒ', meaning: 'trái cây' }] },
-            { pair: '4-1', words: [{ chars: '大家', pinyin: 'dàjiā', meaning: 'mọi người' }, { chars: '教师', pinyin: 'jiàoshī', meaning: 'giáo viên' }] },
+            { pair: '1-2', words: [{ chars: '中国', pinyin: 'Zhōngguó', meaning: 'Trung Quốc' }, { chars: '今天', pinyin: 'jīntiān', meaning: 'hôm nay' }, { chars: '高兴', pinyin: 'gāoxìng', meaning: 'vui' }] },
+            { pair: '2-4', words: [{ chars: '学校', pinyin: 'xuéxiào', meaning: 'trường học' }, { chars: '明天', pinyin: 'míngtiān', meaning: 'ngày mai' }, { chars: '回答', pinyin: 'huídá', meaning: 'trả lời' }] },
+            { pair: '3-3', words: [{ chars: '你好', pinyin: 'nǐ hǎo', meaning: 'xin chào' }, { chars: '水果', pinyin: 'shuǐguǒ', meaning: 'trái cây' }, { chars: '写作', pinyin: 'xiězuò', meaning: 'viết bài' }] },
+            { pair: '4-1', words: [{ chars: '大家', pinyin: 'dàjiā', meaning: 'mọi người' }, { chars: '教师', pinyin: 'jiàoshī', meaning: 'giáo viên' }, { chars: '外衣', pinyin: 'wàiyī', meaning: 'áo khoác' }] },
+            { pair: '2-3', words: [{ chars: '朋友', pinyin: 'péngyǒu', meaning: 'bạn bè' }, { chars: '觉得', pinyin: 'juéde', meaning: 'cảm thấy' }, { chars: '图书', pinyin: 'túshū', meaning: 'sách vở' }] },
+            { pair: '4-4', words: [{ chars: '上课', pinyin: 'shàngkè', meaning: 'lên lớp' }, { chars: '数学', pinyin: 'shùxué', meaning: 'toán học' }, { chars: '作业', pinyin: 'zuòyè', meaning: 'bài tập' }] },
+            { pair: '1-1', words: [{ chars: '开心', pinyin: 'kāixīn', meaning: 'vui vẻ' }, { chars: '书包', pinyin: 'shūbāo', meaning: 'cặp sách' }, { chars: '公园', pinyin: 'gōngyuán', meaning: 'công viên' }] },
+            { pair: '3-4', words: [{ chars: '很好', pinyin: 'hěnhǎo', meaning: 'rất tốt' }, { chars: '可以', pinyin: 'kěyǐ', meaning: 'có thể' }, { chars: '雨伞', pinyin: 'yǔsǎn', meaning: 'ô dù' }] },
         ],
     },
-    // === Shadowing — Daily conversation ===
-    {
-        id: 'shadow-daily-cn',
-        type: 'shadowing',
-        title: '日常对话 (Hội thoại hàng ngày)',
-        titleVi: 'Hội thoại hàng ngày',
-        level: 'A1',
-        emoji: '💬',
-        mode: 'kids',
-        sentences: [
-            { text: '你好！你叫什么名字？', pinyin: 'Nǐ hǎo! Nǐ jiào shénme míngzi?', textVi: 'Xin chào! Bạn tên gì?' },
-            { text: '我叫小明。今年七岁。', pinyin: 'Wǒ jiào Xiǎo Míng. Jīnnián qī suì.', textVi: 'Tôi tên Tiểu Minh. Năm nay 7 tuổi.' },
-            { text: '你好！很高兴认识你。', pinyin: 'Nǐ hǎo! Hěn gāoxìng rènshí nǐ.', textVi: 'Xin chào! Rất vui được gặp bạn.' },
-            { text: '我喜欢吃冰淇淋。', pinyin: 'Wǒ xǐhuān chī bīngqílín.', textVi: 'Tôi thích ăn kem.' },
-            { text: '明天不上学，太好了！', pinyin: 'Míngtiān bú shàngxué, tài hǎo le!', textVi: 'Mai không đi học, tuyệt quá!' },
-        ],
-    },
+    ...KIDS_CN_SPEAKING_CURRICULUM_LESSONS,
     // === Shadowing — Travel ===
     {
         id: 'shadow-travel-cn',
@@ -95,6 +92,10 @@ export const SPEAKING_CN_LESSONS = [
 ];
 
 export function getCnSpeakingByMode(mode) {
-    if (mode === 'adult') return SPEAKING_CN_LESSONS;
-    return SPEAKING_CN_LESSONS.filter(l => l.mode === 'kids' || l.level === 'A1' || l.level === 'A2');
+    const foundationLessons = SPEAKING_CN_LESSONS.filter(lesson => lesson.mode !== 'adult');
+    const adultLessons = SPEAKING_CN_LESSONS.filter(lesson => lesson.mode === 'adult');
+    if (mode === 'adult') {
+        return [...adultLessons, ...foundationLessons];
+    }
+    return foundationLessons;
 }

@@ -1,7 +1,7 @@
 const cache = new Map();
 
 function getBaseUrl() {
-    return import.meta.env.BASE_URL || '/';
+    return import.meta.env?.BASE_URL || '/';
 }
 
 function toDataUrl(fileName) {

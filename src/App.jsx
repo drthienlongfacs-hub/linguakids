@@ -35,6 +35,7 @@ const ListeningHub = lazy(() => import('./modules/listening/ListeningHub'));
 const ListeningLesson = lazy(() => import('./modules/listening/ListeningLesson'));
 const SpeakingHub = lazy(() => import('./modules/speaking/SpeakingHub'));
 const ListeningCnHub = lazy(() => import('./modules/listening_cn/ListeningCnHub'));
+const ListeningCnLesson = lazy(() => import('./modules/listening_cn/ListeningCnLesson'));
 const SpeakingCnHub = lazy(() => import('./modules/speaking_cn/SpeakingCnHub'));
 const SpeakingCnExercise = lazy(() => import('./modules/speaking_cn/SpeakingCnExercise'));
 const ReadingHub = lazy(() => import('./modules/reading/ReadingHub'));
@@ -150,6 +151,7 @@ function AppContent() {
             <Route path="/listening" element={<ListeningHub />} />
             <Route path="/listening/:lessonId" element={<ListeningLesson />} />
             <Route path="/listening-cn" element={<ListeningCnHub />} />
+            <Route path="/listening-cn/:lessonId" element={<ListeningCnLesson />} />
             <Route path="/speaking" element={<SpeakingHub />} />
             <Route path="/speaking-cn" element={<SpeakingCnHub />} />
             <Route path="/speaking-cn/:lessonId" element={<SpeakingCnExercise />} />

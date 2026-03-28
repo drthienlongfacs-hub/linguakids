@@ -10,6 +10,9 @@ export default function ListeningHub() {
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
     const lessons = getLessonsByMode(state.userMode);
+    const totalSegments = lessons.reduce((sum, lesson) => sum + (lesson.segments?.length || 0), 0);
+    const totalVocabulary = lessons.reduce((sum, lesson) => sum + (lesson.vocabulary?.length || 0), 0);
+    const totalQuizItems = lessons.reduce((sum, lesson) => sum + (lesson.quiz?.length || 0), 0);
     const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
     // Group by level
@@ -52,7 +55,7 @@ export default function ListeningHub() {
             <p className="lh-subtitle">
                 {adult
                     ? 'Build your listening skills with structured exercises. Each lesson includes audio, dictation, quiz, and vocabulary.'
-                    : 'Luyện nghe tiếng Anh qua các bài nghe sinh động! 🎵'}
+                    : `Luyện nghe tiếng Anh với ${totalSegments} đoạn audio giả lập, ${totalVocabulary} từ vựng và ${totalQuizItems} câu kiểm tra.`}
             </p>
 
             {/* Stats bar */}
@@ -62,12 +65,12 @@ export default function ListeningHub() {
                     <span className="lh-stat-label">{adult ? 'Lessons' : 'Bài'}</span>
                 </div>
                 <div className="lh-stat">
-                    <span className="lh-stat-number">4</span>
-                    <span className="lh-stat-label">{adult ? 'Activities' : 'Bài tập'}</span>
+                    <span className="lh-stat-number">{totalSegments}</span>
+                    <span className="lh-stat-label">{adult ? 'Segments' : 'Đoạn nghe'}</span>
                 </div>
                 <div className="lh-stat">
-                    <span className="lh-stat-number">3</span>
-                    <span className="lh-stat-label">{adult ? 'Question types' : 'Dạng'}</span>
+                    <span className="lh-stat-number">{totalVocabulary}</span>
+                    <span className="lh-stat-label">{adult ? 'Vocab' : 'Từ mới'}</span>
                 </div>
             </div>
 

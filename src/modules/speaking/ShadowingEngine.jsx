@@ -114,7 +114,6 @@ export default function ShadowingEngine({
     const [bestScore, setBestScore] = useState(0);
     const [speed, setSpeed] = useState(0.85);
     const [error, setError] = useState('');
-    const [isBrowserSupported, setIsBrowserSupported] = useState(true);
     const [waveAmplitude, setWaveAmplitude] = useState(0);
     const [revealIdx, setRevealIdx] = useState(-1); // slow-reveal word index
 
@@ -129,12 +128,6 @@ export default function ShadowingEngine({
         if (lang === 'cn') return text.replace(/[\s。，！？、]/g, '').split('');
         return text.split(/\s+/).filter(Boolean);
     }, [text, lang]);
-
-    // Check browser support
-    useEffect(() => {
-        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SR) setIsBrowserSupported(false);
-    }, []);
 
     // Cleanup
     useEffect(() => {
@@ -200,7 +193,7 @@ export default function ShadowingEngine({
                 frameRef.current = requestAnimationFrame(tick);
             };
             tick();
-        } catch (e) { /* fail silently */ }
+        } catch { /* fail silently */ }
     }, []);
 
     const stopWaveform = useCallback(() => {
@@ -213,6 +206,34 @@ export default function ShadowingEngine({
         }
     }, []);
 
+    const applyTranscript = useCallback((spokenText) => {
+        setState('processing');
+        const diffs = diffWords(text, spokenText, lang);
+        const acc = calculateAccuracy(diffs);
+
+        setFinalText(spokenText);
+        setWordDiffs(diffs);
+        setAccuracy(acc);
+        setAttempts(previous => previous + 1);
+        if (acc > bestScore) {
+            setBestScore(acc);
+        }
+
+        setTimeout(() => setState('result'), 200);
+    }, [text, lang, bestScore]);
+
+    const requestTypedFallback = useCallback((message) => {
+        const typed = prompt(message);
+        if (typed && typed.trim()) {
+            stopWaveform();
+            applyTranscript(typed.trim());
+            return true;
+        }
+
+        setState('idle');
+        return false;
+    }, [applyTranscript, stopWaveform]);
+
     // ====== Speech Recognition ======
     const startRecording = useCallback(async () => {
         setError('');
@@ -222,13 +243,15 @@ export default function ShadowingEngine({
         setState('recording');
 
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SR) { setError('Browser not supported'); setState('idle'); return; }
+        if (!SR) {
+            requestTypedFallback('Thiết bị chưa hỗ trợ nhận diện giọng nói. Hãy nhập câu vừa nói để tiếp tục chấm điểm:');
+            return;
+        }
 
         try {
             await navigator.mediaDevices.getUserMedia({ audio: true });
         } catch {
-            setError('Microphone access denied');
-            setState('idle');
+            requestTypedFallback('Micro chưa sẵn sàng. Hãy nhập câu vừa nói để tiếp tục chấm điểm:');
             return;
         }
 
@@ -265,10 +288,14 @@ export default function ShadowingEngine({
             clearTimeout(timeoutRef.current);
             stopWaveform();
             if (e.error !== 'aborted') {
+                if (e.error === 'not-allowed' || e.error === 'audio-capture' || e.error === 'service-not-allowed') {
+                    requestTypedFallback('Không truy cập được micro. Hãy nhập câu vừa nói để tiếp tục chấm điểm:');
+                    return;
+                }
+
                 const msgs = {
-                    'not-allowed': 'Microphone blocked. Check settings.',
-                    'no-speech': 'No speech detected. Try again.',
-                    'network': 'Network error. Check connection.',
+                    'no-speech': 'Không nghe thấy giọng nói. Hãy thử lại hoặc nhập câu bằng tay.',
+                    'network': 'Lỗi mạng khi nhận diện. Hãy thử lại hoặc nhập câu bằng tay.',
                 };
                 setError(msgs[e.error] || `Error: ${e.error}`);
                 setState('idle');
@@ -280,16 +307,7 @@ export default function ShadowingEngine({
             stopWaveform();
 
             if (fullTranscript) {
-                setState('processing');
-                const diffs = diffWords(text, fullTranscript, lang);
-                const acc = calculateAccuracy(diffs);
-
-                setWordDiffs(diffs);
-                setAccuracy(acc);
-                setAttempts(a => a + 1);
-                if (acc > bestScore) setBestScore(acc);
-
-                setTimeout(() => setState('result'), 200);
+                applyTranscript(fullTranscript);
             } else if (state === 'recording') {
                 setError('No speech detected. Speak clearly!');
                 setState('idle');
@@ -304,7 +322,7 @@ export default function ShadowingEngine({
         timeoutRef.current = setTimeout(() => {
             recRef.current?.stop();
         }, 15000);
-    }, [text, lang, bestScore, startWaveform, stopWaveform, state]);
+    }, [startWaveform, stopWaveform, state, applyTranscript, requestTypedFallback, lang]);
 
     const stopRecording = useCallback(() => {
         clearTimeout(timeoutRef.current);
@@ -314,16 +332,6 @@ export default function ShadowingEngine({
     // ====== Grade emoji ======
     const gradeEmoji = accuracy >= 90 ? '🌟' : accuracy >= 75 ? '👍' : accuracy >= 50 ? '💪' : '🔄';
     const gradeLabel = accuracy >= 90 ? 'Excellent!' : accuracy >= 75 ? 'Good job!' : accuracy >= 50 ? 'Not bad!' : 'Try again!';
-
-    if (!isBrowserSupported) {
-        return (
-            <div style={{ textAlign: 'center', padding: '40px 20px', color: '#EF4444' }}>
-                <p style={{ fontSize: '2rem' }}>⚠️</p>
-                <p>Speech Recognition is not supported in this browser.</p>
-                <p style={{ fontSize: '0.85rem', color: '#666' }}>Please use Chrome, Edge, or Safari.</p>
-            </div>
-        );
-    }
 
     return (
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
@@ -348,6 +356,21 @@ export default function ShadowingEngine({
             </div>
 
             {/* ===== Speed Control ===== */}
+            {!(window.SpeechRecognition || window.webkitSpeechRecognition) && (
+                <div style={{
+                    padding: '10px 14px',
+                    borderRadius: '12px',
+                    marginBottom: '12px',
+                    background: 'rgba(245,158,11,0.12)',
+                    border: '1px solid rgba(245,158,11,0.25)',
+                    color: '#B45309',
+                    fontSize: '0.8rem',
+                    textAlign: 'center',
+                }}>
+                    Thiết bị hiện không hỗ trợ nhận diện giọng nói trực tiếp. Nút ghi âm sẽ chuyển sang chế độ nhập câu để vẫn chấm được bài.
+                </div>
+            )}
+
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginBottom: '12px' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>🐢</span>
                 {[0.6, 0.75, 0.85, 1.0].map(s => (

@@ -1,55 +1,9 @@
-// Chinese Listening Content Library — HSK-inspired lessons
-// Structure mirrors listening.js: segments, vocabulary, quiz
-// All content with Chinese text + pinyin + Vietnamese translation
+// Chinese Listening Content Library — HSK/YCT-inspired lessons
+// Expanded with 12 curriculum-aligned kids banks derived from speaking shadowing
+import { KIDS_LISTENING_CN_CURRICULUM_LESSONS } from './listeningCnCurriculum.js';
 
 export const LISTENING_CN_LESSONS = [
-    // ============ A1 Level — Kids ============
-    {
-        id: 'my-day-chinese',
-        title: '我的一天',
-        titleVi: 'Một ngày của em (Tiếng Trung)',
-        level: 'A1',
-        duration: '1:30',
-        topic: 'Daily Life',
-        emoji: '⏰',
-        mode: 'kids',
-        segments: [
-            {
-                id: 1, startTime: 0, endTime: 12,
-                text: '大家好！我叫小明。我今年七岁。我住在胡志明市。让我告诉你我的一天！',
-                pinyin: 'Dàjiā hǎo! Wǒ jiào Xiǎo Míng. Wǒ jīnnián qī suì. Wǒ zhù zài Hú Zhì Míng shì. Ràng wǒ gàosù nǐ wǒ de yī tiān!',
-                textVi: 'Chào mọi người! Mình tên Tiểu Minh. Năm nay mình 7 tuổi. Mình sống ở TP Hồ Chí Minh. Để mình kể một ngày của mình nhé!',
-            },
-            {
-                id: 2, startTime: 12, endTime: 25,
-                text: '我每天早上六点半起床。我刷牙，洗脸，穿校服。然后和家人一起吃早饭。我通常吃米饭和鸡蛋。',
-                pinyin: 'Wǒ měi tiān zǎoshang liù diǎn bàn qǐchuáng. Wǒ shuā yá, xǐ liǎn, chuān xiàofú. Ránhòu hé jiārén yīqǐ chī zǎofàn.',
-                textVi: 'Mình dậy lúc 6:30 mỗi sáng. Mình đánh răng, rửa mặt, mặc đồng phục. Rồi ăn sáng cùng gia đình. Mình thường ăn cơm và trứng.',
-            },
-            {
-                id: 3, startTime: 25, endTime: 40,
-                text: '妈妈七点十五分送我上学。七点半开始上课。我学数学、越南语、中文和自然科学。我最喜欢中文课！',
-                pinyin: 'Māma qī diǎn shíwǔ fēn sòng wǒ shàngxué. Qī diǎn bàn kāishǐ shàngkè. Wǒ xué shùxué, Yuènányǔ, Zhōngwén hé zìrán kēxué.',
-                textVi: 'Mẹ đưa mình đi học lúc 7:15. 7:30 bắt đầu lên lớp. Mình học toán, tiếng Việt, tiếng Trung và khoa học tự nhiên. Mình thích nhất môn tiếng Trung!',
-            },
-            {
-                id: 4, startTime: 40, endTime: 55,
-                text: '放学后，我回家做作业。然后和朋友在公园玩。我们喜欢骑自行车和踢足球。九点睡觉。晚安！',
-                pinyin: "Fàngxué hòu, wǒ huí jiā zuò zuòyè. Ránhòu hé péngyǒu zài gōngyuán wán. Wǒmen xǐhuān qí zìxíngchē hé tī zúqiú. Jiǔ diǎn shuìjiào. Wǎn\u2019ān!",
-                textVi: 'Sau giờ học, mình về nhà làm bài tập. Rồi chơi với bạn ở công viên. Bọn mình thích đạp xe và đá bóng. 9 giờ đi ngủ. Chúc ngủ ngon!',
-            },
-        ],
-        vocabulary: [
-            { word: '起床', pinyin: 'qǐchuáng', meaning: 'thức dậy', example: '我六点半起床。' },
-            { word: '校服', pinyin: 'xiàofú', meaning: 'đồng phục', example: '穿校服上学。' },
-            { word: '放学', pinyin: 'fàngxué', meaning: 'tan trường', example: '放学后做作业。' },
-        ],
-        quiz: [
-            { type: 'mcq', question: '小明几点起床？', options: ['六点', '六点半', '七点', '七点半'], correct: 1 },
-            { type: 'mcq', question: '小明最喜欢的科目是什么？', options: ['数学', '自然科学', '中文', '越南语'], correct: 2 },
-            { type: 'true_false', question: '小明九点半睡觉。', answer: false, explanation: '小明九点睡觉，不是九点半。' },
-        ],
-    },
+    ...KIDS_LISTENING_CN_CURRICULUM_LESSONS,
     // ============ HSK 2-3 Level — Everyday ============
     {
         id: 'at-the-restaurant-cn',
@@ -258,6 +212,10 @@ export const ALL_LISTENING_CN_LESSONS = LISTENING_CN_LESSONS;
 
 
 export function getCnLessonsByMode(mode) {
-    if (mode === 'adult') return LISTENING_CN_LESSONS;
-    return LISTENING_CN_LESSONS.filter(l => l.mode === 'kids' || l.level === 'A1' || l.level === 'A2');
+    const foundationLessons = LISTENING_CN_LESSONS.filter(lesson => lesson.mode !== 'adult');
+    const adultLessons = LISTENING_CN_LESSONS.filter(lesson => lesson.mode === 'adult');
+    if (mode === 'adult') {
+        return [...adultLessons, ...foundationLessons];
+    }
+    return foundationLessons;
 }

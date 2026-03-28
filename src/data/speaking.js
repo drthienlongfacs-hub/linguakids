@@ -1,4 +1,4 @@
-import { KIDS_SPEAKING_CURRICULUM_LESSONS } from './speakingKidsCurriculum';
+import { KIDS_SPEAKING_CURRICULUM_LESSONS } from './speakingKidsCurriculum.js';
 
 // Speaking Content — IELTS speaking prompts, shadowing exercises, pronunciation drills
 

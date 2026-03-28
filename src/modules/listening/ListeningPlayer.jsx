@@ -1,7 +1,12 @@
-import { useState, useRef, useEffect, useCallback } from 'react'; // useEffect used for cleanup
+import { useState, useRef, useEffect } from 'react'; // useEffect used for cleanup
 
 // Custom audio player with speed control, transcript sync, A/B loop
-export default function ListeningPlayer({ segments, onSegmentChange }) {
+export default function ListeningPlayer({
+    segments,
+    onSegmentChange,
+    langCode = 'en-US',
+    showPinyin = false,
+}) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [speed, setSpeed] = useState(1);
@@ -9,6 +14,7 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
     const [showTranslation, setShowTranslation] = useState(false);
     const [loopSegment, setLoopSegment] = useState(null);
     const [activeSegmentId, setActiveSegmentId] = useState(null);
+    const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0);
 
     // We use Web Speech API's SpeechSynthesis for TTS since we don't have real audio files
     const utteranceRef = useRef(null);
@@ -22,7 +28,7 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
         : 0;
 
     // Simulate playback using SpeechSynthesis
-    const speakSegment = useCallback((index) => {
+    function speakSegment(index) {
         if (index >= segments.length) {
             setIsPlaying(false);
             setCurrentTime(0);
@@ -34,19 +40,34 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
         const seg = segments[index];
         setActiveSegmentId(seg.id);
         setCurrentTime(seg.startTime);
+        setCurrentSegmentIndex(index);
         onSegmentChange?.(seg.id);
 
         const utterance = new SpeechSynthesisUtterance(seg.text);
-        utterance.lang = 'en-US';
+        utterance.lang = langCode;
         utterance.rate = speed;
         utterance.pitch = 1;
 
-        // Try to find a good English voice
+        // Try to find a good language-matched voice
         const voices = window.speechSynthesis.getVoices();
-        const enVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Samantha'))
-            || voices.find(v => v.lang.startsWith('en-US'))
-            || voices.find(v => v.lang.startsWith('en'));
-        if (enVoice) utterance.voice = enVoice;
+        const langBase = langCode.split('-')[0];
+        const preferredVoice = voices.find(voice => voice.lang === langCode)
+            || (langBase === 'zh'
+                ? voices.find(voice =>
+                    voice.lang.startsWith('zh')
+                    && (
+                        voice.name.includes('Google')
+                        || voice.name.includes('Ting-Ting')
+                        || voice.name.includes('Xiaoxiao')
+                        || voice.localService
+                    ))
+                : voices.find(voice => voice.lang.startsWith('en') && voice.name.includes('Samantha')))
+            || voices.find(voice => voice.lang.startsWith(langBase));
+
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+            utterance.lang = preferredVoice.lang;
+        }
 
         utterance.onend = () => {
             if (loopSegment === index) {
@@ -62,14 +83,14 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
 
         // Update time progress
         const segDuration = (seg.endTime - seg.startTime) / speed;
-        const startMs = Date.now();
+        let elapsed = 0;
         clearInterval(timerRef.current);
         timerRef.current = setInterval(() => {
-            const elapsed = (Date.now() - startMs) / 1000;
+            elapsed += 0.1;
             const progress = Math.min(elapsed / segDuration, 1);
             setCurrentTime(seg.startTime + progress * (seg.endTime - seg.startTime));
         }, 100);
-    }, [segments, speed, loopSegment, onSegmentChange]);
+    }
 
     const handlePlay = () => {
         if (isPlaying) {
@@ -85,14 +106,15 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
     const handleSegmentClick = (index) => {
         window.speechSynthesis.cancel();
         clearInterval(timerRef.current);
-        segmentIndexRef.current = index;
-        if (isPlaying) {
-            speakSegment(index);
-        } else {
-            setActiveSegmentId(segments[index].id);
-            setCurrentTime(segments[index].startTime);
-        }
-    };
+            segmentIndexRef.current = index;
+            if (isPlaying) {
+                speakSegment(index);
+            } else {
+                setActiveSegmentId(segments[index].id);
+                setCurrentTime(segments[index].startTime);
+                setCurrentSegmentIndex(index);
+            }
+        };
 
     const handleSpeedChange = () => {
         const idx = speeds.indexOf(speed);
@@ -128,7 +150,7 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
                             width: '4px', borderRadius: '4px',
                             background: 'var(--gradient-listening)',
                             animation: `waveBar 0.8s ease-in-out ${i * 0.04}s infinite alternate`,
-                            height: `${12 + Math.random() * 28}px`,
+                            height: `${12 + (i % 6) * 5}px`,
                         }} />
                     ))}
                 </div>
@@ -149,7 +171,7 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
                             {formatTime(currentTime)} / {formatTime(totalDuration)}
                         </span>
                         <span style={{ fontSize: '0.7rem', color: 'var(--color-text-light)' }}>
-                            {segmentIndexRef.current + 1}/{segments.length}
+                            {currentSegmentIndex + 1}/{segments.length}
                         </span>
                     </div>
                 </div>
@@ -195,6 +217,14 @@ export default function ListeningPlayer({ segments, onSegmentChange }) {
                                 </button>
                             </div>
                             <p className="lp-segment-text">{seg.text}</p>
+                            {showPinyin && seg.pinyin && (
+                                <p
+                                    className="lp-segment-translation"
+                                    style={{ color: '#8B5CF6', marginBottom: showTranslation && seg.textVi ? '4px' : 0 }}
+                                >
+                                    {seg.pinyin}
+                                </p>
+                            )}
                             {showTranslation && seg.textVi && (
                                 <p className="lp-segment-translation">{seg.textVi}</p>
                             )}

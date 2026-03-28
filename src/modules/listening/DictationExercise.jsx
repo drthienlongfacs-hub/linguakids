@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 // Dictation Exercise: listen to segment → type what you hear → check accuracy
-export default function DictationExercise({ segments, onComplete }) {
+export default function DictationExercise({ segments, onComplete, lang = 'en' }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
     const [result, setResult] = useState(null);
@@ -10,37 +10,57 @@ export default function DictationExercise({ segments, onComplete }) {
     const [isPlaying, setIsPlaying] = useState(false);
 
     const current = segments[currentIndex];
+    const isChinese = lang === 'cn' || lang === 'zh';
+    const langCode = isChinese ? 'zh-CN' : 'en-US';
+    const unitLabel = isChinese ? 'ký tự' : 'từ';
+
+    const tokenize = useCallback((text) => {
+        if (isChinese) {
+            return String(text || '')
+                .replace(/[^\u4e00-\u9fff0-9]/g, '')
+                .split('')
+                .filter(Boolean);
+        }
+
+        return String(text || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+    }, [isChinese]);
 
     const speakText = useCallback((text, rate = 1) => {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
+        u.lang = langCode;
         u.rate = rate;
         const voices = window.speechSynthesis.getVoices();
-        const enVoice = voices.find(v => v.lang.startsWith('en-US'))
-            || voices.find(v => v.lang.startsWith('en'));
-        if (enVoice) u.voice = enVoice;
+        const langBase = langCode.split('-')[0];
+        const voice = voices.find(v => v.lang === langCode)
+            || voices.find(v => v.lang.startsWith(langBase));
+        if (voice) {
+            u.voice = voice;
+            u.lang = voice.lang;
+        }
         u.onstart = () => setIsPlaying(true);
         u.onend = () => setIsPlaying(false);
         window.speechSynthesis.speak(u);
-    }, []);
+    }, [langCode]);
 
     const handleCheck = () => {
-        const original = current.text.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-        const typed = userInput.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim();
-
-        const origWords = original.split(/\s+/);
-        const typedWords = typed.split(/\s+/);
+        const originalUnits = tokenize(current.text);
+        const typedUnits = tokenize(userInput);
 
         // Word-by-word comparison using LCS for alignment
-        const diff = compareWords(origWords, typedWords);
+        const diff = compareTokens(originalUnits, typedUnits);
         const correctCount = diff.filter(d => d.status === 'correct').length;
-        const accuracy = Math.round((correctCount / origWords.length) * 100);
+        const accuracy = Math.round((correctCount / Math.max(originalUnits.length, 1)) * 100);
 
         setResult({ diff, accuracy, original: current.text });
         setScore(prev => ({
             correct: prev.correct + correctCount,
-            total: prev.total + origWords.length,
+            total: prev.total + originalUnits.length,
         }));
     };
 
@@ -66,7 +86,7 @@ export default function DictationExercise({ segments, onComplete }) {
                         <span className="score-number">{totalAccuracy}%</span>
                         <span className="score-label">Accuracy</span>
                     </div>
-                    <p>{score.correct} / {score.total} từ đúng</p>
+                    <p>{score.correct} / {score.total} {unitLabel} đúng</p>
                     <div className="dictation-rating">
                         {totalAccuracy >= 90 ? '🌟 Xuất sắc!' :
                             totalAccuracy >= 70 ? '👏 Tốt lắm!' :
@@ -102,7 +122,7 @@ export default function DictationExercise({ segments, onComplete }) {
                 </button>
                 <button
                     className="dict-slow-btn"
-                    onClick={() => speakText(current.text, 0.6)}
+                    onClick={() => speakText(current.text, isChinese ? 0.65 : 0.6)}
                     disabled={isPlaying}
                 >
                     🐌 Nghe chậm
@@ -115,7 +135,9 @@ export default function DictationExercise({ segments, onComplete }) {
                         className="dictation-input"
                         value={userInput}
                         onChange={e => setUserInput(e.target.value)}
-                        placeholder="Nghe và gõ lại những gì bạn nghe được..."
+                        placeholder={isChinese
+                            ? 'Nghe và gõ lại câu tiếng Trung con vừa nghe...'
+                            : 'Nghe và gõ lại những gì bạn nghe được...'}
                         rows={4}
                         autoFocus
                     />
@@ -144,6 +166,12 @@ export default function DictationExercise({ segments, onComplete }) {
                         </div>
                     </div>
 
+                    {isChinese && current.pinyin && (
+                        <p className="dictation-translation" style={{ color: '#8B5CF6' }}>
+                            {current.pinyin}
+                        </p>
+                    )}
+
                     {current.textVi && (
                         <p className="dictation-translation">🇻🇳 {current.textVi}</p>
                     )}
@@ -157,8 +185,8 @@ export default function DictationExercise({ segments, onComplete }) {
     );
 }
 
-// Simple word comparison — highlights correct, incorrect, and missing words
-function compareWords(original, typed) {
+// Simple token comparison — highlights correct, incorrect, and missing units
+function compareTokens(original, typed) {
     const result = [];
     const typedSet = new Set(typed.map(w => w.toLowerCase()));
 

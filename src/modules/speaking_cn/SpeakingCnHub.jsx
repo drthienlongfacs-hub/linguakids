@@ -8,6 +8,15 @@ export default function SpeakingCnHub() {
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
     const lessons = getCnSpeakingByMode(state.userMode);
+    const totalShadowingSentences = lessons
+        .filter(lesson => lesson.type === 'shadowing')
+        .reduce((sum, lesson) => sum + (lesson.sentences?.length || 0), 0);
+    const totalConversationPrompts = lessons
+        .filter(lesson => lesson.type === 'conversation')
+        .reduce((sum, lesson) => sum + (lesson.prompts?.length || 0), 0);
+    const totalToneItems = lessons
+        .filter(lesson => lesson.type === 'tone_drill')
+        .reduce((sum, lesson) => sum + (lesson.drills?.length || 0) + (lesson.tonePairs?.length || 0), 0);
 
     const typeLabels = {
         tone_drill: { icon: '🎵', label: 'Luyện thanh điệu' },
@@ -30,8 +39,8 @@ export default function SpeakingCnHub() {
 
             <p className="lh-subtitle">
                 {adult
-                    ? 'Master Chinese pronunciation with tone drills, shadowing, and conversation practice.'
-                    : 'Luyện phát âm tiếng Trung và nói theo mẫu! 🎤'}
+                    ? 'Master Chinese pronunciation with tone drills, large shadowing banks, and guided conversation practice.'
+                    : `Luyện nói tiếng Trung với ${totalShadowingSentences} câu shadowing, ${totalToneItems} cụm thanh điệu và ${totalConversationPrompts} prompt hội thoại.`}
             </p>
 
             <div className="lh-stats">
@@ -40,18 +49,40 @@ export default function SpeakingCnHub() {
                     <span className="lh-stat-label">{adult ? 'Lessons' : 'Bài'}</span>
                 </div>
                 <div className="lh-stat">
-                    <span className="lh-stat-number">4</span>
-                    <span className="lh-stat-label">{adult ? 'Tones' : 'Thanh điệu'}</span>
+                    <span className="lh-stat-number">{totalShadowingSentences}</span>
+                    <span className="lh-stat-label">{adult ? 'Shadowing' : 'Câu nói'}</span>
+                </div>
+                <div className="lh-stat">
+                    <span className="lh-stat-number">{totalToneItems}</span>
+                    <span className="lh-stat-label">{adult ? 'Tone Items' : 'Mục thanh điệu'}</span>
                 </div>
             </div>
 
-            {Object.entries(grouped).map(([type, items]) => (
+            {!adult && (
+                <div className="lh-curriculum-note">
+                    <div className="lh-curriculum-copy">
+                        <strong>Khung bài nói chuẩn</strong>
+                        <p>
+                            Bộ câu luyện nói được mở rộng theo trục YCT 1-3 và HSK 1-3 nền tảng,
+                            ưu tiên chủ đề gần gũi, câu ngắn rõ âm và phù hợp luyện phản xạ.
+                        </p>
+                    </div>
+                    <div className="lh-curriculum-kpi">
+                        <strong>{totalShadowingSentences}</strong>
+                        <span>câu đang dùng</span>
+                    </div>
+                </div>
+            )}
+
+            {['tone_drill', 'shadowing', 'conversation']
+                .filter(type => grouped[type]?.length)
+                .map(type => (
                 <div key={type} className="lh-level-section">
                     <div className="lh-level-header">
                         <h3>{typeLabels[type]?.icon} {typeLabels[type]?.label || type}</h3>
                     </div>
                     <div className="lh-lesson-grid">
-                        {items.map(lesson => (
+                        {grouped[type].map(lesson => (
                             <div
                                 key={lesson.id}
                                 className="lh-lesson-card"

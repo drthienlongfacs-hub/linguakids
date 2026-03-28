@@ -8,6 +8,9 @@ export default function ListeningCnHub() {
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
     const lessons = getCnLessonsByMode(state.userMode);
+    const totalSegments = lessons.reduce((sum, lesson) => sum + (lesson.segments?.length || 0), 0);
+    const totalVocabulary = lessons.reduce((sum, lesson) => sum + (lesson.vocabulary?.length || 0), 0);
+    const totalQuizItems = lessons.reduce((sum, lesson) => sum + (lesson.quiz?.length || 0), 0);
 
     const levels = {};
     lessons.forEach(l => {
@@ -32,8 +35,8 @@ export default function ListeningCnHub() {
 
             <p className="lh-subtitle">
                 {adult
-                    ? 'Practice Chinese listening with HSK-style exercises. Each lesson includes transcript, vocabulary, and quiz.'
-                    : 'Luyện nghe tiếng Trung qua các bài nghe sinh động! 🎵'}
+                    ? 'Practice Chinese listening with HSK/YCT-style lessons. Each lesson includes guided audio, dictation, quiz, and vocabulary.'
+                    : `Luyện nghe tiếng Trung với ${totalSegments} đoạn nghe, ${totalVocabulary} mục từ trọng tâm và ${totalQuizItems} câu kiểm tra.`}
             </p>
 
             <div className="lh-stats">
@@ -42,10 +45,30 @@ export default function ListeningCnHub() {
                     <span className="lh-stat-label">{adult ? 'Lessons' : 'Bài'}</span>
                 </div>
                 <div className="lh-stat">
-                    <span className="lh-stat-number">3</span>
-                    <span className="lh-stat-label">{adult ? 'Question types' : 'Dạng câu hỏi'}</span>
+                    <span className="lh-stat-number">{totalSegments}</span>
+                    <span className="lh-stat-label">{adult ? 'Segments' : 'Đoạn nghe'}</span>
+                </div>
+                <div className="lh-stat">
+                    <span className="lh-stat-number">{totalVocabulary}</span>
+                    <span className="lh-stat-label">{adult ? 'Vocab' : 'Từ mới'}</span>
                 </div>
             </div>
+
+            {!adult && (
+                <div className="lh-curriculum-note">
+                    <div className="lh-curriculum-copy">
+                        <strong>Khung nghe chuẩn</strong>
+                        <p>
+                            Kho bài nghe được mở rộng theo chủ đề YCT 1-3 và HSK 1-3 nền tảng,
+                            ưu tiên câu tần suất cao, rõ nghĩa và sát tình huống học sinh nhỏ tuổi.
+                        </p>
+                    </div>
+                    <div className="lh-curriculum-kpi">
+                        <strong>{totalSegments}</strong>
+                        <span>đoạn đang dùng</span>
+                    </div>
+                </div>
+            )}
 
             {levelOrder.filter(l => levels[l]).map(level => (
                 <div key={level} className="lh-level-section">
@@ -67,7 +90,7 @@ export default function ListeningCnHub() {
                                     <div className="lh-lesson-meta">
                                         <span>⏱️ {lesson.duration}</span>
                                         <span>📝 {lesson.quiz.length} câu</span>
-                                        <span>📚 {lesson.vocabulary.length} từ mới</span>
+                                        <span>📚 {lesson.vocabulary.length} mục</span>
                                     </div>
                                 </div>
                                 <span className="lh-lesson-arrow">▶</span>
@@ -84,7 +107,7 @@ export default function ListeningCnHub() {
                         <span className="step-icon">🎧</span>
                         <div>
                             <strong>Bước 1: Nghe 听</strong>
-                            <p>Nghe với phiên âm pinyin, rồi nghe lại không có phiên âm</p>
+                            <p>Nghe với pinyin, sau đó ẩn pinyin để tăng khả năng xử lý âm thanh thật</p>
                         </div>
                     </div>
                     <div className="lh-method-step">

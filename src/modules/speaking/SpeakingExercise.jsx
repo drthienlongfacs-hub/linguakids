@@ -42,7 +42,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             }, 1000);
         }
         return () => clearInterval(prepTimerRef.current);
-    }, [prepPhase, prepTimer > 0]);
+    }, [prepPhase, prepTimer]);
 
     // Cleanup on unmount
     useEffect(() => {
@@ -55,6 +55,48 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     }, []);
 
     const langCode = lesson.lang === 'cn' ? 'zh-CN' : 'en-US';
+    const isChinese = langCode.startsWith('zh');
+
+    const scoreTranscript = useCallback((spokenText) => {
+        const original = (current?.text || current?.question || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
+        const spoken = String(spokenText || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
+        const origWords = isChinese
+            ? original.replace(/\s/g, '').split('').filter(Boolean)
+            : original.split(/\s+/).filter(Boolean);
+        const spokenWords = isChinese
+            ? spoken.replace(/\s/g, '').split('').filter(Boolean)
+            : spoken.split(/\s+/).filter(Boolean);
+
+        let matched = 0;
+        for (const unit of origWords) {
+            if (spokenWords.includes(unit)) {
+                matched++;
+            }
+        }
+
+        const accuracy = Math.round((matched / Math.max(origWords.length, 1)) * 100);
+        setFinalText(spokenText);
+        setScores(prev => [...prev, accuracy]);
+        setTimeout(() => {
+            setRecState('done');
+            setShowResult(true);
+        }, 300);
+    }, [current, isChinese]);
+
+    const requestTypedFallback = useCallback((message) => {
+        const typed = prompt(message);
+        if (typed && typed.trim()) {
+            setRecState('processing');
+            scoreTranscript(typed.trim());
+            return;
+        }
+
+        setRecState('idle');
+    }, [scoreTranscript]);
 
     const speakText = useCallback((text) => {
         window.speechSynthesis.cancel();
@@ -78,8 +120,9 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
 
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SR) {
-            setRecState('error');
-            setErrorMsg(adult ? 'Speech Recognition not supported. Use Chrome or Edge.' : 'Trình duyệt không hỗ trợ. Dùng Chrome nhé!');
+            requestTypedFallback(adult
+                ? 'Speech recognition is unavailable. Type what you said to continue scoring:'
+                : 'Thiết bị chưa hỗ trợ nhận diện giọng nói. Hãy nhập câu con vừa nói để tiếp tục chấm điểm:');
             return;
         }
 
@@ -87,8 +130,9 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         try {
             await navigator.mediaDevices.getUserMedia({ audio: true });
         } catch {
-            setRecState('error');
-            setErrorMsg(adult ? 'Microphone access denied. Check browser settings.' : 'Không truy cập được micro. Cho phép micro nhé!');
+            requestTypedFallback(adult
+                ? 'Microphone is unavailable. Type what you said to continue scoring:'
+                : 'Micro chưa sẵn sàng. Hãy nhập câu con vừa nói để tiếp tục chấm điểm:');
             return;
         }
 
@@ -119,6 +163,12 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         rec.onerror = (e) => {
             clearTimeout(timeoutRef.current);
             if (e.error === 'aborted') return;
+            if (e.error === 'not-allowed' || e.error === 'audio-capture' || e.error === 'service-not-allowed') {
+                requestTypedFallback(adult
+                    ? 'Microphone is blocked. Type what you said to continue scoring:'
+                    : 'Không truy cập được micro. Hãy nhập câu con vừa nói để tiếp tục chấm điểm:');
+                return;
+            }
             setRecState('error');
             const msgs = {
                 'not-allowed': adult ? 'Microphone blocked. Check settings.' : 'Micro bị chặn!',
@@ -133,18 +183,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             clearTimeout(timeoutRef.current);
             if (fullTranscript) {
                 setRecState('processing');
-                const original = (current?.text || current?.question || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
-                const spoken = fullTranscript.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
-                const origWords = langCode.startsWith('zh') ? original.replace(/\s/g, '').split('') : original.split(/\s+/).filter(Boolean);
-                const spokenWords = langCode.startsWith('zh') ? spoken.replace(/\s/g, '').split('') : spoken.split(/\s+/).filter(Boolean);
-
-                let matched = 0;
-                for (const w of origWords) {
-                    if (spokenWords.includes(w)) matched++;
-                }
-                const accuracy = Math.round((matched / Math.max(origWords.length, 1)) * 100);
-                setScores(prev => [...prev, accuracy]);
-                setTimeout(() => { setRecState('done'); setShowResult(true); }, 300);
+                scoreTranscript(fullTranscript);
             } else {
                 setRecState('error');
                 setErrorMsg(adult ? 'No speech detected. Tap Record and speak clearly.' : 'Không nghe thấy. Nhấn Ghi âm và nói rõ ràng!');
@@ -160,7 +199,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             setRecState('error');
             setErrorMsg(adult ? 'Failed to start. Try again.' : 'Không bắt đầu được. Thử lại!');
         }
-    }, [current, adult, langCode]);
+    }, [adult, requestTypedFallback, scoreTranscript, langCode]);
 
     const stopRecording = useCallback(() => {
         clearTimeout(timeoutRef.current);
@@ -244,6 +283,19 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
                 {current?.textVi && <p className="sp-sentence-vi">🇻🇳 {current.textVi}</p>}
                 {current?.pinyin && <p style={{ color: '#8B5CF6', fontSize: '0.9rem', margin: '4px 0' }}>{current.pinyin}</p>}
                 {current?.tip && <p className="sp-tip">💡 {current.tip}</p>}
+                {!(window.SpeechRecognition || window.webkitSpeechRecognition) && (
+                    <p style={{
+                        margin: '8px 0 0',
+                        fontSize: '0.8rem',
+                        color: '#B45309',
+                        background: 'rgba(245,158,11,0.12)',
+                        border: '1px solid rgba(245,158,11,0.24)',
+                        borderRadius: '10px',
+                        padding: '8px 12px',
+                    }}>
+                        Thiết bị chưa có nhận diện giọng nói trực tiếp. Nhấn Ghi âm để chuyển sang chế độ nhập câu và vẫn nhận điểm.
+                    </p>
+                )}
 
                 {/* Status Indicator */}
                 <div className="sp-status" style={{

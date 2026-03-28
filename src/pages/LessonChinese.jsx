@@ -1,12 +1,13 @@
 // LessonChinese — Chinese character flashcard + pinyin + tone + speaking
 // RCA Fix: Auto-extract tones from pinyin diacritics (word.tones was undefined → crash)
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CHINESE_TOPICS, TONE_COLORS } from '../data/chinese';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
 import PronunciationDetail from '../components/PronunciationDetail';
 import StarBurst from '../components/StarBurst';
+import { loadStandardTopicBank } from '../services/standardTopicService';
 
 // Auto-extract tone numbers from pinyin diacritics
 // ā ē ī ō ū ǖ → T1, á é í ó ú ǘ → T2, ǎ ě ǐ ǒ ǔ ǚ → T3, à è ì ò ù ǜ → T4
@@ -25,14 +26,45 @@ export default function LessonChinese() {
     const { topicId } = useParams();
     const navigate = useNavigate();
     const { addXP, learnWord, state } = useGame();
-    const { speakChinese, isSpeaking, startListening, isListening, transcript, checkPronunciation } = useSpeech();
+    const { speakChinese, isSpeaking, startListening, isListening, checkPronunciation } = useSpeech();
 
-    const topic = CHINESE_TOPICS.find(t => t.id === topicId);
+    const legacyTopic = CHINESE_TOPICS.find(t => t.id === topicId);
+    const [standardTopic, setStandardTopic] = useState(null);
+    const [topicLoading, setTopicLoading] = useState(!legacyTopic);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [celebration, setCelebration] = useState(0);
     const [speakResult, setSpeakResult] = useState(null);
     const [showComplete, setShowComplete] = useState(false);
+    const topic = standardTopic || legacyTopic;
+
+    useEffect(() => {
+        let cancelled = false;
+        loadStandardTopicBank('zh')
+            .then((topics) => {
+                if (cancelled) {
+                    return;
+                }
+                setStandardTopic(topics.find(t => t.id === topicId) || null);
+                setTopicLoading(false);
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setTopicLoading(false);
+                }
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [topicId]);
+
+    if (!topic && topicLoading) {
+        return (
+            <div className="page" style={{ textAlign: 'center', paddingTop: '100px' }}>
+                <p>Đang tải chủ đề...</p>
+            </div>
+        );
+    }
 
     if (!topic) {
         return (
