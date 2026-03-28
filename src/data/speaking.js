@@ -1,3 +1,5 @@
+import { KIDS_SPEAKING_CURRICULUM_LESSONS } from './speakingKidsCurriculum';
+
 // Speaking Content — IELTS speaking prompts, shadowing exercises, pronunciation drills
 
 export const SPEAKING_LESSONS = [
@@ -95,22 +97,8 @@ export const SPEAKING_LESSONS = [
         ],
     },
 
-    // === Kids speaking ===
-    {
-        id: 'shadow-greetings',
-        type: 'shadowing',
-        title: 'Greetings & Introductions',
-        titleVi: 'Chào hỏi & Giới thiệu',
-        level: 'A1',
-        emoji: '👋',
-        mode: 'kids',
-        sentences: [
-            { text: "Hello! My name is Anna. What's your name?", textVi: "Xin chào! Tên mình là Anna. Bạn tên gì?" },
-            { text: "Nice to meet you! How are you today?", textVi: "Rất vui được gặp bạn! Hôm nay bạn thế nào?" },
-            { text: "I'm fine, thank you. And you?", textVi: "Mình khỏe, cảm ơn. Còn bạn?" },
-            { text: "I am seven years old. How old are you?", textVi: "Mình bảy tuổi. Bạn bao nhiêu tuổi?" },
-        ],
-    },
+    // === Kids speaking curriculum ===
+    ...KIDS_SPEAKING_CURRICULUM_LESSONS,
 
     // === More Shadowing Exercises ===
     {
@@ -254,68 +242,6 @@ export const SPEAKING_LESSONS = [
         ],
     },
 
-    // === More Kids Speaking ===
-    {
-        id: 'shadow-school-kids',
-        type: 'shadowing',
-        title: 'At School',
-        titleVi: 'Ở trường',
-        level: 'A1',
-        emoji: '🏫',
-        mode: 'kids',
-        sentences: [
-            { text: "Good morning, teacher! How are you today?", textVi: "Chào buổi sáng, cô ơi! Hôm nay cô có khỏe không?" },
-            { text: "Can I borrow your pencil, please?", textVi: "Cho mình mượn bút chì được không?" },
-            { text: "My favorite subject is math because I love solving problems.", textVi: "Môn yêu thích của mình là toán vì mình thích giải bài toán." },
-            { text: "Let's play together during break time!", textVi: "Mình chơi cùng nhau giờ ra chơi nhé!" },
-        ],
-    },
-    {
-        id: 'shadow-family-kids',
-        type: 'shadowing',
-        title: 'My Family',
-        titleVi: 'Gia đình em',
-        level: 'A1',
-        emoji: '👨‍👩‍👧‍👦',
-        mode: 'kids',
-        sentences: [
-            { text: "My family has four people: my dad, my mom, my brother, and me.", textVi: "Gia đình mình có bốn người: ba, mẹ, anh trai, và mình." },
-            { text: "My mom is a teacher and my dad is a doctor.", textVi: "Mẹ mình là giáo viên và ba mình là bác sĩ." },
-            { text: "We like to have dinner together every evening.", textVi: "Chúng mình thích ăn tối cùng nhau mỗi buổi chiều." },
-            { text: "On Sundays, we go to the park and have a picnic.", textVi: "Chủ nhật, chúng mình đi công viên và đi dã ngoại." },
-        ],
-    },
-    {
-        id: 'shadow-food-kids',
-        type: 'shadowing',
-        title: 'Food & Eating',
-        titleVi: 'Món ăn & Ẩm thực',
-        level: 'A1',
-        emoji: '🍕',
-        mode: 'kids',
-        sentences: [
-            { text: "My favorite food is pho because it is delicious and warm.", textVi: "Món ăn yêu thích của mình là phở vì nó ngon và ấm." },
-            { text: "I always drink milk and eat fruit for breakfast.", textVi: "Mình luôn uống sữa và ăn trái cây cho bữa sáng." },
-            { text: "Can I have some water, please? I am very thirsty.", textVi: "Cho mình xin nước được không? Mình rất khát." },
-            { text: "We should eat vegetables every day to stay healthy.", textVi: "Chúng mình nên ăn rau mỗi ngày để khỏe mạnh." },
-        ],
-    },
-    {
-        id: 'shadow-hobbies-kids',
-        type: 'shadowing',
-        title: 'Hobbies & Activities',
-        titleVi: 'Sở thích & Hoạt động',
-        level: 'A2',
-        emoji: '⚽',
-        mode: 'kids',
-        sentences: [
-            { text: "I like drawing pictures of animals and flowers in my notebook.", textVi: "Mình thích vẽ hình động vật và hoa trong vở." },
-            { text: "My brother enjoys playing football with his friends after school.", textVi: "Anh trai mình thích chơi bóng đá với bạn sau giờ học." },
-            { text: "Reading storybooks is my favorite thing to do before bedtime.", textVi: "Đọc truyện là điều mình thích làm nhất trước khi ngủ." },
-            { text: "I am learning to play the piano and I practice every day.", textVi: "Mình đang học chơi piano và luyện tập mỗi ngày." },
-            { text: "Swimming is fun but you should always swim with an adult.", textVi: "Bơi lội rất vui nhưng bạn nên luôn bơi cùng người lớn." },
-        ],
-    },
     // ═══════════════════════════════════════════════════════
     // IELTS Speaking Expansion — High-frequency topics
     // Source: Cambridge IELTS 12-19 topic analysis
@@ -570,7 +496,7 @@ export const SPEAKING_LESSONS = [
 
 export function getSpeakingByMode(mode) {
     if (mode === 'adult') return SPEAKING_LESSONS;
-    return SPEAKING_LESSONS.filter(l => l.mode === 'kids' || l.level === 'A1');
+    return SPEAKING_LESSONS.filter(l => l.mode === 'kids');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -591,10 +517,17 @@ export function getSpeakingByLevel(level) {
 export function getSpeakingStats() {
     const shadowing = SPEAKING_LESSONS.filter(l => l.type === 'shadowing');
     const ielts = SPEAKING_LESSONS.filter(l => l.type === 'ielts_speaking');
+    const kidsLessons = SPEAKING_LESSONS.filter(l => l.mode === 'kids');
+    const adultLessons = SPEAKING_LESSONS.filter(l => l.mode !== 'kids');
     return {
         totalLessons: SPEAKING_LESSONS.length,
         shadowing: shadowing.length,
         ielts: ielts.length,
+        totalShadowingSentences: shadowing.reduce((sum, lesson) => sum + (lesson.sentences?.length || 0), 0),
+        kidsLessons: kidsLessons.length,
+        adultLessons: adultLessons.length,
+        kidsShadowingSentences: kidsLessons.reduce((sum, lesson) => sum + (lesson.sentences?.length || 0), 0),
+        adultShadowingSentences: adultLessons.reduce((sum, lesson) => sum + (lesson.sentences?.length || 0), 0),
         byLevel: {
             A1: SPEAKING_LESSONS.filter(l => l.level === 'A1').length,
             A2: SPEAKING_LESSONS.filter(l => l.level === 'A2').length,

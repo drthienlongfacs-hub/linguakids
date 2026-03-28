@@ -60,6 +60,25 @@ Generated on March 28, 2026:
 - Chinese practice bank: 8,000 entries
 - Combined upgrade vs current core curriculum vocabulary: about 29.5x
 
+## Speaking curriculum alignment
+
+The kids speaking shadowing bank now follows an official curriculum alignment instead of a tiny hardcoded sample set.
+
+Primary references:
+
+1. CEFR Companion Volume
+   URL: https://rm.coe.int/cefr-companion-volume-with-new-descriptors-2018/1680787989
+   Why: anchors A1-A2 speaking outcomes such as simple interaction, introducing self, giving basic information, and describing familiar routines.
+
+2. Cambridge English Young Learners Handbook for Teachers
+   URL: https://www.cambridgeenglish.org/exams-and-tests/qualifications/young-learners/
+   Why: provides topic families used for Starters and Movers such as school, family and friends, food and drink, transport, places and directions, health, weather, and the world around us.
+
+Implementation note:
+
+- Sentences are newly authored and reviewed for app use; they are aligned to official descriptors and topic domains, not copied from copyrighted coursebooks.
+- The current kids speaking bank contains 12 curriculum-aligned shadowing lessons and 360 sentences, which is about 21.2x the previous 17-sentence sample bank.
+
 ## Quality rules
 
 - English keeps lowercase lexical entries, filters out obvious proper nouns, and chooses the best available synset definition per lemma.

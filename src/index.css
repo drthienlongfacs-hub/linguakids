@@ -3281,6 +3281,62 @@ p {
   margin-top: 2px;
 }
 
+.lh-curriculum-note {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 20px;
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.22), rgba(255, 255, 255, 0.92));
+  border: 1px solid rgba(59, 130, 246, 0.16);
+  box-shadow: var(--shadow-card);
+}
+
+.lh-curriculum-copy {
+  flex: 1;
+}
+
+.lh-curriculum-copy strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  margin-bottom: 6px;
+}
+
+.lh-curriculum-copy p {
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--color-text-light);
+}
+
+.lh-curriculum-kpi {
+  min-width: 108px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(59, 130, 246, 0.12);
+}
+
+.lh-curriculum-kpi strong {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 800;
+  color: #2563EB;
+}
+
+.lh-curriculum-kpi span {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  text-align: center;
+}
+
 .lh-level-section {
   margin-bottom: 24px;
 }
@@ -3322,6 +3378,16 @@ p {
 .lh-lesson-card:hover {
   border-color: rgba(99, 102, 241, 0.3);
   transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+  .lh-curriculum-note {
+    flex-direction: column;
+  }
+
+  .lh-curriculum-kpi {
+    min-width: 0;
+  }
 }
 
 .lh-lesson-emoji {

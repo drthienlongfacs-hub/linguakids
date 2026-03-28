@@ -11,6 +11,11 @@ export default function SpeakingHub() {
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
     const lessons = getSpeakingByMode(state.userMode);
+    const shadowingLessons = lessons.filter(l => l.type === 'shadowing');
+    const totalShadowingSentences = shadowingLessons.reduce(
+        (sum, lesson) => sum + (lesson.sentences?.length || 0),
+        0
+    );
     const [activeLesson, setActiveLesson] = useState(null);
     const [currentIdx, setCurrentIdx] = useState(0);
 
@@ -55,9 +60,20 @@ export default function SpeakingHub() {
     }
 
     // ===== Lesson list =====
-    const shadowing = lessons.filter(l => l.type === 'shadowing');
+    const shadowing = shadowingLessons;
     const ielts = lessons.filter(l => l.type === 'ielts_speaking');
     const pronunciation = lessons.filter(l => l.type === 'pronunciation');
+    const stats = adult
+        ? [
+            { value: lessons.length, label: 'Exercises' },
+            { value: shadowing.length, label: 'Shadowing Sets' },
+            { value: '🎤', label: 'Voice Rec.' },
+        ]
+        : [
+            { value: lessons.length, label: 'Chủ đề' },
+            { value: totalShadowingSentences, label: 'Câu nói' },
+            { value: 'A1-A2', label: 'Khung CEFR' },
+        ];
 
     return (
         <div className="speaking-hub page">
@@ -66,14 +82,35 @@ export default function SpeakingHub() {
                 <h2 className="lh-title">🗣️ {adult ? 'Speaking Practice' : 'Luyện Nói'}</h2>
             </div>
             <p className="lh-subtitle">
-                {adult ? 'Improve your speaking with shadowing, pronunciation drills, and IELTS speaking practice.' : 'Luyện nói tiếng Anh cùng bé! 🎤'}
+                {adult
+                    ? 'Improve your speaking with shadowing, pronunciation drills, and IELTS speaking practice.'
+                    : `Luyện nói tiếng Anh cùng bé với ${totalShadowingSentences} câu shadowing theo CEFR A1-A2 và Cambridge YLE.`}
             </p>
 
             <div className="lh-stats">
-                <div className="lh-stat"><span className="lh-stat-number">{lessons.length}</span><span className="lh-stat-label">{adult ? 'Exercises' : 'Bài'}</span></div>
-                <div className="lh-stat"><span className="lh-stat-number">3</span><span className="lh-stat-label">{adult ? 'Types' : 'Dạng'}</span></div>
-                <div className="lh-stat"><span className="lh-stat-number">🎤</span><span className="lh-stat-label">{adult ? 'Voice Rec.' : 'Ghi âm'}</span></div>
+                {stats.map(stat => (
+                    <div key={stat.label} className="lh-stat">
+                        <span className="lh-stat-number">{stat.value}</span>
+                        <span className="lh-stat-label">{stat.label}</span>
+                    </div>
+                ))}
             </div>
+
+            {!adult && (
+                <div className="lh-curriculum-note">
+                    <div className="lh-curriculum-copy">
+                        <strong>Khung bài nói chuẩn</strong>
+                        <p>
+                            Bộ câu được biên soạn lại theo nhóm chủ đề Starters/Movers và descriptor nói A1-A2,
+                            ưu tiên câu ngắn, tần suất cao, phù hợp trẻ em.
+                        </p>
+                    </div>
+                    <div className="lh-curriculum-kpi">
+                        <strong>{totalShadowingSentences}</strong>
+                        <span>câu đang dùng</span>
+                    </div>
+                </div>
+            )}
 
             {shadowing.length > 0 && (
                 <div className="lh-level-section">
