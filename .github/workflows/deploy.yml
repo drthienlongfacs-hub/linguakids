@@ -32,9 +32,16 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin gh-pages || true
           rm -rf /tmp/linguakids-gh-pages
-          git worktree add /tmp/linguakids-gh-pages origin/gh-pages
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            git fetch origin gh-pages
+            git worktree add /tmp/linguakids-gh-pages origin/gh-pages
+          else
+            git worktree add --detach /tmp/linguakids-gh-pages
+            cd /tmp/linguakids-gh-pages
+            git checkout --orphan gh-pages
+            cd -
+          fi
           find /tmp/linguakids-gh-pages -mindepth 1 -maxdepth 1 \
             ! -name '.git' \
             ! -name '.github' \
@@ -47,3 +54,6 @@ jobs:
           git push origin HEAD:gh-pages
           cd -
           git worktree remove /tmp/linguakids-gh-pages --force
+
+      - name: Verify live site serves new bundle
+        run: node scripts/verify-live-deploy.mjs --site https://drthienlongfacs-hub.github.io/linguakids/ --dist dist/index.html --timeout-ms 900000 --interval-ms 20000

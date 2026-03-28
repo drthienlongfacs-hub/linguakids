@@ -8,7 +8,8 @@
     "build": "vite build",
     "build:standard-data": "node scripts/build-standard-lexicon.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:live": "node scripts/verify-live-deploy.mjs --site https://drthienlongfacs-hub.github.io/linguakids/ --dist dist/index.html"
   },
   "dependencies": {
     "hanzi-writer": "^3.7.3",

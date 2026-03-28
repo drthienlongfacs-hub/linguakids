@@ -86,6 +86,17 @@ npm run build
 
 Mở trên Chrome/Safari → Menu → "Add to Home Screen" / "Thêm vào Màn hình chính"
 
+## 🔎 Release Verification
+
+Deploy production dùng workflow `.github/workflows/deploy.yml`, xuất `dist/` lên nhánh `gh-pages` rồi kiểm tra live HTML đã phục vụ đúng asset hash mới.
+
+```bash
+npm run build
+npm run verify:live
+```
+
+Nếu lệnh này fail thì không được coi là đã phát hành xong, dù `git push` hoặc build local đã pass.
+
 ## 📄 License
 
 MIT © 2026 Dr. Thiên Long
