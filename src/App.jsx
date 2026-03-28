@@ -126,7 +126,6 @@ function AppContent() {
       <InstallPrompt />
       <ScrollToTop />
       <StudyReminder />
-      <CopyrightSeal />
       <ErrorBoundary>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
@@ -206,6 +205,7 @@ function AppContent() {
         </Suspense>
       </ErrorBoundary>
 
+      <CopyrightSeal />
       <NavBar />
     </div>
   );

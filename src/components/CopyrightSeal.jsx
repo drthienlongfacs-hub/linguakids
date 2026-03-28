@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import {
     BRAND_WATERMARK_TEXT,
-    COPYRIGHT_NOTICE,
     COPYRIGHT_OWNER,
     COPYRIGHT_TITLE,
 } from '../config/brandProtection';
@@ -23,17 +22,18 @@ export default function CopyrightSeal() {
                 ))}
             </div>
 
-            <aside className="copyright-seal" aria-label="Dau ban quyen">
-                <div className="copyright-seal__eyebrow">Ban quyen phat trien</div>
-                <strong className="copyright-seal__owner">{COPYRIGHT_OWNER}</strong>
-                <p className="copyright-seal__line">{COPYRIGHT_TITLE}</p>
-                <p className="copyright-seal__line">{COPYRIGHT_NOTICE}</p>
+            <footer className="copyright-seal" aria-label="Chan trang ban quyen">
+                <div className="copyright-seal__inner">
+                    <div className="copyright-seal__eyebrow">Quyen phat trien</div>
+                    <strong className="copyright-seal__owner">{COPYRIGHT_OWNER}</strong>
+                    <p className="copyright-seal__line">{COPYRIGHT_TITLE}</p>
+                </div>
                 {!isLegalPage && (
                     <Link className="copyright-seal__link" to="/legal-notice">
-                        Tuyen bo quyen
+                        Xem tuyen bo quyen
                     </Link>
                 )}
-            </aside>
+            </footer>
         </>
     );
 }
