@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-03-29T06:33:20.107Z",
+  "sourceManifest": "free-speaking-coach.json",
+  "summary": {
+    "scenarioCount": 5,
+    "clipCount": 46,
+    "missingFiles": 0,
+    "zeroByteFiles": 0,
+    "forbiddenLightSurfaceMatches": 0,
+    "contrastFailures": 0,
+    "strictModulePass": true
+  },
+  "scenarios": {
+    "daily-small-talk": {
+      "clipCount": 12,
+      "missingClipIds": [],
+      "zeroByteClipIds": []
+    },
+    "job-interview-brief": {
+      "clipCount": 10,
+      "missingClipIds": [],
+      "zeroByteClipIds": []
+    },
+    "travel-help": {
+      "clipCount": 8,
+      "missingClipIds": [],
+      "zeroByteClipIds": []
+    },
+    "self-intro-cn": {
+      "clipCount": 8,
+      "missingClipIds": [],
+      "zeroByteClipIds": []
+    },
+    "ordering-cn": {
+      "clipCount": 8,
+      "missingClipIds": [],
+      "zeroByteClipIds": []
+    }
+  },
+  "contrast": [
+    {
+      "name": "panel/textBody",
+      "foreground": "#E2E8F0",
+      "background": "#162440",
+      "min": 4.5,
+      "ratio": 12.52,
+      "pass": true
+    },
+    {
+      "name": "panel/textMuted",
+      "foreground": "#CBD5E1",
+      "background": "#162440",
+      "min": 4.5,
+      "ratio": 10.4,
+      "pass": true
+    },
+    {
+      "name": "coachBubble/text",
+      "foreground": "#F8FAFC",
+      "background": "#1E293B",
+      "min": 4.5,
+      "ratio": 13.98,
+      "pass": true
+    },
+    {
+      "name": "userBubble/text",
+      "foreground": "#FFFFFF",
+      "background": "#4F46E5",
+      "min": 4.5,
+      "ratio": 6.29,
+      "pass": true
+    },
+    {
+      "name": "chip/text",
+      "foreground": "#C7D2FE",
+      "background": "#1F2A44",
+      "min": 4.5,
+      "ratio": 9.56,
+      "pass": true
+    },
+    {
+      "name": "success/text",
+      "foreground": "#DCFCE7",
+      "background": "#10281E",
+      "min": 4.5,
+      "ratio": 14.22,
+      "pass": true
+    },
+    {
+      "name": "warning/text",
+      "foreground": "#FDE68A",
+      "background": "#3F2A0E",
+      "min": 4.5,
+      "ratio": 10.89,
+      "pass": true
+    },
+    {
+      "name": "input/text",
+      "foreground": "#F8FAFC",
+      "background": "#0F172A",
+      "min": 4.5,
+      "ratio": 17.06,
+      "pass": true
+    },
+    {
+      "name": "secondaryButton/text",
+      "foreground": "#E2E8F0",
+      "background": "#182540",
+      "min": 4.5,
+      "ratio": 12.37,
+      "pass": true
+    },
+    {
+      "name": "primaryButton/text",
+      "foreground": "#FFFFFF",
+      "background": "#4F46E5",
+      "min": 4.5,
+      "ratio": 6.29,
+      "pass": true
+    }
+  ],
+  "sourceMatches": []
+}
