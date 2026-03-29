@@ -137,23 +137,37 @@ export default function ListeningPlayer({
         const utterance = new SpeechSynthesisUtterance(seg.text);
         utterance.lang = langCode;
         utterance.rate = speed;
-        utterance.pitch = 1;
+        utterance.pitch = 1.02; // Slightly above 1.0 for warmth
 
-        // Try to find a good language-matched voice
+        // Enhanced voice matching — try multiple platform-specific names
         const voices = window.speechSynthesis.getVoices();
         const langBase = langCode.split('-')[0];
-        const preferredVoice = voices.find(voice => voice.lang === langCode)
-            || (langBase === 'zh'
-                ? voices.find(voice =>
-                    voice.lang.startsWith('zh')
-                    && (
-                        voice.name.includes('Google')
-                        || voice.name.includes('Ting-Ting')
-                        || voice.name.includes('Xiaoxiao')
-                        || voice.localService
-                    ))
-                : voices.find(voice => voice.lang.startsWith('en') && voice.name.includes('Samantha')))
-            || voices.find(voice => voice.lang.startsWith(langBase));
+        const langRegion = langCode.split('-')[1] || '';
+
+        // Priority voice name lists per language
+        const voiceHints = {
+            'en': ['Samantha', 'Aaron', 'Allison', 'Google US English', 'Google UK English Female', 'Daniel', 'Serena', 'Karen'],
+            'zh': ['Ting-Ting', 'Mei-Jia', 'Google 普通话', 'Google 中文', 'Microsoft Xiaoxiao'],
+            'vi': ['Linh', 'Google Tiếng Việt', 'Microsoft HoaiMy'],
+        };
+
+        let preferredVoice = null;
+        // 1. Try exact language match
+        preferredVoice = voices.find(v => v.lang === langCode);
+        // 2. Try hint names
+        if (!preferredVoice && voiceHints[langBase]) {
+            for (const hint of voiceHints[langBase]) {
+                const found = voices.find(v => v.name.includes(hint) && v.lang.startsWith(langBase));
+                if (found) { preferredVoice = found; break; }
+            }
+        }
+        // 3. Enhanced/premium/local voices
+        if (!preferredVoice) {
+            const langVoices = voices.filter(v => v.lang.startsWith(langBase));
+            preferredVoice = langVoices.find(v => v.name.toLowerCase().includes('enhanced') || v.name.toLowerCase().includes('natural'))
+                || langVoices.find(v => v.localService)
+                || langVoices[0];
+        }
 
         if (preferredVoice) {
             utterance.voice = preferredVoice;

@@ -1,19 +1,28 @@
 // useSpeech — Premium TTS + Speech Recognition
 // RCA Fix v2: Proper speech queue, iOS-safe timing, reliable full-sentence playback
 // v3: Enhanced recognition with confidence + N-best alternatives
+// v4: Voice Personality System — accent + personality-aware TTS
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { checkWordPronunciation } from '../utils/pronunciationEngine';
 import { recordCapabilityEvent } from '../services/capabilityService';
+import { findPersonalityVoice, getPersonalityProsody, DEFAULT_PERSONALITY } from '../data/voicePersonalities';
 
 // Voice preference lists — best quality first
 const VOICE_PREFERENCES = {
     'en-US': [
-        'Samantha', 'Karen', 'Daniel', 'Moira', 'Tessa',
-        'Google US English', 'Google UK English Female',
-        'Microsoft Aria', 'Microsoft Jenny',
+        'Samantha', 'Aaron', 'Allison', 'Ava',
+        'Google US English', 'Google US English Female', 'Google US English Male',
+        'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Mark',
     ],
     'en-GB': [
-        'Daniel', 'Kate', 'Oliver', 'Google UK English Female',
+        'Daniel', 'Serena', 'Kate', 'Oliver', 'Arthur',
+        'Google UK English Female', 'Google UK English Male',
+        'Microsoft Hazel', 'Microsoft Ryan',
+    ],
+    'en-AU': [
+        'Karen', 'Catherine', 'Gordon', 'Lee',
+        'Google Australian English', 'Google Australian English Female', 'Google Australian English Male',
+        'Microsoft Natasha', 'Microsoft William',
     ],
     'zh-CN': [
         'Ting-Ting', 'Mei-Jia', 'Sin-ji',
@@ -196,6 +205,22 @@ export function useSpeech() {
     const speakVietnamese = useCallback((text) => {
         speak(text, 'vi-VN', { rate: 0.85, pitch: 1.0 });
     }, [speak]);
+
+    // v4: Accent + Personality-aware speaking
+    const speakWithPersonality = useCallback((text, accentLang = 'en-US', personalityId = DEFAULT_PERSONALITY) => {
+        if (!window.speechSynthesis || !text) return;
+        const voice = findPersonalityVoice(voices, null, personalityId);
+        const prosody = getPersonalityProsody(personalityId);
+        queueRef.current.push({
+            text,
+            lang: accentLang,
+            rate: prosody.rate,
+            pitch: prosody.pitch,
+            onDone: null,
+            _voiceOverride: voice,
+        });
+        processQueue();
+    }, [voices, processQueue]);
 
     // FIX RC-4: speakTwice uses queue properly (no time estimation)
     const speakTwice = useCallback((text, lang = 'en-US') => {
@@ -380,6 +405,7 @@ export function useSpeech() {
         speakEnglish,
         speakChinese,
         speakVietnamese,
+        speakWithPersonality,
         speakTwice,
         isSpeaking,
         stopSpeaking,
