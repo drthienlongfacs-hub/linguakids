@@ -157,7 +157,7 @@ export default function LearnEnglish() {
                 >
                     <div className="topic-card__emoji">📚</div>
                     <div className="topic-card__title">Bài của Cô</div>
-                    <div className="topic-card__count">18 chương · 521 từ</div>
+                    <div className="topic-card__count">19 chương · 531 từ</div>
                     <div style={{
                         fontSize: '0.6rem', color: '#10B981', fontWeight: 700,
                         background: 'rgba(16,185,129,0.1)', padding: '2px 6px',
