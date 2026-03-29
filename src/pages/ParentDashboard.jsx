@@ -3,6 +3,7 @@ import { useGame } from '../context/GameStateContext';
 import { getUnlockedBadges, getAllBadges } from '../services/xpEngine';
 import { getDueWordIds } from '../services/fsrs';
 import usePremiumStatus from '../hooks/usePremiumStatus';
+import { getKidsLibraryHarvestModel } from '../services/kidsLibraryHarvestService';
 
 export default function ParentDashboard() {
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ export default function ParentDashboard() {
     const allBadges = getAllBadges();
     const dueWords = getDueWordIds();
     const daily = getDailyStats();
+    const kidsLibrary = getKidsLibraryHarvestModel();
 
     const totalStudyDays = state.streak || 0;
     const wordsLearned = state.wordsLearned?.length || 0;
@@ -126,6 +128,33 @@ export default function ParentDashboard() {
                         width: `${Math.min(100, daily.progress)}%`,
                         transition: 'width 0.5s ease',
                     }} />
+                </div>
+            </div>
+
+            <div style={{
+                background: '#EEF2FF', borderRadius: 16, padding: '1rem 1.2rem',
+                border: '1px solid #C7D2FE', marginBottom: '1rem',
+            }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '0.95rem', margin: '0 0 6px', color: '#312E81' }}>
+                    📚 Kids Library Harvest
+                </h3>
+                <p style={{ fontSize: '0.82rem', color: '#475569', margin: '0 0 10px', lineHeight: 1.5 }}>
+                    {kidsLibrary.summary.storyCount} truyện, {kidsLibrary.summary.readingCount} bài đọc, {kidsLibrary.summary.teacherChapterCount} chương bài của cô,
+                    {' '}{kidsLibrary.summary.speakingSentenceCount} câu luyện nói.
+                </p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <button onClick={() => navigate('/kids-library')} style={{
+                        background: '#4F46E5', color: '#fff', border: 'none', borderRadius: 10,
+                        padding: '8px 14px', fontSize: '0.82rem', fontFamily: 'var(--font-display)', cursor: 'pointer',
+                    }}>
+                        Mở Kids Library
+                    </button>
+                    <button onClick={() => navigate('/teacher-lessons')} style={{
+                        background: '#fff', color: '#312E81', border: '1px solid #A5B4FC', borderRadius: 10,
+                        padding: '8px 14px', fontSize: '0.82rem', fontFamily: 'var(--font-display)', cursor: 'pointer',
+                    }}>
+                        Xem bài của cô
+                    </button>
                 </div>
             </div>
 

@@ -151,6 +151,33 @@ export default function Home() {
                 <span style={{ marginLeft: 'auto', fontSize: '1.2rem' }}>➤</span>
             </Link>
 
+            {!isAdult && (
+                <Link to="/kids-library" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '16px 18px',
+                    borderRadius: 'var(--radius-xl)',
+                    background: 'linear-gradient(135deg, #ECFEFF, #EEF2FF 55%, #FDF2F8)',
+                    border: '1px solid #C7D2FE',
+                    marginBottom: '16px',
+                    textDecoration: 'none',
+                    color: 'var(--color-text)',
+                    boxShadow: '0 10px 24px rgba(79, 70, 229, 0.12)',
+                }}>
+                    <span style={{ fontSize: '2rem' }}>📚</span>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1rem', color: '#312E81' }}>
+                            Kids Library
+                        </div>
+                        <div style={{ fontSize: '0.76rem', color: '#475569', marginTop: '2px', lineHeight: 1.5 }}>
+                            Truyện, tự đọc, bài của cô, và lộ trình nghe nói trong một nơi.
+                        </div>
+                    </div>
+                    <span style={{ marginLeft: 'auto', fontSize: '1.2rem', color: '#4338CA' }}>➜</span>
+                </Link>
+            )}
+
             {/* 🎓 AI Teacher Suite — prominent access */}
             <div style={{ marginBottom: '16px' }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>

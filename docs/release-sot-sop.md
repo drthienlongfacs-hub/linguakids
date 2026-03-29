@@ -22,6 +22,10 @@ The following files are the operational source of truth for release-critical che
   Shared voice preference runtime for browser TTS paths.
 - `scripts/audit-voice-runtime.mjs`
   End-to-end audit for voice preference propagation through store, UI, and runtime.
+- `src/services/kidsLibraryHarvestService.js`
+  Source of truth for the kids library and harvested shelf counts.
+- `scripts/audit-kids-library.mjs`
+  Regression gate for the Khan-inspired kids library integration.
 - `server/entitlement-api.mjs`
   Reference backend for server-backed web entitlement.
 - `scripts/generate-premium-token.js`
@@ -45,20 +49,23 @@ The following files are the operational source of truth for release-critical che
    Result must be `pass: true`.
 3. Run `npm run audit:voice-runtime`.
    Result must be `pass: true`.
-4. Run `npm run audit:free-speaking`.
+4. Run `npm run audit:kids-library`.
+   Result must be `pass: true`.
+5. Run `npm run audit:free-speaking`.
    Result must be `strictModulePass: true`.
-5. Run `npm run audit:teacher-lessons`.
+6. Run `npm run audit:teacher-lessons`.
    Result must be `strictModulePass: true`.
-6. Run `npm run build`.
+7. Run `npm run build`.
    Result must complete successfully.
-7. Push `main`.
-8. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
+8. Push `main`.
+9. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
 
 ## Audio regression control
 
 - Any lesson route that auto-plays instructional audio must ship a controlled audio manifest or an explicit transitional waiver.
 - A route-level fix is not considered complete until its audit script is wired into `audit:release`.
 - Any new browser-TTS preference flow must consume the shared voice preference service and pass `audit:voice-runtime`.
+- Any harvested benchmark-inspired surface must point into real routes, use repo-backed counts, and pass its dedicated audit gate.
 
 ## Distribution policy
 
