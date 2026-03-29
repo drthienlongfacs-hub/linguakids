@@ -164,20 +164,22 @@ export default function PlacementTest() {
                 </div>
             </div>
 
-            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '16px', padding: '24px', marginBottom: '20px' }}>
-                <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '20px', lineHeight: 1.5 }}>{current.q}</p>
+            <div style={{ background: 'rgba(255,255,255,0.95)', borderRadius: '16px', padding: '24px', marginBottom: '20px', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }}>
+                <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '20px', lineHeight: 1.5, color: '#1E293B' }}>{current.q}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {current.options.map((opt, i) => {
-                        let bg = 'rgba(255,255,255,0.05)';
-                        let border = '1px solid rgba(255,255,255,0.08)';
+                        let bg = '#FFFFFF';
+                        let border = '2px solid #E2E8F0';
+                        let textColor = '#334155';
+                        let labelColor = '#6C63FF';
                         if (selected !== null) {
-                            if (i === current.answer) { bg = 'rgba(34,197,94,0.15)'; border = '1px solid #22C55E'; }
-                            else if (i === selected && i !== current.answer) { bg = 'rgba(239,68,68,0.15)'; border = '1px solid #EF4444'; }
+                            if (i === current.answer) { bg = '#DCFCE7'; border = '2px solid #22C55E'; textColor = '#166534'; labelColor = '#166534'; }
+                            else if (i === selected && i !== current.answer) { bg = '#FEE2E2'; border = '2px solid #EF4444'; textColor = '#991B1B'; labelColor = '#991B1B'; }
                         }
                         return (
                             <button key={i} onClick={() => handleAnswer(i)}
-                                style={{ padding: '14px 18px', borderRadius: '10px', background: bg, border, textAlign: 'left', cursor: selected !== null ? 'default' : 'pointer', fontSize: '1rem', color: '#E2E8F0', transition: 'all 0.2s' }}>
-                                <span style={{ opacity: 0.5, marginRight: '10px' }}>{String.fromCharCode(65 + i)}.</span>
+                                style={{ padding: '14px 18px', borderRadius: '12px', background: bg, border, textAlign: 'left', cursor: selected !== null ? 'default' : 'pointer', fontSize: '1rem', color: textColor, transition: 'all 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center' }}>
+                                <span style={{ color: labelColor, marginRight: '12px', fontWeight: 700, fontSize: '1rem', minWidth: '24px' }}>{String.fromCharCode(65 + i)}.</span>
                                 {opt}
                             </button>
                         );
