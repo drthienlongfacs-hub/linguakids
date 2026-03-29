@@ -14,6 +14,7 @@
     "build:free-speaking-audio": "node scripts/build-free-speaking-audio.mjs",
     "audit:accent-voice-pack": "node scripts/audit-accent-practice-audio.mjs",
     "audit:free-speaking": "node scripts/audit-free-speaking-module.mjs",
+    "audit:premium": "node scripts/audit-premium-architecture.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "verify:live": "node scripts/verify-live-deploy.mjs --site https://drthienlongfacs-hub.github.io/linguakids/ --dist dist/index.html"

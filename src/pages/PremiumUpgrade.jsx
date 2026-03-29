@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isPremium, unlockPremium, startTrial, getPremiumStatus, PREMIUM_FEATURES } from '../services/premiumService';
+import {
+    isPremium,
+    unlockPremium,
+    startTrial,
+    getPremiumStatus,
+    PREMIUM_FEATURES,
+    PREMIUM_TOKEN_PLACEHOLDER,
+} from '../services/premiumService';
 
 export default function PremiumUpgrade() {
     const [code, setCode] = useState('');
@@ -9,8 +16,8 @@ export default function PremiumUpgrade() {
     const navigate = useNavigate();
     const status = getPremiumStatus();
 
-    const handleUnlock = () => {
-        const result = unlockPremium(code);
+    const handleUnlock = async () => {
+        const result = await unlockPremium(code);
         setMsg(result);
         if (result.success) setTimeout(() => setPremium(true), 1200);
     };
@@ -35,6 +42,11 @@ export default function PremiumUpgrade() {
                             ? `Dùng thử đến ${new Date(status.expiresAt).toLocaleDateString('vi-VN')}`
                             : 'Trọn đời — Cảm ơn bạn đã ủng hộ!'}
                     </p>
+                    {status.activationMethod && (
+                        <p style={{ opacity: 0.72, marginTop: 8, fontSize: '0.8rem' }}>
+                            Activation: {status.activationMethod}
+                        </p>
+                    )}
                 </div>
                 <button onClick={() => navigate('/')} style={{
                     display: 'block', margin: '1.5rem auto 0', background: 'var(--color-primary)',
@@ -82,35 +94,32 @@ export default function PremiumUpgrade() {
                 ))}
             </div>
 
-            {/* Pricing */}
+            {/* Activation */}
             <div style={{
                 background: '#fff', borderRadius: 20, padding: '1.5rem',
                 textAlign: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
                 border: '2px solid var(--color-primary)', marginBottom: '1.5rem',
             }}>
-                <div style={{ fontSize: '0.85rem', color: '#888', textDecoration: 'line-through' }}>199.000₫</div>
-                <div style={{ fontSize: '2.5rem', fontFamily: 'var(--font-display)', color: 'var(--color-primary)', fontWeight: 800 }}>
-                    99.000₫
+                <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', color: 'var(--color-primary)', fontWeight: 800 }}>
+                    Premium activation
                 </div>
                 <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                    Một lần duy nhất • Trọn đời • Không subscription
+                    Trang này tập trung vào trial nội bộ và kích hoạt bằng token đã được cấp.
                 </div>
 
-                {/* Purchase instruction — external payment, NOT in-app */}
+                {/* Activation-first copy to avoid overclaiming payment compliance */}
                 <div style={{
                     background: '#f8f9fa', borderRadius: 12, padding: '16px',
                     fontSize: '0.85rem', color: '#555', lineHeight: 1.6,
                     textAlign: 'left',
                 }}>
-                    <strong>📋 Cách mua Premium:</strong>
-                    <ol style={{ margin: '8px 0 0', paddingLeft: '1.2rem' }}>
-                        <li>Chuyển khoản <strong>99.000₫</strong> qua Momo/ZaloPay/Ngân hàng</li>
-                        <li>Ghi nội dung: <strong>LinguaKids Premium</strong></li>
-                        <li>Gửi biên lai qua email: <strong>drthienlongfacs@gmail.com</strong></li>
-                        <li>Nhận mã kích hoạt trong vòng 24h</li>
-                    </ol>
+                    <strong>📋 Kích hoạt Premium cho web edition:</strong>
+                    <div style={{ marginTop: 8 }}>
+                        Trang này chỉ dùng để <strong>bắt đầu trial</strong> hoặc <strong>dán token kích hoạt đã được cấp</strong>.
+                        Việc bán hàng, chăm sóc khách hàng và cấp token được xử lý ngoài ứng dụng.
+                    </div>
                     <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#888' }}>
-                        💡 Hoặc nhắn tin Zalo/Messenger cho hỗ trợ nhanh hơn.
+                        Nếu sau này có bản iOS/Android store, entitlement nên đi qua StoreKit / Google Play Billing riêng cho từng nền tảng.
                     </div>
                 </div>
             </div>
@@ -131,19 +140,22 @@ export default function PremiumUpgrade() {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginTop: 0 }}>
-                    🔑 Nhập mã kích hoạt
+                    🔑 Dán token kích hoạt
                 </h3>
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <input
                         type="text"
-                        placeholder="LK-XXXXXXXX-XXXX"
+                        placeholder={PREMIUM_TOKEN_PLACEHOLDER}
                         value={code}
-                        onChange={e => setCode(e.target.value.toUpperCase())}
-                        maxLength={15}
+                        onChange={e => setCode(e.target.value)}
+                        maxLength={240}
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
                         style={{
                             flex: 1, border: '2px solid #e0e0e0', borderRadius: 12,
-                            padding: '12px', fontSize: '1rem', fontFamily: 'monospace',
-                            textAlign: 'center', letterSpacing: 2,
+                            padding: '12px', fontSize: '0.92rem', fontFamily: 'monospace',
+                            letterSpacing: 0.5,
                         }}
                     />
                     <button onClick={handleUnlock} style={{
@@ -165,7 +177,7 @@ export default function PremiumUpgrade() {
                 )}
             </div>
 
-            {/* Honest guarantees — NO "100% secure" claim */}
+            {/* Honest guarantees — no impossible security claims */}
             <div style={{
                 display: 'flex', justifyContent: 'center', gap: '1.5rem',
                 marginTop: '1.5rem', fontSize: '0.8rem', color: '#888',

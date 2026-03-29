@@ -1,50 +1,114 @@
 #!/usr/bin/env node
 // generate-premium-token.js — OFFLINE ONLY
-// This script runs OUTSIDE the web bundle.
-// It generates valid LinguaKids premium tokens.
+// Generates signed LinguaKids premium tokens with a private key
+// that is intentionally kept OUTSIDE the repository.
 //
-// Usage: node scripts/generate-premium-token.js [count]
-// Example: node scripts/generate-premium-token.js 10
+// Usage:
+//   node scripts/generate-premium-token.js [count]
 //
-// SECURITY NOTE (RCA-042):
-// This file MUST NOT be included in the web bundle.
-// It is gitignored from the dist/ folder.
-// The computeTokenSig algorithm must match premiumService.js
+// Optional env vars:
+//   LINGUAKIDS_PREMIUM_PRIVATE_KEY_FILE=/abs/path/private-key.pem
+//   LINGUAKIDS_PREMIUM_TOKEN_TYPE=lifetime|trial_token
+//   LINGUAKIDS_PREMIUM_TOKEN_DAYS=30
 
-const SALT = [7, 13, 23, 37, 41, 53, 61, 71];
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { webcrypto } from 'node:crypto';
+import process from 'node:process';
+import { Buffer } from 'node:buffer';
 
-function computeTokenSig(payload) {
-    let hash = 0;
-    for (let i = 0; i < payload.length; i++) {
-        const c = payload.charCodeAt(i);
-        hash = ((hash << 5) - hash + c * SALT[i]) | 0;
-    }
-    let sig = '';
-    let h = Math.abs(hash);
-    for (let i = 0; i < 4; i++) {
-        sig += CHARS[h % 36];
-        h = Math.floor(h / 36) + SALT[i];
-    }
-    return sig;
+const TOKEN_PREFIX = 'LK1';
+const TOKEN_AUDIENCE = 'linguakids-premium';
+const TOKEN_VERSION = 1;
+const DEFAULT_KEY_PATH = path.join(os.homedir(), '.linguakids-premium', 'premium-private-key.pem');
+
+function toBase64Url(buffer) {
+    return Buffer.from(buffer)
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/g, '');
 }
 
-function generateToken() {
-    let payload = '';
-    for (let i = 0; i < 8; i++) {
-        payload += CHARS[Math.floor(Math.random() * 36)];
-    }
-    const sig = computeTokenSig(payload);
-    return `LK-${payload}-${sig}`;
+function randomTokenId() {
+    return toBase64Url(webcrypto.getRandomValues(new Uint8Array(9))).slice(0, 12);
 }
 
-// CLI
-const count = parseInt(process.argv[2]) || 5;
-console.log(`\n🔑 LinguaKids Premium Tokens (${count}):\n`);
-console.log('─'.repeat(30));
-for (let i = 0; i < count; i++) {
-    console.log(`  ${i + 1}. ${generateToken()}`);
+function loadPrivateKeyPem() {
+    const filePath = process.env.LINGUAKIDS_PREMIUM_PRIVATE_KEY_FILE || DEFAULT_KEY_PATH;
+    if (!fs.existsSync(filePath)) {
+        throw new Error(`missing_private_key:${filePath}`);
+    }
+    return fs.readFileSync(filePath, 'utf8');
 }
-console.log('─'.repeat(30));
-console.log(`\n⚠️  These tokens are for distribution to paying customers.`);
-console.log(`    Do NOT share this script or commit it to the web bundle.\n`);
+
+async function importPrivateKey(pem) {
+    const base64 = pem
+        .replace(/-----BEGIN PRIVATE KEY-----/g, '')
+        .replace(/-----END PRIVATE KEY-----/g, '')
+        .replace(/\s+/g, '');
+    const keyBytes = Buffer.from(base64, 'base64');
+    return webcrypto.subtle.importKey(
+        'pkcs8',
+        keyBytes,
+        { name: 'ECDSA', namedCurve: 'P-256' },
+        false,
+        ['sign']
+    );
+}
+
+function buildPayload() {
+    const now = Math.floor(Date.now() / 1000);
+    const type = process.env.LINGUAKIDS_PREMIUM_TOKEN_TYPE || 'lifetime';
+    const days = Number.parseInt(process.env.LINGUAKIDS_PREMIUM_TOKEN_DAYS || '0', 10);
+    const payload = {
+        v: TOKEN_VERSION,
+        a: TOKEN_AUDIENCE,
+        t: type,
+        i: now,
+        n: randomTokenId(),
+    };
+
+    if (Number.isFinite(days) && days > 0) {
+        payload.e = now + (days * 24 * 60 * 60);
+    }
+
+    return payload;
+}
+
+async function signPayload(privateKey, payloadSegment) {
+    const signature = await webcrypto.subtle.sign(
+        { name: 'ECDSA', hash: 'SHA-256' },
+        privateKey,
+        new TextEncoder().encode(payloadSegment)
+    );
+    return toBase64Url(Buffer.from(signature));
+}
+
+async function generateToken(privateKey) {
+    const payload = buildPayload();
+    const payloadSegment = toBase64Url(Buffer.from(JSON.stringify(payload), 'utf8'));
+    const signatureSegment = await signPayload(privateKey, payloadSegment);
+    return `${TOKEN_PREFIX}.${payloadSegment}.${signatureSegment}`;
+}
+
+async function main() {
+    const count = Number.parseInt(process.argv[2] || '5', 10);
+    const pem = loadPrivateKeyPem();
+    const privateKey = await importPrivateKey(pem);
+
+    console.log(`\n🔑 LinguaKids Signed Premium Tokens (${count}):\n`);
+    console.log('─'.repeat(30));
+    for (let i = 0; i < count; i += 1) {
+        const token = await generateToken(privateKey);
+        console.log(`  ${i + 1}. ${token}`);
+    }
+    console.log('─'.repeat(30));
+    console.log('\n⚠️  Private key stays outside the repo and outside the web bundle.\n');
+}
+
+main().catch((error) => {
+    console.error(error.message || error);
+    process.exit(1);
+});

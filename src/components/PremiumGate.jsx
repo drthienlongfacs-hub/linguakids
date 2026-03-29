@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isPremium, unlockPremium, startTrial, PREMIUM_FEATURES } from '../services/premiumService';
+import {
+    isPremium,
+    unlockPremium,
+    startTrial,
+    PREMIUM_FEATURES,
+    PREMIUM_TOKEN_PLACEHOLDER,
+} from '../services/premiumService';
 
 /**
  * PremiumGate — wraps content that requires premium.
@@ -15,8 +21,8 @@ export default function PremiumGate({ children, featureName = '' }) {
 
     if (unlocked) return children;
 
-    const handleUnlock = () => {
-        const result = unlockPremium(code);
+    const handleUnlock = async () => {
+        const result = await unlockPremium(code);
         setMsg(result);
         if (result.success) {
             setTimeout(() => setUnlocked(true), 1500);
@@ -57,9 +63,8 @@ export default function PremiumGate({ children, featureName = '' }) {
 
                     {/* Price badge */}
                     <div className="premium-gate__price">
-                        <span className="premium-gate__price-old">199.000₫</span>
-                        <span className="premium-gate__price-current">99.000₫</span>
-                        <span className="premium-gate__price-label">Trọn đời • Một lần duy nhất</span>
+                        <span className="premium-gate__price-current">Premium access</span>
+                        <span className="premium-gate__price-label">Kích hoạt bằng token ký số hoặc trial nội bộ</span>
                     </div>
 
                     {/* CTA buttons */}
@@ -67,7 +72,7 @@ export default function PremiumGate({ children, featureName = '' }) {
                         className="premium-gate__btn-buy"
                         onClick={() => navigate('/premium')}
                     >
-                        🛒 Mua Premium
+                        🧾 Xem tùy chọn kích hoạt
                     </button>
 
                     <button
@@ -83,11 +88,14 @@ export default function PremiumGate({ children, featureName = '' }) {
                         <div className="premium-gate__unlock-row">
                             <input
                                 type="text"
-                                placeholder="LK-XXXXXXXX-XXXX"
+                                placeholder={PREMIUM_TOKEN_PLACEHOLDER}
                                 value={code}
-                                onChange={e => setCode(e.target.value.toUpperCase())}
+                                onChange={e => setCode(e.target.value)}
                                 className="premium-gate__input"
-                                maxLength={15}
+                                maxLength={240}
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
                             />
                             <button onClick={handleUnlock} className="premium-gate__btn-unlock">
                                 Kích hoạt
