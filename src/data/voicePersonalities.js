@@ -87,11 +87,13 @@ export const VOICE_PERSONALITIES = [
         description: 'Clear, authoritative news anchor voice',
         descriptionVi: 'Giọng MC truyền hình, rõ ràng, truyền cảm',
         gender: 'male',
-        pitch: 0.95,
-        rate: 0.92,
-        // Subtle variations for natural sound
-        pitchVariation: 0.03,
-        rateVariation: 0.02,
+        // RCA-040v2: 3-axis differentiation
+        // Rate = PRIMARY differentiator (most audible)
+        // Pitch = SECONDARY (moderate, Android-safe 0.95-1.10)
+        // Volume = TERTIARY (warmth vs projection)
+        pitch: 0.97,     // slightly low = authoritative
+        rate: 0.90,       // measured, deliberate pace
+        volume: 1.0,      // full projection
         color: '#3B82F6',
     },
     {
@@ -102,10 +104,9 @@ export const VOICE_PERSONALITIES = [
         description: 'Warm, conversational, everyday speech',
         descriptionVi: 'Giọng nữ ấm áp, giao tiếp hàng ngày',
         gender: 'female',
-        pitch: 1.05,
-        rate: 0.95,
-        pitchVariation: 0.04,
-        rateVariation: 0.03,
+        pitch: 1.03,      // warm, friendly
+        rate: 0.93,       // comfortable conversational
+        volume: 0.90,     // intimate, not shouting
         color: '#10B981',
     },
     {
@@ -116,10 +117,9 @@ export const VOICE_PERSONALITIES = [
         description: 'Young, dynamic, podcast presenter style',
         descriptionVi: 'Trẻ trung, năng động, kiểu podcast',
         gender: 'female',
-        pitch: 1.12,
-        rate: 1.05,
-        pitchVariation: 0.05,
-        rateVariation: 0.04,
+        pitch: 1.08,      // bright, youthful
+        rate: 1.15,       // FAST — most distinctive trait
+        volume: 1.0,      // energetic projection
         color: '#F59E0B',
     },
     {
@@ -130,10 +130,9 @@ export const VOICE_PERSONALITIES = [
         description: 'Deep, expressive, audiobook narrator',
         descriptionVi: 'Giọng nam trầm ấm, như đọc truyện',
         gender: 'male',
-        pitch: 0.88,
-        rate: 0.85,
-        pitchVariation: 0.04,
-        rateVariation: 0.03,
+        pitch: 0.95,      // low end of safe range
+        rate: 0.72,       // VERY SLOW — audiobook pace, most distinctive
+        volume: 0.85,     // intimate narration
         color: '#8B5CF6',
     },
     {
@@ -144,10 +143,9 @@ export const VOICE_PERSONALITIES = [
         description: 'Refined, elegant, diplomatic speaker',
         descriptionVi: 'Giọng nữ sang trọng, lịch thiệp',
         gender: 'female',
-        pitch: 0.98,
-        rate: 0.88,
-        pitchVariation: 0.02,
-        rateVariation: 0.02,
+        pitch: 1.0,       // neutral, polished
+        rate: 0.82,       // slow, measured, deliberate
+        volume: 0.88,     // composed, not loud
         color: '#EC4899',
     },
     {
@@ -158,10 +156,9 @@ export const VOICE_PERSONALITIES = [
         description: 'Engaging TED Talk presenter, motivational',
         descriptionVi: 'Giọng thuyết giảng cuốn hút kiểu TED',
         gender: 'male',
-        pitch: 1.02,
-        rate: 1.0,
-        pitchVariation: 0.05,
-        rateVariation: 0.04,
+        pitch: 1.05,      // confident, upbeat
+        rate: 1.05,       // brisk, engaging pace
+        volume: 1.0,      // strong projection
         color: '#EF4444',
     },
 ];
@@ -289,15 +286,26 @@ export function findPersonalityVoice(voices, accentId, personalityId) {
 
 export function getPersonalityProsody(personalityId) {
     const p = VOICE_PERSONALITIES.find(v => v.id === personalityId);
-    if (!p) return { pitch: 1.0, rate: 0.9 };
+    if (!p) return { pitch: 1.0, rate: 0.95, volume: 1.0 };
 
-    // Add subtle randomization (±variation) for natural sound
-    const pitchJitter = (Math.random() - 0.5) * 2 * (p.pitchVariation || 0.03);
-    const rateJitter = (Math.random() - 0.5) * 2 * (p.rateVariation || 0.02);
+    const platform = detectPlatform();
+    // RCA-040v2: On Android, pitch outside 0.93-1.12 causes distortion
+    // Use rate as primary differentiator (0.72-1.15 = very audible)
+    // Volume as secondary (0.80-1.0 = warmth vs projection)
+    const isAndroid = (platform === 'android');
+
+    // Minimal jitter — just enough to avoid robotic repetition
+    const rateJitter = (Math.random() - 0.5) * 0.04; // ±0.02
+
+    // Clamp pitch to platform-safe range
+    const safePitch = isAndroid
+        ? Math.max(0.95, Math.min(1.10, p.pitch))
+        : Math.max(0.90, Math.min(1.15, p.pitch));
 
     return {
-        pitch: Math.max(0.5, Math.min(2.0, p.pitch + pitchJitter)),
-        rate: Math.max(0.5, Math.min(2.0, p.rate + rateJitter)),
+        pitch: safePitch,
+        rate: Math.max(0.65, Math.min(1.3, p.rate + rateJitter)),
+        volume: Math.max(0.7, Math.min(1.0, p.volume || 1.0)),
     };
 }
 

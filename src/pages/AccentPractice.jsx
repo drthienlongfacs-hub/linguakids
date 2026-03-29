@@ -91,7 +91,7 @@ export default function AccentPractice() {
 
         u.pitch = prosody.pitch;
         u.rate = rateOverride || prosody.rate;
-        u.volume = 1.0;
+        u.volume = prosody.volume || 1.0;
         u.onend = () => setIsSpeaking(false);
         u.onerror = () => setIsSpeaking(false);
         window.speechSynthesis?.speak(u);
