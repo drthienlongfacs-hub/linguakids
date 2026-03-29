@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-29T22:47:14.823Z",
-  "version": "video-lessons-88de5d5bd85b",
+  "generatedAt": "2026-03-29T23:43:43.455Z",
+  "version": "video-lessons-9bf16b0a9791",
   "summary": {
     "totalLessons": 120,
-    "candidateLessons": 8,
+    "candidateLessons": 13,
     "reviewQueueLessons": 17,
     "readyToPublishLessons": 0,
-    "blockedLessons": 95,
+    "blockedLessons": 90,
     "publicLessons": 0
   },
   "decisionSchema": {
@@ -42,18 +42,18 @@
       "wave": 1,
       "targetSize": 12,
       "lessonIds": [
+        "k-p1",
+        "k-p2",
+        "k-p3",
         "k-p4",
+        "k-p7",
+        "k-p8",
         "k-a3",
         "k-s5",
         "k-s6",
         "b-v1",
         "b-v5",
-        "b-g1",
-        "b-g4",
-        "b-l4",
-        "b-pr3",
-        "b-pr4",
-        "b-pr5"
+        "b-g1"
       ],
       "publicableNowCount": 0,
       "greenCount": 0,
@@ -64,6 +64,11 @@
       "wave": 2,
       "targetSize": 24,
       "lessonIds": [
+        "b-g4",
+        "b-l4",
+        "b-pr3",
+        "b-pr4",
+        "b-pr5",
         "b-pr6",
         "i-g3",
         "i-g5",
@@ -81,7 +86,7 @@
       "publicableNowCount": 0,
       "greenCount": 0,
       "yellowCount": 0,
-      "redCount": 13
+      "redCount": 18
     },
     {
       "wave": 3,
@@ -105,23 +110,19 @@
   "items": [
     {
       "lessonId": "k-p1",
-      "status": "blocked",
+      "status": "candidate",
       "levelId": "kids-prea1",
       "levelTitle": "Kids Foundation",
       "categoryId": "k-phonics",
       "categoryTitle": "Phonics & ABC",
       "title": "ABC Song",
       "titleVi": "Bài hát ABC",
-      "riskScore": 0,
+      "riskScore": 55,
       "autoDecision": "red",
-      "blockingReasons": [
-        "age_appropriateness_risk"
-      ],
+      "blockingReasons": [],
       "autoReasons": [
-        "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
-        "alignment_suspect",
         "human_review_pending",
         "exact_subtitles_not_ready"
       ],
@@ -131,7 +132,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": null,
+      "wave": 1,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p1 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p1 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -139,23 +140,19 @@
     },
     {
       "lessonId": "k-p2",
-      "status": "blocked",
+      "status": "candidate",
       "levelId": "kids-prea1",
       "levelTitle": "Kids Foundation",
       "categoryId": "k-phonics",
       "categoryTitle": "Phonics & ABC",
       "title": "Phonics Song",
       "titleVi": "Bài hát Phonics",
-      "riskScore": 0,
+      "riskScore": 55,
       "autoDecision": "red",
-      "blockingReasons": [
-        "age_appropriateness_risk"
-      ],
+      "blockingReasons": [],
       "autoReasons": [
-        "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
-        "alignment_suspect",
         "human_review_pending",
         "exact_subtitles_not_ready"
       ],
@@ -165,7 +162,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": null,
+      "wave": 1,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p2 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p2 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -173,23 +170,19 @@
     },
     {
       "lessonId": "k-p3",
-      "status": "blocked",
+      "status": "candidate",
       "levelId": "kids-prea1",
       "levelTitle": "Kids Foundation",
       "categoryId": "k-phonics",
       "categoryTitle": "Phonics & ABC",
       "title": "Phonics Song 2",
       "titleVi": "Bài hát Phonics 2",
-      "riskScore": 0,
+      "riskScore": 55,
       "autoDecision": "red",
-      "blockingReasons": [
-        "age_appropriateness_risk"
-      ],
+      "blockingReasons": [],
       "autoReasons": [
-        "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
-        "alignment_suspect",
         "human_review_pending",
         "exact_subtitles_not_ready"
       ],
@@ -199,7 +192,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": null,
+      "wave": 1,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p3 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p3 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -247,14 +240,13 @@
       "riskScore": 0,
       "autoDecision": "red",
       "blockingReasons": [
-        "title_category_mismatch",
         "age_appropriateness_risk"
       ],
       "autoReasons": [
-        "title_category_mismatch",
         "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
+        "alignment_suspect",
         "human_review_pending",
         "exact_subtitles_not_ready"
       ],
@@ -282,14 +274,13 @@
       "riskScore": 0,
       "autoDecision": "red",
       "blockingReasons": [
-        "title_category_mismatch",
         "age_appropriateness_risk"
       ],
       "autoReasons": [
-        "title_category_mismatch",
         "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
+        "alignment_suspect",
         "human_review_pending",
         "exact_subtitles_not_ready"
       ],
@@ -307,22 +298,17 @@
     },
     {
       "lessonId": "k-p7",
-      "status": "blocked",
+      "status": "candidate",
       "levelId": "kids-prea1",
       "levelTitle": "Kids Foundation",
       "categoryId": "k-phonics",
       "categoryTitle": "Phonics & ABC",
       "title": "Short Vowel Sounds",
       "titleVi": "Nguyên âm ngắn",
-      "riskScore": 0,
+      "riskScore": 55,
       "autoDecision": "red",
-      "blockingReasons": [
-        "title_category_mismatch",
-        "age_appropriateness_risk"
-      ],
+      "blockingReasons": [],
       "autoReasons": [
-        "title_category_mismatch",
-        "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
         "human_review_pending",
@@ -334,7 +320,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": null,
+      "wave": 1,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p7 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p7 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -342,22 +328,17 @@
     },
     {
       "lessonId": "k-p8",
-      "status": "blocked",
+      "status": "candidate",
       "levelId": "kids-prea1",
       "levelTitle": "Kids Foundation",
       "categoryId": "k-phonics",
       "categoryTitle": "Phonics & ABC",
       "title": "Long Vowel Sounds",
       "titleVi": "Nguyên âm dài",
-      "riskScore": 0,
+      "riskScore": 55,
       "autoDecision": "red",
-      "blockingReasons": [
-        "title_category_mismatch",
-        "age_appropriateness_risk"
-      ],
+      "blockingReasons": [],
       "autoReasons": [
-        "title_category_mismatch",
-        "age_appropriateness_risk",
         "no_canonical_source",
         "license_review_pending",
         "human_review_pending",
@@ -369,7 +350,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": null,
+      "wave": 1,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p8 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p8 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -1717,7 +1698,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": 1,
+      "wave": 2,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g4 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g4 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -1913,7 +1894,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": 1,
+      "wave": 2,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l4 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l4 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -2274,7 +2255,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": 1,
+      "wave": 2,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr3 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr3 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -2304,7 +2285,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": 1,
+      "wave": 2,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr4 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr4 --reviewer \"<name>\" --reason-code \"<code>\""
@@ -2335,7 +2316,7 @@
       "canonicalSrc": null,
       "manualReviewStatus": "pending",
       "rejectionReasonCode": null,
-      "wave": 1,
+      "wave": 2,
       "reviewActions": {
         "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr5 --reviewer \"<name>\" --evidence-url \"<url>\"",
         "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr5 --reviewer \"<name>\" --reason-code \"<code>\""

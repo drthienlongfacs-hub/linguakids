@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-29T22:47:14.821Z",
-  "version": "video-lessons-88de5d5bd85b",
+  "generatedAt": "2026-03-29T23:43:43.453Z",
+  "version": "video-lessons-9bf16b0a9791",
   "policy": {
     "mediaHost": {
       "baseUrl": "https://cdn.linguakids.example.invalid/",
@@ -37,10 +37,10 @@
     "totalQuizQuestionCount": 600,
     "publicQuizQuestionCount": 0,
     "hiddenLessonCount": 0,
-    "candidateLessonCount": 8,
+    "candidateLessonCount": 13,
     "reviewQueueLessonCount": 17,
     "readyToPublishLessonCount": 0,
-    "blockedLessonCount": 95,
+    "blockedLessonCount": 90,
     "draftLessonCount": 0,
     "retiredLessonCount": 0,
     "emptyPublicLevelCount": 4,
@@ -75,7 +75,7 @@
               "levelId": "kids-prea1",
               "categoryId": "k-phonics",
               "order": 1,
-              "status": "blocked",
+              "status": "candidate",
               "quiz": [
                 {
                   "id": "q1",
@@ -236,9 +236,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=cR-Qr1V8e_w",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "cR-Qr1V8e_w",
+                    "title": "The Alphabet Chant + More | ABC Songs for Preschool | Super Simple Songs",
+                    "channel": "Super Simple Songs - Kids Songs",
+                    "confidence": 0.75,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=hq3yfQnllfQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "hq3yfQnllfQ"
+                    "youtubeId": "hq3yfQnllfQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -262,16 +276,14 @@
                   "youtubeId": "hq3yfQnllfQ"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
+                "contentMatchStatus": "aligned",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.458,
-                "riskScore": 0,
+                "riskScore": 55,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
-                  "alignment_suspect",
                   "human_review_pending",
                   "exact_subtitles_not_ready"
                 ],
@@ -281,16 +293,23 @@
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Song Super Simple Songs english lesson",
+                  "confidence": 0.75,
+                  "harvestedTitle": "The Alphabet Chant + More | ABC Songs for Preschool | Super Simple Songs",
+                  "harvestedChannel": "Super Simple Songs - Kids Songs",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=cR-Qr1V8e_w",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
-                  "titleCategoryMatch": false,
-                  "ageAppropriate": false,
+                  "titleCategoryMatch": true,
+                  "ageAppropriate": true,
                   "licenseValid": false,
                   "scriptAcceptable": true,
                   "quizAcceptable": true
                 },
-                "blockingReasons": [
-                  "age_appropriateness_risk"
-                ],
+                "blockingReasons": [],
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -662,7 +681,7 @@
               "levelId": "kids-prea1",
               "categoryId": "k-phonics",
               "order": 2,
-              "status": "blocked",
+              "status": "candidate",
               "quiz": [
                 {
                   "id": "q1",
@@ -823,9 +842,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=Bfp0DQpn_4I",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "Bfp0DQpn_4I",
+                    "title": "Super Simple Phonics - \"L song\" and mini-lesson | Super Simple Songs",
+                    "channel": "Super Simple Songs - Kids Songs",
+                    "confidence": 0.9,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=BELlZKpi1Zs",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "BELlZKpi1Zs"
+                    "youtubeId": "BELlZKpi1Zs",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -849,16 +882,14 @@
                   "youtubeId": "BELlZKpi1Zs"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
+                "contentMatchStatus": "aligned",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.375,
-                "riskScore": 0,
+                "riskScore": 55,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
-                  "alignment_suspect",
                   "human_review_pending",
                   "exact_subtitles_not_ready"
                 ],
@@ -868,16 +899,23 @@
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Phonics Song Super Simple Songs english lesson",
+                  "confidence": 0.9,
+                  "harvestedTitle": "Super Simple Phonics - \"L song\" and mini-lesson | Super Simple Songs",
+                  "harvestedChannel": "Super Simple Songs - Kids Songs",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=Bfp0DQpn_4I",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
-                  "titleCategoryMatch": false,
-                  "ageAppropriate": false,
+                  "titleCategoryMatch": true,
+                  "ageAppropriate": true,
                   "licenseValid": false,
                   "scriptAcceptable": true,
                   "quizAcceptable": true
                 },
-                "blockingReasons": [
-                  "age_appropriateness_risk"
-                ],
+                "blockingReasons": [],
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -1249,7 +1287,7 @@
               "levelId": "kids-prea1",
               "categoryId": "k-phonics",
               "order": 3,
-              "status": "blocked",
+              "status": "candidate",
               "quiz": [
                 {
                   "id": "q1",
@@ -1410,9 +1448,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=ffeZXPtTGC4",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "ffeZXPtTGC4",
+                    "title": "Phonics Song 2 (new version)",
+                    "channel": "KidsTV123",
+                    "confidence": 0.775,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=36IBDpTRVNE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "36IBDpTRVNE"
+                    "youtubeId": "36IBDpTRVNE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -1436,16 +1488,14 @@
                   "youtubeId": "36IBDpTRVNE"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
+                "contentMatchStatus": "aligned",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.357,
-                "riskScore": 0,
+                "riskScore": 55,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
-                  "alignment_suspect",
                   "human_review_pending",
                   "exact_subtitles_not_ready"
                 ],
@@ -1455,16 +1505,23 @@
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Phonics Song 2 Kids TV english lesson",
+                  "confidence": 0.775,
+                  "harvestedTitle": "Phonics Song 2 (new version)",
+                  "harvestedChannel": "KidsTV123",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=ffeZXPtTGC4",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
-                  "titleCategoryMatch": false,
-                  "ageAppropriate": false,
+                  "titleCategoryMatch": true,
+                  "ageAppropriate": true,
                   "licenseValid": false,
                   "scriptAcceptable": true,
                   "quizAcceptable": true
                 },
-                "blockingReasons": [
-                  "age_appropriateness_risk"
-                ],
+                "blockingReasons": [],
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -1997,9 +2054,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=GiSyhDv51s8",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "GiSyhDv51s8",
+                    "title": "Letter A Song | Learn the Alphabet with Matt | What Starts with A?",
+                    "channel": "Dream English Kids",
+                    "confidence": 0.967,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=eEmXHJX7Wb0",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "eEmXHJX7Wb0"
+                    "youtubeId": "eEmXHJX7Wb0",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -2039,6 +2110,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Learn Letter A Dream English Kids english lesson",
+                  "confidence": 0.967,
+                  "harvestedTitle": "Letter A Song | Learn the Alphabet with Matt | What Starts with A?",
+                  "harvestedChannel": "Dream English Kids",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=GiSyhDv51s8",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -2580,9 +2660,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "9yE1bK6_ICw",
+                    "title": "The ABC Song",
+                    "channel": "Maple Leaf Learning",
+                    "confidence": 0.6,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=8IW3RB1vVTg",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "8IW3RB1vVTg"
+                    "youtubeId": "8IW3RB1vVTg",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -2606,16 +2700,16 @@
                   "youtubeId": "8IW3RB1vVTg"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
+                "contentMatchStatus": "suspect",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.136,
                 "riskScore": 0,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "title_category_mismatch",
                   "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
+                  "alignment_suspect",
                   "human_review_pending",
                   "exact_subtitles_not_ready"
                 ],
@@ -2625,6 +2719,15 @@
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Uppercase Maple Leaf Learning english lesson",
+                  "confidence": 0.6,
+                  "harvestedTitle": "The ABC Song",
+                  "harvestedChannel": "Maple Leaf Learning",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
                   "ageAppropriate": false,
@@ -2633,7 +2736,6 @@
                   "quizAcceptable": true
                 },
                 "blockingReasons": [
-                  "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
                 "reviewedBy": null,
@@ -3168,9 +3270,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "9yE1bK6_ICw",
+                    "title": "The ABC Song",
+                    "channel": "Maple Leaf Learning",
+                    "confidence": 0.6,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=_UR-l3QI2nE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "_UR-l3QI2nE"
+                    "youtubeId": "_UR-l3QI2nE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -3194,16 +3310,16 @@
                   "youtubeId": "_UR-l3QI2nE"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
+                "contentMatchStatus": "suspect",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.273,
                 "riskScore": 0,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "title_category_mismatch",
                   "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
+                  "alignment_suspect",
                   "human_review_pending",
                   "exact_subtitles_not_ready"
                 ],
@@ -3213,6 +3329,15 @@
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Lowercase Maple Leaf Learning english lesson",
+                  "confidence": 0.6,
+                  "harvestedTitle": "The ABC Song",
+                  "harvestedChannel": "Maple Leaf Learning",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
                   "ageAppropriate": false,
@@ -3221,7 +3346,6 @@
                   "quizAcceptable": true
                 },
                 "blockingReasons": [
-                  "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
                 "reviewedBy": null,
@@ -3595,7 +3719,7 @@
               "levelId": "kids-prea1",
               "categoryId": "k-phonics",
               "order": 7,
-              "status": "blocked",
+              "status": "candidate",
               "quiz": [
                 {
                   "id": "q1",
@@ -3756,9 +3880,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=4TjcT7Gto3U",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "4TjcT7Gto3U",
+                    "title": "The Vowel Song: Long and Short Vowel Sounds | English Songs | Scratch Garden",
+                    "channel": "Scratch Garden",
+                    "confidence": 0.775,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=RUSCz41aDug",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "RUSCz41aDug"
+                    "youtubeId": "RUSCz41aDug",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -3782,14 +3920,12 @@
                   "youtubeId": "RUSCz41aDug"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
+                "contentMatchStatus": "aligned",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.308,
-                "riskScore": 0,
+                "riskScore": 55,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "title_category_mismatch",
-                  "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
                   "human_review_pending",
@@ -3801,17 +3937,23 @@
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Short Vowel Sounds Dream English Kids english lesson",
+                  "confidence": 0.775,
+                  "harvestedTitle": "The Vowel Song: Long and Short Vowel Sounds | English Songs | Scratch Garden",
+                  "harvestedChannel": "Scratch Garden",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=4TjcT7Gto3U",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
-                  "titleCategoryMatch": false,
-                  "ageAppropriate": false,
+                  "titleCategoryMatch": true,
+                  "ageAppropriate": true,
                   "licenseValid": false,
                   "scriptAcceptable": true,
                   "quizAcceptable": true
                 },
-                "blockingReasons": [
-                  "title_category_mismatch",
-                  "age_appropriateness_risk"
-                ],
+                "blockingReasons": [],
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -4183,7 +4325,7 @@
               "levelId": "kids-prea1",
               "categoryId": "k-phonics",
               "order": 8,
-              "status": "blocked",
+              "status": "candidate",
               "quiz": [
                 {
                   "id": "q1",
@@ -4344,9 +4486,23 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=xPx9xFyzyCc",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "xPx9xFyzyCc",
+                    "title": "These Are the Long Vowel Sounds  Jack Hartmann",
+                    "channel": "Jack Hartmann Kids Music Channel",
+                    "confidence": 1,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=gp1UmVSlLJ4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "gp1UmVSlLJ4"
+                    "youtubeId": "gp1UmVSlLJ4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -4370,14 +4526,12 @@
                   "youtubeId": "gp1UmVSlLJ4"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
+                "contentMatchStatus": "aligned",
                 "automatedCheckStatus": "triaged",
                 "automatedMatchScore": 0.346,
-                "riskScore": 0,
+                "riskScore": 55,
                 "autoDecision": "red",
                 "autoReasons": [
-                  "title_category_mismatch",
-                  "age_appropriateness_risk",
                   "no_canonical_source",
                   "license_review_pending",
                   "human_review_pending",
@@ -4389,17 +4543,23 @@
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
                 },
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Long Vowel Sounds Jack Hartmann english lesson",
+                  "confidence": 1,
+                  "harvestedTitle": "These Are the Long Vowel Sounds  Jack Hartmann",
+                  "harvestedChannel": "Jack Hartmann Kids Music Channel",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=xPx9xFyzyCc",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                },
                 "reviewChecklist": {
-                  "titleCategoryMatch": false,
-                  "ageAppropriate": false,
+                  "titleCategoryMatch": true,
+                  "ageAppropriate": true,
                   "licenseValid": false,
                   "scriptAcceptable": true,
                   "quizAcceptable": true
                 },
-                "blockingReasons": [
-                  "title_category_mismatch",
-                  "age_appropriateness_risk"
-                ],
+                "blockingReasons": [],
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -4944,7 +5104,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=DR-cfDsHCGA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "DR-cfDsHCGA"
+                    "youtubeId": "DR-cfDsHCGA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -4986,6 +5150,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -5531,7 +5704,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=0TgLtF3PMOc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "0TgLtF3PMOc"
+                    "youtubeId": "0TgLtF3PMOc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -5573,6 +5750,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -6118,7 +6304,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Yt8GFgxlITs",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Yt8GFgxlITs"
+                    "youtubeId": "Yt8GFgxlITs",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -6160,6 +6350,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -6705,7 +6904,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=e0dJWfQHF8Y",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "e0dJWfQHF8Y"
+                    "youtubeId": "e0dJWfQHF8Y",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -6747,6 +6950,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -7293,7 +7505,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=85M1yxIcHpw",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "85M1yxIcHpw"
+                    "youtubeId": "85M1yxIcHpw",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -7335,6 +7551,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -7881,7 +8106,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=IjcX3MVSdyA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "IjcX3MVSdyA"
+                    "youtubeId": "IjcX3MVSdyA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -7923,6 +8152,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -8479,7 +8717,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=jYAWf8Y91hA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "jYAWf8Y91hA"
+                    "youtubeId": "jYAWf8Y91hA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -8521,6 +8763,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -9067,7 +9318,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=ybt2jhCQ3lA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "ybt2jhCQ3lA"
+                    "youtubeId": "ybt2jhCQ3lA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -9109,6 +9364,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -9655,7 +9919,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=zxIpA5nF_LY",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "zxIpA5nF_LY"
+                    "youtubeId": "zxIpA5nF_LY",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -9697,6 +9965,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -10243,7 +10520,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=tRNy2i75tCc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "tRNy2i75tCc"
+                    "youtubeId": "tRNy2i75tCc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -10285,6 +10566,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -10831,7 +11121,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=GFSsRYmSlZ0",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "GFSsRYmSlZ0"
+                    "youtubeId": "GFSsRYmSlZ0",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -10873,6 +11167,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -11419,7 +11722,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=OEbRDtCAFdU",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "OEbRDtCAFdU"
+                    "youtubeId": "OEbRDtCAFdU",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -11461,6 +11768,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -12017,7 +12333,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=OwRmivbNgQk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "OwRmivbNgQk"
+                    "youtubeId": "OwRmivbNgQk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -12059,6 +12379,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -12604,7 +12933,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=pWepfJ-8XU0",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "pWepfJ-8XU0"
+                    "youtubeId": "pWepfJ-8XU0",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -12646,6 +12979,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -13191,7 +13533,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=XqZsoesa55w",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "XqZsoesa55w"
+                    "youtubeId": "XqZsoesa55w",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -13231,6 +13577,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -13774,7 +14129,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=zXEq-QO3xTg",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "zXEq-QO3xTg"
+                    "youtubeId": "zXEq-QO3xTg",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -13816,6 +14175,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -14362,7 +14730,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Oxw6FoUNeT4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Oxw6FoUNeT4"
+                    "youtubeId": "Oxw6FoUNeT4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -14404,6 +14776,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -14950,7 +15331,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=_Ir0Mc6Qilo",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "_Ir0Mc6Qilo"
+                    "youtubeId": "_Ir0Mc6Qilo",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -14992,6 +15377,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -15548,7 +15942,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=ZanHgPprl-0",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "ZanHgPprl-0"
+                    "youtubeId": "ZanHgPprl-0",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -15590,6 +15988,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.667,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -16135,7 +16542,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=h4eueDYPTIg",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "h4eueDYPTIg"
+                    "youtubeId": "h4eueDYPTIg",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -16177,6 +16588,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -16723,7 +17143,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=QkHQ0CYwjaI",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "QkHQ0CYwjaI"
+                    "youtubeId": "QkHQ0CYwjaI",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -16765,6 +17189,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -17311,7 +17744,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=-ozG4PFFP5A",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "-ozG4PFFP5A"
+                    "youtubeId": "-ozG4PFFP5A",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -17353,6 +17790,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -17898,7 +18344,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=YVgv1EFJZHc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "YVgv1EFJZHc"
+                    "youtubeId": "YVgv1EFJZHc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -17940,6 +18390,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -18486,7 +18945,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=L_A_HjHZxfI",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "L_A_HjHZxfI"
+                    "youtubeId": "L_A_HjHZxfI",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -18528,6 +18991,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -19084,7 +19556,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=e_04ZrNroTo",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "e_04ZrNroTo"
+                    "youtubeId": "e_04ZrNroTo",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -19126,6 +19602,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -19671,7 +20156,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=yCjJyiqpAuU",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "yCjJyiqpAuU"
+                    "youtubeId": "yCjJyiqpAuU",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -19713,6 +20202,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -20258,7 +20756,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=0VLxWIHRD4E",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "0VLxWIHRD4E"
+                    "youtubeId": "0VLxWIHRD4E",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -20300,6 +20802,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -20846,7 +21357,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=v0aRb4rAq0I",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "v0aRb4rAq0I"
+                    "youtubeId": "v0aRb4rAq0I",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -20888,6 +21403,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -21434,7 +21958,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=LFrKYjrIDs8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "LFrKYjrIDs8"
+                    "youtubeId": "LFrKYjrIDs8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -21474,6 +22002,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.667,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -22017,7 +22554,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=w_lCi8U49mY",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "w_lCi8U49mY"
+                    "youtubeId": "w_lCi8U49mY",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -22057,6 +22598,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.667,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -22622,7 +23172,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=tFY9jK7OHYg",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "tFY9jK7OHYg"
+                    "youtubeId": "tFY9jK7OHYg",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -22663,6 +23217,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -23206,7 +23769,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=9AOAH0j14qQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "9AOAH0j14qQ"
+                    "youtubeId": "9AOAH0j14qQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -23247,6 +23814,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -23792,7 +24368,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=FHaObkHEkHQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "FHaObkHEkHQ"
+                    "youtubeId": "FHaObkHEkHQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -23833,6 +24413,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -24378,7 +24967,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=frN3nvhIHUk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "frN3nvhIHUk"
+                    "youtubeId": "frN3nvhIHUk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -24419,6 +25012,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -24964,7 +25566,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=EIQQAzaSsw8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "EIQQAzaSsw8"
+                    "youtubeId": "EIQQAzaSsw8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -25005,6 +25611,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -25548,7 +26163,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=rD6FRDd9Hew",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "rD6FRDd9Hew"
+                    "youtubeId": "rD6FRDd9Hew",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -25589,6 +26208,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -26144,7 +26772,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=MqjKOZSdG90",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "MqjKOZSdG90"
+                    "youtubeId": "MqjKOZSdG90",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -26185,6 +26817,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -26728,7 +27369,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=LppAASWtUZU",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "LppAASWtUZU"
+                    "youtubeId": "LppAASWtUZU",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -26769,6 +27414,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -27314,7 +27968,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=P2jvBE6DiHo",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "P2jvBE6DiHo"
+                    "youtubeId": "P2jvBE6DiHo",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -27355,6 +28013,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -27900,7 +28567,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=a9_a0kH1XYM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "a9_a0kH1XYM"
+                    "youtubeId": "a9_a0kH1XYM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -27941,6 +28612,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.667,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -28484,7 +29164,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=_k5DYl0el14",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "_k5DYl0el14"
+                    "youtubeId": "_k5DYl0el14",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -28525,6 +29209,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -29070,7 +29763,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=VSwsy6GEwOs",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "VSwsy6GEwOs"
+                    "youtubeId": "VSwsy6GEwOs",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -29111,6 +29808,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -29666,7 +30372,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Fw0rdSHzWFY",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Fw0rdSHzWFY"
+                    "youtubeId": "Fw0rdSHzWFY",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -29707,6 +30417,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -30252,7 +30971,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=d6J0OMjcQfc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "d6J0OMjcQfc"
+                    "youtubeId": "d6J0OMjcQfc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -30293,6 +31016,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -30838,7 +31570,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=7isSwerYaQc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "7isSwerYaQc"
+                    "youtubeId": "7isSwerYaQc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -30879,6 +31615,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -31424,7 +32169,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=QLR2pLUsl-Y",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "QLR2pLUsl-Y"
+                    "youtubeId": "QLR2pLUsl-Y",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -31465,6 +32214,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -32008,7 +32766,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=IxVT84N7Mbk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "IxVT84N7Mbk"
+                    "youtubeId": "IxVT84N7Mbk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -32049,6 +32811,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -32594,7 +33365,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=qD1pnquN_DM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "qD1pnquN_DM"
+                    "youtubeId": "qD1pnquN_DM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -32635,6 +33410,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -33190,7 +33974,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=UnEmEbWytI8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "UnEmEbWytI8"
+                    "youtubeId": "UnEmEbWytI8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -33231,6 +34019,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -33776,7 +34573,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=DPYJQSA-x50",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "DPYJQSA-x50"
+                    "youtubeId": "DPYJQSA-x50",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -33817,6 +34618,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -34362,7 +35172,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=bgfdqVmVjfk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "bgfdqVmVjfk"
+                    "youtubeId": "bgfdqVmVjfk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -34403,6 +35217,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -34948,7 +35771,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=XRG9LfZmChQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "XRG9LfZmChQ"
+                    "youtubeId": "XRG9LfZmChQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -34989,6 +35816,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -35534,7 +36370,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=q7Vqhpb0iIA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "q7Vqhpb0iIA"
+                    "youtubeId": "q7Vqhpb0iIA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -35575,6 +36415,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -36120,7 +36969,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=OuW5iLHG3G4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "OuW5iLHG3G4"
+                    "youtubeId": "OuW5iLHG3G4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -36161,6 +37014,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -36716,7 +37578,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=n4NVPg2kHv4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "n4NVPg2kHv4"
+                    "youtubeId": "n4NVPg2kHv4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -36757,6 +37623,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -37302,7 +38177,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=ldAKIzq7bvs",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "ldAKIzq7bvs"
+                    "youtubeId": "ldAKIzq7bvs",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -37343,6 +38222,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -37888,7 +38776,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Ft17a7tyjMM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Ft17a7tyjMM"
+                    "youtubeId": "Ft17a7tyjMM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -37929,6 +38821,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -38472,7 +39373,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Vu6UVwkUgzc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Vu6UVwkUgzc"
+                    "youtubeId": "Vu6UVwkUgzc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -38512,6 +39417,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -39055,7 +39969,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=oxWxft6i9E4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "oxWxft6i9E4"
+                    "youtubeId": "oxWxft6i9E4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -39096,6 +40014,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -39639,7 +40566,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=SphjRJgNbWc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "SphjRJgNbWc"
+                    "youtubeId": "SphjRJgNbWc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -39680,6 +40611,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -40245,7 +41185,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=CEa8IZy7hLk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "CEa8IZy7hLk"
+                    "youtubeId": "CEa8IZy7hLk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -40286,6 +41230,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -40831,7 +41784,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=uTB5I8V9Eog",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "uTB5I8V9Eog"
+                    "youtubeId": "uTB5I8V9Eog",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -40872,6 +41829,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -41417,7 +42383,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=MbVPhYPFWl0",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "MbVPhYPFWl0"
+                    "youtubeId": "MbVPhYPFWl0",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -41458,6 +42428,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -42001,7 +42980,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=0-6ZBRkZKWI",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "0-6ZBRkZKWI"
+                    "youtubeId": "0-6ZBRkZKWI",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -42042,6 +43025,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -42587,7 +43579,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=nI5zaB6QL-o",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "nI5zaB6QL-o"
+                    "youtubeId": "nI5zaB6QL-o",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -42628,6 +43624,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -43171,7 +44176,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=eplQBhE0-Hg",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "eplQBhE0-Hg"
+                    "youtubeId": "eplQBhE0-Hg",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -43211,6 +44220,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -43754,7 +44772,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=j25CFx-4g0I",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "j25CFx-4g0I"
+                    "youtubeId": "j25CFx-4g0I",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -43795,6 +44817,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -44340,7 +45371,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=iZnL2cb_w20",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "iZnL2cb_w20"
+                    "youtubeId": "iZnL2cb_w20",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -44381,6 +45416,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -44936,7 +45980,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=d3LPrhI0v-w",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "d3LPrhI0v-w"
+                    "youtubeId": "d3LPrhI0v-w",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -44977,6 +46025,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -45522,7 +46579,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=QHTdOq5MHZM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "QHTdOq5MHZM"
+                    "youtubeId": "QHTdOq5MHZM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -45563,6 +46624,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -46108,7 +47178,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=WQtbFDPOdT8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "WQtbFDPOdT8"
+                    "youtubeId": "WQtbFDPOdT8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -46149,6 +47223,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -46694,7 +47777,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=jAa58N4Jlos",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "jAa58N4Jlos"
+                    "youtubeId": "jAa58N4Jlos",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -46735,6 +47822,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -47280,7 +48376,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=sG1IH1vCvko",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "sG1IH1vCvko"
+                    "youtubeId": "sG1IH1vCvko",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -47321,6 +48421,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -47866,7 +48975,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=8_I2sg8Z7Yk",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "8_I2sg8Z7Yk"
+                    "youtubeId": "8_I2sg8Z7Yk",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -47907,6 +49020,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -48452,7 +49574,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=B0heWo1XGhc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "B0heWo1XGhc"
+                    "youtubeId": "B0heWo1XGhc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -48493,6 +49619,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -49036,7 +50171,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=GRxofEmo3HA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "GRxofEmo3HA"
+                    "youtubeId": "GRxofEmo3HA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -49077,6 +50216,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -49632,7 +50780,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=tn8ubczZpAo",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "tn8ubczZpAo"
+                    "youtubeId": "tn8ubczZpAo",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -49673,6 +50825,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -50218,7 +51379,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=aWAOqzudtSM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "aWAOqzudtSM"
+                    "youtubeId": "aWAOqzudtSM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -50259,6 +51424,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -50804,7 +51978,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=d0GKyzG9OWA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "d0GKyzG9OWA"
+                    "youtubeId": "d0GKyzG9OWA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -50845,6 +52023,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -51390,7 +52577,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=4zXys7i8Zrc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "4zXys7i8Zrc"
+                    "youtubeId": "4zXys7i8Zrc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -51431,6 +52622,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -51976,7 +53176,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=hUoEtGmXtIw",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "hUoEtGmXtIw"
+                    "youtubeId": "hUoEtGmXtIw",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -52017,6 +53221,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -52560,7 +53773,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Af4kqQ8hdhE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Af4kqQ8hdhE"
+                    "youtubeId": "Af4kqQ8hdhE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -52601,6 +53818,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -53156,7 +54382,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=paivy-gGQZA",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "paivy-gGQZA"
+                    "youtubeId": "paivy-gGQZA",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -53197,6 +54427,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -53740,7 +54979,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=H14bBuluwB8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "H14bBuluwB8"
+                    "youtubeId": "H14bBuluwB8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -53781,6 +55024,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.5,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -54324,7 +55576,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=arj7oStGLkU",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "arj7oStGLkU"
+                    "youtubeId": "arj7oStGLkU",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -54365,6 +55621,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -54908,7 +56173,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=LnJwH_PZXnM",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "LnJwH_PZXnM"
+                    "youtubeId": "LnJwH_PZXnM",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -54949,6 +56218,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -55494,7 +56772,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=YV4oYkIeGJc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "YV4oYkIeGJc"
+                    "youtubeId": "YV4oYkIeGJc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -55535,6 +56817,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -56080,7 +57371,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=5MgBikgcWnY",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "5MgBikgcWnY"
+                    "youtubeId": "5MgBikgcWnY",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -56121,6 +57416,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -56688,7 +57992,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=3IWtnBniKF4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "3IWtnBniKF4"
+                    "youtubeId": "3IWtnBniKF4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -56729,6 +58037,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -57274,7 +58591,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=AYLo2GJ3Mog",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "AYLo2GJ3Mog"
+                    "youtubeId": "AYLo2GJ3Mog",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -57315,6 +58636,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -57860,7 +59190,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=h98_IupNFAU",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "h98_IupNFAU"
+                    "youtubeId": "h98_IupNFAU",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -57901,6 +59235,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -58446,7 +59789,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "dQw4w9WgXcQ"
+                    "youtubeId": "dQw4w9WgXcQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -58487,6 +59834,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -59032,7 +60388,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=V-Ro66uMBX4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "V-Ro66uMBX4"
+                    "youtubeId": "V-Ro66uMBX4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -59073,6 +60433,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -59616,7 +60985,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=ChqnN3cKzXQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "ChqnN3cKzXQ"
+                    "youtubeId": "ChqnN3cKzXQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -59657,6 +61030,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -60212,7 +61594,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Sw61Uu8ftII",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Sw61Uu8ftII"
+                    "youtubeId": "Sw61Uu8ftII",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -60253,6 +61639,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -60798,7 +62193,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Zm8GNCdro4o",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Zm8GNCdro4o"
+                    "youtubeId": "Zm8GNCdro4o",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -60839,6 +62238,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -61382,7 +62790,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=RfTalFEeKKE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "RfTalFEeKKE"
+                    "youtubeId": "RfTalFEeKKE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -61423,6 +62835,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -61968,7 +63389,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=1KtKNkg4j3s",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "1KtKNkg4j3s"
+                    "youtubeId": "1KtKNkg4j3s",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -62009,6 +63434,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -62554,7 +63988,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=YaEG2aWJnZ8",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "YaEG2aWJnZ8"
+                    "youtubeId": "YaEG2aWJnZ8",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -62595,6 +64033,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -63140,7 +64587,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=Tt08KmFfIYQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "Tt08KmFfIYQ"
+                    "youtubeId": "Tt08KmFfIYQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -63181,6 +64632,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -63736,7 +65196,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=yvt8RzGNhBc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "yvt8RzGNhBc"
+                    "youtubeId": "yvt8RzGNhBc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -63776,6 +65240,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.667,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -64319,7 +65792,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=e-p-DuPevss",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "e-p-DuPevss"
+                    "youtubeId": "e-p-DuPevss",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -64360,6 +65837,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -64905,7 +66391,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=iTJgIgCtNi4",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "iTJgIgCtNi4"
+                    "youtubeId": "iTJgIgCtNi4",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -64946,6 +66436,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -65491,7 +66990,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=UuOWNNvupik",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "UuOWNNvupik"
+                    "youtubeId": "UuOWNNvupik",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -65532,6 +67035,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.167,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -66077,7 +67589,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=DsFT8exiG5o",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "DsFT8exiG5o"
+                    "youtubeId": "DsFT8exiG5o",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -66118,6 +67634,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -66663,7 +68188,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=dItUGF8GdTw",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "dItUGF8GdTw"
+                    "youtubeId": "dItUGF8GdTw",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -66703,6 +68232,15 @@
                   "channelMatch": true,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": true,
@@ -67256,7 +68794,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=wpjspHgHU9g",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "wpjspHgHU9g"
+                    "youtubeId": "wpjspHgHU9g",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -67297,6 +68839,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -67842,7 +69393,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=fkY_Bu5rrcE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "fkY_Bu5rrcE"
+                    "youtubeId": "fkY_Bu5rrcE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -67883,6 +69438,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -68428,7 +69992,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=ZnioDeQNlxQ",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "ZnioDeQNlxQ"
+                    "youtubeId": "ZnioDeQNlxQ",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -68469,6 +70037,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -69014,7 +70591,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=8xYMnb5Dyko",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "8xYMnb5Dyko"
+                    "youtubeId": "8xYMnb5Dyko",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -69055,6 +70636,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -69600,7 +71190,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=yoEezZD71sc",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "yoEezZD71sc"
+                    "youtubeId": "yoEezZD71sc",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -69641,6 +71235,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
@@ -70186,7 +71789,11 @@
                     "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=4uuGYHfnVRE",
                     "label": "Legacy YouTube reference",
-                    "youtubeId": "4uuGYHfnVRE"
+                    "youtubeId": "4uuGYHfnVRE",
+                    "title": null,
+                    "channel": null,
+                    "confidence": null,
+                    "source": null
                   }
                 ]
               },
@@ -70227,6 +71834,15 @@
                   "channelMatch": false,
                   "keywordCoverage": 0.333,
                   "reviewSnapshotUrl": null
+                },
+                "referenceHarvest": {
+                  "source": null,
+                  "query": null,
+                  "confidence": null,
+                  "harvestedTitle": null,
+                  "harvestedChannel": null,
+                  "harvestedUrl": null,
+                  "harvestedAt": null
                 },
                 "reviewChecklist": {
                   "titleCategoryMatch": false,
