@@ -74,7 +74,7 @@ export default function SpeakingCoachPanel({
                         {analysis.overallScore}%
                     </div>
                     <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>
-                        Coaching
+                        Coaching · Huấn luyện
                     </div>
                 </div>
             </div>
@@ -115,6 +115,9 @@ export default function SpeakingCoachPanel({
                         >
                             <div style={{ fontSize: '0.72rem', color: SPEAKING_UI_THEME.textMuted }}>
                                 {metric.label}
+                                {metric.labelVi && metric.labelVi !== metric.label && (
+                                    <span style={{ opacity: 0.7, marginLeft: 4 }}>· {metric.labelVi}</span>
+                                )}
                             </div>
                             <div style={{
                                 marginTop: '4px',
@@ -127,6 +130,11 @@ export default function SpeakingCoachPanel({
                             <div style={{ marginTop: '4px', fontSize: '0.7rem', color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.45 }}>
                                 {metric.insight}
                             </div>
+                            {metric.insightVi && metric.insightVi !== metric.insight && (
+                                <div style={{ marginTop: '2px', fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.4, opacity: 0.75, fontStyle: 'italic' }}>
+                                    {metric.insightVi}
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -140,19 +148,19 @@ export default function SpeakingCoachPanel({
                     marginBottom: '12px',
                 }}>
                     <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>WPM</div>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>WPM<br /><span style={{ opacity: 0.6, fontSize: '0.6rem' }}>Từ/phút</span></div>
                         <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.transcriptStats?.wpm || 0}</div>
                     </div>
                     <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Filler</div>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Filler<br /><span style={{ opacity: 0.6, fontSize: '0.6rem' }}>Từ đệm</span></div>
                         <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.signalBreakdown.fillerCount || 0}</div>
                     </div>
                     <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Diversity</div>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Diversity<br /><span style={{ opacity: 0.6, fontSize: '0.6rem' }}>Đa dạng</span></div>
                         <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{formatPercent(analysis.transcriptStats?.lexicalDiversity || 0)}</div>
                     </div>
                     <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Relevance</div>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Relevance<br /><span style={{ opacity: 0.6, fontSize: '0.6rem' }}>Liên quan</span></div>
                         <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.signalBreakdown.promptCoverage || 0}%</div>
                     </div>
                 </div>
@@ -166,7 +174,7 @@ export default function SpeakingCoachPanel({
                         color: SPEAKING_UI_THEME.textMuted,
                         marginBottom: '8px',
                     }}>
-                        Word-level alignment
+                        Word-level alignment · So khớp từng từ
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                         {analysis.referenceWordFeedback.map((word, index) => {
@@ -195,7 +203,7 @@ export default function SpeakingCoachPanel({
             {analysis.strengths?.length > 0 && (
                 <div style={{ marginBottom: '10px' }}>
                     <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.successText, marginBottom: '6px' }}>
-                        What went well
+                        What went well · Điểm tốt
                     </div>
                     <div style={{ display: 'grid', gap: '6px' }}>
                         {analysis.strengths.map((item) => (
@@ -221,7 +229,7 @@ export default function SpeakingCoachPanel({
             {analysis.recommendations?.length > 0 && (
                 <div style={{ marginBottom: footer ? '10px' : 0 }}>
                     <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.warningText, marginBottom: '6px' }}>
-                        Next-step coaching
+                        Next-step coaching · Gợi ý cải thiện
                     </div>
                     <div style={{ display: 'grid', gap: '6px' }}>
                         {analysis.recommendations.map((item) => (

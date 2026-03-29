@@ -145,14 +145,13 @@ function buildSourceBadge(playbackMode, hasControlledAudio) {
 export default function FreeSpeakingCoach() {
     const navigate = useNavigate();
     const { state, addXP, addSpeakingRecap, updateSkillScore } = useGame();
-    const { readiness } = useDeviceCapabilities();
+    useDeviceCapabilities();
     const [activeLang, setActiveLang] = useState('en');
     const [activeScenario, setActiveScenario] = useState(null);
     const [turnIndex, setTurnIndex] = useState(0);
     const [messages, setMessages] = useState([]);
     const [turnResults, setTurnResults] = useState([]);
     const [currentAnalysis, setCurrentAnalysis] = useState(null);
-    const [currentTranscript, setCurrentTranscript] = useState('');
     const [currentCoachReply, setCurrentCoachReply] = useState('');
     const [currentCoachReplyClipId, setCurrentCoachReplyClipId] = useState('');
     const [sessionSummary, setSessionSummary] = useState(null);
@@ -164,6 +163,7 @@ export default function FreeSpeakingCoach() {
     const [voicePackStatus, setVoicePackStatus] = useState('loading');
     const [coachPlaybackMode, setCoachPlaybackMode] = useState('idle');
     const audioRef = useRef(null);
+    const chatEndRef = useRef(null);
     const {
         phase,
         interimText,
@@ -178,9 +178,8 @@ export default function FreeSpeakingCoach() {
     const scenarios = useMemo(() => getFreeSpeakingScenarios(activeLang), [activeLang]);
     const currentTurn = activeScenario?.turns?.[turnIndex] || null;
     const activeAudioEntry = activeScenario ? getFreeSpeakingAudioEntry(voicePackManifest, activeScenario.id) : null;
-    const activeScenarioQA = activeScenario ? voicePackQA?.scenarios?.[activeScenario.id] : null;
     const studioAudioReady = !!activeAudioEntry;
-    const outputBadge = buildSourceBadge(coachPlaybackMode, studioAudioReady);
+    buildSourceBadge(coachPlaybackMode, studioAudioReady);
 
     useEffect(() => {
         let active = true;
@@ -228,6 +227,10 @@ export default function FreeSpeakingCoach() {
         setIsCoachSpeaking(false);
     }, []);
 
+    useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages, currentAnalysis, interimText, phase]);
+
     useEffect(() => () => {
         stopCoachPlayback();
         resetSession();
@@ -270,7 +273,6 @@ export default function FreeSpeakingCoach() {
                 };
 
                 setCurrentAnalysis(analysis);
-                setCurrentTranscript(transcript);
                 setCurrentCoachReply(coachReplyDecision.text);
                 setCurrentCoachReplyClipId(coachReplyDecision.clipId);
                 setTurnResults((previous) => [...previous, nextResult]);
@@ -367,7 +369,6 @@ export default function FreeSpeakingCoach() {
         setTurnIndex(0);
         setTurnResults([]);
         setCurrentAnalysis(null);
-        setCurrentTranscript('');
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setSessionSummary(null);
@@ -383,7 +384,6 @@ export default function FreeSpeakingCoach() {
         if (!activeScenario || !currentTurn) return;
         stopCoachPlayback();
         setCurrentAnalysis(null);
-        setCurrentTranscript('');
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
@@ -394,7 +394,6 @@ export default function FreeSpeakingCoach() {
         if (!activeScenario || !currentTurn) return;
         stopCoachPlayback();
         setCurrentAnalysis(null);
-        setCurrentTranscript('');
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
@@ -428,9 +427,9 @@ export default function FreeSpeakingCoach() {
                 recommendations: summary.priorities.length > 0
                     ? summary.priorities
                     : ['Keep practicing with one longer answer and one stronger example next time.'],
-                note: 'Session summary aggregated from guided speaking turns. It is transcript-based coaching, not model-based conversational AI scoring.',
+                note: 'Session summary aggregated from guided speaking turns. It is transcript-based coaching, not model-based conversational AI scoring. · Tổng kết này được gộp từ các lượt nói đã hoàn thành. Đây là coaching dựa trên transcript, không phải chấm hội thoại bằng mô hình AI.',
                 coachModel: 'guided_free_speaking_coach',
-                evidenceLevel: 'Prompt-aligned transcript coaching',
+                evidenceLevel: 'Prompt-aligned transcript coaching · Huấn luyện dựa trên transcript và mức độ bám sát câu hỏi',
                 strengths: summary.strengths,
                 risks: summary.priorities,
                 transcriptStats: {
@@ -456,7 +455,6 @@ export default function FreeSpeakingCoach() {
         const nextTurn = activeScenario.turns[nextIndex];
         setTurnIndex(nextIndex);
         setCurrentAnalysis(null);
-        setCurrentTranscript('');
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
@@ -481,7 +479,6 @@ export default function FreeSpeakingCoach() {
         setMessages([]);
         setTurnResults([]);
         setCurrentAnalysis(null);
-        setCurrentTranscript('');
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setSessionSummary(null);
@@ -498,10 +495,12 @@ export default function FreeSpeakingCoach() {
                 </div>
 
                 <div style={{ ...pageCardStyle, marginBottom: '12px' }}>
-                    <div style={sectionTitleStyle}>Guided open speaking</div>
+                    <div style={sectionTitleStyle}>Guided open speaking · Luyện nói tự do có hướng dẫn</div>
                     <p style={{ margin: '8px 0 0', color: SPEAKING_UI_THEME.textMuted, fontSize: '0.84rem', lineHeight: 1.65 }}>
                         Guided free speaking with studio coach audio, turn-by-turn capture, and transcript-driven feedback.
-                        This module is structured, evidence-based coaching, not model-based conversational AI scoring.
+                    </p>
+                    <p style={{ margin: '4px 0 0', color: SPEAKING_UI_THEME.textSoft, fontSize: '0.78rem', lineHeight: 1.55, fontStyle: 'italic' }}>
+                        Luyện nói tự do có audio huấn luyện viên, ghi âm từng lượt, phản hồi dựa trên bản ghi.
                     </p>
                 </div>
 
@@ -600,7 +599,7 @@ export default function FreeSpeakingCoach() {
                         );
                     })}
                 </div>
-            </div>
+            </div >
         );
     }
 
@@ -609,7 +608,7 @@ export default function FreeSpeakingCoach() {
             <div className="page" style={{ color: SPEAKING_UI_THEME.textBody }}>
                 <div className="page-header">
                     <button className="page-header__back" onClick={leaveScenario}>←</button>
-                    <h2 className="page-header__title">{activeScenario.emoji} Session Recap</h2>
+                    <h2 className="page-header__title">{activeScenario.emoji} Kết quả · Session Recap</h2>
                     <div className="xp-badge">⭐ {state.xp}</div>
                 </div>
 
@@ -622,21 +621,27 @@ export default function FreeSpeakingCoach() {
                         {sessionSummary.overallScore}%
                     </div>
                     <div style={{ marginTop: '4px', fontSize: '0.8rem', color: SPEAKING_UI_THEME.textMuted }}>
-                        {sessionSummary.totalTurns} turns · {sessionSummary.totalWords} words · vocab progress {sessionSummary.vocabularyProgress}%
+                        {sessionSummary.totalTurns} lượt · {sessionSummary.totalWords} từ · từ vựng {sessionSummary.vocabularyProgress}%
+                    </div>
+                    <div style={{ marginTop: '4px', fontSize: '0.72rem', color: SPEAKING_UI_THEME.textSoft, fontStyle: 'italic' }}>
+                        {sessionSummary.overallScore >= 85 ? 'Xuất sắc! Bạn nói rất tốt!' :
+                            sessionSummary.overallScore >= 70 ? 'Tốt lắm! Hãy tiếp tục luyện tập!' :
+                                sessionSummary.overallScore >= 55 ? 'Đang tiến bộ! Thêm vài buổi luyện nữa nhé!' :
+                                    'Cố gắng thêm! Mỗi lần nói là một lần giỏi hơn!'}
                     </div>
                 </div>
 
                 <SpeakingCoachPanel
                     analysis={{
                         overallScore: sessionSummary.overallScore,
-                        analysisSummary: 'Session recap aggregated from all completed guided speaking turns.',
+                        analysisSummary: 'Tổng kết từ các lượt nói trong buổi luyện tập. · Session recap aggregated from all completed guided speaking turns.',
                         metrics: sessionSummary.metrics,
                         strengths: sessionSummary.strengths,
                         recommendations: sessionSummary.priorities.length > 0
                             ? sessionSummary.priorities
-                            : ['Next round: answer one prompt with a longer example and one clearer reason.'],
-                        evidenceLevel: 'Aggregated transcript coaching',
-                        note: 'This summary is built from your completed turns in the guided coach. It does not use model-based conversation AI or acoustic scoring.',
+                            : ['Lần sau: trả lời dài hơn với một ví dụ cụ thể và một lý do rõ ràng. · Next round: answer one prompt with a longer example and one clearer reason.'],
+                        evidenceLevel: 'Aggregated transcript coaching · Huấn luyện tổng hợp dựa trên transcript',
+                        note: 'This summary is built from your completed turns in the guided coach. It does not use model-based conversation AI or acoustic scoring. · Tổng kết này được tạo từ các lượt nói bạn đã hoàn thành trong guided coach. Nó không dùng AI hội thoại theo mô hình hay acoustic scoring.',
                         transcriptStats: {
                             wpm: 0,
                             lexicalDiversity: sessionSummary.totalWords > 0 ? sessionSummary.uniqueWords / sessionSummary.totalWords : 0,
@@ -647,282 +652,293 @@ export default function FreeSpeakingCoach() {
                         },
                         referenceWordFeedback: [],
                     }}
-                    title="Session coaching summary"
-                    transcriptLabel="Combined transcript"
+                    title="Tổng kết buổi học · Session coaching summary"
+                    transcriptLabel="Bản ghi kết hợp · Combined transcript"
                     transcript={sessionSummary.transcriptBundle}
                     tone="#818CF8"
                 />
 
                 <div style={{ display: 'grid', gap: '10px', marginTop: '14px' }}>
                     <button style={{ ...primaryButtonStyle, width: '100%' }} onClick={() => startScenario(activeScenario)}>
-                        🔄 Repeat scenario
+                        🔄 Luyện lại · Repeat scenario
                     </button>
                     <button style={{ ...secondaryButtonStyle, width: '100%' }} onClick={leaveScenario}>
-                        🧭 Choose another coach
+                        🧭 Chọn chủ đề khác · Choose another coach
                     </button>
                 </div>
             </div>
         );
     }
 
-    return (
-        <div className="page" style={{ color: SPEAKING_UI_THEME.textBody }}>
-            <div className="page-header">
-                <button className="page-header__back" onClick={leaveScenario}>←</button>
-                <h2 className="page-header__title">{activeScenario.emoji} {activeScenario.lang === 'cn' ? activeScenario.titleVi : activeScenario.title}</h2>
-                <div className="xp-badge">⭐ {state.xp}</div>
-            </div>
+    const coachAvatar = activeScenario?.emoji || '🧑‍🏫';
 
-            <div style={{ ...pageCardStyle, marginBottom: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'flex-start' }}>
-                    <div>
-                        <div style={sectionTitleStyle}>
-                            {activeScenario.coachName} · {activeScenario.coachRole}
-                        </div>
-                        <div style={{ fontSize: '0.78rem', color: SPEAKING_UI_THEME.textMuted, marginTop: '6px', lineHeight: 1.5 }}>
-                            {activeScenario.targetLength}
-                        </div>
-                        <div style={{ marginTop: '8px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                            <span style={{
-                                padding: '4px 9px',
-                                borderRadius: '999px',
-                                background: SPEAKING_UI_THEME.accentSurface,
-                                border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
-                                color: SPEAKING_UI_THEME.accentText,
-                                fontSize: '0.68rem',
-                                fontWeight: 700,
-                            }}>
-                                {outputBadge}
-                            </span>
-                            {activeScenarioQA && (
-                                <span style={{
-                                    padding: '4px 9px',
-                                    borderRadius: '999px',
-                                    background: SPEAKING_UI_THEME.successSurface,
-                                    border: `1px solid ${SPEAKING_UI_THEME.successBorder}`,
-                                    color: SPEAKING_UI_THEME.successText,
-                                    fontSize: '0.68rem',
-                                    fontWeight: 700,
-                                }}>
-                                    {activeScenarioQA.clipCount} verified clips
-                                </span>
-                            )}
-                        </div>
-                    </div>
+    return (
+        <div className="page" style={{ color: SPEAKING_UI_THEME.textBody, display: 'flex', flexDirection: 'column', minHeight: '100dvh' }}>
+            {/* Slim header */}
+            <div className="page-header" style={{ flexShrink: 0 }}>
+                <button className="page-header__back" onClick={leaveScenario}>←</button>
+                <h2 className="page-header__title" style={{ fontSize: '0.92rem' }}>
+                    {activeScenario.emoji} {activeScenario.lang === 'cn' ? activeScenario.titleVi : activeScenario.title}
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <button
-                        onClick={() => setHandsFree((value) => !value)}
+                        onClick={() => setHandsFree((v) => !v)}
                         style={{
-                            padding: '10px 14px',
-                            borderRadius: '999px',
-                            border: `1px solid ${handsFree ? SPEAKING_UI_THEME.successBorder : SPEAKING_UI_THEME.secondaryBorder}`,
-                            background: handsFree ? SPEAKING_UI_THEME.successSurface : SPEAKING_UI_THEME.secondarySurface,
-                            color: handsFree ? SPEAKING_UI_THEME.successText : SPEAKING_UI_THEME.secondaryText,
-                            fontWeight: 800,
-                            cursor: 'pointer',
-                            whiteSpace: 'nowrap',
+                            padding: '6px 10px', borderRadius: '999px',
+                            border: `1px solid ${handsFree ? '#22C55E40' : SPEAKING_UI_THEME.borderSoft}`,
+                            background: handsFree ? '#22C55E18' : 'transparent',
+                            color: handsFree ? '#4ADE80' : SPEAKING_UI_THEME.textSoft,
+                            fontSize: '0.68rem', fontWeight: 700, cursor: 'pointer',
                         }}
                     >
-                        {handsFree ? 'Hands-free on' : 'Hands-free off'}
+                        {handsFree ? '🎧 Auto' : '✋ Manual'}
                     </button>
-                </div>
-
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '12px' }}>
-                    {activeScenario.vocabulary.map((item) => (
-                        <span
-                            key={item}
-                            style={{
-                                padding: '4px 8px',
-                                borderRadius: '999px',
-                                fontSize: '0.68rem',
-                                color: SPEAKING_UI_THEME.neutralChipText,
-                                background: SPEAKING_UI_THEME.neutralChipSurface,
-                                border: `1px solid ${SPEAKING_UI_THEME.neutralChipBorder}`,
-                            }}
-                        >
-                            {item}
-                        </span>
-                    ))}
+                    <div className="xp-badge">⭐ {state.xp}</div>
                 </div>
             </div>
 
-            <CapabilityNotice
-                icon="🎧"
-                title="Coach output"
-                badge={outputBadge}
-                tone={studioAudioReady ? 'success' : 'warn'}
-                summary={studioAudioReady
-                    ? `This coach uses controlled audio assets first. Runtime will only fall back to browser TTS if a verified clip fails to load.`
-                    : 'Controlled coach audio is unavailable for this scenario right now, so prompt playback will use browser TTS and may sound device-dependent.'}
-                compact
-            />
-
-            <CapabilityNotice
-                icon="🎙️"
-                title="Speaking capture"
-                badge={readiness.speechInput.badge}
-                tone={readiness.speechInput.status === 'supported' ? 'success' : 'warn'}
-                summary={readiness.speechInput.summary}
-                compact
-            />
-
-            <div style={pageCardStyle}>
-                <div style={{ fontSize: '0.74rem', fontWeight: 700, color: SPEAKING_UI_THEME.accentStrong, marginBottom: '10px' }}>
-                    Turn {turnIndex + 1}/{activeScenario.turns.length}
+            {/* Chat area — full height, scrollable */}
+            <div className="sc-chat-scroll" style={{
+                flex: 1, overflowY: 'auto', padding: '12px 4px 100px',
+                display: 'flex', flexDirection: 'column', gap: '8px',
+            }}>
+                {/* Turn progress */}
+                <div style={{ textAlign: 'center', fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft, padding: '4px 0 8px' }}>
+                    Turn {turnIndex + 1} / {activeScenario.turns.length} · {activeScenario.coachName}
                 </div>
-                <div style={{ display: 'grid', gap: '10px', maxHeight: '260px', overflowY: 'auto' }}>
-                    {messages.map((message, index) => (
-                        <div
-                            key={`${message.role}-${index}`}
-                            style={getTimelineBubbleStyle(message.role)}
-                        >
+
+                {/* Chat messages */}
+                {messages.map((message, index) => (
+                    <div key={`${message.role}-${index}`} className="sc-bubble-enter" style={{
+                        display: 'flex', alignItems: 'flex-end', gap: '8px',
+                        justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start',
+                        animationDelay: `${Math.min(index * 0.08, 0.4)}s`,
+                    }}>
+                        {message.role === 'coach' && (
+                            <div style={{
+                                width: '30px', height: '30px', borderRadius: '50%',
+                                background: SPEAKING_UI_THEME.coachBubbleSurface,
+                                border: `1px solid ${SPEAKING_UI_THEME.border}`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '0.9rem', flexShrink: 0,
+                            }}>{coachAvatar}</div>
+                        )}
+                        <div style={{ ...getTimelineBubbleStyle(message.role), maxWidth: '80%', margin: 0 }}>
                             {message.text}
                         </div>
-                    ))}
-                    {interimText && phase === 'recording' && (
-                        <div style={{
-                            marginLeft: '18%',
-                            padding: '10px 12px',
-                            borderRadius: '16px',
-                            background: SPEAKING_UI_THEME.interimSurface,
-                            color: SPEAKING_UI_THEME.interimText,
-                            lineHeight: 1.5,
-                            fontSize: '0.82rem',
-                            fontStyle: 'italic',
-                            border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
-                        }}>
-                            {interimText}
-                        </div>
-                    )}
-                </div>
-            </div>
+                        {message.role === 'user' && audioUrl && index === messages.length - 1 && (
+                            <button onClick={() => { const a = new Audio(audioUrl); void a.play(); }} style={{
+                                background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.9rem', padding: '2px', flexShrink: 0,
+                            }} title="Nghe lại giọng mình">🔊</button>
+                        )}
+                    </div>
+                ))}
 
-            <div style={{ ...pageCardStyle, marginTop: '12px' }}>
-                <div style={sectionTitleStyle}>
-                    {currentTurn.prompt}
-                </div>
-                {currentTurn.promptVi && (
-                    <div style={{ marginTop: '6px', fontSize: '0.8rem', color: SPEAKING_UI_THEME.textMuted, lineHeight: 1.5 }}>
-                        {currentTurn.promptVi}
+                {/* Recording interim */}
+                {phase === 'recording' && (
+                    <div className="sc-bubble-enter" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', gap: '8px' }}>
+                        <div style={{ ...getTimelineBubbleStyle('user'), maxWidth: '80%', margin: 0, opacity: 0.7, fontStyle: 'italic' }}>
+                            {interimText || (<span style={{ color: SPEAKING_UI_THEME.interimText }}>
+                                <span className="sc-typing-dot" /><span className="sc-typing-dot" /><span className="sc-typing-dot" />
+                            </span>)}
+                        </div>
                     </div>
                 )}
-                <div style={{ marginTop: '8px', fontSize: '0.76rem', color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.55 }}>
-                    Tip: {currentTurn.tip}
-                </div>
 
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '14px' }}>
-                    <button
-                        style={secondaryButtonStyle}
-                        onClick={() => playCoachVoice(activeScenario.starter, { clipId: getFreeSpeakingStarterClipId() })}
-                        disabled={isCoachSpeaking}
-                    >
-                        {isCoachSpeaking ? '🔊 Coach...' : '🔊 Play intro'}
-                    </button>
-                    <button
-                        style={secondaryButtonStyle}
-                        onClick={() => playCoachVoice(currentTurn.prompt, {
-                            clipId: getFreeSpeakingPromptClipId(currentTurn.id),
-                            autoRecord: true,
-                        })}
-                        disabled={isCoachSpeaking}
-                    >
-                        🔊 Play prompt
-                    </button>
-                    {phase !== 'recording' ? (
-                        <button style={primaryButtonStyle} onClick={beginTurn}>
-                            🎙️ Speak now
-                        </button>
-                    ) : (
-                        <button style={primaryButtonStyle} onClick={stopCapture}>
-                            ⏹️ Stop
-                        </button>
-                    )}
-                    {audioUrl && (
-                        <button
-                            style={secondaryButtonStyle}
-                            onClick={() => {
-                                const audio = new Audio(audioUrl);
-                                void audio.play();
-                            }}
-                        >
-                            ▶ Nghe lại giọng mình
-                        </button>
-                    )}
-                </div>
+                {/* Processing indicator */}
+                {phase === 'processing' && (
+                    <div className="sc-bubble-enter" style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
+                        <div style={{
+                            width: '30px', height: '30px', borderRadius: '50%',
+                            background: SPEAKING_UI_THEME.coachBubbleSurface,
+                            border: `1px solid ${SPEAKING_UI_THEME.border}`,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '0.9rem', flexShrink: 0,
+                        }}>{coachAvatar}</div>
+                        <div style={{ ...getTimelineBubbleStyle('coach'), maxWidth: '80%', margin: 0 }}>
+                            <span style={{ color: SPEAKING_UI_THEME.textSoft }}>
+                                <span className="sc-typing-dot" /><span className="sc-typing-dot" /><span className="sc-typing-dot" />
+                            </span>
+                        </div>
+                    </div>
+                )}
 
-                <div style={{ marginTop: '10px', fontSize: '0.76rem', color: SPEAKING_UI_THEME.textMuted, lineHeight: 1.55 }}>
-                    {phase === 'recording' && 'Recording in progress. Speak naturally, then stop when you finish.'}
-                    {phase === 'processing' && 'Processing transcript and coaching signals...'}
-                    {phase === 'done' && currentCoachReply && 'Turn complete. Review the coaching before continuing to the next prompt.'}
-                </div>
+                {/* Inline coaching card */}
+                {currentAnalysis && (
+                    <div className="sc-coach-card" style={{
+                        margin: '4px 0 4px 38px', padding: '12px 14px', borderRadius: '16px',
+                        background: `linear-gradient(135deg, ${SPEAKING_UI_THEME.panelSurfaceRaised}, ${SPEAKING_UI_THEME.panelSurface})`,
+                        border: `1px solid ${SPEAKING_UI_THEME.border}`,
+                        boxShadow: '0 8px 24px rgba(2,6,23,0.15)',
+                    }}>
+                        {/* Score + summary */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+                            <div className="sc-score-pop" style={{
+                                width: '48px', height: '48px', borderRadius: '50%',
+                                background: `${metricColor(currentAnalysis.overallScore)}18`,
+                                border: `2px solid ${metricColor(currentAnalysis.overallScore)}`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontWeight: 900, fontSize: '1rem',
+                                color: metricColor(currentAnalysis.overallScore),
+                            }}>{currentAnalysis.overallScore}</div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: SPEAKING_UI_THEME.textStrong }}>
+                                    {currentAnalysis.overallScore >= 85 ? 'Xuất sắc! · Excellent!' :
+                                        currentAnalysis.overallScore >= 70 ? 'Tốt lắm! · Good job!' :
+                                            currentAnalysis.overallScore >= 55 ? 'Đang tiến bộ · Getting there!' :
+                                                'Cố gắng thêm · Keep practicing!'}
+                                </div>
+                                <div style={{ fontSize: '0.7rem', color: SPEAKING_UI_THEME.textSoft, marginTop: '2px' }}>
+                                    {currentAnalysis.analysisSummary || currentAnalysis.note}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Compact metrics — horizontal scroll */}
+                        {currentAnalysis.metrics?.length > 0 && (
+                            <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '6px', marginBottom: '8px' }}>
+                                {currentAnalysis.metrics.map((m) => (
+                                    <div key={m.key} style={{
+                                        padding: '6px 10px', borderRadius: '12px',
+                                        background: SPEAKING_UI_THEME.panelSurfaceMuted,
+                                        border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
+                                        minWidth: '72px', textAlign: 'center', flexShrink: 0,
+                                    }}>
+                                        <div style={{ fontSize: '0.62rem', color: SPEAKING_UI_THEME.textSoft }}>{m.labelVi || m.label}</div>
+                                        <div style={{ fontSize: '0.88rem', fontWeight: 800, color: metricColor(m.score), marginTop: '2px' }}>{m.score}%</div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Top strength + recommendation */}
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                            {currentAnalysis.strengths?.slice(0, 1).map((s, i) => (
+                                <div key={`s-${i}`} style={{
+                                    padding: '5px 10px', borderRadius: '10px', fontSize: '0.7rem',
+                                    background: SPEAKING_UI_THEME.successSurface, border: `1px solid ${SPEAKING_UI_THEME.successBorder}`,
+                                    color: SPEAKING_UI_THEME.successText, lineHeight: 1.4,
+                                }}>✅ {s}</div>
+                            ))}
+                            {currentAnalysis.recommendations?.slice(0, 1).map((r, i) => (
+                                <div key={`r-${i}`} style={{
+                                    padding: '5px 10px', borderRadius: '10px', fontSize: '0.7rem',
+                                    background: SPEAKING_UI_THEME.warningSurface, border: `1px solid ${SPEAKING_UI_THEME.warningBorder}`,
+                                    color: SPEAKING_UI_THEME.warningText, lineHeight: 1.4,
+                                }}>💡 {r}</div>
+                            ))}
+                        </div>
+
+                        {/* Coach follow-up */}
+                        {currentCoachReply && (
+                            <div style={{
+                                marginTop: '8px', padding: '8px 10px', borderRadius: '12px',
+                                background: SPEAKING_UI_THEME.accentSurface, border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
+                                fontSize: '0.74rem', lineHeight: 1.5, color: SPEAKING_UI_THEME.textBody,
+                            }}>
+                                <strong style={{ color: SPEAKING_UI_THEME.accentStrong }}>{activeScenario.coachName}:</strong>{' '}
+                                {currentCoachReply}
+                                {currentCoachReplyClipId && (
+                                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.82rem', marginLeft: '6px' }}
+                                        onClick={() => playCoachVoice(currentCoachReply, { clipId: currentCoachReplyClipId })}>🔊</button>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Action buttons */}
+                        <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                            <button style={{ ...secondaryButtonStyle, flex: 1, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
+                                onClick={retryTurn}>🔄 Thử lại</button>
+                            <button style={{ ...primaryButtonStyle, flex: 2, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
+                                onClick={goNextTurn}>
+                                {turnIndex + 1 >= activeScenario.turns.length ? '📊 Kết quả' : '➡️ Câu tiếp theo'}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Manual fallback */}
+                {manualFallback && (
+                    <div className="sc-coach-card" style={{ margin: '4px 0 4px 38px' }}>
+                        <ManualTranscriptFallback
+                            title={manualFallback.title} description={manualFallback.description}
+                            value={typedTranscript} onChange={setTypedTranscript}
+                            onSubmit={() => submitManualTranscript(typedTranscript)}
+                            onCancel={() => { setTypedTranscript(''); resetSession(); }}
+                            placeholder={activeScenario.lang === 'cn' ? '请输入你刚才说的话…' : 'Type what you said…'}
+                            submitLabel={activeScenario.lang === 'cn' ? '提交内容' : 'Submit'}
+                            cancelLabel={activeScenario.lang === 'cn' ? '取消' : 'Cancel'}
+                        />
+                    </div>
+                )}
+
+                <div ref={chatEndRef} />
             </div>
 
-            {manualFallback && (
-                <ManualTranscriptFallback
-                    title={manualFallback.title}
-                    description={manualFallback.description}
-                    value={typedTranscript}
-                    onChange={setTypedTranscript}
-                    onSubmit={() => submitManualTranscript(typedTranscript)}
-                    onCancel={() => {
-                        setTypedTranscript('');
-                        resetSession();
-                    }}
-                    placeholder={activeScenario.lang === 'cn' ? '请输入你刚才说的话…' : 'Type what you said…'}
-                    submitLabel={activeScenario.lang === 'cn' ? '提交内容' : 'Submit transcript'}
-                    cancelLabel={activeScenario.lang === 'cn' ? '取消' : 'Cancel'}
-                />
-            )}
-
-            {currentAnalysis && (
-                <SpeakingCoachPanel
-                    analysis={currentAnalysis}
-                    title="Turn-by-turn coaching"
-                    transcriptLabel="Your answer"
-                    transcript={currentTranscript}
-                    tone="#818CF8"
-                    footer={currentCoachReply ? (
+            {/* Fixed bottom action bar */}
+            {!currentAnalysis && !manualFallback && (
+                <div style={{
+                    position: 'fixed', bottom: 0, left: 0, right: 0,
+                    padding: '12px 16px', paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
+                    background: `linear-gradient(to top, ${SPEAKING_UI_THEME.panelSurface} 80%, transparent)`,
+                    zIndex: 10,
+                }}>
+                    {/* Tip */}
+                    {currentTurn && phase !== 'recording' && phase !== 'processing' && (
                         <div style={{
-                            marginTop: '10px',
-                            padding: '10px 12px',
-                            borderRadius: '14px',
-                            background: SPEAKING_UI_THEME.accentSurface,
-                            border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
-                            fontSize: '0.78rem',
-                            lineHeight: 1.55,
-                            color: SPEAKING_UI_THEME.textBody,
+                            padding: '8px 12px', borderRadius: '14px',
+                            background: SPEAKING_UI_THEME.panelSurfaceRaised,
+                            border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
+                            marginBottom: '10px', fontSize: '0.74rem',
+                            color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.5,
                         }}>
-                            <strong style={{ color: SPEAKING_UI_THEME.accentStrong }}>Coach follow-up:</strong> {currentCoachReply}
-                            {currentCoachReplyClipId && (
-                                <button
-                                    style={{ ...secondaryButtonStyle, marginTop: '10px' }}
-                                    onClick={() => playCoachVoice(currentCoachReply, { clipId: currentCoachReplyClipId })}
-                                >
-                                    🔊 Play coach follow-up
-                                </button>
+                            <span style={{ color: SPEAKING_UI_THEME.accentStrong, fontWeight: 700 }}>💡</span>{' '}
+                            {currentTurn.tip}
+                            {currentTurn.tipVi && (
+                                <span style={{ display: 'block', opacity: 0.7, fontStyle: 'italic', marginTop: '2px' }}>{currentTurn.tipVi}</span>
                             )}
                         </div>
-                    ) : null}
-                />
-            )}
+                    )}
 
-            {currentAnalysis && (
-                <div style={{ display: 'grid', gap: '10px', marginTop: '12px' }}>
-                    <button style={{ ...secondaryButtonStyle, width: '100%' }} onClick={retryTurn}>
-                        🔄 Retry this turn
-                    </button>
-                    <button style={{ ...primaryButtonStyle, width: '100%' }} onClick={goNextTurn}>
-                        {turnIndex + 1 >= activeScenario.turns.length ? '📊 Finish session' : '➡️ Continue'}
-                    </button>
+                    {phase === 'recording' && (
+                        <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#8B5CF6', fontWeight: 700, marginBottom: '8px' }}>
+                            🎙️ Đang lắng nghe... · Listening...
+                        </div>
+                    )}
+
+                    {/* Buttons */}
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <button
+                            style={{
+                                ...secondaryButtonStyle, padding: '12px', borderRadius: '50%',
+                                width: '48px', height: '48px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
+                            }}
+                            onClick={() => playCoachVoice(currentTurn?.prompt || activeScenario.starter, {
+                                clipId: currentTurn ? getFreeSpeakingPromptClipId(currentTurn.id) : getFreeSpeakingStarterClipId(),
+                            })}
+                            disabled={isCoachSpeaking}
+                        >🔊</button>
+
+                        {phase !== 'recording' ? (
+                            <button style={{
+                                ...primaryButtonStyle, flex: 1, padding: '14px', fontSize: '0.92rem', borderRadius: '18px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                            }} onClick={beginTurn} disabled={phase === 'processing'}>
+                                🎙️ {phase === 'processing' ? 'Đang xử lý...' : 'Nói ngay · Speak now'}
+                            </button>
+                        ) : (
+                            <button className="sc-recording-pulse" style={{
+                                ...primaryButtonStyle, flex: 1, padding: '14px', fontSize: '0.92rem', borderRadius: '18px',
+                                background: 'linear-gradient(135deg, #DC2626, #EF4444)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                            }} onClick={stopCapture}>
+                                ⏹️ Dừng · Stop
+                            </button>
+                        )}
+                    </div>
                 </div>
             )}
-
-            <div style={{ ...pageCardStyle, marginTop: '12px', background: SPEAKING_UI_THEME.panelSurface }}>
-                <div style={{ ...sectionTitleStyle, fontSize: '0.88rem' }}>Release gate applied</div>
-                <div style={{ marginTop: '8px', color: SPEAKING_UI_THEME.textMuted, fontSize: '0.76rem', lineHeight: 1.6 }}>
-                    This module now ships behind two checks: controlled coach audio coverage and contrast audit for dark-mode speaking surfaces.
-                    If either gate fails, the QA script marks the module non-compliant before release.
-                </div>
-            </div>
         </div>
     );
 }

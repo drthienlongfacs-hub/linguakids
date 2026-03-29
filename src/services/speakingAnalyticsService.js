@@ -99,13 +99,15 @@ function statusFromScore(score) {
     return 'needs_work';
 }
 
-function createMetric(key, label, score, insight) {
+function createMetric(key, label, score, insight, labelVi = '', insightVi = '') {
     return {
         key,
         label,
+        labelVi: labelVi || label,
         score: clamp(score),
         status: statusFromScore(score),
         insight,
+        insightVi: insightVi || insight,
     };
 }
 
@@ -179,11 +181,12 @@ function buildStrengths(metrics, lang = 'en') {
         .filter((metric) => metric.score >= 75)
         .sort((a, b) => b.score - a.score)
         .slice(0, 2)
-        .map((metric) => (
-            lang === 'cn' || lang === 'zh'
-                ? `${metric.label} đang là điểm mạnh ở mức ${metric.score}%.`
-                : `${metric.label} is currently a strength at ${metric.score}%.`
-        ));
+        .map((metric) => {
+            const en = `${metric.label} is a strength at ${metric.score}%.`;
+            const vi = `${metric.labelVi || metric.label} là điểm mạnh ở mức ${metric.score}%.`;
+            if (lang === 'cn' || lang === 'zh') return vi;
+            return `${en} · ${vi}`;
+        });
 }
 
 function buildRisks(metrics, lang = 'en') {
@@ -191,58 +194,82 @@ function buildRisks(metrics, lang = 'en') {
         .filter((metric) => metric.score < 70)
         .sort((a, b) => a.score - b.score)
         .slice(0, 2)
-        .map((metric) => (
-            lang === 'cn' || lang === 'zh'
-                ? `Cần ưu tiên cải thiện ${metric.label.toLowerCase()} ở lượt nói sau.`
-                : `Prioritize ${metric.label.toLowerCase()} in the next attempt.`
-        ));
+        .map((metric) => {
+            const en = `Prioritize ${metric.label.toLowerCase()} in the next attempt.`;
+            const vi = `Cần ưu tiên cải thiện ${(metric.labelVi || metric.label).toLowerCase()} ở lượt nói sau.`;
+            return bilingualTip(en, vi, lang);
+        });
+}
+
+function bilingualTip(en, vi, lang) {
+    if (lang === 'cn' || lang === 'zh') return vi;
+    return `${en} · ${vi}`;
+}
+
+function bilingualSentence(en, vi, lang) {
+    if (lang === 'cn' || lang === 'zh') return vi;
+    return `${en} · ${vi}`;
 }
 
 function buildRecommendations(metrics, signals, lang = 'en') {
     const lowMetrics = metrics.filter((metric) => metric.score < 70);
     if (lowMetrics.length === 0) {
-        return lang === 'cn' || lang === 'zh'
-            ? ['Giữ nhịp nói ổn định và thử mở rộng câu trả lời thêm một ý nữa ở lượt tiếp theo.']
-            : ['Keep the rhythm stable and expand one answer with one more supporting detail next time.'];
+        return [bilingualTip(
+            'Keep the rhythm stable and expand one answer with one more supporting detail next time.',
+            'Giữ nhịp nói ổn định và thử mở rộng câu trả lời thêm một ý nữa ở lượt tiếp theo.',
+            lang,
+        )];
     }
 
     const recommendations = [];
+    const tipMap = {
+        pronunciation: [
+            'Replay the model once and mirror it in shorter chunks before saying the full sentence again.',
+            'Nghe mẫu thêm một lượt rồi nói lại theo từng cụm ngắn trước khi ghép thành cả câu.',
+        ],
+        completeness: [
+            'Complete the whole model sentence instead of stopping early or dropping the ending.',
+            'Hoàn thành trọn câu mẫu, đừng dừng ở giữa hoặc bỏ phần cuối.',
+        ],
+        fluency: [
+            'Keep a steadier pace and reduce long hesitation gaps between words.',
+            'Giữ nhịp đều hơn và giảm khoảng ngập ngừng giữa các từ.',
+        ],
+        grammar: [
+            'Use a clearer sentence frame with subject + verb + key detail.',
+            'Dùng khung câu rõ hơn: chủ ngữ + động từ + thông tin chính.',
+        ],
+        vocabulary: [
+            'Add more specific content words so the answer sounds richer and less generic.',
+            'Thêm từ nội dung cụ thể hơn thay vì chỉ trả lời rất ngắn.',
+        ],
+        delivery: [
+            'Reduce fillers and connect ideas more smoothly to sound more professional.',
+            'Giảm filler và kết nối câu mượt hơn để bài nói chuyên nghiệp hơn.',
+        ],
+        relevance: [
+            'Answer the prompt more directly and add at least one supporting detail.',
+            'Bám sát câu hỏi hơn và thêm ít nhất một chi tiết hỗ trợ.',
+        ],
+        task_completion: [
+            'Answer the prompt more directly and add at least one supporting detail.',
+            'Bám sát câu hỏi hơn và thêm ít nhất một chi tiết hỗ trợ.',
+        ],
+    };
+
     for (const metric of lowMetrics) {
-        if (metric.key === 'pronunciation') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Nghe mẫu thêm một lượt rồi nói lại theo từng cụm ngắn trước khi ghép thành cả câu.'
-                : 'Replay the model once and mirror it in shorter chunks before saying the full sentence again.');
-        } else if (metric.key === 'completeness') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Hoàn thành trọn câu mẫu, đừng dừng ở giữa hoặc bỏ phần cuối.'
-                : 'Complete the whole model sentence instead of stopping early or dropping the ending.');
-        } else if (metric.key === 'fluency') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Giữ nhịp đều hơn và giảm khoảng ngập ngừng giữa các từ.'
-                : 'Keep a steadier pace and reduce long hesitation gaps between words.');
-        } else if (metric.key === 'grammar') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Dùng khung câu rõ hơn: chủ ngữ + động từ + thông tin chính.'
-                : 'Use a clearer sentence frame with subject + verb + key detail.');
-        } else if (metric.key === 'vocabulary') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Thêm từ nội dung cụ thể hơn thay vì chỉ trả lời rất ngắn.'
-                : 'Add more specific content words so the answer sounds richer and less generic.');
-        } else if (metric.key === 'delivery') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Giảm filler và kết nối câu mượt hơn để bài nói chuyên nghiệp hơn.'
-                : 'Reduce fillers and connect ideas more smoothly to sound more professional.');
-        } else if (metric.key === 'relevance' || metric.key === 'task_completion') {
-            recommendations.push(lang === 'cn' || lang === 'zh'
-                ? 'Bám sát câu hỏi hơn và thêm ít nhất một chi tiết hỗ trợ.'
-                : 'Answer the prompt more directly and add at least one supporting detail.');
+        const pair = tipMap[metric.key];
+        if (pair) {
+            recommendations.push(bilingualTip(pair[0], pair[1], lang));
         }
     }
 
     if (signals?.fillerRatio >= 0.1) {
-        recommendations.push(lang === 'cn' || lang === 'zh'
-            ? 'Nếu cần nghĩ thêm ý, hãy tạm dừng ngắn thay vì lặp lại “ừm/ờ/like”.'
-            : 'If you need time to think, pause briefly instead of filling space with “um”, “uh”, or “like”.');
+        recommendations.push(bilingualTip(
+            'If you need time to think, pause briefly instead of filling space with "um", "uh", or "like".',
+            'Nếu cần nghĩ thêm ý, hãy tạm dừng ngắn thay vì lặp lại "ừm/ờ/like".',
+            lang,
+        ));
     }
 
     return [...new Set(recommendations)].slice(0, 3);
@@ -285,13 +312,27 @@ function buildExactMetrics(targetText, spokenText, lang, durationMs, promptText 
     const taskCompletion = average([completeness, signals.promptCoverage || completeness]);
 
     const metrics = [
-        createMetric('pronunciation', 'Pronunciation', accuracy, 'Transcript-aligned articulation against the model sentence.'),
-        createMetric('completeness', 'Completeness', completeness, 'How much of the reference sentence was captured and finished.'),
-        createMetric('fluency', 'Fluency', fluencyScore, 'Speech pacing estimated from transcript length, duration, and filler load.'),
-        createMetric('grammar', 'Structure', grammarControl, 'Word order stability compared with the reference sentence.'),
-        createMetric('vocabulary', 'Vocabulary', vocabularyCoverage, 'Coverage of the target vocabulary in the learner attempt.'),
-        createMetric('delivery', 'Delivery', deliveryScore, 'Smoothness inferred from fillers, sentence control, and response stability.'),
-        createMetric('task_completion', 'Task', taskCompletion, 'Whether the learner completed the full speaking task clearly.'),
+        createMetric('pronunciation', 'Pronunciation', accuracy,
+            'Transcript-aligned articulation against the model sentence.',
+            'Phát âm', 'Độ chính xác phát âm so với câu mẫu.'),
+        createMetric('completeness', 'Completeness', completeness,
+            'How much of the reference sentence was captured and finished.',
+            'Hoàn thành', 'Bạn đã nói được bao nhiêu phần trăm câu mẫu.'),
+        createMetric('fluency', 'Fluency', fluencyScore,
+            'Speech pacing estimated from transcript length, duration, and filler load.',
+            'Lưu loát', 'Nhịp nói ước tính từ độ dài, thời lượng, và từ đệm.'),
+        createMetric('grammar', 'Structure', grammarControl,
+            'Word order stability compared with the reference sentence.',
+            'Cấu trúc', 'Thứ tự từ ổn định so với câu mẫu.'),
+        createMetric('vocabulary', 'Vocabulary', vocabularyCoverage,
+            'Coverage of the target vocabulary in the learner attempt.',
+            'Từ vựng', 'Mức độ sử dụng từ vựng mục tiêu trong câu trả lời.'),
+        createMetric('delivery', 'Delivery', deliveryScore,
+            'Smoothness inferred from fillers, sentence control, and response stability.',
+            'Trình bày', 'Độ mượt dựa trên từ đệm, cấu trúc câu và sự ổn định.'),
+        createMetric('task_completion', 'Task', taskCompletion,
+            'Whether the learner completed the full speaking task clearly.',
+            'Nhiệm vụ', 'Bạn đã hoàn thành nhiệm vụ nói rõ ràng chưa.'),
     ];
 
     return {
@@ -363,12 +404,23 @@ function buildOpenMetrics({ promptText, spokenText, lang, durationMs, sampleAnsw
 
     const promptInsight = tip || promptText || 'Open-ended response coaching from transcript only.';
     const metrics = [
-        createMetric('fluency', 'Fluency', fluencyScore, 'Response pacing estimated from transcript length, duration, and filler load.'),
-        createMetric('grammar', 'Structure', grammarScore, 'Sentence-frame control inferred from transcript patterns.'),
-        createMetric('vocabulary', 'Vocabulary', lexicalScore, 'Lexical variety and amount of meaningful content in the response.'),
-        createMetric('relevance', 'Relevance', relevanceScore, 'How directly the response stays on the prompt and sample direction.'),
-        createMetric('delivery', 'Delivery', deliveryScore, 'How smoothly the response flows without too many filler units.'),
-        createMetric('task_completion', 'Task', taskCompletion, promptInsight),
+        createMetric('fluency', 'Fluency', fluencyScore,
+            'Response pacing estimated from transcript length, duration, and filler load.',
+            'Lưu loát', 'Nhịp nói ước tính từ độ dài câu trả lời, thời lượng và từ đệm.'),
+        createMetric('grammar', 'Structure', grammarScore,
+            'Sentence-frame control inferred from transcript patterns.',
+            'Cấu trúc', 'Khả năng kiểm soát khung câu (chủ ngữ + động từ + bổ ngữ).'),
+        createMetric('vocabulary', 'Vocabulary', lexicalScore,
+            'Lexical variety and amount of meaningful content in the response.',
+            'Từ vựng', 'Độ đa dạng từ vựng và lượng nội dung có ý nghĩa trong câu trả lời.'),
+        createMetric('relevance', 'Relevance', relevanceScore,
+            'How directly the response stays on the prompt and sample direction.',
+            'Liên quan', 'Câu trả lời bám sát câu hỏi và hướng gợi ý đến mức nào.'),
+        createMetric('delivery', 'Delivery', deliveryScore,
+            'How smoothly the response flows without too many filler units.',
+            'Trình bày', 'Câu trả lời trôi chảy đến đâu, ít từ đệm (ừm, à, ờ).'),
+        createMetric('task_completion', 'Task', taskCompletion, promptInsight,
+            'Nhiệm vụ', 'Trả lời đúng yêu cầu câu hỏi với ít nhất một chi tiết cụ thể.'),
     ];
 
     return {
@@ -418,13 +470,31 @@ export function analyzeSpeakingAttempt({
         risks,
         recommendations,
         coachModel: targetText ? 'heuristic_reference_coaching' : 'heuristic_open_response_coaching',
-        evidenceLevel: targetText ? 'Reference-aligned transcript coaching' : 'Prompt-aligned transcript coaching',
+        evidenceLevel: targetText
+            ? bilingualSentence(
+                'Reference-aligned transcript coaching',
+                'Huấn luyện dựa trên bản ghi và câu mẫu tham chiếu',
+                lang,
+            )
+            : bilingualSentence(
+                'Prompt-aligned transcript coaching',
+                'Huấn luyện dựa trên bản ghi và mức độ bám sát câu hỏi',
+                lang,
+            ),
         analysisSummary: topMetric && lowMetric
-            ? `Strongest area: ${topMetric.label}. Primary focus: ${lowMetric.label}.`
-            : 'Transcript-derived speaking coaching.',
+            ? `Strongest: ${topMetric.label} · Mạnh nhất: ${topMetric.labelVi || topMetric.label}. Focus: ${lowMetric.label} · Cần cải thiện: ${lowMetric.labelVi || lowMetric.label}.`
+            : 'Transcript-derived speaking coaching. · Phân tích dựa trên bản ghi giọng nói.',
         note: targetText
-            ? 'Feedback is inferred from transcript alignment, pacing, filler load, and sentence stability. It is not acoustic phoneme scoring.'
-            : 'Feedback is inferred from transcript quality, pacing, relevance, filler load, and sentence-pattern heuristics. It is not model-based conversation scoring.',
+            ? bilingualSentence(
+                'Feedback is inferred from transcript alignment, pacing, filler load, and sentence stability. It is not acoustic phoneme scoring.',
+                'Phản hồi được suy ra từ mức độ khớp transcript, nhịp nói, từ đệm và độ ổn định câu. Đây không phải chấm âm vị học âm thanh.',
+                lang,
+            )
+            : bilingualSentence(
+                'Feedback is inferred from transcript quality, pacing, relevance, filler load, and sentence-pattern heuristics. It is not model-based conversation scoring.',
+                'Phản hồi được suy ra từ chất lượng transcript, nhịp nói, độ liên quan, từ đệm và heuristic về mẫu câu. Đây không phải chấm hội thoại bằng mô hình AI.',
+                lang,
+            ),
     };
 }
 
