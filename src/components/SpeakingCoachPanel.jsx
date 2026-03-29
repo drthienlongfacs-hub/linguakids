@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { SPEAKING_UI_THEME } from '../data/speakingUiTheme';
 
 function metricColor(score) {
@@ -25,8 +26,16 @@ export default function SpeakingCoachPanel({
     transcript = '',
     tone = '#4F46E5',
     footer = null,
+    compact = false,
+    defaultExpanded = false,
 }) {
+    const [expanded, setExpanded] = useState(defaultExpanded);
+    const isExpanded = compact ? expanded : true;
+
     if (!analysis) return null;
+
+    const topStrength = analysis.strengths?.[0] || '';
+    const topRecommendation = analysis.recommendations?.[0] || '';
 
     return (
         <div style={{
@@ -59,7 +68,7 @@ export default function SpeakingCoachPanel({
                         color: SPEAKING_UI_THEME.textMuted,
                         lineHeight: 1.5,
                     }}>
-                        {analysis.analysisSummary || analysis.note}
+                        {compact ? (analysis.analysisSummary || analysis.note) : (analysis.analysisSummary || analysis.note)}
                     </div>
                 </div>
                 <div style={{
@@ -79,7 +88,55 @@ export default function SpeakingCoachPanel({
                 </div>
             </div>
 
-            {transcript && (
+            {compact && (
+                <div style={{ display: 'grid', gap: '8px', marginBottom: isExpanded ? '12px' : (footer ? '12px' : 0) }}>
+                    {topStrength && (
+                        <div style={{
+                            padding: '8px 10px',
+                            borderRadius: '12px',
+                            background: SPEAKING_UI_THEME.successSurface,
+                            border: `1px solid ${SPEAKING_UI_THEME.successBorder}`,
+                            fontSize: '0.76rem',
+                            lineHeight: 1.45,
+                            color: SPEAKING_UI_THEME.successText,
+                        }}>
+                            ✅ {topStrength}
+                        </div>
+                    )}
+                    {topRecommendation && (
+                        <div style={{
+                            padding: '8px 10px',
+                            borderRadius: '12px',
+                            background: SPEAKING_UI_THEME.warningSurface,
+                            border: `1px solid ${SPEAKING_UI_THEME.warningBorder}`,
+                            fontSize: '0.76rem',
+                            lineHeight: 1.45,
+                            color: SPEAKING_UI_THEME.warningText,
+                        }}>
+                            💡 {topRecommendation}
+                        </div>
+                    )}
+                    <button
+                        onClick={() => setExpanded((value) => !value)}
+                        style={{
+                            justifySelf: 'flex-start',
+                            padding: '8px 12px',
+                            borderRadius: '999px',
+                            border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
+                            background: SPEAKING_UI_THEME.panelSurfaceMuted,
+                            color: SPEAKING_UI_THEME.textBody,
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            fontSize: '0.72rem',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {isExpanded ? 'Thu gọn chi tiết · Collapse details' : 'Xem phân tích chi tiết · See detailed analysis'}
+                    </button>
+                </div>
+            )}
+
+            {isExpanded && transcript && (
                 <div style={{
                     padding: '10px 12px',
                     borderRadius: '14px',
@@ -96,7 +153,7 @@ export default function SpeakingCoachPanel({
                 </div>
             )}
 
-            {analysis.metrics?.length > 0 && (
+            {isExpanded && analysis.metrics?.length > 0 && (
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
@@ -140,7 +197,7 @@ export default function SpeakingCoachPanel({
                 </div>
             )}
 
-            {analysis.signalBreakdown && (
+            {isExpanded && analysis.signalBreakdown && (
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
@@ -166,7 +223,7 @@ export default function SpeakingCoachPanel({
                 </div>
             )}
 
-            {analysis.referenceWordFeedback?.length > 0 && (
+            {isExpanded && analysis.referenceWordFeedback?.length > 0 && (
                 <div style={{ marginBottom: '12px' }}>
                     <div style={{
                         fontSize: '0.76rem',
@@ -200,7 +257,7 @@ export default function SpeakingCoachPanel({
                 </div>
             )}
 
-            {analysis.strengths?.length > 0 && (
+            {isExpanded && analysis.strengths?.length > 0 && (
                 <div style={{ marginBottom: '10px' }}>
                     <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.successText, marginBottom: '6px' }}>
                         What went well · Điểm tốt
@@ -226,7 +283,7 @@ export default function SpeakingCoachPanel({
                 </div>
             )}
 
-            {analysis.recommendations?.length > 0 && (
+            {isExpanded && analysis.recommendations?.length > 0 && (
                 <div style={{ marginBottom: footer ? '10px' : 0 }}>
                     <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.warningText, marginBottom: '6px' }}>
                         Next-step coaching · Gợi ý cải thiện

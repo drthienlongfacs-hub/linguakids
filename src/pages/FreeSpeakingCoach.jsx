@@ -16,6 +16,7 @@ import {
     getFreeSpeakingScenarios,
     resolveCoachReply,
 } from '../services/freeSpeakingCoachService';
+import { suggestEnglishFromVietnamese } from '../services/freeSpeakingTranslationHelper';
 import {
     getFreeSpeakingAudioClip,
     getFreeSpeakingAudioEntry,
@@ -162,11 +163,13 @@ export default function FreeSpeakingCoach() {
     const [voicePackQA, setVoicePackQA] = useState(null);
     const [voicePackStatus, setVoicePackStatus] = useState('loading');
     const [coachPlaybackMode, setCoachPlaybackMode] = useState('idle');
+    const [helperDraft, setHelperDraft] = useState('');
     const audioRef = useRef(null);
     const chatEndRef = useRef(null);
     const {
         phase,
         interimText,
+        finalText,
         audioUrl,
         manualFallback,
         startCapture,
@@ -180,6 +183,11 @@ export default function FreeSpeakingCoach() {
     const activeAudioEntry = activeScenario ? getFreeSpeakingAudioEntry(voicePackManifest, activeScenario.id) : null;
     const studioAudioReady = !!activeAudioEntry;
     buildSourceBadge(coachPlaybackMode, studioAudioReady);
+    const helperSuggestion = useMemo(() => (
+        activeScenario?.lang === 'en'
+            ? suggestEnglishFromVietnamese({ text: helperDraft, turn: currentTurn })
+            : null
+    ), [activeScenario?.lang, currentTurn, helperDraft]);
 
     useEffect(() => {
         let active = true;
@@ -240,10 +248,12 @@ export default function FreeSpeakingCoach() {
         if (!activeScenario || !currentTurn) return;
         startCapture({
             lang: activeScenario.coachVoiceLang,
-            continuous: false,
+            continuous: true,
             interimResults: true,
             maxAlternatives: 3,
             autoStopOnEnd: true,
+            autoStopOnSilence: true,
+            silenceMs: 2000,
             fallback: buildFallbackCopy(activeScenario.lang),
             onFinalize: ({ transcript, durationMs }) => {
                 if (!activeScenario || !currentTurn) return;
@@ -373,6 +383,7 @@ export default function FreeSpeakingCoach() {
         setCurrentCoachReplyClipId('');
         setSessionSummary(null);
         setTypedTranscript('');
+        setHelperDraft('');
         resetSession();
         setMessages([
             { role: 'coach', text: scenario.starter },
@@ -387,6 +398,7 @@ export default function FreeSpeakingCoach() {
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
+        setHelperDraft('');
         startTurnCapture();
     }, [activeScenario, currentTurn, startTurnCapture, stopCoachPlayback]);
 
@@ -397,6 +409,7 @@ export default function FreeSpeakingCoach() {
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
+        setHelperDraft('');
         setTurnResults((previous) => previous.slice(0, -1));
         setMessages((previous) => previous.slice(0, -2));
         resetSession();
@@ -458,6 +471,7 @@ export default function FreeSpeakingCoach() {
         setCurrentCoachReply('');
         setCurrentCoachReplyClipId('');
         setTypedTranscript('');
+        setHelperDraft('');
         resetSession();
         setMessages((previous) => [...previous, { role: 'coach', text: nextTurn.prompt }]);
         if (handsFree) {
@@ -483,6 +497,7 @@ export default function FreeSpeakingCoach() {
         setCurrentCoachReplyClipId('');
         setSessionSummary(null);
         setTypedTranscript('');
+        setHelperDraft('');
     }, [resetSession, stopCoachPlayback]);
 
     if (!activeScenario) {
@@ -765,95 +780,41 @@ export default function FreeSpeakingCoach() {
 
                 {/* Inline coaching card */}
                 {currentAnalysis && (
-                    <div className="sc-coach-card" style={{
-                        margin: '4px 0 4px 38px', padding: '12px 14px', borderRadius: '16px',
-                        background: `linear-gradient(135deg, ${SPEAKING_UI_THEME.panelSurfaceRaised}, ${SPEAKING_UI_THEME.panelSurface})`,
-                        border: `1px solid ${SPEAKING_UI_THEME.border}`,
-                        boxShadow: '0 8px 24px rgba(2,6,23,0.15)',
-                    }}>
-                        {/* Score + summary */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-                            <div className="sc-score-pop" style={{
-                                width: '48px', height: '48px', borderRadius: '50%',
-                                background: `${metricColor(currentAnalysis.overallScore)}18`,
-                                border: `2px solid ${metricColor(currentAnalysis.overallScore)}`,
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                fontWeight: 900, fontSize: '1rem',
-                                color: metricColor(currentAnalysis.overallScore),
-                            }}>{currentAnalysis.overallScore}</div>
-                            <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '0.78rem', fontWeight: 700, color: SPEAKING_UI_THEME.textStrong }}>
-                                    {currentAnalysis.overallScore >= 85 ? 'Xuất sắc! · Excellent!' :
-                                        currentAnalysis.overallScore >= 70 ? 'Tốt lắm! · Good job!' :
-                                            currentAnalysis.overallScore >= 55 ? 'Đang tiến bộ · Getting there!' :
-                                                'Cố gắng thêm · Keep practicing!'}
-                                </div>
-                                <div style={{ fontSize: '0.7rem', color: SPEAKING_UI_THEME.textSoft, marginTop: '2px' }}>
-                                    {currentAnalysis.analysisSummary || currentAnalysis.note}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Compact metrics — horizontal scroll */}
-                        {currentAnalysis.metrics?.length > 0 && (
-                            <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '6px', marginBottom: '8px' }}>
-                                {currentAnalysis.metrics.map((m) => (
-                                    <div key={m.key} style={{
-                                        padding: '6px 10px', borderRadius: '12px',
-                                        background: SPEAKING_UI_THEME.panelSurfaceMuted,
-                                        border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
-                                        minWidth: '72px', textAlign: 'center', flexShrink: 0,
-                                    }}>
-                                        <div style={{ fontSize: '0.62rem', color: SPEAKING_UI_THEME.textSoft }}>{m.labelVi || m.label}</div>
-                                        <div style={{ fontSize: '0.88rem', fontWeight: 800, color: metricColor(m.score), marginTop: '2px' }}>{m.score}%</div>
+                    <div className="sc-coach-card" style={{ margin: '4px 0 4px 38px' }}>
+                        <SpeakingCoachPanel
+                            analysis={currentAnalysis}
+                            title="Coach feedback · Phản hồi lượt nói"
+                            transcriptLabel="What you said · Điều bạn vừa nói"
+                            transcript={finalText}
+                            tone={metricColor(currentAnalysis.overallScore)}
+                            compact
+                            footer={(
+                                <>
+                                    {currentCoachReply && (
+                                        <div style={{
+                                            marginTop: '8px', padding: '8px 10px', borderRadius: '12px',
+                                            background: SPEAKING_UI_THEME.accentSurface, border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
+                                            fontSize: '0.74rem', lineHeight: 1.5, color: SPEAKING_UI_THEME.textBody,
+                                        }}>
+                                            <strong style={{ color: SPEAKING_UI_THEME.accentStrong }}>{activeScenario.coachName}:</strong>{' '}
+                                            {currentCoachReply}
+                                            {currentCoachReplyClipId && (
+                                                <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.82rem', marginLeft: '6px' }}
+                                                    onClick={() => playCoachVoice(currentCoachReply, { clipId: currentCoachReplyClipId })}>🔊</button>
+                                            )}
+                                        </div>
+                                    )}
+                                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                                        <button style={{ ...secondaryButtonStyle, flex: 1, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
+                                            onClick={retryTurn}>🔄 Thử lại</button>
+                                        <button style={{ ...primaryButtonStyle, flex: 2, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
+                                            onClick={goNextTurn}>
+                                            {turnIndex + 1 >= activeScenario.turns.length ? '📊 Kết quả' : '➡️ Câu tiếp theo'}
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* Top strength + recommendation */}
-                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                            {currentAnalysis.strengths?.slice(0, 1).map((s, i) => (
-                                <div key={`s-${i}`} style={{
-                                    padding: '5px 10px', borderRadius: '10px', fontSize: '0.7rem',
-                                    background: SPEAKING_UI_THEME.successSurface, border: `1px solid ${SPEAKING_UI_THEME.successBorder}`,
-                                    color: SPEAKING_UI_THEME.successText, lineHeight: 1.4,
-                                }}>✅ {s}</div>
-                            ))}
-                            {currentAnalysis.recommendations?.slice(0, 1).map((r, i) => (
-                                <div key={`r-${i}`} style={{
-                                    padding: '5px 10px', borderRadius: '10px', fontSize: '0.7rem',
-                                    background: SPEAKING_UI_THEME.warningSurface, border: `1px solid ${SPEAKING_UI_THEME.warningBorder}`,
-                                    color: SPEAKING_UI_THEME.warningText, lineHeight: 1.4,
-                                }}>💡 {r}</div>
-                            ))}
-                        </div>
-
-                        {/* Coach follow-up */}
-                        {currentCoachReply && (
-                            <div style={{
-                                marginTop: '8px', padding: '8px 10px', borderRadius: '12px',
-                                background: SPEAKING_UI_THEME.accentSurface, border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
-                                fontSize: '0.74rem', lineHeight: 1.5, color: SPEAKING_UI_THEME.textBody,
-                            }}>
-                                <strong style={{ color: SPEAKING_UI_THEME.accentStrong }}>{activeScenario.coachName}:</strong>{' '}
-                                {currentCoachReply}
-                                {currentCoachReplyClipId && (
-                                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.82rem', marginLeft: '6px' }}
-                                        onClick={() => playCoachVoice(currentCoachReply, { clipId: currentCoachReplyClipId })}>🔊</button>
-                                )}
-                            </div>
-                        )}
-
-                        {/* Action buttons */}
-                        <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                            <button style={{ ...secondaryButtonStyle, flex: 1, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
-                                onClick={retryTurn}>🔄 Thử lại</button>
-                            <button style={{ ...primaryButtonStyle, flex: 2, padding: '10px', fontSize: '0.78rem', borderRadius: '12px' }}
-                                onClick={goNextTurn}>
-                                {turnIndex + 1 >= activeScenario.turns.length ? '📊 Kết quả' : '➡️ Câu tiếp theo'}
-                            </button>
-                        </div>
+                                </>
+                            )}
+                        />
                     </div>
                 )}
 
@@ -885,6 +846,93 @@ export default function FreeSpeakingCoach() {
                 }}>
                     {/* Tip */}
                     {currentTurn && phase !== 'recording' && phase !== 'processing' && (
+                        <>
+                            {activeScenario.lang === 'en' && (
+                                <div style={{
+                                    padding: '10px 12px',
+                                    borderRadius: '16px',
+                                    background: SPEAKING_UI_THEME.panelSurfaceRaised,
+                                    border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
+                                    marginBottom: '10px',
+                                }}>
+                                    <div style={{ fontSize: '0.72rem', fontWeight: 700, color: SPEAKING_UI_THEME.accentText, marginBottom: '6px' }}>
+                                        🇻🇳→🇬🇧 Phrase helper · Gõ ý tiếng Việt để lấy câu gợi ý
+                                    </div>
+                                    <textarea
+                                        value={helperDraft}
+                                        onChange={(event) => setHelperDraft(event.target.value)}
+                                        placeholder="Ví dụ: Hôm nay tôi đi làm và hơi mệt nhưng tôi vẫn hoàn thành việc chính."
+                                        rows={2}
+                                        style={{
+                                            width: '100%',
+                                            resize: 'vertical',
+                                            borderRadius: '12px',
+                                            border: `1px solid ${SPEAKING_UI_THEME.inputBorder}`,
+                                            padding: '10px 12px',
+                                            fontSize: '0.82rem',
+                                            lineHeight: 1.5,
+                                            background: SPEAKING_UI_THEME.inputSurface,
+                                            color: SPEAKING_UI_THEME.inputText,
+                                            outline: 'none',
+                                        }}
+                                    />
+                                    {helperSuggestion?.suggestion && (
+                                        <div style={{
+                                            marginTop: '8px',
+                                            padding: '10px 12px',
+                                            borderRadius: '12px',
+                                            background: SPEAKING_UI_THEME.accentSurface,
+                                            border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
+                                        }}>
+                                            <div style={{ fontSize: '0.7rem', color: SPEAKING_UI_THEME.accentText, marginBottom: '4px' }}>
+                                                {helperSuggestion.mode === 'matched'
+                                                    ? 'Matched speaking pattern · Mẫu câu khớp'
+                                                    : 'Prompt scaffold · Khung trả lời gợi ý'}
+                                            </div>
+                                            <div style={{ fontSize: '0.82rem', lineHeight: 1.55, color: SPEAKING_UI_THEME.textStrong }}>
+                                                {helperSuggestion.suggestion}
+                                            </div>
+                                            <div style={{ marginTop: '4px', fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.45 }}>
+                                                {helperSuggestion.note}
+                                            </div>
+                                            {helperSuggestion.matchedPatterns?.length > 0 && (
+                                                <div style={{ marginTop: '6px', display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                                                    {helperSuggestion.matchedPatterns.map((item) => (
+                                                        <span
+                                                            key={item}
+                                                            style={{
+                                                                padding: '4px 8px',
+                                                                borderRadius: '999px',
+                                                                fontSize: '0.66rem',
+                                                                color: SPEAKING_UI_THEME.neutralChipText,
+                                                                background: SPEAKING_UI_THEME.neutralChipSurface,
+                                                                border: `1px solid ${SPEAKING_UI_THEME.neutralChipBorder}`,
+                                                            }}
+                                                        >
+                                                            {item}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
+                                            <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                                                <button
+                                                    style={{ ...secondaryButtonStyle, flex: 1, padding: '10px', fontSize: '0.74rem', borderRadius: '12px' }}
+                                                    onClick={() => playCoachVoice(helperSuggestion.suggestion)}
+                                                >
+                                                    🔊 Nghe câu gợi ý
+                                                </button>
+                                                <button
+                                                    style={{ ...secondaryButtonStyle, flex: 1, padding: '10px', fontSize: '0.74rem', borderRadius: '12px' }}
+                                                    onClick={() => setTypedTranscript(helperSuggestion.suggestion)}
+                                                >
+                                                    📝 Dùng cho nhập tay
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                         <div style={{
                             padding: '8px 12px', borderRadius: '14px',
                             background: SPEAKING_UI_THEME.panelSurfaceRaised,
@@ -898,11 +946,12 @@ export default function FreeSpeakingCoach() {
                                 <span style={{ display: 'block', opacity: 0.7, fontStyle: 'italic', marginTop: '2px' }}>{currentTurn.tipVi}</span>
                             )}
                         </div>
+                        </>
                     )}
 
                     {phase === 'recording' && (
                         <div style={{ textAlign: 'center', fontSize: '0.72rem', color: '#8B5CF6', fontWeight: 700, marginBottom: '8px' }}>
-                            🎙️ Đang lắng nghe... · Listening...
+                            🎙️ Đang lắng nghe... tự dừng sau khoảng 2 giây im lặng · Listening... auto-stop after around 2 seconds of silence
                         </div>
                     )}
 

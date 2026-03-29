@@ -35,6 +35,10 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
     const finalTextRef = useRef('');
     const confidenceRef = useRef(0);
     const alternativesRef = useRef([]);
+    const silenceTimerRef = useRef(null);
+    const silenceMsRef = useRef(2000);
+    const autoStopOnSilenceRef = useRef(false);
+    const stopCaptureRef = useRef(() => {});
 
     const revokeAudioUrl = useCallback(() => {
         if (audioUrlRef.current) {
@@ -42,6 +46,13 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
             audioUrlRef.current = '';
         }
         setAudioUrl('');
+    }, []);
+
+    const clearSilenceTimer = useCallback(() => {
+        if (silenceTimerRef.current) {
+            window.clearTimeout(silenceTimerRef.current);
+            silenceTimerRef.current = null;
+        }
     }, []);
 
     const stopMediaTracks = useCallback(() => {
@@ -53,6 +64,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
 
     const resetSession = useCallback(() => {
         stoppingRef.current = true;
+        clearSilenceTimer();
         recognitionRef.current?.abort?.();
         if (mediaRecorderRef.current?.state && mediaRecorderRef.current.state !== 'inactive') {
             mediaRecorderRef.current.stop();
@@ -74,7 +86,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         confidenceRef.current = 0;
         alternativesRef.current = [];
         stoppingRef.current = false;
-    }, [revokeAudioUrl, stopMediaTracks]);
+    }, [clearSilenceTimer, revokeAudioUrl, stopMediaTracks]);
 
     useEffect(() => {
         phaseRef.current = phase;
@@ -87,6 +99,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
     }, [resetSession]);
 
     const requestManualFallback = useCallback((fallback) => {
+        clearSilenceTimer();
         if (mediaRecorderRef.current?.state && mediaRecorderRef.current.state !== 'inactive') {
             mediaRecorderRef.current.stop();
         }
@@ -96,7 +109,21 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
             title: 'Nhập lại câu đã nói',
             description: 'Thiết bị chưa thể nhận diện giọng nói. Hãy nhập transcript để tiếp tục.',
         });
-    }, [stopMediaTracks]);
+    }, [clearSilenceTimer, stopMediaTracks]);
+
+    const armSilenceAutoStop = useCallback((timeoutMs = silenceMsRef.current) => {
+        if (!autoStopOnSilenceRef.current || stoppingRef.current) return;
+        clearSilenceTimer();
+        silenceTimerRef.current = window.setTimeout(() => {
+            if (phaseRef.current !== 'recording') return;
+            recordCapabilityEvent('speech_capture_auto_stopped', {
+                module: moduleName,
+                reason: 'silence_timeout',
+                silenceMs: timeoutMs,
+            });
+            stopCaptureRef.current();
+        }, timeoutMs);
+    }, [clearSilenceTimer, moduleName]);
 
     const finalizeCapture = useCallback((transcriptOverride) => {
         const transcript = String(transcriptOverride ?? finalTextRef.current ?? '').trim()
@@ -123,6 +150,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         if (phaseRef.current !== 'recording' && phaseRef.current !== 'requesting') return;
 
         stoppingRef.current = true;
+        clearSilenceTimer();
         setPhase('processing');
         recognitionRef.current?.stop?.();
 
@@ -135,7 +163,11 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
             finalizeCapture();
             stoppingRef.current = false;
         }, 220);
-    }, [finalizeCapture, stopMediaTracks]);
+    }, [clearSilenceTimer, finalizeCapture, stopMediaTracks]);
+
+    useEffect(() => {
+        stopCaptureRef.current = stopCapture;
+    }, [stopCapture]);
 
     const startCapture = useCallback(async ({
         lang = 'en-US',
@@ -143,6 +175,8 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         interimResults = true,
         maxAlternatives = 3,
         autoStopOnEnd = true,
+        autoStopOnSilence = false,
+        silenceMs = 2000,
         fallback,
         onFinalize,
     } = {}) => {
@@ -150,6 +184,8 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         setPhase('requesting');
         finalizeCallbackRef.current = onFinalize || null;
         autoStopOnEndRef.current = autoStopOnEnd;
+        autoStopOnSilenceRef.current = autoStopOnSilence;
+        silenceMsRef.current = silenceMs;
 
         const SpeechRecognitionCtor = getSpeechRecognitionCtor();
         const hasMediaCapture = !!navigator.mediaDevices?.getUserMedia;
@@ -215,6 +251,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
 
         recognition.onresult = (event) => {
             let interim = '';
+            let heardSpeech = false;
             for (let index = event.resultIndex; index < event.results.length; index += 1) {
                 const result = event.results[index];
                 const resultAlternatives = Array.from(result).map((item) => ({
@@ -223,6 +260,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
                 }));
 
                 if (result.isFinal) {
+                    heardSpeech = true;
                     stableTranscript = `${stableTranscript} ${result[0].transcript}`.trim();
                     setFinalText(stableTranscript);
                     finalTextRef.current = stableTranscript;
@@ -231,11 +269,17 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
                     setConfidence(resultAlternatives[0]?.confidence || 0);
                     confidenceRef.current = resultAlternatives[0]?.confidence || 0;
                 } else {
+                    if (result[0]?.transcript?.trim()) {
+                        heardSpeech = true;
+                    }
                     interim += result[0].transcript;
                 }
             }
             setInterimText(interim.trim());
             interimTextRef.current = interim.trim();
+            if (heardSpeech) {
+                armSilenceAutoStop(silenceMsRef.current);
+            }
         };
 
         recognition.onerror = (event) => {
@@ -271,10 +315,13 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
                 lang,
                 continuous,
             });
+            if (autoStopOnSilenceRef.current) {
+                armSilenceAutoStop(Math.max(silenceMsRef.current * 2, 3500));
+            }
         } catch {
             requestManualFallback(fallback);
         }
-    }, [moduleName, requestManualFallback, resetSession, revokeAudioUrl, stopCapture, stopMediaTracks]);
+    }, [armSilenceAutoStop, moduleName, requestManualFallback, resetSession, revokeAudioUrl, stopCapture, stopMediaTracks]);
 
     const submitManualTranscript = useCallback((value) => {
         const transcript = String(value || '').trim();

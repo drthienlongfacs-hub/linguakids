@@ -11,8 +11,27 @@ const sourceFiles = [
     path.join(repoRoot, 'src', 'components', 'SpeakingCoachPanel.jsx'),
     path.join(repoRoot, 'src', 'components', 'ManualTranscriptFallback.jsx'),
     path.join(repoRoot, 'src', 'components', 'CapabilityNotice.jsx'),
+    path.join(repoRoot, 'src', 'hooks', 'useSpeechPracticeSession.js'),
+    path.join(repoRoot, 'src', 'services', 'freeSpeakingTranslationHelper.js'),
 ];
 const forbiddenSurfacePattern = /background\s*:\s*['"`][^'"`]*(?:rgba\(\s*255\s*,\s*255\s*,\s*255|#fff(?:fff)?)/gi;
+const requiredSourcePatterns = [
+    {
+        file: path.join(repoRoot, 'src', 'pages', 'FreeSpeakingCoach.jsx'),
+        pattern: /suggestEnglishFromVietnamese/,
+        message: 'FreeSpeakingCoach must wire the Vietnamese phrase helper into the runtime flow.',
+    },
+    {
+        file: path.join(repoRoot, 'src', 'hooks', 'useSpeechPracticeSession.js'),
+        pattern: /autoStopOnSilence|speech_capture_auto_stopped|silence_timeout/,
+        message: 'Speech practice session must support silence-based auto stop.',
+    },
+    {
+        file: path.join(repoRoot, 'src', 'components', 'SpeakingCoachPanel.jsx'),
+        pattern: /compact|See detailed analysis|Xem phân tích chi tiết/,
+        message: 'SpeakingCoachPanel must support compact expandable feedback.',
+    },
+];
 
 function hexToRgb(hex) {
     const normalized = String(hex || '').replace('#', '').trim();
@@ -55,6 +74,7 @@ async function main() {
     let missingFiles = 0;
     let zeroByteFiles = 0;
     let clipCount = 0;
+    const requiredPatternFindings = [];
 
     for (const filePath of sourceFiles) {
         const contents = await fs.readFile(filePath, 'utf8');
@@ -63,6 +83,16 @@ async function main() {
             sourceMatches.push({
                 file: path.relative(repoRoot, filePath),
                 matches,
+            });
+        }
+    }
+
+    for (const rule of requiredSourcePatterns) {
+        const contents = await fs.readFile(rule.file, 'utf8');
+        if (!rule.pattern.test(contents)) {
+            requiredPatternFindings.push({
+                file: path.relative(repoRoot, rule.file),
+                message: rule.message,
             });
         }
     }
@@ -120,14 +150,17 @@ async function main() {
             zeroByteFiles,
             forbiddenLightSurfaceMatches: sourceMatches.reduce((sum, item) => sum + item.matches.length, 0),
             contrastFailures: contrastFailures.length,
+            requiredPatternFailures: requiredPatternFindings.length,
             strictModulePass: missingFiles === 0
                 && zeroByteFiles === 0
                 && contrastFailures.length === 0
-                && sourceMatches.length === 0,
+                && sourceMatches.length === 0
+                && requiredPatternFindings.length === 0,
         },
         scenarios: scenarioSummaries,
         contrast,
         sourceMatches,
+        requiredPatternFindings,
     };
 
     await fs.writeFile(qaPath, `${JSON.stringify(qa, null, 2)}\n`);
