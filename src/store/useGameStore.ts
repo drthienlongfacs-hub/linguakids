@@ -13,6 +13,37 @@ export interface WordLearned {
     lastReviewQuality?: number;
 }
 
+export interface SpeakingRecapMetric {
+    key: string;
+    label: string;
+    score: number;
+    status: string;
+    insight: string;
+}
+
+export interface SpeakingRecap {
+    id: string;
+    createdAt: string;
+    lessonId: string;
+    lessonTitle: string;
+    lang: 'en' | 'cn';
+    promptText: string;
+    targetText: string;
+    transcript: string;
+    source: string;
+    overallScore: number;
+    analysisType: string;
+    metrics: SpeakingRecapMetric[];
+    recommendations: string[];
+    note: string;
+    transcriptStats: {
+        tokenCount: number;
+        uniqueTokens: number;
+        wpm: number;
+        lexicalDiversity: number;
+    };
+}
+
 export interface GameState {
     childName: string;
     avatarEmoji: string;
@@ -57,6 +88,7 @@ export interface GameState {
     completedRoadmapTasks: { week: number; day: number; taskIdx: number; type: string; xp: number }[];
     skillScores: Record<string, number>;
     examHistory: { date: string; type: string; score: number }[];
+    speakingRecaps: SpeakingRecap[];
 }
 
 interface GameActions {
@@ -79,6 +111,8 @@ interface GameActions {
     completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => void;
     setPlacementResult: (cefrLevel: string | null, hskLevel: string | null) => void;
     updateSkillScore: (skill: string, score: number) => void;
+    addSpeakingRecap: (recap: SpeakingRecap) => void;
+    clearSpeakingRecaps: () => void;
 }
 
 export type GameStore = GameState & GameActions;
@@ -117,6 +151,7 @@ const DEFAULT_STATE: GameState = {
     completedRoadmapTasks: [],
     skillScores: { listening: 0, reading: 0, writing: 0, speaking: 0, grammar: 0, vocabulary: 0 },
     examHistory: [],
+    speakingRecaps: [],
 };
 
 export const useGameStore = create<GameStore>()(
@@ -268,6 +303,10 @@ export const useGameStore = create<GameStore>()(
                     skillScores: { ...state.skillScores, [skill]: Math.min(100, Math.max(0, updated)) },
                 };
             }),
+            addSpeakingRecap: (recap: SpeakingRecap) => set((state) => ({
+                speakingRecaps: [recap, ...state.speakingRecaps].slice(0, 20),
+            })),
+            clearSpeakingRecaps: () => set({ speakingRecaps: [] }),
         }),
         {
             name: 'linguakids_state_z', // unique name

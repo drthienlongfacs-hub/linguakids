@@ -128,5 +128,8 @@ export function useGameState() {
         recordDailyActivity: store.recordDailyActivity,
         completeDailyChallenge: store.completeDailyChallenge,
         getDailyStats,
+        updateSkillScore: store.updateSkillScore,
+        addSpeakingRecap: store.addSpeakingRecap,
+        clearSpeakingRecaps: store.clearSpeakingRecaps,
     };
 }

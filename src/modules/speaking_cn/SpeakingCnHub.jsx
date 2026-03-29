@@ -19,7 +19,11 @@ export default function SpeakingCnHub() {
         .reduce((sum, lesson) => sum + (lesson.prompts?.length || 0), 0);
     const totalToneItems = lessons
         .filter(lesson => lesson.type === 'tone_drill')
-        .reduce((sum, lesson) => sum + (lesson.drills?.length || 0) + (lesson.tonePairs?.length || 0), 0);
+        .reduce((sum, lesson) => (
+            sum
+            + (lesson.drills?.length || 0)
+            + (lesson.tonePairs || []).reduce((pairSum, pair) => pairSum + (pair.words?.length || 0), 0)
+        ), 0);
 
     const typeLabels = {
         tone_drill: { icon: '🎵', label: 'Luyện thanh điệu' },
@@ -107,7 +111,7 @@ export default function SpeakingCnHub() {
                                     <div className="lh-lesson-meta">
                                         <span>📊 {lesson.level}</span>
                                         <span>
-                                            {lesson.type === 'tone_drill' && `${lesson.drills?.length || 0} thanh + ${lesson.tonePairs?.length || 0} cặp`}
+                                            {lesson.type === 'tone_drill' && `${lesson.drills?.length || 0} thanh + ${(lesson.tonePairs || []).reduce((sum, pair) => sum + (pair.words?.length || 0), 0)} từ/cụm`}
                                             {lesson.type === 'shadowing' && `${lesson.sentences?.length || 0} câu`}
                                             {lesson.type === 'conversation' && `${lesson.prompts?.length || 0} câu hỏi`}
                                         </span>

@@ -3,8 +3,46 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import CapabilityNotice from '../../components/CapabilityNotice';
 import ManualTranscriptFallback from '../../components/ManualTranscriptFallback';
+import { useGame } from '../../context/GameStateContext';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { recordCapabilityEvent } from '../../services/capabilityService';
+import { analyzeSpeakingAttempt, buildSpeakingRecap } from '../../services/speakingAnalyticsService';
+
+function normalizeTemplateText(text) {
+    return String(text || '')
+        .replace(/[_\uFF3F]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function countUnits(text, lang = 'en') {
+    const value = String(text || '').trim();
+    if (!value) return 0;
+    if (lang === 'cn') {
+        return value.replace(/[，。！？、\s]/g, '').length;
+    }
+    return value.split(/\s+/).filter(Boolean).length;
+}
+
+function estimateExpectedTokens({ targetText, sampleAnswer, lessonType, part, lang }) {
+    const targetCount = countUnits(targetText, lang);
+    if (targetCount > 0) {
+        return lang === 'cn'
+            ? Math.max(2, targetCount)
+            : Math.max(3, targetCount - 1);
+    }
+
+    const sampleCount = countUnits(sampleAnswer, lang);
+    if (sampleCount > 0) {
+        return sampleCount;
+    }
+
+    if (part === 2) return lang === 'cn' ? 18 : 40;
+    if (part === 3) return lang === 'cn' ? 10 : 18;
+    if (part === 1) return lang === 'cn' ? 6 : 8;
+    if (lessonType === 'conversation') return lang === 'cn' ? 4 : 6;
+    return lang === 'cn' ? 3 : 4;
+}
 
 export default function SpeakingExercise({ lesson, onBack, adult }) {
     const [currentIdx, setCurrentIdx] = useState(0);
@@ -14,6 +52,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     const [errorMsg, setErrorMsg] = useState('');
     const [showResult, setShowResult] = useState(false);
     const [scores, setScores] = useState([]);
+    const [analysis, setAnalysis] = useState(null);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [prepPhase, setPrepPhase] = useState(lesson.prepTime > 0);
     const [prepTimer, setPrepTimer] = useState(lesson.prepTime || 0);
@@ -23,12 +62,20 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     const timeoutRef = useRef(null);
     const prepTimerRef = useRef(null);
     const voicesRef = useRef([]);
+    const recordingStartedAtRef = useRef(0);
+    const { updateSkillScore, addSpeakingRecap } = useGame();
     const { readiness } = useDeviceCapabilities();
 
     const items = lesson.type === 'ielts_speaking'
         ? (lesson.questions || [{ question: lesson.cueCard?.topic || '' }])
         : (lesson.sentences || lesson.prompts || []);
     const current = items[currentIdx];
+    const lessonLang = lesson.lang === 'cn' ? 'cn' : 'en';
+    const langCode = lessonLang === 'cn' ? 'zh-CN' : 'en-US';
+    const promptText = current?.question || current?.text || lesson.cueCard?.topic || '';
+    const promptTranslation = current?.textVi || current?.questionVi || '';
+    const sampleAnswer = normalizeTemplateText(current?.sampleAnswer || lesson.sampleAnswer || '');
+    const samplePinyin = current?.samplePinyin || '';
 
     // Pre-load voices on mount (Chrome loads them async)
     useEffect(() => {
@@ -61,42 +108,66 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         };
     }, []);
 
-    const langCode = lesson.lang === 'cn' ? 'zh-CN' : 'en-US';
-    const isChinese = langCode.startsWith('zh');
+    const scoreTranscript = useCallback((spokenText, durationMs = 0) => {
+        const targetText = current?.text || '';
+        const promptContext = current?.question || current?.text || lesson.cueCard?.topic || '';
+        const cleanedSampleAnswer = normalizeTemplateText(current?.sampleAnswer || lesson.sampleAnswer || '');
+        const analytics = analyzeSpeakingAttempt({
+            spokenText,
+            lang: lessonLang,
+            durationMs,
+            targetText,
+            promptText: promptContext,
+            sampleAnswer: cleanedSampleAnswer,
+            tip: current?.tip || current?.tipVi || '',
+            expectedMinTokens: estimateExpectedTokens({
+                targetText,
+                sampleAnswer: cleanedSampleAnswer,
+                lessonType: lesson.type,
+                part: lesson.part,
+                lang: lessonLang,
+            }),
+        });
 
-    const scoreTranscript = useCallback((spokenText) => {
-        const original = (current?.text || current?.question || '')
-            .toLowerCase()
-            .replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
-        const spoken = String(spokenText || '')
-            .toLowerCase()
-            .replace(/[^a-z0-9\u4e00-\u9fff\s]/g, '');
-        const origWords = isChinese
-            ? original.replace(/\s/g, '').split('').filter(Boolean)
-            : original.split(/\s+/).filter(Boolean);
-        const spokenWords = isChinese
-            ? spoken.replace(/\s/g, '').split('').filter(Boolean)
-            : spoken.split(/\s+/).filter(Boolean);
-
-        let matched = 0;
-        for (const unit of origWords) {
-            if (spokenWords.includes(unit)) {
-                matched++;
-            }
-        }
-
-        const accuracy = Math.round((matched / Math.max(origWords.length, 1)) * 100);
+        setAnalysis(analytics);
         setFinalText(spokenText);
-        setScores(prev => [...prev, accuracy]);
+        setScores(prev => [...prev, analytics.overallScore]);
+        updateSkillScore('speaking', analytics.overallScore);
+        addSpeakingRecap(buildSpeakingRecap({
+            lessonId: lesson.id,
+            lessonTitle: lesson.title,
+            lang: lessonLang,
+            promptText: promptContext,
+            targetText,
+            transcript: spokenText,
+            analytics,
+            source: lesson.type === 'ielts_speaking'
+                ? `ielts_part_${lesson.part || 0}`
+                : lesson.type || 'speaking',
+        }));
+
         setTimeout(() => {
             setRecState('done');
             setShowResult(true);
         }, 300);
-    }, [current, isChinese]);
+    }, [
+        addSpeakingRecap,
+        current,
+        lesson.cueCard?.topic,
+        lesson.id,
+        lesson.part,
+        lesson.sampleAnswer,
+        lesson.title,
+        lesson.type,
+        lessonLang,
+        updateSkillScore,
+    ]);
 
     const requestTypedFallback = useCallback((message) => {
         setManualPrompt(message);
         setManualTranscript('');
+        setAnalysis(null);
+        recordingStartedAtRef.current = 0;
         setRecState('manual');
         recordCapabilityEvent('speech_input_fallback_triggered', {
             module: 'SpeakingExercise',
@@ -124,6 +195,10 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         setInterimText('');
         setFinalText('');
         setShowResult(false);
+        setAnalysis(null);
+        setManualPrompt('');
+        setManualTranscript('');
+        recordingStartedAtRef.current = 0;
 
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SR) {
@@ -207,7 +282,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
                     lang: langCode,
                     chars: fullTranscript.trim().length,
                 });
-                scoreTranscript(fullTranscript);
+                scoreTranscript(fullTranscript, Date.now() - recordingStartedAtRef.current);
             } else {
                 setRecState('error');
                 setErrorMsg(adult ? 'No speech detected. Tap Record and speak clearly.' : 'Không nghe thấy. Nhấn Ghi âm và nói rõ ràng!');
@@ -217,6 +292,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         recognitionRef.current = rec;
         try {
             rec.start();
+            recordingStartedAtRef.current = Date.now();
             setRecState('listening');
             timeoutRef.current = setTimeout(() => { recognitionRef.current?.stop(); }, 15000);
         } catch {
@@ -238,6 +314,9 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         setInterimText('');
         setRecState('idle');
         setErrorMsg('');
+        setAnalysis(null);
+        setManualPrompt('');
+        setManualTranscript('');
     };
 
     const retryRecording = () => {
@@ -246,6 +325,10 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         setFinalText('');
         setInterimText('');
         setShowResult(false);
+        setAnalysis(null);
+        setManualPrompt('');
+        setManualTranscript('');
+        recordingStartedAtRef.current = 0;
     };
 
     const submitManualTranscript = () => {
@@ -257,16 +340,18 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             lang: langCode,
             chars: manualTranscript.trim().length,
         });
-        scoreTranscript(manualTranscript.trim());
+        scoreTranscript(manualTranscript.trim(), 0);
     };
 
     const cancelManualTranscript = () => {
         setManualPrompt('');
         setManualTranscript('');
+        setAnalysis(null);
         setRecState('idle');
     };
 
     const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+    const latestScore = analysis?.overallScore ?? scores[scores.length - 1] ?? 0;
 
     const statusConfig = {
         idle: { label: adult ? 'Tap Record to start' : 'Nhấn Ghi âm để bắt đầu', color: '#94A3B8' },
@@ -330,10 +415,29 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
                     summary={readiness.speechInput.summary}
                     compact
                 />
-                <p className="sp-sentence-text">{current?.text || current?.question}</p>
-                {current?.textVi && <p className="sp-sentence-vi">🇻🇳 {current.textVi}</p>}
+                <p className="sp-sentence-text">{promptText}</p>
+                {promptTranslation && <p className="sp-sentence-vi">🇻🇳 {promptTranslation}</p>}
                 {current?.pinyin && <p style={{ color: '#8B5CF6', fontSize: '0.9rem', margin: '4px 0' }}>{current.pinyin}</p>}
-                {current?.tip && <p className="sp-tip">💡 {current.tip}</p>}
+                {(current?.tip || current?.tipVi) && <p className="sp-tip">💡 {current?.tip || current?.tipVi}</p>}
+                {sampleAnswer && !current?.text && (
+                    <div style={{
+                        marginTop: '12px',
+                        padding: '12px 14px',
+                        borderRadius: '12px',
+                        background: 'rgba(59,130,246,0.08)',
+                        border: '1px solid rgba(59,130,246,0.18)',
+                    }}>
+                        <strong style={{ display: 'block', marginBottom: '4px', color: '#1D4ED8', fontSize: '0.82rem' }}>
+                            {adult ? 'Suggested response frame' : 'Khung trả lời gợi ý'}
+                        </strong>
+                        <p style={{ margin: 0, fontSize: '0.92rem', lineHeight: 1.5 }}>{sampleAnswer}</p>
+                        {samplePinyin && (
+                            <p style={{ margin: '6px 0 0', fontSize: '0.85rem', color: '#8B5CF6' }}>
+                                {samplePinyin}
+                            </p>
+                        )}
+                    </div>
+                )}
                 {!(window.SpeechRecognition || window.webkitSpeechRecognition) && (
                     <p style={{
                         margin: '8px 0 0',
@@ -420,13 +524,66 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
 
                 {showResult && (
                     <div className="sp-result">
-                        <div className={`dictation-accuracy ${scores[scores.length - 1] >= 80 ? 'good' : scores[scores.length - 1] >= 50 ? 'ok' : 'poor'}`}>
-                            {scores[scores.length - 1]}% Match
+                        <div className={`dictation-accuracy ${latestScore >= 80 ? 'good' : latestScore >= 50 ? 'ok' : 'poor'}`}>
+                            {latestScore}% {adult ? 'Coaching Score' : 'Điểm coaching'}
                         </div>
                         <div className="sp-your-speech">
                             <strong>{adult ? 'Your speech:' : 'Bạn nói:'}</strong>
                             <p>{finalText || '(Could not detect speech)'}</p>
                         </div>
+                        {analysis?.metrics?.length > 0 && (
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                                gap: '8px',
+                                marginTop: '12px',
+                            }}>
+                                {analysis.metrics.map((metric) => (
+                                    <div
+                                        key={metric.key}
+                                        style={{
+                                            padding: '10px 12px',
+                                            borderRadius: '12px',
+                                            background: 'rgba(15,23,42,0.04)',
+                                            border: '1px solid rgba(148,163,184,0.22)',
+                                        }}
+                                    >
+                                        <div style={{ fontSize: '0.76rem', color: '#64748B', marginBottom: '4px' }}>
+                                            {metric.label}
+                                        </div>
+                                        <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#0F172A' }}>
+                                            {metric.score}%
+                                        </div>
+                                        <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '4px', lineHeight: 1.4 }}>
+                                            {metric.insight}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {analysis?.recommendations?.length > 0 && (
+                            <div style={{
+                                marginTop: '12px',
+                                padding: '12px 14px',
+                                borderRadius: '12px',
+                                background: 'rgba(34,197,94,0.08)',
+                                border: '1px solid rgba(34,197,94,0.2)',
+                            }}>
+                                <strong style={{ display: 'block', marginBottom: '6px' }}>
+                                    {adult ? 'Next-step coaching' : 'Gợi ý cải thiện'}
+                                </strong>
+                                <ul style={{ margin: 0, paddingLeft: '18px', lineHeight: 1.5 }}>
+                                    {analysis.recommendations.map((recommendation) => (
+                                        <li key={recommendation}>{recommendation}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+                        {analysis?.note && (
+                            <p style={{ marginTop: '12px', fontSize: '0.75rem', color: '#64748B', lineHeight: 1.45 }}>
+                                {analysis.note}
+                            </p>
+                        )}
                         <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
                             <button className="dict-play-btn" onClick={startRecording} style={{ flex: 1 }}>
                                 🔄 {adult ? 'Try Again' : 'Thử lại'}

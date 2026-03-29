@@ -7,8 +7,10 @@
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import CapabilityNotice from '../../components/CapabilityNotice';
 import ManualTranscriptFallback from '../../components/ManualTranscriptFallback';
+import { useGame } from '../../context/GameStateContext';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { recordCapabilityEvent } from '../../services/capabilityService';
+import { analyzeSpeakingAttempt, buildSpeakingRecap } from '../../services/speakingAnalyticsService';
 
 // ============================================================
 // Levenshtein distance for word-level similarity scoring
@@ -122,6 +124,8 @@ export default function ShadowingEngine({
     const [revealIdx, setRevealIdx] = useState(-1); // slow-reveal word index
     const [manualTranscript, setManualTranscript] = useState('');
     const [manualPrompt, setManualPrompt] = useState('');
+    const [analysis, setAnalysis] = useState(null);
+    const { updateSkillScore, addSpeakingRecap } = useGame();
     const { readiness } = useDeviceCapabilities();
 
     const recRef = useRef(null);
@@ -129,6 +133,7 @@ export default function ShadowingEngine({
     const analyserRef = useRef(null);
     const frameRef = useRef(null);
     const revealTimerRef = useRef(null);
+    const recordingStartedAtRef = useRef(0);
 
     // Parse words for slow-reveal
     const words = useMemo(() => {
@@ -213,26 +218,57 @@ export default function ShadowingEngine({
         }
     }, []);
 
-    const applyTranscript = useCallback((spokenText) => {
+    const applyTranscript = useCallback((spokenText, durationMs = 0) => {
         setState('processing');
         const diffs = diffWords(text, spokenText, lang);
-        const acc = calculateAccuracy(diffs);
+        const transcriptMatch = calculateAccuracy(diffs);
+        const analytics = analyzeSpeakingAttempt({
+            spokenText,
+            lang,
+            durationMs,
+            targetText: text,
+            promptText: textVi || pinyin || text,
+            expectedMinTokens: Math.max(2, words.length),
+        });
+        const stableAnalytics = {
+            ...analytics,
+            metrics: analytics.metrics.map((metric) => (
+                metric.key === 'pronunciation'
+                    ? { ...metric, score: transcriptMatch }
+                    : metric
+            )),
+        };
+        const coachingScore = analytics.overallScore;
 
         setFinalText(spokenText);
-        setWordDiffs(diffs);
-        setAccuracy(acc);
+        setWordDiffs(analytics.referenceDiffs?.length ? analytics.referenceDiffs : diffs);
+        setAnalysis(stableAnalytics);
+        setAccuracy(coachingScore);
         setAttempts(previous => previous + 1);
-        if (acc > bestScore) {
-            setBestScore(acc);
+        if (coachingScore > bestScore) {
+            setBestScore(coachingScore);
         }
+        updateSkillScore('speaking', coachingScore);
+        addSpeakingRecap(buildSpeakingRecap({
+            lessonId: `shadow-${lang}-${text.slice(0, 24)}`,
+            lessonTitle: text.length > 48 ? `${text.slice(0, 48)}...` : text,
+            lang: lang === 'cn' ? 'cn' : 'en',
+            promptText: textVi || pinyin || text,
+            targetText: text,
+            transcript: spokenText,
+            analytics: stableAnalytics,
+            source: 'shadowing',
+        }));
 
         setTimeout(() => setState('result'), 200);
-    }, [text, lang, bestScore]);
+    }, [addSpeakingRecap, bestScore, lang, pinyin, text, textVi, updateSkillScore, words.length]);
 
     const requestTypedFallback = useCallback((message) => {
         stopWaveform();
         setManualPrompt(message);
         setManualTranscript('');
+        setAnalysis(null);
+        recordingStartedAtRef.current = 0;
         setState('manual');
         recordCapabilityEvent('speech_input_fallback_triggered', {
             module: 'ShadowingEngine',
@@ -247,6 +283,10 @@ export default function ShadowingEngine({
         setInterim('');
         setFinalText('');
         setWordDiffs([]);
+        setAnalysis(null);
+        setManualPrompt('');
+        setManualTranscript('');
+        recordingStartedAtRef.current = 0;
         setState('recording');
 
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -328,8 +368,8 @@ export default function ShadowingEngine({
                     lang,
                     chars: fullTranscript.trim().length,
                 });
-                applyTranscript(fullTranscript);
-            } else if (state === 'recording') {
+                applyTranscript(fullTranscript, Date.now() - recordingStartedAtRef.current);
+            } else {
                 setError('No speech detected. Speak clearly!');
                 setState('idle');
             }
@@ -337,13 +377,14 @@ export default function ShadowingEngine({
 
         recRef.current = rec;
         rec.start();
+        recordingStartedAtRef.current = Date.now();
         startWaveform();
 
         // Auto-stop after 15 seconds
         timeoutRef.current = setTimeout(() => {
             recRef.current?.stop();
         }, 15000);
-    }, [startWaveform, stopWaveform, state, applyTranscript, requestTypedFallback, lang]);
+    }, [startWaveform, stopWaveform, applyTranscript, requestTypedFallback, lang]);
 
     const stopRecording = useCallback(() => {
         clearTimeout(timeoutRef.current);
@@ -361,12 +402,13 @@ export default function ShadowingEngine({
             lang,
             chars: manualTranscript.trim().length,
         });
-        applyTranscript(manualTranscript.trim());
+        applyTranscript(manualTranscript.trim(), 0);
     };
 
     const cancelManualTranscript = () => {
         setManualPrompt('');
         setManualTranscript('');
+        setAnalysis(null);
         setState('idle');
     };
 
@@ -522,7 +564,9 @@ export default function ShadowingEngine({
                         <p style={{ fontSize: '1.5rem', fontWeight: 700, margin: '4px 0 2px', color: accuracy >= 75 ? '#059669' : '#DC2626' }}>
                             {accuracy}%
                         </p>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', margin: 0 }}>{gradeLabel}</p>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', margin: 0 }}>
+                            {analysis ? 'Transcript-based coaching score' : gradeLabel}
+                        </p>
                         {attempts > 1 && (
                             <p style={{ fontSize: '0.75rem', color: '#8B5CF6', margin: '4px 0 0' }}>
                                 Best: {bestScore}% · Attempt #{attempts}
@@ -560,9 +604,63 @@ export default function ShadowingEngine({
                         <strong>You said:</strong> {finalText || '(no speech detected)'}
                     </div>
 
+                    {analysis?.metrics?.length > 0 && (
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+                            gap: '8px',
+                            marginTop: '12px',
+                        }}>
+                            {analysis.metrics.map((metric) => (
+                                <div
+                                    key={metric.key}
+                                    style={{
+                                        padding: '10px 12px',
+                                        borderRadius: '10px',
+                                        background: 'rgba(15,23,42,0.04)',
+                                        border: '1px solid rgba(148,163,184,0.22)',
+                                    }}
+                                >
+                                    <div style={{ fontSize: '0.74rem', color: '#64748B', marginBottom: '4px' }}>
+                                        {metric.label}
+                                    </div>
+                                    <div style={{ fontSize: '1rem', fontWeight: 800 }}>
+                                        {metric.score}%
+                                    </div>
+                                    <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '4px', lineHeight: 1.35 }}>
+                                        {metric.insight}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {analysis?.recommendations?.length > 0 && (
+                        <div style={{
+                            marginTop: '12px',
+                            padding: '12px 14px',
+                            borderRadius: '12px',
+                            background: 'rgba(34,197,94,0.08)',
+                            border: '1px solid rgba(34,197,94,0.2)',
+                        }}>
+                            <strong style={{ display: 'block', marginBottom: '6px' }}>Next-step coaching</strong>
+                            <ul style={{ margin: 0, paddingLeft: '18px', lineHeight: 1.5 }}>
+                                {analysis.recommendations.map((recommendation) => (
+                                    <li key={recommendation}>{recommendation}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
+                    {analysis?.note && (
+                        <p style={{ marginTop: '12px', fontSize: '0.75rem', color: '#64748B', lineHeight: 1.45 }}>
+                            {analysis.note}
+                        </p>
+                    )}
+
                     {/* Actions */}
                     <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
-                        <button onClick={() => { setState('idle'); setWordDiffs([]); }}
+                        <button onClick={() => { setState('idle'); setWordDiffs([]); setAnalysis(null); setFinalText(''); setInterim(''); }}
                             style={{ flex: 1, padding: '10px', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'transparent', cursor: 'pointer', fontWeight: 600 }}>
                             🔄 Retry
                         </button>
@@ -580,7 +678,7 @@ export default function ShadowingEngine({
             {state === 'processing' && (
                 <div style={{ textAlign: 'center', padding: '20px', color: '#6366F1' }}>
                     <div style={{ fontSize: '1.5rem', animation: 'spin 1s linear infinite' }}>⏳</div>
-                    <p style={{ fontSize: '0.9rem', marginTop: '8px' }}>Analyzing pronunciation...</p>
+                    <p style={{ fontSize: '0.9rem', marginTop: '8px' }}>Analyzing transcript-derived speaking signals...</p>
                 </div>
             )}
         </div>
