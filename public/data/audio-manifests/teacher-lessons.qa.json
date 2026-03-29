@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-03-29T07:53:06.548Z",
+  "sourceManifest": "teacher-lessons.json",
+  "summary": {
+    "chapterCount": 19,
+    "practiceItemCount": 517,
+    "clipCount": 434,
+    "manifestClipCount": 434,
+    "filteredOutStructuralItems": 10,
+    "missingFiles": 0,
+    "zeroByteFiles": 0,
+    "sourceFindings": 0,
+    "strictModulePass": true
+  },
+  "missingKeys": [],
+  "zeroByteKeys": [],
+  "sourceFindings": []
+}

@@ -21,6 +21,7 @@ function run(command, args) {
 async function main() {
     await run('npm', ['run', 'audit:premium']);
     await run('npm', ['run', 'audit:free-speaking']);
+    await run('npm', ['run', 'audit:teacher-lessons']);
 }
 
 main().catch((error) => {

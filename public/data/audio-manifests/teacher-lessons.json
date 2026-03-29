@@ -1,0 +1,3142 @@
+{
+  "source": "controlled_teacher_lessons_pack",
+  "engine": "edge_tts",
+  "generatedAt": "2026-03-29T07:51:34.958Z",
+  "voice": {
+    "voice": "en-US-AriaNeural",
+    "voiceLabel": "Teacher Studio / Aria",
+    "speakerKey": "teacher_studio_aria",
+    "variantMode": "distinct_speaker",
+    "rate": "+0%",
+    "pitch": "+0Hz",
+    "volume": "+0%"
+  },
+  "summary": {
+    "chapterCount": 19,
+    "practiceItemCount": 517,
+    "clipCount": 434
+  },
+  "clips": {
+    "airplane": {
+      "text": "Airplane",
+      "src": "audio/teacher-lessons/32e6c5c2ad23.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "arm": {
+      "text": "Arm",
+      "src": "audio/teacher-lessons/ed945d6b996f.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "book": {
+      "text": "Book",
+      "src": "audio/teacher-lessons/e7e694c58cd5.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "ball": {
+      "text": "Ball",
+      "src": "audio/teacher-lessons/8bec0406497c.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "ant": {
+      "text": "Ant",
+      "src": "audio/teacher-lessons/64bd05d89142.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "apple": {
+      "text": "Apple",
+      "src": "audio/teacher-lessons/d0be2dc421be.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "this_is_my_"
+      ]
+    },
+    "boy": {
+      "text": "Boy",
+      "src": "audio/teacher-lessons/ceac9b04aced.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "banana": {
+      "text": "Banana",
+      "src": "audio/teacher-lessons/250e77f12a5a.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "car": {
+      "text": "Car",
+      "src": "audio/teacher-lessons/9e32521dd2f8.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "cup": {
+      "text": "Cup",
+      "src": "audio/teacher-lessons/ad00c690d667.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "i_have",
+        "there_is_a_an"
+      ]
+    },
+    "cake": {
+      "text": "Cake",
+      "src": "audio/teacher-lessons/5ddc2ae17d5b.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "cat": {
+      "text": "Cat",
+      "src": "audio/teacher-lessons/9d989e8d27dc.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "baby_animals",
+        "color",
+        "i_have"
+      ]
+    },
+    "duck": {
+      "text": "Duck",
+      "src": "audio/teacher-lessons/5ece240085b9.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "baby_animals"
+      ]
+    },
+    "desk": {
+      "text": "Desk",
+      "src": "audio/teacher-lessons/46e7cfa08091.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an",
+        "this_is_my_"
+      ]
+    },
+    "door": {
+      "text": "Door",
+      "src": "audio/teacher-lessons/2680b6746cf8.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "dog": {
+      "text": "Dog",
+      "src": "audio/teacher-lessons/e49512524f47.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "baby_animals",
+        "color",
+        "this_is_my_"
+      ]
+    },
+    "elephant": {
+      "text": "Elephant",
+      "src": "audio/teacher-lessons/0ae9e4deba26.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "egg": {
+      "text": "Egg",
+      "src": "audio/teacher-lessons/4fa6024f1249.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "ear": {
+      "text": "Ear",
+      "src": "audio/teacher-lessons/ddbc6188203d.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "eye": {
+      "text": "Eye",
+      "src": "audio/teacher-lessons/79df4b171812.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "flower": {
+      "text": "Flower",
+      "src": "audio/teacher-lessons/5a46b8253d07.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "frog": {
+      "text": "Frog",
+      "src": "audio/teacher-lessons/b3e0f62fa104.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "fan": {
+      "text": "Fan",
+      "src": "audio/teacher-lessons/2899441143e2.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "i_have",
+        "there_is_a_an"
+      ]
+    },
+    "fish": {
+      "text": "Fish",
+      "src": "audio/teacher-lessons/64875fcccaac.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "girl": {
+      "text": "Girl",
+      "src": "audio/teacher-lessons/25b732b3425c.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "goat": {
+      "text": "Goat",
+      "src": "audio/teacher-lessons/162d15a0c695.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "grey": {
+      "text": "Grey",
+      "src": "audio/teacher-lessons/7d1f8f911da9.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "gloves": {
+      "text": "Gloves",
+      "src": "audio/teacher-lessons/33ac0350c30c.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "hat": {
+      "text": "Hat",
+      "src": "audio/teacher-lessons/10e5866050d2.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "hen": {
+      "text": "Hen",
+      "src": "audio/teacher-lessons/d811086176db.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "hand": {
+      "text": "Hand",
+      "src": "audio/teacher-lessons/9621a244a447.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an"
+      ]
+    },
+    "iron": {
+      "text": "iron",
+      "src": "audio/teacher-lessons/b6a8f8958154.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an"
+      ]
+    },
+    "house": {
+      "text": "House",
+      "src": "audio/teacher-lessons/5be93480bd8b.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "this_is_my_"
+      ]
+    },
+    "ice cream": {
+      "text": "ice cream",
+      "src": "audio/teacher-lessons/7c16c8188e25.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "ink": {
+      "text": "ink",
+      "src": "audio/teacher-lessons/ec437ab60af3.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "island": {
+      "text": "island",
+      "src": "audio/teacher-lessons/7bd1a907a1ec.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "jellyfish": {
+      "text": "Jellyfish",
+      "src": "audio/teacher-lessons/bf3acbf92b3c.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "jelly": {
+      "text": "Jelly",
+      "src": "audio/teacher-lessons/31e49e19060b.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "juice": {
+      "text": "Juice",
+      "src": "audio/teacher-lessons/07ef87917542.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "jam": {
+      "text": "Jam",
+      "src": "audio/teacher-lessons/da3dd5c2657f.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "lion": {
+      "text": "Lion",
+      "src": "audio/teacher-lessons/eaf14a01af23.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "baby_animals"
+      ]
+    },
+    "kite": {
+      "text": "Kite",
+      "src": "audio/teacher-lessons/34e1c7876de9.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "key": {
+      "text": "Key",
+      "src": "audio/teacher-lessons/a62f2225bf70.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "lamp": {
+      "text": "Lamp",
+      "src": "audio/teacher-lessons/bc4edcce8a85.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "kangaroo": {
+      "text": "Kangaroo",
+      "src": "audio/teacher-lessons/7d94bcd89230.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "knife": {
+      "text": "Knife",
+      "src": "audio/teacher-lessons/6e32618ee300.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "moon": {
+      "text": "Moon",
+      "src": "audio/teacher-lessons/46dcd4dd65b6.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "leg": {
+      "text": "Leg",
+      "src": "audio/teacher-lessons/321d6cc5177a.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "leaf": {
+      "text": "Leaf",
+      "src": "audio/teacher-lessons/98798241748e.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "monkey": {
+      "text": "Monkey",
+      "src": "audio/teacher-lessons/ab87d24bdc74.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "milk": {
+      "text": "Milk",
+      "src": "audio/teacher-lessons/cf5dbf0ec57d.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "this_is_my_"
+      ]
+    },
+    "mouse": {
+      "text": "Mouse",
+      "src": "audio/teacher-lessons/9e05e6832caf.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "nurse": {
+      "text": "Nurse",
+      "src": "audio/teacher-lessons/285f9a003f67.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "neck": {
+      "text": "Neck",
+      "src": "audio/teacher-lessons/bb4a91749fe0.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "nine": {
+      "text": "Nine",
+      "src": "audio/teacher-lessons/b4ddce182ecf.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "nose": {
+      "text": "Nose",
+      "src": "audio/teacher-lessons/1a1f58c9adc7.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "orange": {
+      "text": "Orange",
+      "src": "audio/teacher-lessons/ef0ebbb77298.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "there_is_a_an"
+      ]
+    },
+    "onion": {
+      "text": "Onion",
+      "src": "audio/teacher-lessons/6ac8c09b23df.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "oil": {
+      "text": "Oil",
+      "src": "audio/teacher-lessons/a5f58c39cc52.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "octopus": {
+      "text": "Octopus",
+      "src": "audio/teacher-lessons/460b8dde3c37.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "pen": {
+      "text": "Pen",
+      "src": "audio/teacher-lessons/31a841af7b2f.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "pizza": {
+      "text": "Pizza",
+      "src": "audio/teacher-lessons/1f6ccd2be75f.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "this_is_my_"
+      ]
+    },
+    "pig": {
+      "text": "Pig",
+      "src": "audio/teacher-lessons/2cd4ba93087f.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "baby_animals",
+        "color"
+      ]
+    },
+    "panda": {
+      "text": "Panda",
+      "src": "audio/teacher-lessons/f91a8ee646a2.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "queen": {
+      "text": "Queen",
+      "src": "audio/teacher-lessons/410114109270.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "question": {
+      "text": "Question",
+      "src": "audio/teacher-lessons/3b2be2e26344.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "quail": {
+      "text": "Quail",
+      "src": "audio/teacher-lessons/84d137ab41aa.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "red": {
+      "text": "Red",
+      "src": "audio/teacher-lessons/78988010b890.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "ring": {
+      "text": "Ring",
+      "src": "audio/teacher-lessons/5c7d283db584.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "quilt": {
+      "text": "Quilt",
+      "src": "audio/teacher-lessons/2a1acb3a3766.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "rabbit": {
+      "text": "Rabbit",
+      "src": "audio/teacher-lessons/6d0ebbbdce32.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "there_is_a_an"
+      ]
+    },
+    "sun": {
+      "text": "Sun",
+      "src": "audio/teacher-lessons/22fa6121da96.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "robot": {
+      "text": "Robot",
+      "src": "audio/teacher-lessons/b232ae125d1a.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "this_is_my_"
+      ]
+    },
+    "school": {
+      "text": "School",
+      "src": "audio/teacher-lessons/655f83be7512.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "snake": {
+      "text": "Snake",
+      "src": "audio/teacher-lessons/148627088915.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an"
+      ]
+    },
+    "tiger": {
+      "text": "Tiger",
+      "src": "audio/teacher-lessons/46e3d772a188.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "tree": {
+      "text": "Tree",
+      "src": "audio/teacher-lessons/80655da8d80a.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "there_is_a_an"
+      ]
+    },
+    "star": {
+      "text": "Star",
+      "src": "audio/teacher-lessons/4e3e01b9af84.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "table": {
+      "text": "Table",
+      "src": "audio/teacher-lessons/c3ee137d4f22.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color",
+        "i_have"
+      ]
+    },
+    "umbrella": {
+      "text": "Umbrella",
+      "src": "audio/teacher-lessons/3ff95ac9e6b1.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an",
+        "this_is_my_"
+      ]
+    },
+    "uncle": {
+      "text": "Uncle",
+      "src": "audio/teacher-lessons/a5afc8df8baa.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "toy": {
+      "text": "Toy",
+      "src": "audio/teacher-lessons/cd1933db799b.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "uniform": {
+      "text": "Uniform",
+      "src": "audio/teacher-lessons/8146160c40ca.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "up": {
+      "text": "Up",
+      "src": "audio/teacher-lessons/7c0a25c06ea3.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "vegetable": {
+      "text": "Vegetable",
+      "src": "audio/teacher-lessons/f13a905f3776.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "vase": {
+      "text": "Vase",
+      "src": "audio/teacher-lessons/28e4e605778d.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "violin": {
+      "text": "Violin",
+      "src": "audio/teacher-lessons/06384a70e1eb.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "water": {
+      "text": "Water",
+      "src": "audio/teacher-lessons/6d5a45920a15.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "van": {
+      "text": "Van",
+      "src": "audio/teacher-lessons/efa44987b6e3.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "window": {
+      "text": "Window",
+      "src": "audio/teacher-lessons/320ad267d8d9.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "there_is_a_an"
+      ]
+    },
+    "watch": {
+      "text": "Watch",
+      "src": "audio/teacher-lessons/292b0901993f.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "this_is_my_"
+      ]
+    },
+    "whale": {
+      "text": "Whale",
+      "src": "audio/teacher-lessons/1769e230f788.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "axe": {
+      "text": "Axe",
+      "src": "audio/teacher-lessons/237b5017397b.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "box": {
+      "text": "Box",
+      "src": "audio/teacher-lessons/c7d8a6d722a1.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "six": {
+      "text": "Six",
+      "src": "audio/teacher-lessons/bec9703f7a45.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "fox": {
+      "text": "Fox",
+      "src": "audio/teacher-lessons/ff0f0a8b656f.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "yogurt": {
+      "text": "Yogurt",
+      "src": "audio/teacher-lessons/7a7453043a7d.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "yo-yo": {
+      "text": "Yo-yo",
+      "src": "audio/teacher-lessons/a52546235cc3.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "yellow": {
+      "text": "Yellow",
+      "src": "audio/teacher-lessons/96de5543d183.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "zebra": {
+      "text": "Zebra",
+      "src": "audio/teacher-lessons/38aa53de31c0.mp3",
+      "sourceChapters": [
+        "alphabet_abc",
+        "color"
+      ]
+    },
+    "yoga": {
+      "text": "Yoga",
+      "src": "audio/teacher-lessons/6b3bebb6d418.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "zipper": {
+      "text": "Zipper",
+      "src": "audio/teacher-lessons/77ee7816144e.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "zoo": {
+      "text": "Zoo",
+      "src": "audio/teacher-lessons/4c1f32a51dbf.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "i can see a horse.": {
+      "text": "I can see a horse.",
+      "src": "audio/teacher-lessons/cdb376e7d71f.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "at the zoo": {
+      "text": "At The Zoo",
+      "src": "audio/teacher-lessons/25a7303a8ab2.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "zero": {
+      "text": "Zero",
+      "src": "audio/teacher-lessons/aa8c41330509.mp3",
+      "sourceChapters": [
+        "alphabet_abc"
+      ]
+    },
+    "what can": {
+      "text": "What can",
+      "src": "audio/teacher-lessons/34475bbc87f7.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "you see?": {
+      "text": "you see?",
+      "src": "audio/teacher-lessons/345722423e34.mp3",
+      "sourceChapters": [
+        "at_the_zoo",
+        "number"
+      ]
+    },
+    "i can see a lion.": {
+      "text": "I can see a lion.",
+      "src": "audio/teacher-lessons/722ae6c45734.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a zebra.": {
+      "text": "I can see a zebra.",
+      "src": "audio/teacher-lessons/3627a912bd13.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see an elephant.": {
+      "text": "I can see an elephant.",
+      "src": "audio/teacher-lessons/73bc3ce6a679.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a bear.": {
+      "text": "I can see a bear.",
+      "src": "audio/teacher-lessons/72f426a26a87.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a tiger.": {
+      "text": "I can see a tiger.",
+      "src": "audio/teacher-lessons/19d19fa64681.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a snake.": {
+      "text": "I can see a snake.",
+      "src": "audio/teacher-lessons/2bfbff9add4e.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a monkey.": {
+      "text": "I can see a monkey.",
+      "src": "audio/teacher-lessons/c0d10c7891f2.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see an alligator.": {
+      "text": "I can see an alligator.",
+      "src": "audio/teacher-lessons/a7a924fb8a5a.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a bird.": {
+      "text": "I can see a bird.",
+      "src": "audio/teacher-lessons/52e848ac4759.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a kangaroo.": {
+      "text": "I can see a kangaroo.",
+      "src": "audio/teacher-lessons/9edd4e6f4426.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a frog.": {
+      "text": "I can see a frog.",
+      "src": "audio/teacher-lessons/4edfce69c832.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a bee.": {
+      "text": "I can see a bee.",
+      "src": "audio/teacher-lessons/82f8a3655a47.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a butterfly.": {
+      "text": "I can see a butterfly.",
+      "src": "audio/teacher-lessons/bf4f49ec4c9a.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a cat.": {
+      "text": "I can see a cat.",
+      "src": "audio/teacher-lessons/a2b385b2fdd4.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a dog.": {
+      "text": "I can see a dog.",
+      "src": "audio/teacher-lessons/62cc08c132fe.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a fox.": {
+      "text": "I can see a fox.",
+      "src": "audio/teacher-lessons/4067c545c47a.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a cow.": {
+      "text": "I can see a cow.",
+      "src": "audio/teacher-lessons/e10d3881a9ba.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a rabbit.": {
+      "text": "I can see a rabbit.",
+      "src": "audio/teacher-lessons/79bd1747daf5.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a spider.": {
+      "text": "I can see a spider.",
+      "src": "audio/teacher-lessons/f66848827f17.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a goat.": {
+      "text": "I can see a goat.",
+      "src": "audio/teacher-lessons/c6419bce5995.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a giraffe.": {
+      "text": "I can see a giraffe.",
+      "src": "audio/teacher-lessons/fc3e732fa37e.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a dinasaur.": {
+      "text": "I can see a dinasaur.",
+      "src": "audio/teacher-lessons/44b40111152d.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a sheep.": {
+      "text": "I can see a sheep.",
+      "src": "audio/teacher-lessons/4816ea850cc7.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "baby animals": {
+      "text": "Baby Animals",
+      "src": "audio/teacher-lessons/85899387bc8b.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a mouse.": {
+      "text": "I can see a mouse.",
+      "src": "audio/teacher-lessons/d18bcddbb521.mp3",
+      "sourceChapters": [
+        "at_the_zoo"
+      ]
+    },
+    "i can see a chick.": {
+      "text": "I can see a chick.",
+      "src": "audio/teacher-lessons/ed9f807a1a52.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a calf.": {
+      "text": "I can see a calf.",
+      "src": "audio/teacher-lessons/759fbae41804.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "cow": {
+      "text": "Cow",
+      "src": "audio/teacher-lessons/8bbddb4a0374.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a kitten.": {
+      "text": "I can see a kitten.",
+      "src": "audio/teacher-lessons/f630ed75ec8a.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "chicken": {
+      "text": "Chicken",
+      "src": "audio/teacher-lessons/cef7e59218e3.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a puppy.": {
+      "text": "I can see a puppy.",
+      "src": "audio/teacher-lessons/e9e4bfefb4fa.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a piglet.": {
+      "text": "I can see a piglet.",
+      "src": "audio/teacher-lessons/c67e5389583f.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a cub.": {
+      "text": "I can see a cub.",
+      "src": "audio/teacher-lessons/1bbac92f8a9d.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "i can see a duckling.": {
+      "text": "I can see a duckling.",
+      "src": "audio/teacher-lessons/0b81b8c09a26.mp3",
+      "sourceChapters": [
+        "baby_animals"
+      ]
+    },
+    "small": {
+      "text": "Small",
+      "src": "audio/teacher-lessons/89f6229a11ac.mp3",
+      "sourceChapters": [
+        "big_and_small"
+      ]
+    },
+    "big": {
+      "text": "Big",
+      "src": "audio/teacher-lessons/95c4bea12e4e.mp3",
+      "sourceChapters": [
+        "big_and_small"
+      ]
+    },
+    "color": {
+      "text": "Color",
+      "src": "audio/teacher-lessons/6dd0fe800114.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "duckling": {
+      "text": "Duckling",
+      "src": "audio/teacher-lessons/65823aa67138.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "mango": {
+      "text": "Mango",
+      "src": "audio/teacher-lessons/934aae49f648.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a yellow": {
+      "text": "I see a YELLOW",
+      "src": "audio/teacher-lessons/784e3dd601cd.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "cheese": {
+      "text": "Cheese",
+      "src": "audio/teacher-lessons/bcef7a046258.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "heart": {
+      "text": "Heart",
+      "src": "audio/teacher-lessons/ef8201e13a29.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a red": {
+      "text": "I see a RED",
+      "src": "audio/teacher-lessons/d60b9981c7a9.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "strawberry": {
+      "text": "Strawberry",
+      "src": "audio/teacher-lessons/c0b51c46e4dc.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "tomato": {
+      "text": "Tomato",
+      "src": "audio/teacher-lessons/321f6b7e8bf7.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a blue": {
+      "text": "I see a BLUE",
+      "src": "audio/teacher-lessons/d4c85837ca68.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "bird": {
+      "text": "Bird",
+      "src": "audio/teacher-lessons/cd92815bf627.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "avocado": {
+      "text": "Avocado",
+      "src": "audio/teacher-lessons/fdb7388828a7.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "sky": {
+      "text": "Sky",
+      "src": "audio/teacher-lessons/5737ef08a3ec.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "grape": {
+      "text": "Grape",
+      "src": "audio/teacher-lessons/bc8a2f8cdedb.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "bag": {
+      "text": "Bag",
+      "src": "audio/teacher-lessons/9b4e473e4de7.mp3",
+      "sourceChapters": [
+        "color",
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "t-shirt": {
+      "text": "T-shirt",
+      "src": "audio/teacher-lessons/7a436acca7c1.mp3",
+      "sourceChapters": [
+        "color",
+        "i_have",
+        "there_is_a_an"
+      ]
+    },
+    "i see a green": {
+      "text": "I see a GREEN",
+      "src": "audio/teacher-lessons/91ac5932ea6e.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a pink": {
+      "text": "I see a PINK",
+      "src": "audio/teacher-lessons/ca75f64b22d2.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a purple": {
+      "text": "I see a PURPLE",
+      "src": "audio/teacher-lessons/0074560cb2ac.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "shoes": {
+      "text": "Shoes",
+      "src": "audio/teacher-lessons/19f319efbd6d.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "clock": {
+      "text": "Clock",
+      "src": "audio/teacher-lessons/83655a5560ef.mp3",
+      "sourceChapters": [
+        "color",
+        "this_is_my_"
+      ]
+    },
+    "eggplant": {
+      "text": "Eggplant",
+      "src": "audio/teacher-lessons/9f35b48686fd.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a brown": {
+      "text": "I see a BROWN",
+      "src": "audio/teacher-lessons/7c5422c567e3.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "chocolate": {
+      "text": "Chocolate",
+      "src": "audio/teacher-lessons/891c5feef171.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "butterfly": {
+      "text": "Butterfly",
+      "src": "audio/teacher-lessons/ba856797a6ed.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "bear": {
+      "text": "Bear",
+      "src": "audio/teacher-lessons/09f5edeb4f5b.mp3",
+      "sourceChapters": [
+        "color",
+        "there_is_a_an"
+      ]
+    },
+    "piano": {
+      "text": "Piano",
+      "src": "audio/teacher-lessons/5c07d1e47b9d.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "penguin": {
+      "text": "Penguin",
+      "src": "audio/teacher-lessons/73335c221018.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "coffee": {
+      "text": "Coffee",
+      "src": "audio/teacher-lessons/44213f9f4d59.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "spider": {
+      "text": "Spider",
+      "src": "audio/teacher-lessons/640fb06193d8.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a black": {
+      "text": "I see a BLACK",
+      "src": "audio/teacher-lessons/9530d3996542.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "cloud": {
+      "text": "Cloud",
+      "src": "audio/teacher-lessons/000e793db70c.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a white": {
+      "text": "I see a WHITE",
+      "src": "audio/teacher-lessons/172d022cee09.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "notebook": {
+      "text": "Notebook",
+      "src": "audio/teacher-lessons/5280933cbca1.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see an orange": {
+      "text": "I see an ORANGE",
+      "src": "audio/teacher-lessons/3415e61ec492.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "rice": {
+      "text": "Rice",
+      "src": "audio/teacher-lessons/6939278d66e3.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "carrot": {
+      "text": "Carrot",
+      "src": "audio/teacher-lessons/d8bfad4b74d5.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "fire": {
+      "text": "Fire",
+      "src": "audio/teacher-lessons/1da840244989.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i can draw": {
+      "text": "I can draw",
+      "src": "audio/teacher-lessons/323f99cbd275.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "pumpkin": {
+      "text": "Pumpkin",
+      "src": "audio/teacher-lessons/5f13610453fd.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i see a grey": {
+      "text": "I see a GREY",
+      "src": "audio/teacher-lessons/5d56177eff3e.mp3",
+      "sourceChapters": [
+        "color"
+      ]
+    },
+    "i can sing": {
+      "text": "I can sing",
+      "src": "audio/teacher-lessons/ebe1426afa66.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can dance": {
+      "text": "I can dance",
+      "src": "audio/teacher-lessons/e20fe353c4d0.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can read": {
+      "text": "I can read",
+      "src": "audio/teacher-lessons/f198ec8ed210.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can ride": {
+      "text": "I can ride",
+      "src": "audio/teacher-lessons/00ddeb49c4b4.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can skate": {
+      "text": "I can skate",
+      "src": "audio/teacher-lessons/d7d9b2a10ba5.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can write": {
+      "text": "I can write",
+      "src": "audio/teacher-lessons/cfdc7e0564a3.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can swim": {
+      "text": "I can swim",
+      "src": "audio/teacher-lessons/22aaa7a08d7b.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can cook": {
+      "text": "I can cook",
+      "src": "audio/teacher-lessons/bf7da1896eea.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can sleep": {
+      "text": "I can sleep",
+      "src": "audio/teacher-lessons/56ab3d5b49aa.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can count": {
+      "text": "I can count",
+      "src": "audio/teacher-lessons/19dbc72ee8aa.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can eat": {
+      "text": "I can eat",
+      "src": "audio/teacher-lessons/bc1fa5ce326d.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can drink": {
+      "text": "I can drink",
+      "src": "audio/teacher-lessons/3b804a75a15f.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i can run": {
+      "text": "I can run",
+      "src": "audio/teacher-lessons/02b0d9275c3c.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i drink water.": {
+      "text": "I drink water.",
+      "src": "audio/teacher-lessons/a4b6626cc204.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i can kick": {
+      "text": "I can kick",
+      "src": "audio/teacher-lessons/802740e4bfc3.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i drink": {
+      "text": "I drink",
+      "src": "audio/teacher-lessons/b164df53cfd0.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink milk.": {
+      "text": "I drink milk.",
+      "src": "audio/teacher-lessons/b0df7246a655.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i can clap": {
+      "text": "I can clap",
+      "src": "audio/teacher-lessons/f2d85bab0e3e.mp3",
+      "sourceChapters": [
+        "i_can"
+      ]
+    },
+    "i drink orange juice.": {
+      "text": "I drink orange juice.",
+      "src": "audio/teacher-lessons/da424fc55cea.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink pineapple juice": {
+      "text": "I drink pineapple juice",
+      "src": "audio/teacher-lessons/f0d656e24bda.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink tomato juice.": {
+      "text": "I drink tomato juice.",
+      "src": "audio/teacher-lessons/44a7d491a273.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink lemonade.": {
+      "text": "I drink lemonade.",
+      "src": "audio/teacher-lessons/f86040ebe36f.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink coconut water.": {
+      "text": "I drink coconut water.",
+      "src": "audio/teacher-lessons/6b6062bed93c.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink tea.": {
+      "text": "I drink tea.",
+      "src": "audio/teacher-lessons/3b01ade8a92a.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink smoothie.": {
+      "text": "I drink smoothie.",
+      "src": "audio/teacher-lessons/74dc8ec35763.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink milk tea.": {
+      "text": "I drink milk tea.",
+      "src": "audio/teacher-lessons/cb8f13ec506d.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink carrot juice.": {
+      "text": "I drink carrot juice.",
+      "src": "audio/teacher-lessons/6d97272135e7.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink yogurt.": {
+      "text": "I drink yogurt.",
+      "src": "audio/teacher-lessons/fde3ec359828.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink soy milk.": {
+      "text": "I drink soy milk.",
+      "src": "audio/teacher-lessons/9518d3defd95.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "i drink coffee.": {
+      "text": "I drink coffee.",
+      "src": "audio/teacher-lessons/9b292852ab34.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "swimming": {
+      "text": "Swimming",
+      "src": "audio/teacher-lessons/bb500fcedfa3.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "home": {
+      "text": "Home",
+      "src": "audio/teacher-lessons/e83249bd3ba7.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "shopping": {
+      "text": "Shopping",
+      "src": "audio/teacher-lessons/c651445273f6.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "i drink coke.": {
+      "text": "I drink Coke.",
+      "src": "audio/teacher-lessons/85c57958c690.mp3",
+      "sourceChapters": [
+        "i_drink"
+      ]
+    },
+    "to school": {
+      "text": "To School",
+      "src": "audio/teacher-lessons/f37df1501a4b.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "to bed": {
+      "text": "To Bed",
+      "src": "audio/teacher-lessons/ba7a0fab5c0d.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "to the beach": {
+      "text": "To The Beach",
+      "src": "audio/teacher-lessons/f357599fdb9b.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "to the zoo": {
+      "text": "To The Zoo",
+      "src": "audio/teacher-lessons/d292d7f56f6d.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "downstairs": {
+      "text": "Downstairs",
+      "src": "audio/teacher-lessons/83663496663e.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "to the park": {
+      "text": "To The Park",
+      "src": "audio/teacher-lessons/a5dba45b1f5f.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "pencil": {
+      "text": "pencil",
+      "src": "audio/teacher-lessons/d2fc512490a1.mp3",
+      "sourceChapters": [
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "upstairs": {
+      "text": "Upstairs",
+      "src": "audio/teacher-lessons/193c47c9b6c7.mp3",
+      "sourceChapters": [
+        "i_go"
+      ]
+    },
+    "bowl": {
+      "text": "bowl",
+      "src": "audio/teacher-lessons/4a07eca09938.mp3",
+      "sourceChapters": [
+        "i_have",
+        "there_is_a_an"
+      ]
+    },
+    "doll": {
+      "text": "doll",
+      "src": "audio/teacher-lessons/8f6314ac5d1f.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "spoon": {
+      "text": "spoon",
+      "src": "audio/teacher-lessons/f557e92965db.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "bike": {
+      "text": "bike",
+      "src": "audio/teacher-lessons/44d536903233.mp3",
+      "sourceChapters": [
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "pillow": {
+      "text": "pillow",
+      "src": "audio/teacher-lessons/81cebb9e8bd9.mp3",
+      "sourceChapters": [
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "mirror": {
+      "text": "mirror",
+      "src": "audio/teacher-lessons/ffff80d25a26.mp3",
+      "sourceChapters": [
+        "i_have",
+        "there_is_a_an"
+      ]
+    },
+    "toothbrush": {
+      "text": "toothbrush",
+      "src": "audio/teacher-lessons/c3cc7c6c532c.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "chair": {
+      "text": "chair",
+      "src": "audio/teacher-lessons/851e13a65333.mp3",
+      "sourceChapters": [
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "radio": {
+      "text": "radio",
+      "src": "audio/teacher-lessons/d432c3525b9d.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "ruler": {
+      "text": "ruler",
+      "src": "audio/teacher-lessons/5f55d09a5132.mp3",
+      "sourceChapters": [
+        "i_have",
+        "this_is_my_"
+      ]
+    },
+    "jacket": {
+      "text": "jacket",
+      "src": "audio/teacher-lessons/1cdbba9665ee.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "teddy bear": {
+      "text": "teddy bear",
+      "src": "audio/teacher-lessons/da9f522041bd.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "comb": {
+      "text": "comb",
+      "src": "audio/teacher-lessons/e51f8984adcc.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "helmet": {
+      "text": "helmet",
+      "src": "audio/teacher-lessons/749440ec6a50.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "guitar": {
+      "text": "guitar",
+      "src": "audio/teacher-lessons/22942b7c5cdf.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "crayons": {
+      "text": "crayons",
+      "src": "audio/teacher-lessons/8f9993bef41f.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "bath": {
+      "text": "bath",
+      "src": "audio/teacher-lessons/b483b668ed18.mp3",
+      "sourceChapters": [
+        "i_have"
+      ]
+    },
+    "i play with": {
+      "text": "I play with",
+      "src": "audio/teacher-lessons/ffcc72421098.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my dog.": {
+      "text": "I play with my dog.",
+      "src": "audio/teacher-lessons/643fa69a5c1c.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my cat.": {
+      "text": "I play with my cat.",
+      "src": "audio/teacher-lessons/6899c1d4a721.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my toys.": {
+      "text": "I play with my toys.",
+      "src": "audio/teacher-lessons/382b56452c8c.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a kite.": {
+      "text": "I play with a kite.",
+      "src": "audio/teacher-lessons/97eca46f2e7f.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my doll.": {
+      "text": "I play with my doll.",
+      "src": "audio/teacher-lessons/b30159ed27de.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my ball.": {
+      "text": "I play with my ball.",
+      "src": "audio/teacher-lessons/d9c50651fa2d.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with sand.": {
+      "text": "I play with sand.",
+      "src": "audio/teacher-lessons/6ed338e52cde.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a guitar.": {
+      "text": "I play with a guitar.",
+      "src": "audio/teacher-lessons/3414db9be22b.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with my teddy bear.": {
+      "text": "I play with my teddy bear.",
+      "src": "audio/teacher-lessons/64400f249a10.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with blocks.": {
+      "text": "I play with blocks.",
+      "src": "audio/teacher-lessons/32bd273d600c.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a yo-yo.": {
+      "text": "I play with a yo-yo.",
+      "src": "audio/teacher-lessons/996040516de7.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a drum.": {
+      "text": "I play with a drum.",
+      "src": "audio/teacher-lessons/f0f860ed31bc.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a robot.": {
+      "text": "I play with a robot.",
+      "src": "audio/teacher-lessons/0a74a627979d.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a slide.": {
+      "text": "I play with a slide.",
+      "src": "audio/teacher-lessons/eaf5ec70c804.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a balloon.": {
+      "text": "I play with a balloon.",
+      "src": "audio/teacher-lessons/96471e255198.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a swing.": {
+      "text": "I play with a swing.",
+      "src": "audio/teacher-lessons/1e81e12e08bc.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a seesaw.": {
+      "text": "I play with a seesaw.",
+      "src": "audio/teacher-lessons/882a6e2fe1c1.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a toy gun.": {
+      "text": "I play with a toy gun.",
+      "src": "audio/teacher-lessons/e8f15118096b.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a drone.": {
+      "text": "I play with a drone.",
+      "src": "audio/teacher-lessons/3e2bf5767a1e.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i play with a piano.": {
+      "text": "I play with a piano.",
+      "src": "audio/teacher-lessons/b7227682c0bf.mp3",
+      "sourceChapters": [
+        "i_play_with"
+      ]
+    },
+    "i put on my dress.": {
+      "text": "I put on my dress.",
+      "src": "audio/teacher-lessons/e90c1a186ed8.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on": {
+      "text": "I put on",
+      "src": "audio/teacher-lessons/e31848455897.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my t- shirt.": {
+      "text": "I put on my T- shirt.",
+      "src": "audio/teacher-lessons/32c8fa9eb371.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my pants.": {
+      "text": "I put on my pants.",
+      "src": "audio/teacher-lessons/59ab27929787.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my scarf.": {
+      "text": "I put on my scarf.",
+      "src": "audio/teacher-lessons/4d777338a73a.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my gloves.": {
+      "text": "I put on my gloves.",
+      "src": "audio/teacher-lessons/58d5a0420872.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my watch.": {
+      "text": "I put on my watch.",
+      "src": "audio/teacher-lessons/df52ed2778a8.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my shoes.": {
+      "text": "I put on my shoes.",
+      "src": "audio/teacher-lessons/c392d153c390.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my socks.": {
+      "text": "I put on my socks.",
+      "src": "audio/teacher-lessons/a80d16742e1b.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my shorts.": {
+      "text": "I put on my shorts.",
+      "src": "audio/teacher-lessons/0b037bd5b6f5.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my jacket.": {
+      "text": "I put on my jacket.",
+      "src": "audio/teacher-lessons/6d990bf744d4.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my mask.": {
+      "text": "I put on my mask.",
+      "src": "audio/teacher-lessons/4f80205799ec.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my helmet.": {
+      "text": "I put on my helmet.",
+      "src": "audio/teacher-lessons/874c2958f3bb.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my hat.": {
+      "text": "I put on my hat.",
+      "src": "audio/teacher-lessons/dc81d5cc9307.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my glasses.": {
+      "text": "I put on my glasses.",
+      "src": "audio/teacher-lessons/4a7ecdd8516e.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i put on my raincoat.": {
+      "text": "I put on my raincoat.",
+      "src": "audio/teacher-lessons/050a8797d338.mp3",
+      "sourceChapters": [
+        "i_put_on"
+      ]
+    },
+    "i see a ladybug.": {
+      "text": "I see a ladybug.",
+      "src": "audio/teacher-lessons/cc1e533774d5.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a cat.": {
+      "text": "I see a cat.",
+      "src": "audio/teacher-lessons/f8dc10433964.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a ball.": {
+      "text": "I see a ball.",
+      "src": "audio/teacher-lessons/ccea794d6a99.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a leaf.": {
+      "text": "I see a leaf.",
+      "src": "audio/teacher-lessons/1a7fd37066e1.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a doll.": {
+      "text": "I see a doll.",
+      "src": "audio/teacher-lessons/24b357505041.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a dog.": {
+      "text": "I see a dog.",
+      "src": "audio/teacher-lessons/630ebd9a5b6e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a banana.": {
+      "text": "I see a banana.",
+      "src": "audio/teacher-lessons/e2570debdc2b.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a tv.": {
+      "text": "I see a TV.",
+      "src": "audio/teacher-lessons/a1bf8c93447e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a car.": {
+      "text": "I see a car.",
+      "src": "audio/teacher-lessons/bdd09cff598d.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a pen.": {
+      "text": "I see a pen.",
+      "src": "audio/teacher-lessons/f748112338fb.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a bird.": {
+      "text": "I see a bird.",
+      "src": "audio/teacher-lessons/44777988d43e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a doctor.": {
+      "text": "I see a doctor.",
+      "src": "audio/teacher-lessons/621c4e3f252d.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a hand.": {
+      "text": "I see a hand.",
+      "src": "audio/teacher-lessons/777095de278f.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a comb.": {
+      "text": "I see a comb.",
+      "src": "audio/teacher-lessons/0c7d7a422128.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a hat.": {
+      "text": "I see a hat.",
+      "src": "audio/teacher-lessons/e66306a730c9.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a bear.": {
+      "text": "I see a bear.",
+      "src": "audio/teacher-lessons/ea67715f477e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a cake.": {
+      "text": "I see a cake.",
+      "src": "audio/teacher-lessons/e2f27edf31a3.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a boat.": {
+      "text": "I see a boat.",
+      "src": "audio/teacher-lessons/6018283c4511.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a computer.": {
+      "text": "I see a computer.",
+      "src": "audio/teacher-lessons/bc1e63803798.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a bed.": {
+      "text": "I see a bed.",
+      "src": "audio/teacher-lessons/0a09329ac0d0.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a flower.": {
+      "text": "I see a flower.",
+      "src": "audio/teacher-lessons/dcef8a970782.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a mouth.": {
+      "text": "I see a mouth.",
+      "src": "audio/teacher-lessons/27dbe417f34b.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a notebook.": {
+      "text": "I see a notebook.",
+      "src": "audio/teacher-lessons/de176ac1caf5.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a teacher.": {
+      "text": "I see a teacher.",
+      "src": "audio/teacher-lessons/5be686478578.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a tree.": {
+      "text": "I see a tree.",
+      "src": "audio/teacher-lessons/a56125ac685a.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a board.": {
+      "text": "I see a board.",
+      "src": "audio/teacher-lessons/6c2290a59aef.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a window.": {
+      "text": "I see a window.",
+      "src": "audio/teacher-lessons/895a55d7612a.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i see a phone.": {
+      "text": "I see a phone.",
+      "src": "audio/teacher-lessons/1e1e04bfe083.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i want": {
+      "text": "I want",
+      "src": "audio/teacher-lessons/7204fea45391.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i see a jellyfish.": {
+      "text": "I see a jellyfish.",
+      "src": "audio/teacher-lessons/fe812b522f9e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i want some milk.": {
+      "text": "I want some milk.",
+      "src": "audio/teacher-lessons/dcf6d2cdc217.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want some water.": {
+      "text": "I want some water.",
+      "src": "audio/teacher-lessons/f5fe0a78fa76.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i see a star.": {
+      "text": "I see a star.",
+      "src": "audio/teacher-lessons/bead56aef18e.mp3",
+      "sourceChapters": [
+        "i_see"
+      ]
+    },
+    "i want a cookie.": {
+      "text": "I want a cookie.",
+      "src": "audio/teacher-lessons/04948fe6246f.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a banana.": {
+      "text": "I want a banana.",
+      "src": "audio/teacher-lessons/8590bef00672.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a toy.": {
+      "text": "I want a toy.",
+      "src": "audio/teacher-lessons/d9b34813524d.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want an apple.": {
+      "text": "I want an apple.",
+      "src": "audio/teacher-lessons/0cdb22d9c951.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a book.": {
+      "text": "I want a book.",
+      "src": "audio/teacher-lessons/f9a61d4d29bc.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a teddy bear.": {
+      "text": "I want a teddy bear.",
+      "src": "audio/teacher-lessons/50adbe96e80b.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a pen.": {
+      "text": "I want a pen.",
+      "src": "audio/teacher-lessons/7ac43d73633b.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want candy.": {
+      "text": "I want candy.",
+      "src": "audio/teacher-lessons/a74fdb0b02bb.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a hat.": {
+      "text": "I want a hat.",
+      "src": "audio/teacher-lessons/003aa6b53a18.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a ball.": {
+      "text": "I want a ball.",
+      "src": "audio/teacher-lessons/8e235608c0b1.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want chocolate.": {
+      "text": "I want chocolate.",
+      "src": "audio/teacher-lessons/9638ade11901.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a bag.": {
+      "text": "I want a bag.",
+      "src": "audio/teacher-lessons/b64581e4e568.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a kite.": {
+      "text": "I want a kite.",
+      "src": "audio/teacher-lessons/9df566205a71.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want an umbrella.": {
+      "text": "I want an umbrella.",
+      "src": "audio/teacher-lessons/e4220dd9d033.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a cake.": {
+      "text": "I want a cake.",
+      "src": "audio/teacher-lessons/d4889c5fbb84.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a pillow.": {
+      "text": "I want a pillow.",
+      "src": "audio/teacher-lessons/419be700771b.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a toy car.": {
+      "text": "I want a toy car.",
+      "src": "audio/teacher-lessons/3e9dd3f62603.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "i want a doll.": {
+      "text": "I want a doll.",
+      "src": "audio/teacher-lessons/a565076d1394.mp3",
+      "sourceChapters": [
+        "i_want"
+      ]
+    },
+    "he is a doctor.": {
+      "text": "He is a doctor.",
+      "src": "audio/teacher-lessons/e23995a4a132.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a student.": {
+      "text": "He is a student.",
+      "src": "audio/teacher-lessons/20dfbbb1ae47.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a nurse.": {
+      "text": "She is a nurse.",
+      "src": "audio/teacher-lessons/2212dcfd6a0d.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "what does he do?": {
+      "text": "What does he do?",
+      "src": "audio/teacher-lessons/ef55dbd3fa38.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "what does she do?": {
+      "text": "What does she do?",
+      "src": "audio/teacher-lessons/b0620e35491e.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a teacher.": {
+      "text": "She is a teacher.",
+      "src": "audio/teacher-lessons/70fc5d1d9418.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a driver.": {
+      "text": "He is a driver.",
+      "src": "audio/teacher-lessons/0748d0b08f04.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a farmer.": {
+      "text": "She is a farmer.",
+      "src": "audio/teacher-lessons/37b28a73173a.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a singer.": {
+      "text": "She is a singer.",
+      "src": "audio/teacher-lessons/b7c8af6fd52a.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a chef.": {
+      "text": "He is a chef.",
+      "src": "audio/teacher-lessons/62e20ee5aa52.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a police officer.": {
+      "text": "She is a police officer.",
+      "src": "audio/teacher-lessons/2e2a81d42c37.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a seller.": {
+      "text": "He is a seller.",
+      "src": "audio/teacher-lessons/0dd9435b15e6.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a firefighter.": {
+      "text": "He is a firefighter.",
+      "src": "audio/teacher-lessons/52bf4fbee97b.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is an actor.": {
+      "text": "He is an actor.",
+      "src": "audio/teacher-lessons/05d29ee0b9cc.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a painter.": {
+      "text": "She is a painter.",
+      "src": "audio/teacher-lessons/a1818496540b.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a flight attendant.": {
+      "text": "She is a flight attendant.",
+      "src": "audio/teacher-lessons/31703d733dfd.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a soldier.": {
+      "text": "He is a soldier.",
+      "src": "audio/teacher-lessons/e49a70eb766a.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "he is a pilot.": {
+      "text": "He is a pilot.",
+      "src": "audio/teacher-lessons/f4a1f5340923.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a dancer.": {
+      "text": "She is a dancer.",
+      "src": "audio/teacher-lessons/d9500874d736.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a dentist.": {
+      "text": "She is a dentist.",
+      "src": "audio/teacher-lessons/df904177806b.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "number": {
+      "text": "Number",
+      "src": "audio/teacher-lessons/53b0a1b2fadf.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "he is an engineer.": {
+      "text": "He is an engineer.",
+      "src": "audio/teacher-lessons/c0fc3ecb66ae.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "she is a cleaner.": {
+      "text": "She is a cleaner.",
+      "src": "audio/teacher-lessons/fbca241c9c95.mp3",
+      "sourceChapters": [
+        "job"
+      ]
+    },
+    "what do": {
+      "text": "What do",
+      "src": "audio/teacher-lessons/b63a0203f3da.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 1 fox.": {
+      "text": "I see 1 fox.",
+      "src": "audio/teacher-lessons/41ec5f7be3a7.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number one": {
+      "text": "Number ONE",
+      "src": "audio/teacher-lessons/78c2db9948a9.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number three": {
+      "text": "Number THREE",
+      "src": "audio/teacher-lessons/517bcd57923c.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number two": {
+      "text": "Number TWO",
+      "src": "audio/teacher-lessons/a1b43dc41a58.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 2 dogs.": {
+      "text": "I see 2 dogs.",
+      "src": "audio/teacher-lessons/7da18a79e368.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 3 cats.": {
+      "text": "I see 3 cats.",
+      "src": "audio/teacher-lessons/735d87ccb211.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 4 ducks.": {
+      "text": "I see 4 ducks.",
+      "src": "audio/teacher-lessons/82767e6d7f92.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 5 cars.": {
+      "text": "I see 5 cars.",
+      "src": "audio/teacher-lessons/cc5811549fc5.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number five": {
+      "text": "Number FIVE",
+      "src": "audio/teacher-lessons/9c372b9045d1.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number six": {
+      "text": "Number SIX",
+      "src": "audio/teacher-lessons/4d09f584e345.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number four": {
+      "text": "Number FOUR",
+      "src": "audio/teacher-lessons/dc63adefe838.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 6 books.": {
+      "text": "I see 6 books.",
+      "src": "audio/teacher-lessons/79e9f3935278.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number seven": {
+      "text": "Number SEVEN",
+      "src": "audio/teacher-lessons/fdd9589f8116.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 8 bags.": {
+      "text": "I see 8 bags.",
+      "src": "audio/teacher-lessons/a46d78ffaf15.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number nine": {
+      "text": "Number NINE",
+      "src": "audio/teacher-lessons/c275455b206b.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 9 t-shirts.": {
+      "text": "I see 9 T-shirts.",
+      "src": "audio/teacher-lessons/74e7f588c954.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 7 balls.": {
+      "text": "I see 7 balls.",
+      "src": "audio/teacher-lessons/0a09f638f17d.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number eight": {
+      "text": "Number EIGHT",
+      "src": "audio/teacher-lessons/004d10ffed9e.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number ten": {
+      "text": "Number TEN",
+      "src": "audio/teacher-lessons/6c1f7f9e786c.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number eleven": {
+      "text": "Number ELEVEN",
+      "src": "audio/teacher-lessons/3373b5941f75.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number twelve": {
+      "text": "Number TWELVE",
+      "src": "audio/teacher-lessons/6baf01984e39.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 10 mice.": {
+      "text": "I see 10 mice.",
+      "src": "audio/teacher-lessons/7035fae3cae7.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 12 fans.": {
+      "text": "I see 12 fans.",
+      "src": "audio/teacher-lessons/86b01d4b31d7.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 13 cups.": {
+      "text": "I see 13 cups.",
+      "src": "audio/teacher-lessons/c3575c430f39.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number thirteen": {
+      "text": "Number THIRTEEN",
+      "src": "audio/teacher-lessons/a1a7c52b15d2.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number fifteen": {
+      "text": "Number FIFTEEN",
+      "src": "audio/teacher-lessons/281b9237bf1d.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number fourteen": {
+      "text": "Number FOURTEEN",
+      "src": "audio/teacher-lessons/f2ad4c3b6c3a.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 11 apples.": {
+      "text": "I see 11 apples.",
+      "src": "audio/teacher-lessons/9bbdb6f0e2bd.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 14 pens.": {
+      "text": "I see 14 pens.",
+      "src": "audio/teacher-lessons/37992606be3e.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number sixteen": {
+      "text": "Number SIXTEEN",
+      "src": "audio/teacher-lessons/b8f7a3e07118.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 16 ants.": {
+      "text": "I see 16 ants.",
+      "src": "audio/teacher-lessons/d50a60c36a0e.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 15 hats.": {
+      "text": "I see 15 hats.",
+      "src": "audio/teacher-lessons/dc89363d61c6.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 17 hands.": {
+      "text": "I see 17 hands.",
+      "src": "audio/teacher-lessons/d3c44fb60407.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number seventeen": {
+      "text": "Number SEVENTEEN",
+      "src": "audio/teacher-lessons/05a24c763ffd.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 18 trees.": {
+      "text": "I see 18 trees.",
+      "src": "audio/teacher-lessons/dbc11cef0d75.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 19 rings.": {
+      "text": "I see 19 rings.",
+      "src": "audio/teacher-lessons/b2022756c835.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number eightteen": {
+      "text": "Number EIGHTTEEN",
+      "src": "audio/teacher-lessons/6e1a5c312b5a.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "number nineteen": {
+      "text": "Number NINETEEN",
+      "src": "audio/teacher-lessons/0f2f81f8a4ce.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "i see 20 flowers.": {
+      "text": "I see 20 flowers.",
+      "src": "audio/teacher-lessons/34902d08161f.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "phone": {
+      "text": "Phone",
+      "src": "audio/teacher-lessons/f6be6ca91098.mp3",
+      "sourceChapters": [
+        "there_is_a_an",
+        "this_is_my_"
+      ]
+    },
+    "bookcase": {
+      "text": "Bookcase",
+      "src": "audio/teacher-lessons/0efba811c1e8.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "number twenty": {
+      "text": "Number TWENTY",
+      "src": "audio/teacher-lessons/3e62df57d6d0.mp3",
+      "sourceChapters": [
+        "number"
+      ]
+    },
+    "blanket": {
+      "text": "Blanket",
+      "src": "audio/teacher-lessons/607919897b07.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "glass": {
+      "text": "Glass",
+      "src": "audio/teacher-lessons/170fd7e84a1b.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "sock": {
+      "text": "Sock",
+      "src": "audio/teacher-lessons/18c9667c2999.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "mask": {
+      "text": "Mask",
+      "src": "audio/teacher-lessons/9d4cca1595c3.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "train": {
+      "text": "Train",
+      "src": "audio/teacher-lessons/94efdd6f628e.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "crayon": {
+      "text": "Crayon",
+      "src": "audio/teacher-lessons/9be869cf4a4e.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "dress": {
+      "text": "Dress",
+      "src": "audio/teacher-lessons/9dbfbe4709d4.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "towel": {
+      "text": "Towel",
+      "src": "audio/teacher-lessons/d617b78e234e.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "balloon": {
+      "text": "Balloon",
+      "src": "audio/teacher-lessons/326de722b35a.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "plane": {
+      "text": "Plane",
+      "src": "audio/teacher-lessons/2e869b90408c.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "raincoat": {
+      "text": "Raincoat",
+      "src": "audio/teacher-lessons/4318f82eac06.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "shirt": {
+      "text": "Shirt",
+      "src": "audio/teacher-lessons/faa5d6830269.mp3",
+      "sourceChapters": [
+        "this_is_my_"
+      ]
+    },
+    "computer": {
+      "text": "Computer",
+      "src": "audio/teacher-lessons/c60266a8adad.mp3",
+      "sourceChapters": [
+        "this_is_my_"
+      ]
+    },
+    "candy": {
+      "text": "Candy",
+      "src": "audio/teacher-lessons/615923d86676.mp3",
+      "sourceChapters": [
+        "there_is_a_an"
+      ]
+    },
+    "bathtub": {
+      "text": "Bathtub",
+      "src": "audio/teacher-lessons/37d00e850428.mp3",
+      "sourceChapters": [
+        "this_is_my_"
+      ]
+    },
+    "this is a bike": {
+      "text": "This Is A Bike",
+      "src": "audio/teacher-lessons/6bd3916933e3.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a car": {
+      "text": "This Is A Car",
+      "src": "audio/teacher-lessons/39965f9f23d7.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a bus": {
+      "text": "This Is A Bus",
+      "src": "audio/teacher-lessons/cd9bdc319350.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a truck": {
+      "text": "This Is A Truck",
+      "src": "audio/teacher-lessons/bd032a382588.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a taxi": {
+      "text": "This Is A Taxi",
+      "src": "audio/teacher-lessons/5bb3c9d1c3fa.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a train": {
+      "text": "This Is A Train",
+      "src": "audio/teacher-lessons/d4d1e3b6b2c9.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a motorbike": {
+      "text": "This Is A Motorbike",
+      "src": "audio/teacher-lessons/bf737aac9c7f.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a boat": {
+      "text": "This Is A Boat",
+      "src": "audio/teacher-lessons/1df7a507b829.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "this is a ship": {
+      "text": "This Is A Ship",
+      "src": "audio/teacher-lessons/3c1c2c80c544.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "i sit on the chair.": {
+      "text": "I sit on the chair.",
+      "src": "audio/teacher-lessons/954c433f29fe.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "this is a plane": {
+      "text": "This Is A Plane",
+      "src": "audio/teacher-lessons/58798ef88fc1.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "i sit on the bench.": {
+      "text": "I sit on the bench.",
+      "src": "audio/teacher-lessons/a7a398ee196a.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "this is a helicopter": {
+      "text": "This Is A Helicopter",
+      "src": "audio/teacher-lessons/6c89539b8248.mp3",
+      "sourceChapters": [
+        "transportation"
+      ]
+    },
+    "i sit on the floor": {
+      "text": "I sit on the floor",
+      "src": "audio/teacher-lessons/824a9d07656c.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on my bed.": {
+      "text": "I sit on my bed.",
+      "src": "audio/teacher-lessons/0628cc06e8af.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the mat.": {
+      "text": "I sit on the mat.",
+      "src": "audio/teacher-lessons/d109ff244e17.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the swing.": {
+      "text": "I sit on the swing.",
+      "src": "audio/teacher-lessons/1e90eb6075e0.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the grass.": {
+      "text": "I sit on the grass.",
+      "src": "audio/teacher-lessons/39aac73a104c.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the pillow.": {
+      "text": "I sit on the pillow.",
+      "src": "audio/teacher-lessons/cf09afaa1f70.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the sofa.": {
+      "text": "I sit on the sofa.",
+      "src": "audio/teacher-lessons/5b3af0a76c7f.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    },
+    "i sit on the rock.": {
+      "text": "I sit on the rock.",
+      "src": "audio/teacher-lessons/5ea2e4f82384.mp3",
+      "sourceChapters": [
+        "i_sit_on"
+      ]
+    }
+  }
+}

@@ -712,22 +712,98 @@ export const TEACHER_CURRICULUM = {
 };
 
 // ================================================================
+// Teacher audio normalization and practice-item filtering
+// ================================================================
+
+export const TEACHER_LESSON_AUDIO_VOICE = {
+  voice: 'en-US-AriaNeural',
+  voiceLabel: 'Teacher Studio / Aria',
+  speakerKey: 'teacher_studio_aria',
+  variantMode: 'distinct_speaker',
+  rate: '+0%',
+  pitch: '+0Hz',
+  volume: '+0%',
+};
+
+function toNaturalSentenceCase(text) {
+  return text
+    .toLowerCase()
+    .replace(/\b([a-z])/g, (match) => match.toUpperCase());
+}
+
+function containsUnsupportedChars(text) {
+  return /[^\u0020-\u007E]/.test(text);
+}
+
+export function normalizeTeacherLessonAudioText(text) {
+  let cleaned = String(text || '')
+    .replace(/[“”]/g, '"')
+    .replace(/[’]/g, '\'')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!cleaned) return '';
+
+  cleaned = cleaned.replace(/\s*-\s*$/, '').trim();
+
+  const translatedSuffix = cleaned.match(/^(.*?)\s+-\s+(.*)$/);
+  if (translatedSuffix && containsUnsupportedChars(translatedSuffix[2])) {
+    cleaned = translatedSuffix[1].trim();
+  }
+
+  if (!cleaned) return '';
+  if (containsUnsupportedChars(cleaned)) return '';
+  if (/\.\.\.|…/.test(cleaned)) return '';
+  if (/a\s*\/\s*an/i.test(cleaned)) return '';
+  if (/\.{4,}/.test(cleaned)) return '';
+  if (!/[A-Za-z]/.test(cleaned)) return '';
+
+  if (/^[A-Z][A-Z0-9\s&'/-]+$/.test(cleaned) && cleaned.length > 1) {
+    cleaned = toNaturalSentenceCase(cleaned);
+  }
+
+  return cleaned;
+}
+
+export function normalizeTeacherLessonAudioKey(text) {
+  return normalizeTeacherLessonAudioText(text).toLowerCase();
+}
+
+export function buildTeacherLessonPracticeItem(item) {
+  const promptEn = normalizeTeacherLessonAudioText(item?.en);
+  if (!promptEn) return null;
+  return {
+    ...item,
+    promptEn,
+  };
+}
+
+export function getTeacherLessonPracticeItems(chapter) {
+  return chapter.items
+    .map(buildTeacherLessonPracticeItem)
+    .filter(Boolean);
+}
+
+// ================================================================
 // Exercise generators
 // ================================================================
 
 /** Generate flashcard pairs from a chapter */
 export function generateFlashcards(chapter) {
-  return chapter.items.map((item, idx) => ({
+  return getTeacherLessonPracticeItems(chapter).map((item, idx) => ({
     id: idx,
     en: item.en,
     vi: item.vi,
+    promptEn: item.promptEn,
     chapter: chapter.title,
   }));
 }
 
 /** Generate listen-and-choose quiz */
 export function generateListenQuiz(chapter, count = 8) {
-  const items = [...chapter.items].filter(i => i.en.length > 2).sort(() => Math.random() - 0.5);
+  const items = [...getTeacherLessonPracticeItems(chapter)]
+    .filter(i => i.promptEn.length > 2)
+    .sort(() => Math.random() - 0.5);
   const questions = [];
   for (let i = 0; i < Math.min(count, items.length); i++) {
     const correct = items[i];
@@ -735,7 +811,7 @@ export function generateListenQuiz(chapter, count = 8) {
     const options = [correct, ...wrongs].sort(() => Math.random() - 0.5);
     questions.push({
       id: i,
-      audio: correct.en,
+      audio: correct.promptEn,
       audioVi: correct.vi,
       options: options.map(o => o.en),
       optionsVi: options.map(o => o.vi),
@@ -748,7 +824,7 @@ export function generateListenQuiz(chapter, count = 8) {
 
 /** Generate sentence-building exercise */
 export function generateSentenceBuild(chapter, count = 6) {
-  const sentences = chapter.items
+  const sentences = getTeacherLessonPracticeItems(chapter)
     .filter(item => item.en.includes(' ') && item.en.split(' ').length >= 3)
     .sort(() => Math.random() - 0.5)
     .slice(0, count);
@@ -759,6 +835,7 @@ export function generateSentenceBuild(chapter, count = 6) {
       id: idx,
       sentence: item.en,
       sentenceVi: item.vi,
+      audioText: item.promptEn,
       words: scrambled,
       answer: words,
     };

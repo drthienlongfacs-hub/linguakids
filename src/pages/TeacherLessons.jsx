@@ -4,8 +4,14 @@
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TEACHER_CURRICULUM, generateFlashcards, generateListenQuiz, generateSentenceBuild } from '../data/teacherLessons';
+import { TEACHER_CURRICULUM, generateFlashcards, generateListenQuiz, generateSentenceBuild, getTeacherLessonPracticeItems } from '../data/teacherLessons';
 import { useSpeech } from '../hooks/useSpeech';
+import {
+    getTeacherLessonAudioClip,
+    hasTeacherLessonAudioClip,
+    loadTeacherLessonAudioManifest,
+    loadTeacherLessonAudioQA,
+} from '../services/teacherLessonAudioService';
 
 // ================================================================
 // PROGRESS TRACKING (localStorage)
@@ -43,11 +49,81 @@ function getChapterCompletion(chapterId) {
     return Math.round(avgBest * 100);
 }
 
+function buildTeacherAudioBadgeLabel(audioState, qaSummary) {
+    if (audioState === 'ready' && qaSummary?.summary?.strictModulePass) {
+        return `Studio teacher audio ready · ${qaSummary.summary.clipCount} clips`;
+    }
+    if (audioState === 'ready') {
+        return 'Studio teacher audio ready';
+    }
+    if (audioState === 'fallback') {
+        return 'Browser TTS fallback';
+    }
+    return 'Checking teacher audio';
+}
+
+function buildPlaybackSourceLabel(lastPlaybackMode, hasControlledAudio) {
+    if (lastPlaybackMode === 'controlled') return 'Nguồn mẫu: Studio teacher audio';
+    if (hasControlledAudio) return 'Studio teacher audio sẵn sàng';
+    return 'Nguồn mẫu: Browser TTS';
+}
+
+function useTeacherLessonAudioPlayer(voicePackManifest) {
+    const audioRef = useRef(null);
+
+    const stopAudio = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+            audioRef.current = null;
+        }
+        window.speechSynthesis?.cancel();
+    }, []);
+
+    useEffect(() => () => stopAudio(), [stopAudio]);
+
+    const hasControlledAudio = useCallback((text) => (
+        hasTeacherLessonAudioClip(voicePackManifest, text)
+    ), [voicePackManifest]);
+
+    const playText = useCallback(async (text, fallback) => {
+        if (!text) return 'none';
+
+        stopAudio();
+        const src = getTeacherLessonAudioClip(voicePackManifest, text);
+
+        if (src) {
+            const audio = new Audio(src);
+            audioRef.current = audio;
+            try {
+                await audio.play();
+                return 'controlled';
+            } catch (error) {
+                console.warn('teacher_lessons_audio_playback_failed', error);
+                audioRef.current = null;
+            }
+        }
+
+        if (fallback) {
+            fallback();
+            return 'tts';
+        }
+
+        return 'unavailable';
+    }, [stopAudio, voicePackManifest]);
+
+    return {
+        hasControlledAudio,
+        playText,
+        stopAudio,
+    };
+}
+
 // ================================================================
 // CHAPTER LIST VIEW 
 // ================================================================
 
-function ChapterList({ chapters, onSelect }) {
+function ChapterList({ chapters, onSelect, audioState, qaSummary }) {
     const navigate = useNavigate();
     const categories = [
         { id: 'foundation', label: '🏗️ Nền tảng', color: '#3B82F6' },
@@ -56,7 +132,7 @@ function ChapterList({ chapters, onSelect }) {
         { id: 'grammar', label: '📐 Ngữ pháp', color: '#8B5CF6' },
     ];
 
-    const totalItems = chapters.reduce((sum, ch) => sum + ch.items.length, 0);
+    const totalItems = chapters.reduce((sum, ch) => sum + getTeacherLessonPracticeItems(ch).length, 0);
     const overallProgress = Math.round(
         chapters.reduce((sum, ch) => sum + getChapterCompletion(ch.id), 0) / chapters.length
     );
@@ -80,6 +156,16 @@ function ChapterList({ chapters, onSelect }) {
                 }}>
                     {chapters.length} chương · {totalItems} từ vựng · Luyện tập theo bài cô dạy trên lớp
                 </p>
+                <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    marginTop: '8px', padding: '5px 12px', borderRadius: '999px',
+                    background: audioState === 'ready' ? '#ECFDF5' : audioState === 'fallback' ? '#FEF3C7' : '#EFF6FF',
+                    color: audioState === 'ready' ? '#065F46' : audioState === 'fallback' ? '#92400E' : '#1D4ED8',
+                    fontSize: '0.75rem', fontFamily: 'var(--font-display)', fontWeight: 600,
+                }}>
+                    <span>{audioState === 'ready' ? '🎧' : audioState === 'fallback' ? '⚠️' : '⏳'}</span>
+                    <span>{buildTeacherAudioBadgeLabel(audioState, qaSummary)}</span>
+                </div>
                 {/* Overall progress bar */}
                 {overallProgress > 0 && (
                     <div style={{ maxWidth: '300px', margin: '10px auto 0' }}>
@@ -153,7 +239,7 @@ function ChapterList({ chapters, onSelect }) {
                                         <span style={{
                                             fontFamily: 'var(--font-body)', fontSize: '0.65rem',
                                             color: 'var(--color-text-light)',
-                                        }}>{ch.items.length} từ</span>
+                                        }}>{getTeacherLessonPracticeItems(ch).length} từ</span>
                                         {/* Mini progress bar */}
                                         {completion > 0 && (
                                             <div style={{
@@ -185,6 +271,7 @@ function ChapterList({ chapters, onSelect }) {
 function ExerciseSelector({ chapter, onSelect, onBack }) {
     const completion = getChapterCompletion(chapter.id);
     const progress = loadProgress()[chapter.id] || {};
+    const practiceCount = getTeacherLessonPracticeItems(chapter).length;
 
     const modes = [
         { id: 'flashcard', emoji: '🃏', label: 'Thẻ ghi nhớ', desc: 'Nghe, nhìn, lật thẻ Anh-Việt', color: '#3B82F6' },
@@ -213,7 +300,7 @@ function ExerciseSelector({ chapter, onSelect, onBack }) {
                 <p style={{
                     fontFamily: 'var(--font-body)', color: 'var(--color-text-light)',
                     fontSize: '0.85rem', margin: 0,
-                }}>{chapter.title} · {chapter.items.length} từ</p>
+                }}>{chapter.title} · {practiceCount} mục luyện</p>
                 {completion > 0 && (
                     <div style={{
                         display: 'inline-block', marginTop: '8px', padding: '4px 14px',
@@ -278,29 +365,37 @@ function ExerciseSelector({ chapter, onSelect, onBack }) {
 // FLASHCARD EXERCISE — EN front, VN back
 // ================================================================
 
-function FlashcardExercise({ chapter, onBack, onComplete }) {
+function FlashcardExercise({ chapter, onBack, onComplete, voicePackManifest }) {
     const { speak } = useSpeech();
+    const { playText, hasControlledAudio, stopAudio } = useTeacherLessonAudioPlayer(voicePackManifest);
     const cards = useMemo(() => generateFlashcards(chapter), [chapter]);
     const [idx, setIdx] = useState(0);
     const [flipped, setFlipped] = useState(false);
     const [known, setKnown] = useState(new Set());
+    const [playbackMode, setPlaybackMode] = useState('idle');
 
     const current = cards[idx];
     const progress = ((idx + 1) / cards.length) * 100;
+    const hasStudioAudio = hasControlledAudio(current?.promptEn || current?.en);
 
     const playAudio = useCallback(() => {
-        if (current) speak(current.en, 'en-US', { rate: 0.92, pitch: 1.0 });
-    }, [current, speak]);
+        if (!current) return;
+        playText(current.promptEn || current.en, () => speak(current.promptEn || current.en, 'en-US', { rate: 0.92, pitch: 1.0 }))
+            .then(setPlaybackMode);
+    }, [current, playText, speak]);
 
     useEffect(() => {
-        setFlipped(false);
         const timer = setTimeout(() => playAudio(), 300);
-        return () => clearTimeout(timer);
-    }, [idx]); // eslint-disable-line
+        return () => {
+            clearTimeout(timer);
+            stopAudio();
+        };
+    }, [idx, playAudio, stopAudio]);
 
     const markKnown = () => {
         setKnown(prev => new Set([...prev, idx]));
         if (idx < cards.length - 1) {
+            setFlipped(false);
             setIdx(i => i + 1);
         } else {
             const score = known.size + 1;
@@ -309,8 +404,14 @@ function FlashcardExercise({ chapter, onBack, onComplete }) {
         }
     };
 
-    const next = () => setIdx(i => Math.min(i + 1, cards.length - 1));
-    const prev = () => setIdx(i => Math.max(i - 1, 0));
+    const next = () => {
+        setFlipped(false);
+        setIdx(i => Math.min(i + 1, cards.length - 1));
+    };
+    const prev = () => {
+        setFlipped(false);
+        setIdx(i => Math.max(i - 1, 0));
+    };
 
     return (
         <div style={{ padding: '16px', maxWidth: '500px', margin: '0 auto' }}>
@@ -360,8 +461,13 @@ function FlashcardExercise({ chapter, onBack, onComplete }) {
                             boxShadow: '0 2px 8px rgba(59,130,246,0.3)',
                         }}>🔊 Nghe</button>
                         <p style={{
+                            fontFamily: 'var(--font-body)', fontSize: '0.72rem',
+                            color: hasStudioAudio || playbackMode === 'controlled' ? '#065F46' : '#92400E',
+                            margin: '10px 0 0',
+                        }}>{buildPlaybackSourceLabel(playbackMode, hasStudioAudio)}</p>
+                        <p style={{
                             fontFamily: 'var(--font-body)', fontSize: '0.75rem',
-                            color: 'var(--color-text-light)', margin: '10px 0 0', opacity: 0.7,
+                            color: 'var(--color-text-light)', margin: '8px 0 0', opacity: 0.7,
                         }}>👆 Chạm thẻ để xem nghĩa tiếng Việt</p>
                     </>
                 ) : (
@@ -414,25 +520,32 @@ function FlashcardExercise({ chapter, onBack, onComplete }) {
 // LISTEN & CHOOSE QUIZ — with VN hints
 // ================================================================
 
-function ListenQuiz({ chapter, onBack, onComplete }) {
+function ListenQuiz({ chapter, onBack, onComplete, voicePackManifest }) {
     const { speak } = useSpeech();
+    const { playText, hasControlledAudio, stopAudio } = useTeacherLessonAudioPlayer(voicePackManifest);
     const questions = useMemo(() => generateListenQuiz(chapter, 8), [chapter]);
     const [qIdx, setQIdx] = useState(0);
     const [selected, setSelected] = useState(null);
     const [score, setScore] = useState(0);
     const [done, setDone] = useState(false);
+    const [playbackMode, setPlaybackMode] = useState('idle');
 
     const current = questions[qIdx];
+    const hasStudioAudio = hasControlledAudio(current?.audio);
 
     const playAudio = useCallback(() => {
-        if (current) speak(current.audio, 'en-US', { rate: 0.92, pitch: 1.0 });
-    }, [current, speak]);
+        if (!current) return;
+        playText(current.audio, () => speak(current.audio, 'en-US', { rate: 0.92, pitch: 1.0 }))
+            .then(setPlaybackMode);
+    }, [current, playText, speak]);
 
     useEffect(() => {
-        setSelected(null);
         const timer = setTimeout(() => playAudio(), 400);
-        return () => clearTimeout(timer);
-    }, [qIdx]); // eslint-disable-line
+        return () => {
+            clearTimeout(timer);
+            stopAudio();
+        };
+    }, [playAudio, qIdx, stopAudio]);
 
     const handleSelect = (option) => {
         if (selected) return;
@@ -441,6 +554,7 @@ function ListenQuiz({ chapter, onBack, onComplete }) {
         if (correct) setScore(s => s + 1);
         setTimeout(() => {
             if (qIdx < questions.length - 1) {
+                setSelected(null);
                 setQIdx(i => i + 1);
             } else {
                 const finalScore = correct ? score + 1 : score;
@@ -474,6 +588,11 @@ function ListenQuiz({ chapter, onBack, onComplete }) {
                 <p style={{ fontFamily: 'var(--font-body)', color: 'var(--color-text-light)', fontSize: '0.8rem', margin: '6px 0 0' }}>
                     Nhấn để nghe lại
                 </p>
+                <p style={{
+                    fontFamily: 'var(--font-body)', fontSize: '0.72rem',
+                    color: hasStudioAudio || playbackMode === 'controlled' ? '#065F46' : '#92400E',
+                    margin: '6px 0 0',
+                }}>{buildPlaybackSourceLabel(playbackMode, hasStudioAudio)}</p>
                 {/* Show Vietnamese hint after selection */}
                 {selected && current.audioVi && (
                     <div style={{
@@ -523,60 +642,75 @@ function ListenQuiz({ chapter, onBack, onComplete }) {
 // SAY IT (Pronunciation Practice) — with voice personality
 // ================================================================
 
-function SayItExercise({ chapter, onBack, onComplete }) {
+function SayItExercise({ chapter, onBack, onComplete, voicePackManifest }) {
     const { speak, startListening, stopListening, isListening, transcript } = useSpeech();
+    const { playText, hasControlledAudio, stopAudio } = useTeacherLessonAudioPlayer(voicePackManifest);
     const items = useMemo(() => {
-        return [...chapter.items]
-            .filter(i => i.en.length > 2)
-            .sort(() => Math.random() - 0.5)
+        return [...getTeacherLessonPracticeItems(chapter)]
+            .filter(i => i.promptEn.length > 2)
             .slice(0, 8);
     }, [chapter]);
     const [idx, setIdx] = useState(0);
     const [result, setResult] = useState(null);
     const [score, setScore] = useState(0);
+    const [playbackMode, setPlaybackMode] = useState('idle');
     const prevTranscriptRef = useRef('');
 
     const current = items[idx];
-    const progress = ((idx + 1) / items.length) * 100;
+    const modelText = current?.promptEn || current?.en;
+    const hasStudioAudio = hasControlledAudio(modelText);
 
     const playModel = useCallback(() => {
-        if (current) speak(current.en, 'en-US', { rate: 0.92, pitch: 1.0 });
-    }, [current, speak]);
+        if (!current) return;
+        playText(modelText, () => speak(modelText, 'en-US', { rate: 0.92, pitch: 1.0 }))
+            .then(setPlaybackMode);
+    }, [current, modelText, playText, speak]);
 
     useEffect(() => {
-        setResult(null);
         prevTranscriptRef.current = '';
         const timer = setTimeout(() => playModel(), 300);
-        return () => clearTimeout(timer);
-    }, [idx]); // eslint-disable-line
+        return () => {
+            clearTimeout(timer);
+            stopAudio();
+        };
+    }, [idx, playModel, stopAudio]);
 
-    useEffect(() => {
-        if (transcript && current && transcript !== prevTranscriptRef.current) {
-            prevTranscriptRef.current = transcript;
-            const expected = current.en.toLowerCase().replace(/[.!?,]/g, '').trim();
-            const spoken = transcript.toLowerCase().replace(/[.!?,]/g, '').trim();
-            // Fuzzy match: at least 60% of words match
-            const expectedWords = expected.split(' ');
-            const spokenWords = spoken.split(' ');
-            const matchCount = expectedWords.filter(w => spokenWords.includes(w)).length;
-            const similarity = matchCount / expectedWords.length;
+    const evaluateSpeechResult = useCallback((alternatives = []) => {
+        if (!current) return;
+        const best = Array.isArray(alternatives) && alternatives.length > 0
+            ? alternatives[0]
+            : '';
+        const spokenRaw = typeof best === 'string' ? best : best?.text || transcript;
+        if (!spokenRaw || spokenRaw === prevTranscriptRef.current) return;
 
-            if (similarity >= 0.6) {
-                setResult('correct');
-                setScore(s => s + 1);
-            } else {
-                setResult('try-again');
-            }
+        prevTranscriptRef.current = spokenRaw;
+        const expected = modelText.toLowerCase().replace(/[.!?,]/g, '').trim();
+        const spoken = spokenRaw.toLowerCase().replace(/[.!?,]/g, '').trim();
+        const expectedWords = expected.split(' ');
+        const spokenWords = spoken.split(' ');
+        const matchCount = expectedWords.filter(w => spokenWords.includes(w)).length;
+        const similarity = matchCount / expectedWords.length;
+
+        if (similarity >= 0.6) {
+            setResult('correct');
+            setScore(s => s + 1);
+        } else {
+            setResult('try-again');
         }
-    }, [transcript, current]);
+    }, [current, modelText, transcript]);
 
     const handleMic = () => {
         if (isListening) { stopListening(); }
-        else { setResult(null); startListening('en-US'); }
+        else {
+            stopAudio();
+            setResult(null);
+            startListening('en-US', evaluateSpeechResult);
+        }
     };
 
     const next = () => {
         if (idx < items.length - 1) {
+            setResult(null);
             setIdx(i => i + 1);
         } else {
             saveChapterProgress(chapter.id, 'speak', score, items.length);
@@ -610,6 +744,11 @@ function SayItExercise({ chapter, onBack, onComplete }) {
                     borderRadius: '20px', padding: '8px 20px', cursor: 'pointer',
                     fontFamily: 'var(--font-display)', fontSize: '0.85rem',
                 }}>🔊 Nghe mẫu</button>
+                <p style={{
+                    fontFamily: 'var(--font-body)', fontSize: '0.72rem',
+                    color: hasStudioAudio || playbackMode === 'controlled' ? '#065F46' : '#92400E',
+                    margin: '10px 0 0',
+                }}>{buildPlaybackSourceLabel(playbackMode, hasStudioAudio)}</p>
             </div>
 
             {/* Mic */}
@@ -658,28 +797,20 @@ function SayItExercise({ chapter, onBack, onComplete }) {
 // SENTENCE BUILD EXERCISE — with VN translation
 // ================================================================
 
-function SentenceBuildExercise({ chapter, onBack, onComplete }) {
+function SentenceBuildExercise({ chapter, onBack, onComplete, voicePackManifest }) {
     const { speak } = useSpeech();
+    const { playText, hasControlledAudio } = useTeacherLessonAudioPlayer(voicePackManifest);
     const exercises = useMemo(() => generateSentenceBuild(chapter, 6), [chapter]);
     const [eIdx, setEIdx] = useState(0);
-    const [placed, setPlaced] = useState([]);
     const [result, setResult] = useState(null);
     const [score, setScore] = useState(0);
+    const [playbackMode, setPlaybackMode] = useState('idle');
 
     const current = exercises[eIdx];
-    const available = current ? current.words.filter((w, i) => {
-        // Count how many times this word appears in placed
-        const placedCount = placed.filter(p => p === w).length;
-        const totalCount = current.words.filter(cw => cw === w).length;
-        // Only show if not all instances are placed
-        const availableInstances = current.words.slice(0, current.words.indexOf(w, placed.filter(p => p === w).length)).length;
-        return placedCount < current.words.filter(cw => cw === w).length;
-    }) : [];
-
-    // Simpler approach: track indices
     const [placedIndices, setPlacedIndices] = useState([]);
     const availableWords = current ? current.words.map((w, i) => ({ word: w, idx: i })).filter(({ idx }) => !placedIndices.includes(idx)) : [];
     const placedWords = placedIndices.map(i => current?.words[i] || '');
+    const hasStudioAudio = hasControlledAudio(current?.audioText || current?.sentence);
 
     const addWord = (wordIdx) => {
         const newPlaced = [...placedIndices, wordIdx];
@@ -692,7 +823,8 @@ function SentenceBuildExercise({ chapter, onBack, onComplete }) {
             setResult(correct ? 'correct' : 'wrong');
             if (correct) {
                 setScore(s => s + 1);
-                speak(current.sentence, 'en-US', { rate: 0.85 });
+                playText(current.audioText || current.sentence, () => speak(current.audioText || current.sentence, 'en-US', { rate: 0.9, pitch: 1.0 }))
+                    .then(setPlaybackMode);
             }
         }
     };
@@ -779,6 +911,11 @@ function SentenceBuildExercise({ chapter, onBack, onComplete }) {
                         background: '#D1FAE5', color: '#065F46', borderRadius: '12px',
                         padding: '12px', fontFamily: 'var(--font-display)', fontWeight: 600,
                     }}>✅ Đúng rồi!</div>
+                    <div style={{
+                        fontFamily: 'var(--font-body)', fontSize: '0.72rem',
+                        color: hasStudioAudio || playbackMode === 'controlled' ? '#065F46' : '#92400E',
+                        marginTop: '8px',
+                    }}>{buildPlaybackSourceLabel(playbackMode, hasStudioAudio)}</div>
                 </div>
             )}
             {result === 'wrong' && (
@@ -810,7 +947,7 @@ function SentenceBuildExercise({ chapter, onBack, onComplete }) {
 // SHARED COMPONENTS
 // ================================================================
 
-function ExerciseHeader({ icon, title, chapter, current, total, onBack, color }) {
+function ExerciseHeader({ icon, title, current, total, onBack, color }) {
     const progress = (current / total) * 100;
     return (
         <>
@@ -837,7 +974,7 @@ function ExerciseHeader({ icon, title, chapter, current, total, onBack, color })
     );
 }
 
-function ResultScreen({ emoji, title, score, total, onBack, onRetry, onComplete }) {
+function ResultScreen({ emoji, title, score, total, onBack, onRetry }) {
     const pct = Math.round((score / total) * 100);
     return (
         <div style={{ padding: '16px', maxWidth: '500px', margin: '0 auto', textAlign: 'center' }}>
@@ -875,6 +1012,40 @@ export default function TeacherLessons() {
     const [selectedChapter, setSelectedChapter] = useState(null);
     const [exerciseMode, setExerciseMode] = useState(null);
     const [completionResult, setCompletionResult] = useState(null);
+    const [voicePackManifest, setVoicePackManifest] = useState(null);
+    const [voicePackState, setVoicePackState] = useState('loading');
+    const [voicePackQA, setVoicePackQA] = useState(null);
+
+    useEffect(() => {
+        let active = true;
+
+        loadTeacherLessonAudioManifest()
+            .then((manifest) => {
+                if (!active) return;
+                setVoicePackManifest(manifest);
+                setVoicePackState('ready');
+            })
+            .catch(() => {
+                if (!active) return;
+                setVoicePackState('fallback');
+            });
+
+        loadTeacherLessonAudioQA()
+            .then((qa) => {
+                if (active) {
+                    setVoicePackQA(qa);
+                }
+            })
+            .catch(() => {
+                if (active) {
+                    setVoicePackQA(null);
+                }
+            });
+
+        return () => {
+            active = false;
+        };
+    }, []);
 
     const handleSelectChapter = (ch) => { setSelectedChapter(ch); setStep('exercises'); };
     const handleSelectExercise = (mode) => { setExerciseMode(mode); setStep('playing'); };
@@ -887,13 +1058,25 @@ export default function TeacherLessons() {
     };
 
     if (step === 'chapters') {
-        return <ChapterList chapters={TEACHER_CURRICULUM.chapters} onSelect={handleSelectChapter} />;
+        return (
+            <ChapterList
+                chapters={TEACHER_CURRICULUM.chapters}
+                onSelect={handleSelectChapter}
+                audioState={voicePackState}
+                qaSummary={voicePackQA}
+            />
+        );
     }
     if (step === 'exercises' && selectedChapter) {
         return <ExerciseSelector chapter={selectedChapter} onSelect={handleSelectExercise} onBack={goBackToChapters} />;
     }
     if (step === 'playing' && selectedChapter && exerciseMode) {
-        const props = { chapter: selectedChapter, onBack: goBackToExercises, onComplete: handleComplete };
+        const props = {
+            chapter: selectedChapter,
+            onBack: goBackToExercises,
+            onComplete: handleComplete,
+            voicePackManifest,
+        };
         switch (exerciseMode) {
             case 'flashcard': return <FlashcardExercise {...props} />;
             case 'listen': return <ListenQuiz {...props} />;
