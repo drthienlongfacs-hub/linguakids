@@ -55,6 +55,20 @@ export default function LegalNotice() {
                 <h3>Thanh phan ben thu ba</h3>
                 <p>{THIRD_PARTY_NOTICE}</p>
             </section>
+
+            <section className="legal-notice-card">
+                <h3>Chinh sach video lesson</h3>
+                <p>
+                    Video lesson public chi duoc phat hanh khi co nguon hop le, giay phep ro rang va
+                    co the phat truc tiep trong app/PWA. Nguon YouTube chi duoc giu lai lam tham chieu,
+                    khong duoc xem la nguon phat canonical cho lesson public.
+                </p>
+                <ul className="legal-notice-list">
+                    <li>Moi lesson public phai co bang chung license va quyen rehost.</li>
+                    <li>Nguon phat canonical phai duoc host tren object storage/CDN do LinguaKids kiem soat.</li>
+                    <li>Lesson chua dat du cac dieu kien tren se bi an khoi giao dien public.</li>
+                </ul>
+            </section>
         </div>
     );
 }

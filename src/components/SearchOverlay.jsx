@@ -5,22 +5,12 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
+import {
+    flattenPublicVideoLessons,
+    getLessonFocusVocabulary,
+    loadVideoLessonManifest,
+} from '../services/videoLessonManifestService';
 import { isAdultMode } from '../utils/userMode';
-import { LEVEL_1_KIDS } from '../data/videoCurriculum';
-import { LEVEL_2_BEGINNER } from '../data/videoCurriculumL2';
-import { LEVEL_3_INTERMEDIATE, LEVEL_4_ADVANCED } from '../data/videoCurriculumL3L4';
-
-// Build flattened video index for deep search
-const ALL_VIDEO_LEVELS = [LEVEL_1_KIDS, LEVEL_2_BEGINNER, LEVEL_3_INTERMEDIATE, LEVEL_4_ADVANCED];
-const VIDEO_SEARCH_INDEX = ALL_VIDEO_LEVELS.flatMap(lv =>
-    lv.categories.flatMap(cat =>
-        cat.videos.map(v => ({
-            path: '/video-lessons', title: v.title, titleVi: v.titleVi, cat: 'video',
-            icon: cat.icon, tags: [v.channel || '', cat.title, cat.titleVi, lv.title, lv.titleVi, v.id].filter(Boolean),
-            meta: `${lv.level} · ${v.channel}`, isVideo: true,
-        }))
-    )
-);
 
 // ============ SEARCHABLE INDEX ============
 const SEARCH_INDEX = [
@@ -118,15 +108,63 @@ export default function SearchOverlay({ isOpen, onClose }) {
     const adult = isAdultMode(state.userMode);
     const [query, setQuery] = useState('');
     const [selectedIdx, setSelectedIdx] = useState(0);
+    const [videoIndexState, setVideoIndexState] = useState({ ready: false, items: [] });
     const inputRef = useRef(null);
 
     useEffect(() => {
-        if (isOpen) {
+        if (!isOpen) {
+            return undefined;
+        }
+
+        const timeoutId = window.setTimeout(() => {
             setQuery('');
             setSelectedIdx(0);
-            setTimeout(() => inputRef.current?.focus(), 100);
-        }
+            inputRef.current?.focus();
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
     }, [isOpen]);
+
+    useEffect(() => {
+        if (!isOpen || videoIndexState.ready) {
+            return undefined;
+        }
+
+        let active = true;
+
+        loadVideoLessonManifest()
+            .then((manifest) => {
+                if (!active) return;
+                const items = flattenPublicVideoLessons(manifest).map((video) => ({
+                    path: '/video-lessons',
+                    title: video.title,
+                    titleVi: video.titleVi,
+                    cat: 'video',
+                    icon: video.category.icon,
+                    tags: [
+                        video.channel || '',
+                        video.category.title,
+                        video.category.titleVi,
+                        video.level.title,
+                        video.level.titleVi,
+                        video.id,
+                        ...getLessonFocusVocabulary(video).map((entry) => entry.term),
+                        ...getLessonFocusVocabulary(video).map((entry) => entry.meaningVi),
+                    ].filter(Boolean),
+                    meta: `${video.level.level} · ${video.channel || 'approved source'}`,
+                    isVideo: true,
+                }));
+                setVideoIndexState({ ready: true, items });
+            })
+            .catch(() => {
+                if (!active) return;
+                setVideoIndexState({ ready: true, items: [] });
+            });
+
+        return () => {
+            active = false;
+        };
+    }, [isOpen, videoIndexState.ready]);
 
     // Keyboard shortcut: Cmd/Ctrl + K
     useEffect(() => {
@@ -143,7 +181,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
     }, [isOpen, onClose]);
 
     // Deep search across pages + videos
-    const FULL_INDEX = useMemo(() => [...SEARCH_INDEX, ...VIDEO_SEARCH_INDEX], []);
+    const FULL_INDEX = useMemo(() => [...SEARCH_INDEX, ...videoIndexState.items], [videoIndexState.items]);
     const results = useMemo(() => {
         if (!query.trim()) return [];
         const q = query.toLowerCase().trim();
@@ -247,7 +285,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                                     <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--color-text-light)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
                                         {adult ? 'Recent' : 'Gần đây'}
                                     </div>
-                                    {recent.map((r, i) => (
+                                    {recent.map((r) => (
                                         <div key={r.path} onClick={() => { navigate(r.path); onClose(); }}
                                             style={{
                                                 padding: '8px 12px', borderRadius: '10px', cursor: 'pointer',

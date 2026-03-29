@@ -38,27 +38,52 @@ The following files are the operational source of truth for release-critical che
   Free-speaking readability and controlled-audio audit.
 - `scripts/audit-teacher-lessons-audio.mjs`
   Teacher-lessons studio-audio coverage audit and regression gate.
+- `content/video-lessons/catalog.json`
+  Editorial source of truth for public/hidden video lesson status, canonical playback, and legal metadata.
+- `content/video-lessons/approved-sources.json`
+  Allowlist for canonical video hosts, blocked domains, and approved playback kinds.
+- `public/data/video-manifests/video-lessons.json`
+  Generated runtime video manifest consumed by the app.
+- `public/data/video-manifests/video-lessons.qa.json`
+  Generated QA snapshot for release review and live verification.
+- `public/data/video-manifests/video-lessons.alignment.qa.json`
+  RCA snapshot for legacy reference mismatch triage.
+- `scripts/build-video-lessons-manifest.mjs`
+  Video lesson manifest build step from the editorial catalog.
+- `scripts/audit-video-lessons.mjs`
+  Release-blocking audit for canonical video source health, legality metadata, and public visibility policy.
+- `scripts/sync-video-lessons-learning-packets.mjs`
+  Materializes bilingual scripts, richer quiz packs, and source-verification defaults into the catalog.
+- `scripts/audit-video-lesson-alignment.mjs`
+  Non-release RCA audit for mismatch between expected lesson topic and legacy reference links.
 - `.github/workflows/deploy.yml`
   Mandatory release gates before publish.
 
 ## Standard operating procedure
 
-1. Run `npm run audit:premium`.
+1. Run `npm run sync:video-lessons:learning` if video titles, categories, or quiz design changed.
+   Result must refresh learning packets, bilingual scripts, and source-verification defaults in the catalog.
+2. Run `npm run build:video-lessons`.
+   Result must emit the current runtime manifest and QA snapshot.
+3. Run `npm run audit:video-lessons`.
    Result must be `pass: true`.
-2. Run `npm run audit:entitlement`.
+4. Run `npm run audit:premium`.
    Result must be `pass: true`.
-3. Run `npm run audit:voice-runtime`.
+5. Run `npm run audit:entitlement`.
    Result must be `pass: true`.
-4. Run `npm run audit:kids-library`.
+6. Run `npm run audit:voice-runtime`.
    Result must be `pass: true`.
-5. Run `npm run audit:free-speaking`.
+7. Run `npm run audit:kids-library`.
+   Result must be `pass: true`.
+8. Run `npm run audit:free-speaking`.
    Result must be `strictModulePass: true`.
-6. Run `npm run audit:teacher-lessons`.
+9. Run `npm run audit:teacher-lessons`.
    Result must be `strictModulePass: true`.
-7. Run `npm run build`.
+10. Run `npm run build`.
    Result must complete successfully.
-8. Push `main`.
-9. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
+11. Optionally run `npm run audit:video-lessons:alignment` during migration to review mismatch RCA before replacing legacy backup references.
+12. Push `main`.
+13. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
 
 ## Audio regression control
 
@@ -66,6 +91,15 @@ The following files are the operational source of truth for release-critical che
 - A route-level fix is not considered complete until its audit script is wired into `audit:release`.
 - Any new browser-TTS preference flow must consume the shared voice preference service and pass `audit:voice-runtime`.
 - Any harvested benchmark-inspired surface must point into real routes, use repo-backed counts, and pass its dedicated audit gate.
+- Video lessons are not allowed to publish directly from legacy YouTube IDs.
+- A public video lesson must have a CDN-backed canonical source, legal evidence, and a passing `audit:video-lessons` probe.
+- Hidden video lessons must not appear in counts, search results, categories, or route browse flows.
+
+## Video publication policy
+
+- Public video lessons are no longer treated as "100% offline". They are streamed from a controlled object-storage CDN.
+- YouTube may remain as a reference URL only. It is not a valid canonical source for public playback, especially in standalone PWA mode.
+- If a lesson has no approved replacement source, it stays hidden until the migration checklist in `docs/video-lessons-sot.md` is complete.
 
 ## Distribution policy
 

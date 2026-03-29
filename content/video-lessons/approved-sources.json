@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "mediaHost": {
+    "baseUrl": "https://cdn.linguakids.example.invalid/",
+    "allowedDomains": [
+      "cdn.linguakids.example.invalid"
+    ]
+  },
+  "allowedCanonicalKinds": [
+    "mp4"
+  ],
+  "blockedCanonicalKinds": [
+    "youtube",
+    "youtube_embed",
+    "youtube_watch",
+    "youtube_nocookie"
+  ],
+  "blockedDomains": [
+    "youtube.com",
+    "youtu.be",
+    "youtube-nocookie.com"
+  ],
+  "approvedSources": [
+    {
+      "id": "linguakids-cdn",
+      "name": "LinguaKids Licensed Video CDN",
+      "domain": "cdn.linguakids.example.invalid",
+      "type": "object_storage_cdn",
+      "notes": "Replace this placeholder CDN host with the production object-storage CDN before any lesson is marked public."
+    }
+  ]
+}

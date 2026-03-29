@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 import process from 'node:process';
 
 function parseArgs(argv) {
@@ -56,18 +57,22 @@ async function main() {
     const args = parseArgs(process.argv.slice(2));
     const distPath = args.dist || 'dist/index.html';
     const site = args.site || 'https://drthienlongfacs-hub.github.io/linguakids/';
+    const manifestPath = args.manifest || path.join(path.dirname(distPath), 'data', 'video-manifests', 'video-lessons.json');
     const timeoutMs = Number(args['timeout-ms'] || 900000);
     const intervalMs = Number(args['interval-ms'] || 20000);
 
     const distHtml = await readFile(distPath, 'utf8');
+    const localManifest = JSON.parse(await readFile(manifestPath, 'utf8'));
     const markers = [
         extractAsset(distHtml, /<script[^>]+src="([^"]+\/assets\/[^"]+\.js)"/, 'JS asset'),
         extractAsset(distHtml, /<link[^>]+href="([^"]+\/assets\/[^"]+\.css)"/, 'CSS asset'),
         extractAsset(distHtml, /serviceWorker\.register\('([^']+sw\.js)'/, 'service worker path'),
     ];
+    const manifestUrl = new URL('data/video-manifests/video-lessons.json', site).toString();
 
     console.log(`Verifying live deployment for ${site}`);
     console.log(`Expected markers: ${markers.join(', ')}`);
+    console.log(`Expected video manifest version: ${localManifest.version}`);
 
     const deadline = Date.now() + timeoutMs;
     let attempt = 0;
@@ -78,14 +83,35 @@ async function main() {
         try {
             const liveHtml = await fetchHtml(site);
             const missing = markers.filter((marker) => !liveHtml.includes(marker));
+            let manifestVersionMatches = false;
+            let liveManifestVersion = null;
 
-            if (missing.length === 0) {
+            try {
+                const liveManifestResponse = await fetch(`${manifestUrl}?verify=${Date.now()}`, {
+                    headers: {
+                        'cache-control': 'no-cache',
+                        pragma: 'no-cache',
+                    },
+                });
+
+                if (!liveManifestResponse.ok) {
+                    throw new Error(`manifest HTTP ${liveManifestResponse.status}`);
+                }
+
+                const liveManifest = await liveManifestResponse.json();
+                liveManifestVersion = liveManifest?.version || null;
+                manifestVersionMatches = liveManifestVersion === localManifest.version;
+            } catch (error) {
+                console.log(`Attempt ${attempt}: could not verify live video manifest: ${error.message}`);
+            }
+
+            if (missing.length === 0 && manifestVersionMatches) {
                 console.log(`Live deployment verified on attempt ${attempt}.`);
                 return;
             }
 
             console.log(
-                `Attempt ${attempt}: live HTML still missing ${missing.length} marker(s): ${missing.join(', ')}`
+                `Attempt ${attempt}: live HTML missing ${missing.length} marker(s); live video manifest=${liveManifestVersion || 'unavailable'}`
             );
         } catch (error) {
             console.log(`Attempt ${attempt}: ${error.message}`);
