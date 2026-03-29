@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { isAdultMode } from '../utils/userMode';
 import SystemCapabilityPanel from '../components/SystemCapabilityPanel';
+import { isPremium, getPremiumStatus } from '../services/premiumService';
 
 const SPEED_OPTIONS = [
     { key: 'slow', label: 'Chậm', labelEn: 'Slow', emoji: '🐢', rate: 0.6 },
@@ -167,6 +168,27 @@ export default function Settings() {
 
             <SystemCapabilityPanel />
 
+            {/* Enterprise Modules */}
+            <div className="glass-card" style={{ padding: '16px', marginBottom: '12px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', marginBottom: '10px' }}>
+                    📱 {isAdult ? 'App & Account' : 'Ứng dụng & Tài khoản'}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <SettingsLink emoji={isPremium() ? '👑' : '🔒'} label={isPremium() ? 'Premium Active' : (isAdult ? 'Upgrade to Premium' : 'Nâng cấp Premium')}
+                        sublabel={isPremium() ? (getPremiumStatus().type === 'trial' ? 'Dùng thử' : 'Trọn đời') : '99.000₫ — Mở khóa tất cả'}
+                        onClick={() => navigate('/premium')} highlight={!isPremium()} />
+                    <SettingsLink emoji="👨‍👩‍👧" label={isAdult ? 'Parent Dashboard' : 'Bảng điều khiển phụ huynh'}
+                        sublabel={isAdult ? 'Track learning progress' : 'Theo dõi tiến trình học'}
+                        onClick={() => navigate('/parent-dashboard')} />
+                    <SettingsLink emoji="🔒" label={isAdult ? 'Privacy Policy' : 'Chính sách bảo mật'}
+                        sublabel="Zero data collection"
+                        onClick={() => navigate('/privacy')} />
+                    <SettingsLink emoji="📋" label={isAdult ? 'Terms of Service' : 'Điều khoản sử dụng'}
+                        sublabel={isAdult ? 'Usage terms & refund' : 'Điều khoản & hoàn tiền'}
+                        onClick={() => navigate('/terms')} />
+                </div>
+            </div>
+
             {/* App Info */}
             <div className="glass-card" style={{ padding: '16px', marginBottom: '12px', textAlign: 'center' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '4px' }}>🌈</div>
@@ -174,7 +196,7 @@ export default function Settings() {
                     LinguaKids
                 </div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>
-                    v12.5.0 · Made with ❤️ for Vietnamese learners
+                    v13.0.0 · Made with ❤️ for Vietnamese learners
                 </div>
                 <div style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', marginTop: '4px' }}>
                     1050+ EN words · 500+ CN words · 6 CEFR levels
@@ -205,5 +227,27 @@ export default function Settings() {
                 </button>
             </div>
         </div>
+    );
+}
+
+function SettingsLink({ emoji, label, sublabel, onClick, highlight }) {
+    return (
+        <button onClick={onClick} style={{
+            display: 'flex', alignItems: 'center', gap: 12, width: '100%',
+            padding: '10px 12px', border: highlight ? '2px solid var(--color-primary)' : '1px solid #eee',
+            borderRadius: 'var(--radius-md)', background: highlight ? '#f0f7ff' : '#fafafa',
+            cursor: 'pointer', textAlign: 'left',
+        }}>
+            <span style={{ fontSize: '1.3rem' }}>{emoji}</span>
+            <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.85rem', fontWeight: 600, color: '#333' }}>
+                    {label}
+                </div>
+                {sublabel && (
+                    <div style={{ fontSize: '0.7rem', color: '#888', marginTop: 1 }}>{sublabel}</div>
+                )}
+            </div>
+            <span style={{ color: '#ccc', fontSize: '1rem' }}>›</span>
+        </button>
     );
 }

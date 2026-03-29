@@ -84,6 +84,10 @@ const PassiveVoiceTrainer = lazy(() => import('./pages/PassiveVoiceTrainer'));
 const CollocationTrainer = lazy(() => import('./pages/CollocationTrainer'));
 const TeacherLessons = lazy(() => import('./pages/TeacherLessons'));
 const LegalNotice = lazy(() => import('./pages/LegalNotice'));
+const PremiumUpgrade = lazy(() => import('./pages/PremiumUpgrade'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const ParentDashboard = lazy(() => import('./pages/ParentDashboard'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -133,6 +137,10 @@ function AppContent() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/legal-notice" element={<LegalNotice />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/premium" element={<PremiumUpgrade />} />
+            <Route path="/parent-dashboard" element={<ParentDashboard />} />
             <Route path="/review" element={<DailyReview />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/vocabulary" element={<VocabularyDashboard />} />

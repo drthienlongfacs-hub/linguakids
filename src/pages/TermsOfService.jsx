@@ -1,0 +1,88 @@
+import { useNavigate } from 'react-router-dom';
+
+export default function TermsOfService() {
+    const navigate = useNavigate();
+
+    return (
+        <div className="page-container" style={{ padding: '1.5rem 1rem', maxWidth: 700, margin: 'auto' }}>
+            <button onClick={() => navigate(-1)} style={{
+                background: 'none', border: 'none', color: 'var(--color-primary)',
+                fontSize: '1rem', cursor: 'pointer', marginBottom: '1rem',
+                fontFamily: 'var(--font-display)',
+            }}>
+                ← Quay lại
+            </button>
+
+            <div style={{
+                background: '#fff', borderRadius: 20, padding: '2rem 1.5rem',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+            }}>
+                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', color: '#333', marginTop: 0 }}>
+                    📋 Điều khoản Sử dụng | Terms of Service
+                </h1>
+                <p style={{ color: '#888', fontSize: '0.85rem' }}>Cập nhật: 29/03/2026 | Last updated: March 29, 2026</p>
+
+                <hr style={{ border: 'none', borderTop: '1px solid #eee', margin: '1.5rem 0' }} />
+
+                <Section title="1. Giới thiệu | Introduction"
+                    content="LinguaKids là ứng dụng học ngôn ngữ cho trẻ em và người lớn, được phát triển bởi ThS.BS CK2. Lê Trọng Thiên Long. Bằng việc sử dụng ứng dụng, bạn đồng ý với các điều khoản này."
+                />
+
+                <Section title="2. Bản miễn phí và Premium | Free & Premium"
+                    content={`Bản miễn phí: Bao gồm 5 chủ đề tiếng Anh, 3 chủ đề tiếng Trung, các trò chơi cơ bản, và tất cả bài giảng của giáo viên.
+
+Bản Premium: Mở khóa toàn bộ nội dung bao gồm 40+ chủ đề, luyện nói AI, nghe nâng cao, đọc & viết, ngữ pháp, luyện thi, và ôn tập thông minh FSRS.
+
+Giá Premium: 99.000₫ — thanh toán một lần, sử dụng trọn đời.`}
+                />
+
+                <Section title="3. Thanh toán và Hoàn tiền | Payment & Refund"
+                    content={`• Thanh toán qua Stripe, Momo, hoặc ZaloPay
+• Sau thanh toán, bạn nhận mã kích hoạt (LK-XXXX-XXXX)
+• Hoàn tiền: Trong vòng 7 ngày kể từ ngày mua nếu không hài lòng
+• Liên hệ hoàn tiền: drthienlongfacs@gmail.com`}
+                />
+
+                <Section title="4. Quyền Sở hữu Trí tuệ | Intellectual Property"
+                    content={`Tất cả nội dung trong LinguaKids (bao gồm nhưng không giới hạn: text, images, audio, curriculum, source code) thuộc quyền sở hữu của tác giả.
+
+Bạn ĐƯỢC PHÉP: Sử dụng cho mục đích học tập cá nhân và gia đình.
+Bạn KHÔNG ĐƯỢC PHÉP: Sao chép, phân phối, bán lại, hoặc sử dụng nội dung cho mục đích thương mại.`}
+                />
+
+                <Section title="5. Giới hạn Trách nhiệm | Limitation of Liability"
+                    content={`LinguaKids được cung cấp "như hiện trạng" (as-is). Chúng tôi không đảm bảo kết quả học tập cụ thể. Ứng dụng là công cụ hỗ trợ, không thay thế giáo viên chuyên nghiệp.
+
+Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại nào phát sinh từ việc sử dụng hoặc không thể sử dụng ứng dụng.`}
+                />
+
+                <Section title="6. Tuổi sử dụng | Age Requirements"
+                    content={`LinguaKids phù hợp cho mọi lứa tuổi. Trẻ em dưới 13 tuổi nên sử dụng dưới sự hướng dẫn của phụ huynh. Việc mua Premium phải được thực hiện bởi người trưởng thành.`}
+                />
+
+                <Section title="7. Thay đổi Điều khoản | Changes to Terms"
+                    content="Chúng tôi có quyền thay đổi điều khoản này. Thay đổi sẽ được thông báo qua ứng dụng. Việc tiếp tục sử dụng sau thay đổi đồng nghĩa với việc chấp nhận điều khoản mới."
+                />
+
+                <Section title="8. Liên hệ | Contact"
+                    content={`📧 Email: drthienlongfacs@gmail.com
+🌐 Website: https://drthienlongfacs-hub.github.io/linguakids
+👨‍⚕️ Tác giả: ThS.BS CK2. Lê Trọng Thiên Long`}
+                />
+            </div>
+        </div>
+    );
+}
+
+function Section({ title, content }) {
+    return (
+        <div style={{ marginBottom: '1.5rem' }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', color: '#444', marginBottom: '0.5rem' }}>
+                {title}
+            </h3>
+            <div style={{ fontSize: '0.9rem', color: '#555', lineHeight: 1.7, whiteSpace: 'pre-line' }}>
+                {content}
+            </div>
+        </div>
+    );
+}
