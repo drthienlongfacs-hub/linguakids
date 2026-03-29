@@ -26,8 +26,7 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm run audit:free-speaking
-      - run: npm run audit:premium
+      - run: npm run audit:release
       - run: npm run build
 
       - name: Publish dist to gh-pages

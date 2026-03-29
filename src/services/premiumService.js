@@ -9,22 +9,22 @@
 // - For App Store / Google Play builds, use native billing entitlements
 // ================================================================
 
+import {
+    base64UrlToBytes,
+    decodePremiumPayload,
+    parseSignedPremiumToken,
+    PREMIUM_PUBLIC_JWK,
+    PREMIUM_TOKEN_AUDIENCE,
+    PREMIUM_TOKEN_PLACEHOLDER,
+    PREMIUM_TOKEN_VERSION,
+} from '../shared/premiumTokenSchema.js';
+
+export { PREMIUM_TOKEN_PLACEHOLDER };
+
 const STORAGE_KEY = 'linguakids_premium';
 const TRIAL_KEY = 'linguakids_trial';
-const TOKEN_PREFIX = 'LK1';
-const TOKEN_AUDIENCE = 'linguakids-premium';
-const TOKEN_VERSION = 1;
-
-const PREMIUM_PUBLIC_JWK = {
-    kty: 'EC',
-    crv: 'P-256',
-    x: 'e1V_QafkKUc0KmgnW58KogZHA_8D4BGDFDbfPk1Dlpw',
-    y: 'S4DJlquwrv0ss9alXVf3Dnq8iQ0QB-cUuO48A_00Y9w',
-};
 
 let importedPremiumKeyPromise = null;
-
-export const PREMIUM_TOKEN_PLACEHOLDER = 'LK1.<payload>.<signature>';
 
 export const FREE_ENGLISH_TOPICS = [
     'alphabet', 'colors', 'numbers', 'animals', 'family',
@@ -75,25 +75,6 @@ function supportsPremiumTokenVerify() {
     return !!globalThis.crypto?.subtle;
 }
 
-function base64UrlToBytes(value) {
-    const normalized = String(value || '')
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
-    const padding = normalized.length % 4 === 0 ? '' : '='.repeat(4 - (normalized.length % 4));
-    const binary = atob(`${normalized}${padding}`);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i += 1) {
-        bytes[i] = binary.charCodeAt(i);
-    }
-    return bytes;
-}
-
-function decodeTokenPayload(payloadSegment) {
-    const bytes = base64UrlToBytes(payloadSegment);
-    const json = new TextDecoder().decode(bytes);
-    return JSON.parse(json);
-}
-
 async function importPremiumPublicKey() {
     if (!importedPremiumKeyPromise) {
         importedPremiumKeyPromise = globalThis.crypto.subtle.importKey(
@@ -111,19 +92,6 @@ async function importPremiumPublicKey() {
     return importedPremiumKeyPromise;
 }
 
-function parseSignedToken(token) {
-    const cleaned = String(token || '').trim();
-    const parts = cleaned.split('.');
-    if (parts.length !== 3 || parts[0] !== TOKEN_PREFIX) {
-        return null;
-    }
-    return {
-        raw: cleaned,
-        payloadSegment: parts[1],
-        signatureSegment: parts[2],
-    };
-}
-
 function normalizeDateFromEpochSeconds(epochSeconds) {
     if (!Number.isFinite(epochSeconds)) return null;
     return new Date(epochSeconds * 1000).toISOString();
@@ -134,11 +102,11 @@ function validatePayload(payload) {
         return { ok: false, message: 'Token payload không hợp lệ' };
     }
 
-    if (payload.v !== TOKEN_VERSION) {
+    if (payload.v !== PREMIUM_TOKEN_VERSION) {
         return { ok: false, message: 'Token version không được hỗ trợ' };
     }
 
-    if (payload.a !== TOKEN_AUDIENCE) {
+    if (payload.a !== PREMIUM_TOKEN_AUDIENCE) {
         return { ok: false, message: 'Token audience không hợp lệ' };
     }
 
@@ -161,7 +129,7 @@ async function verifySignedToken(token) {
         };
     }
 
-    const parsed = parseSignedToken(token);
+    const parsed = parseSignedPremiumToken(token);
     if (!parsed) {
         if (/^LK-[A-Z0-9]{8}-[A-Z0-9]{4}$/i.test(String(token || '').trim())) {
             return {
@@ -177,7 +145,7 @@ async function verifySignedToken(token) {
 
     let payload;
     try {
-        payload = decodeTokenPayload(parsed.payloadSegment);
+        payload = decodePremiumPayload(parsed.payloadSegment);
     } catch {
         return { ok: false, message: 'Không đọc được payload của token.' };
     }

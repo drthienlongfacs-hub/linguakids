@@ -17,22 +17,18 @@ import path from 'node:path';
 import { webcrypto } from 'node:crypto';
 import process from 'node:process';
 import { Buffer } from 'node:buffer';
+import {
+    bytesToBase64Url,
+    encodePremiumPayload,
+    PREMIUM_TOKEN_AUDIENCE,
+    PREMIUM_TOKEN_PREFIX,
+    PREMIUM_TOKEN_VERSION,
+} from '../src/shared/premiumTokenSchema.js';
 
-const TOKEN_PREFIX = 'LK1';
-const TOKEN_AUDIENCE = 'linguakids-premium';
-const TOKEN_VERSION = 1;
 const DEFAULT_KEY_PATH = path.join(os.homedir(), '.linguakids-premium', 'premium-private-key.pem');
 
-function toBase64Url(buffer) {
-    return Buffer.from(buffer)
-        .toString('base64')
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/g, '');
-}
-
 function randomTokenId() {
-    return toBase64Url(webcrypto.getRandomValues(new Uint8Array(9))).slice(0, 12);
+    return bytesToBase64Url(webcrypto.getRandomValues(new Uint8Array(9))).slice(0, 12);
 }
 
 function loadPrivateKeyPem() {
@@ -63,8 +59,8 @@ function buildPayload() {
     const type = process.env.LINGUAKIDS_PREMIUM_TOKEN_TYPE || 'lifetime';
     const days = Number.parseInt(process.env.LINGUAKIDS_PREMIUM_TOKEN_DAYS || '0', 10);
     const payload = {
-        v: TOKEN_VERSION,
-        a: TOKEN_AUDIENCE,
+        v: PREMIUM_TOKEN_VERSION,
+        a: PREMIUM_TOKEN_AUDIENCE,
         t: type,
         i: now,
         n: randomTokenId(),
@@ -83,14 +79,14 @@ async function signPayload(privateKey, payloadSegment) {
         privateKey,
         new TextEncoder().encode(payloadSegment)
     );
-    return toBase64Url(Buffer.from(signature));
+    return bytesToBase64Url(new Uint8Array(signature));
 }
 
 async function generateToken(privateKey) {
     const payload = buildPayload();
-    const payloadSegment = toBase64Url(Buffer.from(JSON.stringify(payload), 'utf8'));
+    const payloadSegment = encodePremiumPayload(payload);
     const signatureSegment = await signPayload(privateKey, payloadSegment);
-    return `${TOKEN_PREFIX}.${payloadSegment}.${signatureSegment}`;
+    return `${PREMIUM_TOKEN_PREFIX}.${payloadSegment}.${signatureSegment}`;
 }
 
 async function main() {
