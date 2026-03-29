@@ -35,9 +35,6 @@ export default function PremiumUpgrade() {
                             ? `Dùng thử đến ${new Date(status.expiresAt).toLocaleDateString('vi-VN')}`
                             : 'Trọn đời — Cảm ơn bạn đã ủng hộ!'}
                     </p>
-                    {status.code && (
-                        <p style={{ opacity: 0.7, fontSize: '0.85rem', marginTop: 8 }}>Mã: {status.code}</p>
-                    )}
                 </div>
                 <button onClick={() => navigate('/')} style={{
                     display: 'block', margin: '1.5rem auto 0', background: 'var(--color-primary)',
@@ -99,45 +96,21 @@ export default function PremiumUpgrade() {
                     Một lần duy nhất • Trọn đời • Không subscription
                 </div>
 
-                {/* Payment methods */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <a
-                        href="https://buy.stripe.com/test_linguakids_premium"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                            background: '#635bff', color: '#fff', border: 'none', borderRadius: 12,
-                            padding: '14px', fontSize: '1rem', fontFamily: 'var(--font-display)',
-                            textDecoration: 'none', cursor: 'pointer',
-                        }}
-                    >
-                        💳 Thanh toán qua Stripe
-                    </a>
-
-                    <div style={{
-                        display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10,
-                    }}>
-                        <button style={{
-                            background: '#a50064', color: '#fff', border: 'none', borderRadius: 12,
-                            padding: '12px', fontSize: '0.9rem', fontFamily: 'var(--font-display)', cursor: 'pointer',
-                        }}>
-                            📱 Momo
-                        </button>
-                        <button style={{
-                            background: '#008fe5', color: '#fff', border: 'none', borderRadius: 12,
-                            padding: '12px', fontSize: '0.9rem', fontFamily: 'var(--font-display)', cursor: 'pointer',
-                        }}>
-                            💙 ZaloPay
-                        </button>
-                    </div>
-
-                    <div style={{
-                        background: '#f8f9fa', borderRadius: 12, padding: '12px',
-                        fontSize: '0.8rem', color: '#666', lineHeight: 1.5,
-                    }}>
-                        💡 Sau khi thanh toán, bạn sẽ nhận mã <strong>LK-XXXX-XXXX</strong> qua email/tin nhắn.
-                        Nhập mã bên dưới để kích hoạt.
+                {/* Purchase instruction — external payment, NOT in-app */}
+                <div style={{
+                    background: '#f8f9fa', borderRadius: 12, padding: '16px',
+                    fontSize: '0.85rem', color: '#555', lineHeight: 1.6,
+                    textAlign: 'left',
+                }}>
+                    <strong>📋 Cách mua Premium:</strong>
+                    <ol style={{ margin: '8px 0 0', paddingLeft: '1.2rem' }}>
+                        <li>Chuyển khoản <strong>99.000₫</strong> qua Momo/ZaloPay/Ngân hàng</li>
+                        <li>Ghi nội dung: <strong>LinguaKids Premium</strong></li>
+                        <li>Gửi biên lai qua email: <strong>drthienlongfacs@gmail.com</strong></li>
+                        <li>Nhận mã kích hoạt trong vòng 24h</li>
+                    </ol>
+                    <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#888' }}>
+                        💡 Hoặc nhắn tin Zalo/Messenger cho hỗ trợ nhanh hơn.
                     </div>
                 </div>
             </div>
@@ -163,10 +136,10 @@ export default function PremiumUpgrade() {
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                     <input
                         type="text"
-                        placeholder="LK-XXXX-XXXX"
+                        placeholder="LK-XXXXXXXX-XXXX"
                         value={code}
                         onChange={e => setCode(e.target.value.toUpperCase())}
-                        maxLength={12}
+                        maxLength={15}
                         style={{
                             flex: 1, border: '2px solid #e0e0e0', borderRadius: 12,
                             padding: '12px', fontSize: '1rem', fontFamily: 'monospace',
@@ -192,15 +165,15 @@ export default function PremiumUpgrade() {
                 )}
             </div>
 
-            {/* Guarantees */}
+            {/* Honest guarantees — NO "100% secure" claim */}
             <div style={{
                 display: 'flex', justifyContent: 'center', gap: '1.5rem',
                 marginTop: '1.5rem', fontSize: '0.8rem', color: '#888',
                 flexWrap: 'wrap',
             }}>
-                <span>🔒 Bảo mật 100%</span>
                 <span>📵 Không thu dữ liệu</span>
                 <span>💯 Hoàn tiền 7 ngày</span>
+                <span>❤️ Ủng hộ tác giả</span>
             </div>
 
             <button onClick={() => navigate(-1)} style={{

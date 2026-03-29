@@ -83,11 +83,11 @@ export default function PremiumGate({ children, featureName = '' }) {
                         <div className="premium-gate__unlock-row">
                             <input
                                 type="text"
-                                placeholder="LK-XXXX-XXXX"
+                                placeholder="LK-XXXXXXXX-XXXX"
                                 value={code}
                                 onChange={e => setCode(e.target.value.toUpperCase())}
                                 className="premium-gate__input"
-                                maxLength={12}
+                                maxLength={15}
                             />
                             <button onClick={handleUnlock} className="premium-gate__btn-unlock">
                                 Kích hoạt
