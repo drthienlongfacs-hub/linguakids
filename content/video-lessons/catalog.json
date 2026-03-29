@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-03-29T15:17:43.367Z",
+  "updatedAt": "2026-03-29T23:11:38.396Z",
   "policy": {
     "defaultStatus": "hidden",
     "publicLessonRequirements": [
@@ -199,6 +199,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=cR-Qr1V8e_w",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "cR-Qr1V8e_w",
+                    "title": "The Alphabet Chant + More | ABC Songs for Preschool | Super Simple Songs",
+                    "channel": "Super Simple Songs - Kids Songs",
+                    "confidence": 0.75,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=hq3yfQnllfQ",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "hq3yfQnllfQ"
@@ -225,9 +235,9 @@
                   "youtubeId": "hq3yfQnllfQ"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.458,
+                "contentMatchStatus": "aligned",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.75,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -262,7 +272,16 @@
                 "blockingReasons": [
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Song Super Simple Songs english lesson",
+                  "confidence": 0.75,
+                  "harvestedTitle": "The Alphabet Chant + More | ABC Songs for Preschool | Super Simple Songs",
+                  "harvestedChannel": "Super Simple Songs - Kids Songs",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=cR-Qr1V8e_w",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -785,6 +804,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=Bfp0DQpn_4I",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "Bfp0DQpn_4I",
+                    "title": "Super Simple Phonics - \"L song\" and mini-lesson | Super Simple Songs",
+                    "channel": "Super Simple Songs - Kids Songs",
+                    "confidence": 0.9,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=BELlZKpi1Zs",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "BELlZKpi1Zs"
@@ -811,9 +840,9 @@
                   "youtubeId": "BELlZKpi1Zs"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.375,
+                "contentMatchStatus": "aligned",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.9,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -848,7 +877,16 @@
                 "blockingReasons": [
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Phonics Song Super Simple Songs english lesson",
+                  "confidence": 0.9,
+                  "harvestedTitle": "Super Simple Phonics - \"L song\" and mini-lesson | Super Simple Songs",
+                  "harvestedChannel": "Super Simple Songs - Kids Songs",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=Bfp0DQpn_4I",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -1371,6 +1409,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=ffeZXPtTGC4",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "ffeZXPtTGC4",
+                    "title": "Phonics Song 2 (new version)",
+                    "channel": "KidsTV123",
+                    "confidence": 0.775,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=36IBDpTRVNE",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "36IBDpTRVNE"
@@ -1397,9 +1445,9 @@
                   "youtubeId": "36IBDpTRVNE"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "suspect",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.357,
+                "contentMatchStatus": "aligned",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.775,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -1434,7 +1482,16 @@
                 "blockingReasons": [
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Phonics Song 2 Kids TV english lesson",
+                  "confidence": 0.775,
+                  "harvestedTitle": "Phonics Song 2 (new version)",
+                  "harvestedChannel": "KidsTV123",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=ffeZXPtTGC4",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -1957,6 +2014,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=GiSyhDv51s8",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "GiSyhDv51s8",
+                    "title": "Letter A Song | Learn the Alphabet with Matt | What Starts with A?",
+                    "channel": "Dream English Kids",
+                    "confidence": 0.967,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=eEmXHJX7Wb0",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "eEmXHJX7Wb0"
@@ -1984,8 +2051,8 @@
                 },
                 "manualReviewStatus": "pending",
                 "contentMatchStatus": "aligned",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.556,
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.967,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -2016,7 +2083,16 @@
                   "quizAcceptable": true
                 },
                 "blockingReasons": [],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Learn Letter A Dream English Kids english lesson",
+                  "confidence": 0.967,
+                  "harvestedTitle": "Letter A Song | Learn the Alphabet with Matt | What Starts with A?",
+                  "harvestedChannel": "Dream English Kids",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=GiSyhDv51s8",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -2539,6 +2615,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "9yE1bK6_ICw",
+                    "title": "The ABC Song",
+                    "channel": "Maple Leaf Learning",
+                    "confidence": 0.6,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=8IW3RB1vVTg",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "8IW3RB1vVTg"
@@ -2565,9 +2651,9 @@
                   "youtubeId": "8IW3RB1vVTg"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.136,
+                "contentMatchStatus": "suspect",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.6,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -2603,7 +2689,16 @@
                   "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Uppercase Maple Leaf Learning english lesson",
+                  "confidence": 0.6,
+                  "harvestedTitle": "The ABC Song",
+                  "harvestedChannel": "Maple Leaf Learning",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -3126,6 +3221,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "9yE1bK6_ICw",
+                    "title": "The ABC Song",
+                    "channel": "Maple Leaf Learning",
+                    "confidence": 0.6,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=_UR-l3QI2nE",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "_UR-l3QI2nE"
@@ -3152,9 +3257,9 @@
                   "youtubeId": "_UR-l3QI2nE"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.273,
+                "contentMatchStatus": "suspect",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.6,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -3190,7 +3295,16 @@
                   "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "ABC Lowercase Maple Leaf Learning english lesson",
+                  "confidence": 0.6,
+                  "harvestedTitle": "The ABC Song",
+                  "harvestedChannel": "Maple Leaf Learning",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=9yE1bK6_ICw",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -3713,6 +3827,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=4TjcT7Gto3U",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "4TjcT7Gto3U",
+                    "title": "The Vowel Song: Long and Short Vowel Sounds | English Songs | Scratch Garden",
+                    "channel": "Scratch Garden",
+                    "confidence": 0.775,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=RUSCz41aDug",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "RUSCz41aDug"
@@ -3739,9 +3863,9 @@
                   "youtubeId": "RUSCz41aDug"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.308,
+                "contentMatchStatus": "aligned",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 0.775,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -3777,7 +3901,16 @@
                   "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Short Vowel Sounds Dream English Kids english lesson",
+                  "confidence": 0.775,
+                  "harvestedTitle": "The Vowel Song: Long and Short Vowel Sounds | English Songs | Scratch Garden",
+                  "harvestedChannel": "Scratch Garden",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=4TjcT7Gto3U",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,
@@ -4300,6 +4433,16 @@
                 "backups": [
                   {
                     "kind": "youtube_watch",
+                    "src": "https://www.youtube.com/watch?v=xPx9xFyzyCc",
+                    "label": "Harvested YouTube reference",
+                    "youtubeId": "xPx9xFyzyCc",
+                    "title": "These Are the Long Vowel Sounds  Jack Hartmann",
+                    "channel": "Jack Hartmann Kids Music Channel",
+                    "confidence": 1,
+                    "source": "youtube_search"
+                  },
+                  {
+                    "kind": "youtube_watch",
                     "src": "https://www.youtube.com/watch?v=gp1UmVSlLJ4",
                     "label": "Legacy YouTube reference",
                     "youtubeId": "gp1UmVSlLJ4"
@@ -4326,9 +4469,9 @@
                   "youtubeId": "gp1UmVSlLJ4"
                 },
                 "manualReviewStatus": "pending",
-                "contentMatchStatus": "mismatch",
-                "automatedCheckStatus": "triaged",
-                "automatedMatchScore": 0.346,
+                "contentMatchStatus": "aligned",
+                "automatedCheckStatus": "harvested_reference",
+                "automatedMatchScore": 1,
                 "reviewedBy": null,
                 "reviewedAt": null,
                 "evidenceUrl": null,
@@ -4364,7 +4507,16 @@
                   "title_category_mismatch",
                   "age_appropriateness_risk"
                 ],
-                "lastAlignedAt": "2026-03-29T14:16:13.245Z"
+                "lastAlignedAt": "2026-03-29T14:16:13.245Z",
+                "referenceHarvest": {
+                  "source": "youtube_search",
+                  "query": "Long Vowel Sounds Jack Hartmann english lesson",
+                  "confidence": 1,
+                  "harvestedTitle": "These Are the Long Vowel Sounds  Jack Hartmann",
+                  "harvestedChannel": "Jack Hartmann Kids Music Channel",
+                  "harvestedUrl": "https://www.youtube.com/watch?v=xPx9xFyzyCc",
+                  "harvestedAt": "2026-03-29T23:11:38.396Z"
+                }
               },
               "learningPacket": {
                 "schemaVersion": 1,

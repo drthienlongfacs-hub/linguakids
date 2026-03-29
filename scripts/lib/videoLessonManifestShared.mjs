@@ -185,6 +185,15 @@ function normalizeSourceVerification(value, defaults) {
             keywordCoverage: Number.isFinite(value?.canonicalMatchEvidence?.keywordCoverage) ? value.canonicalMatchEvidence.keywordCoverage : null,
             reviewSnapshotUrl: ensureString(value?.canonicalMatchEvidence?.reviewSnapshotUrl) || null,
         },
+        referenceHarvest: {
+            source: ensureString(value?.referenceHarvest?.source) || null,
+            query: ensureString(value?.referenceHarvest?.query) || null,
+            confidence: Number.isFinite(value?.referenceHarvest?.confidence) ? value.referenceHarvest.confidence : null,
+            harvestedTitle: ensureString(value?.referenceHarvest?.harvestedTitle) || null,
+            harvestedChannel: ensureString(value?.referenceHarvest?.harvestedChannel) || null,
+            harvestedUrl: ensureString(value?.referenceHarvest?.harvestedUrl) || null,
+            harvestedAt: toIsoOrNull(value?.referenceHarvest?.harvestedAt),
+        },
         reviewChecklist: {
             titleCategoryMatch: ensureBoolean(value?.reviewChecklist?.titleCategoryMatch),
             ageAppropriate: value?.reviewChecklist?.ageAppropriate !== false,
@@ -301,6 +310,10 @@ export function normalizeCatalog(catalog, approvedSources) {
                     src: ensureString(entry?.src) || null,
                     label: ensureString(entry?.label) || null,
                     youtubeId: ensureString(entry?.youtubeId) || null,
+                    title: ensureString(entry?.title) || null,
+                    channel: ensureString(entry?.channel) || null,
+                    confidence: ensureNumber(entry?.confidence),
+                    source: ensureString(entry?.source) || null,
                 }));
                 const learningPacketDefaults = buildLessonLearningPacketDefaults(lesson, {
                     id: categoryId,

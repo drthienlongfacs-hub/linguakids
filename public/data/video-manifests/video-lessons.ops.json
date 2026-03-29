@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-29T15:17:44.103Z",
-  "version": "video-lessons-88de5d5bd85b",
+  "generatedAt": "2026-03-29T23:43:01.682Z",
+  "version": "video-lessons-9bf16b0a9791",
   "summary": {
     "totalLessons": 120,
     "statusCounts": {
-      "blocked": 95,
-      "candidate": 8,
+      "candidate": 13,
+      "blocked": 90,
       "review_queue": 17
     },
     "decisionCounts": {
@@ -18,8 +18,8 @@
       "companion": 120
     },
     "blockerCounts": {
-      "age_appropriateness_risk": 34,
-      "title_category_mismatch": 83
+      "age_appropriateness_risk": 29,
+      "title_category_mismatch": 79
     },
     "publicLessonCount": 0,
     "reviewRejectRate": null
@@ -43,18 +43,18 @@
       "wave": 1,
       "targetSize": 12,
       "lessonIds": [
+        "k-p1",
+        "k-p2",
+        "k-p3",
         "k-p4",
+        "k-p7",
+        "k-p8",
         "k-a3",
         "k-s5",
         "k-s6",
         "b-v1",
         "b-v5",
-        "b-g1",
-        "b-g4",
-        "b-l4",
-        "b-pr3",
-        "b-pr4",
-        "b-pr5"
+        "b-g1"
       ],
       "publicableNowCount": 0,
       "greenCount": 0,
@@ -65,6 +65,11 @@
       "wave": 2,
       "targetSize": 24,
       "lessonIds": [
+        "b-g4",
+        "b-l4",
+        "b-pr3",
+        "b-pr4",
+        "b-pr5",
         "b-pr6",
         "i-g3",
         "i-g5",
@@ -82,7 +87,7 @@
       "publicableNowCount": 0,
       "greenCount": 0,
       "yellowCount": 0,
-      "redCount": 13
+      "redCount": 18
     },
     {
       "wave": 3,

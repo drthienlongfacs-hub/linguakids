@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import {
-    flattenPublicVideoLessons,
+    flattenVisibleVideoLessons,
     getLessonFocusVocabulary,
     loadVideoLessonManifest,
 } from '../services/videoLessonManifestService';
@@ -135,7 +135,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
         loadVideoLessonManifest()
             .then((manifest) => {
                 if (!active) return;
-                const items = flattenPublicVideoLessons(manifest).map((video) => ({
+                const items = flattenVisibleVideoLessons(manifest).map((video) => ({
                     path: '/video-lessons',
                     title: video.title,
                     titleVi: video.titleVi,
@@ -151,7 +151,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                         ...getLessonFocusVocabulary(video).map((entry) => entry.term),
                         ...getLessonFocusVocabulary(video).map((entry) => entry.meaningVi),
                     ].filter(Boolean),
-                    meta: `${video.level.level} · ${video.channel || 'approved source'}`,
+                    meta: `${video.level.level} · ${video.channel || 'reference source'}`,
                     isVideo: true,
                 }));
                 setVideoIndexState({ ready: true, items });

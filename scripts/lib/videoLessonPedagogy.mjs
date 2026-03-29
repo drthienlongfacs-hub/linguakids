@@ -984,6 +984,15 @@ export function buildLessonSourceVerificationDefaults(lesson, category, level) {
             keywordCoverage: null,
             reviewSnapshotUrl: null,
         },
+        referenceHarvest: {
+            source: null,
+            query: null,
+            confidence: null,
+            harvestedTitle: null,
+            harvestedChannel: null,
+            harvestedUrl: null,
+            harvestedAt: null,
+        },
         reviewChecklist: {
             titleCategoryMatch: false,
             ageAppropriate: true,

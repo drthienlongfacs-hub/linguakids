@@ -95,6 +95,17 @@ export function formatVideoLessonDuration(durationSeconds) {
 }
 
 export function getPublicVideoLevels(manifest) {
+    return getVisibleVideoLevels(manifest, { mode: 'public' });
+}
+
+function isVisibleInReferenceMode(lesson) {
+    return lesson?.status !== 'retired'
+        && lesson?.status !== 'draft'
+        && !!getVideoReferenceLink(lesson);
+}
+
+export function getVisibleVideoLevels(manifest, options = {}) {
+    const mode = options.mode || 'reference_fallback';
     return Array.isArray(manifest?.levels)
         ? manifest.levels
             .map((level) => ({
@@ -104,7 +115,11 @@ export function getPublicVideoLevels(manifest) {
                         .map((category) => ({
                             ...category,
                             lessons: Array.isArray(category.lessons)
-                                ? category.lessons.filter((lesson) => lesson.status === 'public')
+                                ? category.lessons.filter((lesson) => (
+                                    mode === 'public'
+                                        ? lesson.status === 'public'
+                                        : (lesson.status === 'public' || isVisibleInReferenceMode(lesson))
+                                ))
                                 : [],
                         }))
                         .filter((category) => category.lessons.length > 0)
@@ -115,7 +130,11 @@ export function getPublicVideoLevels(manifest) {
 }
 
 export function flattenPublicVideoLessons(manifest) {
-    return getPublicVideoLevels(manifest).flatMap((level) =>
+    return flattenVisibleVideoLessons(manifest, { mode: 'public' });
+}
+
+export function flattenVisibleVideoLessons(manifest, options = {}) {
+    return getVisibleVideoLevels(manifest, options).flatMap((level) =>
         level.categories.flatMap((category) =>
             category.lessons.map((lesson) => ({
                 ...lesson,
@@ -195,6 +214,20 @@ export function getLessonReviewBadge(lesson) {
         };
     }
 
+    if (sourceVerification.referenceHarvest?.confidence >= 0.72) {
+        return {
+            tone: 'approved',
+            label: 'Reference matched',
+        };
+    }
+
+    if (getVideoReferenceLink(lesson)) {
+        return {
+            tone: 'pending',
+            label: 'Reference mode',
+        };
+    }
+
     return {
         tone: 'pending',
         label: 'Review pending',
@@ -219,4 +252,39 @@ export function getVideoReferenceLink(lesson) {
         ? lesson.playback.backups.find((entry) => entry?.src)
         : null;
     return backup?.src || lesson?.attribution?.sourcePageUrl || null;
+}
+
+export function getVideoReferenceMeta(lesson) {
+    const backup = Array.isArray(lesson?.playback?.backups)
+        ? lesson.playback.backups.find((entry) => entry?.src)
+        : null;
+    return backup || null;
+}
+
+export function getYouTubeVideoId(url) {
+    if (!url) return null;
+
+    try {
+        const parsed = new URL(url);
+        if (parsed.hostname.includes('youtu.be')) {
+            return parsed.pathname.replace(/^\/+/, '') || null;
+        }
+        if (parsed.hostname.includes('youtube.com')) {
+            return parsed.searchParams.get('v') || null;
+        }
+    } catch {
+        return null;
+    }
+
+    return null;
+}
+
+export function getVideoReferenceEmbedSource(lesson) {
+    const reference = getVideoReferenceLink(lesson);
+    const youtubeId = getYouTubeVideoId(reference);
+    if (!youtubeId) {
+        return null;
+    }
+
+    return `https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1`;
 }

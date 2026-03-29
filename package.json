@@ -17,6 +17,7 @@
     "build:teacher-lessons-audio": "node scripts/build-teacher-lessons-audio.mjs",
     "bootstrap:video-lessons": "node scripts/bootstrap-video-lessons-catalog.mjs",
     "sync:video-lessons:learning": "node scripts/sync-video-lessons-learning-packets.mjs",
+    "harvest:video-lessons:references": "node scripts/harvest-video-lesson-reference-links.mjs",
     "triage:video-lessons": "node scripts/triage-video-lessons.mjs",
     "discover:video-lessons:sources": "node scripts/discover-video-lesson-sources.mjs",
     "validate:video-lessons:canonical": "node scripts/validate-video-lesson-canonical-assets.mjs",

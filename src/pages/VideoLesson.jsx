@@ -5,6 +5,7 @@ import CelebrationOverlay from '../components/CelebrationOverlay';
 import { useGame } from '../context/GameStateContext';
 import {
     flattenPublicVideoLessons,
+    flattenVisibleVideoLessons,
     formatVideoLessonDuration,
     getCanonicalPosterSource,
     getCanonicalVideoSource,
@@ -18,7 +19,10 @@ import {
     getLessonSubtitleLabel,
     getLessonSubtitleVariant,
     getPublicVideoLevels,
+    getVideoReferenceEmbedSource,
     getVideoReferenceLink,
+    getVideoReferenceMeta,
+    getVisibleVideoLevels,
     loadVideoLessonManifest,
     loadVideoLessonOps,
 } from '../services/videoLessonManifestService';
@@ -220,18 +224,27 @@ export default function VideoLesson() {
         () => flattenPublicVideoLessons(manifestState.manifest),
         [manifestState.manifest]
     );
+    const visibleLevels = useMemo(
+        () => getVisibleVideoLevels(manifestState.manifest),
+        [manifestState.manifest]
+    );
+    const visibleVideos = useMemo(
+        () => flattenVisibleVideoLessons(manifestState.manifest),
+        [manifestState.manifest]
+    );
+    const referenceMode = publicLevels.length === 0 && visibleLevels.length > 0;
 
     const selectedLevel = useMemo(
-        () => publicLevels.find((level) => level.id === selectedLevelId) || null,
-        [publicLevels, selectedLevelId]
+        () => (referenceMode ? visibleLevels : publicLevels).find((level) => level.id === selectedLevelId) || null,
+        [publicLevels, referenceMode, selectedLevelId, visibleLevels]
     );
     const selectedCat = useMemo(
         () => selectedLevel?.categories.find((category) => category.id === selectedCatId) || null,
         [selectedLevel, selectedCatId]
     );
     const activeVideo = useMemo(
-        () => publicVideos.find((video) => video.id === activeVideoId) || null,
-        [publicVideos, activeVideoId]
+        () => (referenceMode ? visibleVideos : publicVideos).find((video) => video.id === activeVideoId) || null,
+        [activeVideoId, publicVideos, referenceMode, visibleVideos]
     );
     const activeQuizQuestions = useMemo(
         () => getLessonQuizQuestions(activeVideo),
@@ -254,8 +267,10 @@ export default function VideoLesson() {
         [activeVideo]
     );
 
-    const totalVideos = publicVideos.length;
-    const totalQuizzes = publicVideos.reduce((sum, video) => sum + getLessonQuizQuestions(video).length, 0);
+    const browseLevels = referenceMode ? visibleLevels : publicLevels;
+    const browseVideos = referenceMode ? visibleVideos : publicVideos;
+    const totalVideos = browseVideos.length;
+    const totalQuizzes = browseVideos.reduce((sum, video) => sum + getLessonQuizQuestions(video).length, 0);
     const hiddenCount = manifestState.manifest?.summary?.hiddenLessonCount || 0;
 
     const searchResults = useMemo(() => {
@@ -264,7 +279,7 @@ export default function VideoLesson() {
         }
 
         const q = searchQuery.toLowerCase();
-        return publicVideos
+        return browseVideos
             .filter((video) => (
                 video.title.toLowerCase().includes(q)
                 || video.titleVi.toLowerCase().includes(q)
@@ -273,7 +288,7 @@ export default function VideoLesson() {
                 || video.level.title.toLowerCase().includes(q)
             ))
             .slice(0, 20);
-    }, [publicVideos, searchQuery]);
+    }, [browseVideos, searchQuery]);
 
     function openVideo(video) {
         setSelectedLevelId(video.level.id);
@@ -285,7 +300,7 @@ export default function VideoLesson() {
         setAnswered(null);
         setQuizDone(false);
         setSourceError(null);
-        setSourceStatus(getCanonicalVideoSource(video) ? 'loading' : 'source_error');
+        setSourceStatus(getCanonicalVideoSource(video) || getVideoReferenceLink(video) ? 'loading' : 'source_error');
         setSubtitleViewMode('dual');
         recordVideoLessonTelemetry('public_lesson_open', { lessonId: video.id });
     }
@@ -351,11 +366,11 @@ export default function VideoLesson() {
         if (manifestState.status === 'error') {
             return 'error';
         }
-        if (publicLevels.length === 0) {
+        if (browseLevels.length === 0) {
             return 'empty';
         }
         return 'ready';
-    }, [manifestState.status, publicLevels.length]);
+    }, [browseLevels.length, manifestState.status]);
 
     if (routeState === 'loading') {
         return <LoadingState adult={adult} />;
@@ -487,7 +502,7 @@ export default function VideoLesson() {
                     ))}
                     {searchResults.length === 0 ? (
                         <p style={{ textAlign: 'center', color: 'var(--color-text-light)', fontSize: '0.82rem', padding: '20px' }}>
-                            {adult ? 'No public videos found' : 'Khong tim thay video public'}
+                            {adult ? 'No video lessons found' : 'Khong tim thay lesson video'}
                         </p>
                     ) : null}
                 </div>
@@ -506,7 +521,7 @@ export default function VideoLesson() {
                     <input
                         value={searchQuery}
                         onChange={(event) => setSearchQuery(event.target.value)}
-                        placeholder={adult ? '🔍 Search approved lessons...' : '🔍 Tim lesson da kiem duyet...'}
+                        placeholder={adult ? '🔍 Search lessons, scripts, quizzes...' : '🔍 Tim lesson, script, quiz...'}
                         style={{
                             width: '100%',
                             padding: '10px 14px',
@@ -530,14 +545,14 @@ export default function VideoLesson() {
                 }}>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalVideos}</div>
-                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Public videos' : 'Video public'}</div>
+                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Visible lessons' : 'Lesson hien thi'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalQuizzes}</div>
                         <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Quiz items' : 'Cau hoi'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{publicLevels.length}</div>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{browseLevels.length}</div>
                         <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Levels' : 'Cap do'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
@@ -546,7 +561,7 @@ export default function VideoLesson() {
                     </div>
                 </div>
                 <div style={{ display: 'grid', gap: '10px' }}>
-                    {publicLevels.map((level) => {
+                    {browseLevels.map((level) => {
                         const levelVideoCount = level.categories.reduce((sum, category) => sum + category.lessons.length, 0);
                         return (
                             <button
@@ -571,7 +586,7 @@ export default function VideoLesson() {
                                 <div style={{ flex: 1 }}>
                                     <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{adult ? level.title : level.titleVi}</div>
                                     <div style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
-                                        {level.level} · {level.ageRange} · {levelVideoCount} {adult ? 'public videos' : 'video public'}
+                                        {level.level} · {level.ageRange} · {levelVideoCount} {adult ? 'lessons' : 'lesson'}
                                     </div>
                                 </div>
                                 <span style={{ fontSize: '1.2rem', color: level.color }}>▶</span>
@@ -617,7 +632,7 @@ export default function VideoLesson() {
                             <div style={{ flex: 1 }}>
                                 <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>{adult ? category.title : category.titleVi}</div>
                                 <div style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
-                                    {category.lessons.length} {adult ? 'public videos' : 'video public'}
+                                    {category.lessons.length} {adult ? 'lessons' : 'lesson'}
                                 </div>
                             </div>
                             <span style={{ fontSize: '1rem', color: category.color }}>▶</span>
@@ -684,6 +699,11 @@ export default function VideoLesson() {
                                 <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
                                     {lesson.channel} · {formatQuizCount(adult, getLessonQuizQuestions(lesson).length)}
                                 </div>
+                                <div style={{ fontSize: '0.62rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
+                                    {getCanonicalVideoSource(lesson)
+                                        ? (adult ? 'In-app video' : 'Video trong app')
+                                        : (adult ? 'Reference video' : 'Video tham chieu')}
+                                </div>
                             </div>
                             <span style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', fontWeight: 600 }}>#{index + 1}</span>
                         </button>
@@ -696,6 +716,9 @@ export default function VideoLesson() {
     const canonicalSrc = getCanonicalVideoSource(activeVideo);
     const posterSrc = getCanonicalPosterSource(activeVideo);
     const referenceLink = getVideoReferenceLink(activeVideo);
+    const referenceEmbedSrc = getVideoReferenceEmbedSource(activeVideo);
+    const referenceMeta = getVideoReferenceMeta(activeVideo);
+    const playbackMode = canonicalSrc ? 'canonical' : (referenceEmbedSrc || referenceLink ? 'reference' : 'missing');
     const currentQuestion = activeQuizQuestions[quizIdx] || null;
     const sourceVerification = activeVideo.sourceVerification || null;
     const subtitleVariant = getLessonSubtitleVariant(activeVideo);
@@ -802,14 +825,37 @@ export default function VideoLesson() {
                                     />
                                 ) : null}
                             </video>
+                        ) : referenceEmbedSrc ? (
+                            <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+                                <iframe
+                                    title={activeVideo.title}
+                                    src={referenceEmbedSrc}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allowFullScreen
+                                    style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        width: '100%',
+                                        height: '100%',
+                                        border: 'none',
+                                        background: '#000',
+                                    }}
+                                    onLoad={() => {
+                                        setSourceStatus('playable');
+                                        setSourceError(null);
+                                        recordVideoLessonTelemetry('video_source_playable', { lessonId: activeVideo.id, mode: 'reference' });
+                                    }}
+                                />
+                            </div>
                         ) : (
                             <div style={{ padding: '28px 20px', textAlign: 'center', color: '#fff' }}>
                                 <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
                                 <div style={{ fontWeight: 700, marginBottom: '6px' }}>
-                                    {adult ? 'Canonical source missing' : 'Thieu nguon phat chuan'}
+                                    {adult ? 'Video source missing' : 'Thieu nguon video'}
                                 </div>
                                 <div style={{ fontSize: '0.82rem', opacity: 0.85 }}>
-                                    {adult ? 'This lesson cannot unlock the quiz until the approved video source is restored.' : 'Lesson nay khong duoc mo quiz neu nguon video chuan chua san sang.'}
+                                    {adult ? 'This lesson cannot unlock the quiz until a playable video source is available.' : 'Lesson nay khong duoc mo quiz neu chua co nguon video phat duoc.'}
                                 </div>
                             </div>
                         )}
@@ -817,7 +863,9 @@ export default function VideoLesson() {
 
                     {sourceStatus === 'loading' ? (
                         <div className="glass-card" style={{ padding: '14px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
-                            {adult ? 'Checking in-app playback compatibility...' : 'Dang kiem tra kha nang phat trong app...'}
+                            {playbackMode === 'canonical'
+                                ? (adult ? 'Checking in-app playback compatibility...' : 'Dang kiem tra kha nang phat trong app...')
+                                : (adult ? 'Loading reference video...' : 'Dang tai video tham chieu...')}
                         </div>
                     ) : null}
 
@@ -981,6 +1029,11 @@ export default function VideoLesson() {
                         <div style={{ fontSize: '0.82rem', lineHeight: 1.6 }}>
                             <strong>{adult ? 'Source:' : 'Nguon:'}</strong> {activeVideo.attribution?.sourceName || activeVideo.channel || '--'}
                             <br />
+                            <strong>{adult ? 'Playback mode:' : 'Che do phat:'}</strong>{' '}
+                            {playbackMode === 'canonical'
+                                ? (adult ? 'In-app canonical video' : 'Video canonical trong app')
+                                : (adult ? 'Reference video mode' : 'Che do video tham chieu')}
+                            <br />
                             <strong>{adult ? 'License:' : 'Giay phep:'}</strong> {activeVideo.attribution?.licenseLabel || (adult ? 'Pending approval' : 'Dang cho duyet')}
                             <br />
                             <strong>{adult ? 'Review status:' : 'Trang thai duyet:'}</strong>{' '}
@@ -999,6 +1052,20 @@ export default function VideoLesson() {
                             <br />
                             <strong>{adult ? 'Reviewed by:' : 'Nguoi duyet:'}</strong>{' '}
                             {sourceVerification?.reviewedBy || activeVideo.attribution?.reviewedBy || '--'}
+                            {referenceMeta?.title ? (
+                                <>
+                                    <br />
+                                    <strong>{adult ? 'Reference title:' : 'Tieu de tham chieu:'}</strong>{' '}
+                                    {referenceMeta.title}
+                                </>
+                            ) : null}
+                            {referenceMeta?.channel ? (
+                                <>
+                                    <br />
+                                    <strong>{adult ? 'Reference channel:' : 'Kenh tham chieu:'}</strong>{' '}
+                                    {referenceMeta.channel}
+                                </>
+                            ) : null}
                         </div>
                     </div>
 
@@ -1046,8 +1113,12 @@ export default function VideoLesson() {
                         <div style={{ textAlign: 'center' }}>
                             <p style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '12px' }}>
                                 {sourceStatus === 'playable'
-                                    ? (adult ? 'Watch the approved in-app video, then move through preview, detail, retrieval, and transfer questions.' : 'Xem video da kiem duyet trong app roi di qua cac cau hoi du doan, chi tiet, goi lai va van dung.')
-                                    : (adult ? 'Quiz stays locked until the canonical source is playable.' : 'Quiz chi mo khi nguon video chuan phat duoc.')}
+                                    ? (
+                                        playbackMode === 'canonical'
+                                            ? (adult ? 'Watch the approved in-app video, then move through preview, detail, retrieval, and transfer questions.' : 'Xem video da kiem duyet trong app roi di qua cac cau hoi du doan, chi tiet, goi lai va van dung.')
+                                            : (adult ? 'Watch the reference video, then use the script and quiz to confirm understanding.' : 'Xem video tham chieu roi dung script va quiz de xac nhan muc do hieu bai.')
+                                    )
+                                    : (adult ? 'Quiz stays locked until a playable video source is available.' : 'Quiz chi mo khi co nguon video phat duoc.')}
                             </p>
                             <button
                                 type="button"
