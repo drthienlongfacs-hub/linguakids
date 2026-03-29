@@ -147,6 +147,23 @@ export default function LearnEnglish() {
                         {standardCount ? `${standardCount.toLocaleString('en-US')} mục` : 'Đang tải...'}
                     </div>
                 </div>
+                <div
+                    className="topic-card"
+                    onClick={() => navigate('/teacher-lessons')}
+                    style={{
+                        cursor: 'pointer', textAlign: 'center', padding: '16px 12px',
+                        borderColor: '#10B981', background: 'linear-gradient(135deg, rgba(16,185,129,0.05), rgba(59,130,246,0.05))',
+                    }}
+                >
+                    <div className="topic-card__emoji">📚</div>
+                    <div className="topic-card__title">Bài của Cô</div>
+                    <div className="topic-card__count">18 chương · 521 từ</div>
+                    <div style={{
+                        fontSize: '0.6rem', color: '#10B981', fontWeight: 700,
+                        background: 'rgba(16,185,129,0.1)', padding: '2px 6px',
+                        borderRadius: '4px', marginTop: '4px',
+                    }}>THEO BÀI HỌC TRÊN LỚP</div>
+                </div>
             </div>
 
             {/* Adult mode: show sections */}
