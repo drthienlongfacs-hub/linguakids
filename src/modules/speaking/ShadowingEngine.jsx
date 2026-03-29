@@ -153,23 +153,16 @@ export default function ShadowingEngine({
         };
     }, []);
 
-    // ====== TTS Playback with speed control ======
+    // ====== TTS Playback with speed control (personality-aware) ======
     const playModel = useCallback(() => {
-        window.speechSynthesis.cancel();
         setState('playing');
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang === 'cn' ? 'zh-CN' : 'en-US';
-        u.rate = speed;
-        u.pitch = 1;
-
-        const voices = window.speechSynthesis.getVoices();
-        const targetLang = lang === 'cn' ? 'zh' : 'en';
-        const voice = voices.find(v => v.lang.startsWith(targetLang)) || voices[0];
-        if (voice) u.voice = voice;
-
-        u.onend = () => { setState('idle'); clearInterval(revealTimerRef.current); setRevealIdx(-1); };
-        u.onerror = () => { setState('idle'); clearInterval(revealTimerRef.current); setRevealIdx(-1); };
-        window.speechSynthesis.speak(u);
+        const langCode = lang === 'cn' ? 'zh-CN' : 'en-US';
+        const onDone = () => { setState('idle'); clearInterval(revealTimerRef.current); setRevealIdx(-1); };
+        speakText(text, {
+            lang: langCode,
+            rate: speed,
+            onEnd: onDone,
+        });
 
         // Slow-reveal: estimate word timing and highlight sequentially
         const totalDuration = (text.length / (speed * 12)) * 1000; // rough ms estimate

@@ -5,66 +5,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { checkWordPronunciation } from '../utils/pronunciationEngine';
 import { recordCapabilityEvent } from '../services/capabilityService';
-import { ACCENT_PROFILES, findPersonalityVoice, getPersonalityProsody, DEFAULT_PERSONALITY } from '../data/voicePersonalities';
-
-// Voice preference lists — best quality first
-const VOICE_PREFERENCES = {
-    'en-US': [
-        'Samantha', 'Aaron', 'Allison', 'Ava',
-        'Google US English', 'Google US English Female', 'Google US English Male',
-        'Microsoft Aria', 'Microsoft Jenny', 'Microsoft Mark',
-    ],
-    'en-GB': [
-        'Daniel', 'Serena', 'Kate', 'Oliver', 'Arthur',
-        'Google UK English Female', 'Google UK English Male',
-        'Microsoft Hazel', 'Microsoft Ryan',
-    ],
-    'en-AU': [
-        'Karen', 'Catherine', 'Gordon', 'Lee',
-        'Google Australian English', 'Google Australian English Female', 'Google Australian English Male',
-        'Microsoft Natasha', 'Microsoft William',
-    ],
-    'zh-CN': [
-        'Ting-Ting', 'Mei-Jia', 'Sin-ji',
-        'Google 普通话', 'Google 中文',
-        'Microsoft Xiaoxiao', 'Microsoft Yunyang',
-    ],
-    'vi-VN': [
-        'Linh', 'Google Tiếng Việt',
-        'Microsoft HoaiMy',
-    ],
-};
-
-function findBestVoice(lang, voices) {
-    if (!voices || voices.length === 0) return null;
-    const prefs = VOICE_PREFERENCES[lang] || [];
-
-    // 1. Try preferred voices by name
-    for (const pref of prefs) {
-        const found = voices.find(v =>
-            v.name.includes(pref) && v.lang.startsWith(lang.split('-')[0])
-        );
-        if (found) return found;
-    }
-
-    // 2. Try any voice for this language
-    const langBase = lang.split('-')[0];
-    const langVoices = voices.filter(v => v.lang.startsWith(langBase));
-
-    // Prefer enhanced/premium voices
-    const enhanced = langVoices.find(v =>
-        v.name.toLowerCase().includes('enhanced') ||
-        v.name.toLowerCase().includes('premium') ||
-        v.name.toLowerCase().includes('natural')
-    );
-    if (enhanced) return enhanced;
-
-    // Prefer local voices (better quality, no network delay)
-    const local = langVoices.find(v => v.localService);
-    if (local) return local;
-
-    return langVoices[0] || null;
-}
+import { ACCENT_PROFILES, DEFAULT_PERSONALITY } from '../data/voicePersonalities.js';
+import {
+    applyVoiceProfileToUtterance,
+    getStoredVoicePreferences,
+    resolveVoiceProfile,
+} from '../services/voicePreferenceService.js';
 
 export function useSpeech() {
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -107,7 +53,7 @@ export function useSpeech() {
 
         processingRef.current = true;
         setIsSpeaking(true);
-        const { text, lang, rate, pitch, onDone, _voiceOverride } = queueRef.current.shift();
+        const { text, lang, rate, pitch, volume, onDone, _voiceProfile } = queueRef.current.shift();
 
         // FIX RC-1: Only cancel if there's stale speech, not our queue
         if (window.speechSynthesis?.speaking) {
@@ -115,17 +61,16 @@ export function useSpeech() {
         }
 
         const utterance = new SpeechSynthesisUtterance(text);
-        const bestVoice = _voiceOverride || findBestVoice(lang, voices);
-        if (bestVoice) {
-            utterance.voice = bestVoice;
-            utterance.lang = bestVoice.lang;
-        } else {
-            utterance.lang = lang;
-        }
-
-        utterance.volume = 1.0;
-        utterance.rate = rate;
-        utterance.pitch = pitch;
+        const voiceProfile = _voiceProfile || resolveVoiceProfile({
+            langCode: lang,
+            voices,
+        });
+        applyVoiceProfileToUtterance(utterance, voiceProfile, {
+            langCode: lang,
+            rate,
+            pitch,
+            volume,
+        });
 
         // FIX RC-2: iOS Safari resume — only for utterances > 3 seconds estimated
         // Short utterances don't need it, and it causes glitches on them
@@ -168,22 +113,27 @@ export function useSpeech() {
     }, [voices]);
 
     // Main speak function — adds to queue
+    // options._bypassRateFloor: set by personality-aware callers that pre-compute safe rates
     const speak = useCallback((text, lang = 'en-US', options = {}) => {
         if (!window.speechSynthesis || !text) return;
 
-        // FIX RC-5 v2: Gentle rate adjustment — never go below 0.90 to avoid
-        // time-stretching distortion (RCA-041b: rate=0.78 caused muffled audio)
-        const wordCount = text.split(/\s+/).length;
         let rate = options.rate || 0.90;
-        if (wordCount > 8) rate = Math.max(rate, 0.90);  // Don't go too slow on long sentences
-        if (wordCount <= 3) rate = Math.min(rate, 0.90); // Short words: slightly slower, NOT below 0.90
+
+        if (!options._bypassRateFloor) {
+            // RCA-041b: rate floor for generic callers — avoids muffled distortion
+            const wordCount = text.split(/\s+/).length;
+            if (wordCount > 8) rate = Math.max(rate, 0.90);
+            if (wordCount <= 3) rate = Math.min(rate, 0.90);
+        }
 
         queueRef.current.push({
             text,
             lang,
             rate,
-            pitch: options.pitch || 1.0,  // RCA-041b: 1.05 thins audio on mobile → use 1.0
+            pitch: options.pitch || 1.0,
+            volume: typeof options.volume === 'number' ? options.volume : 1.0,
             onDone: options.onDone,
+            _voiceProfile: options._voiceProfile || null,
         });
 
         recordCapabilityEvent('speech_output_enqueued', {
@@ -194,41 +144,81 @@ export function useSpeech() {
         processQueue();
     }, [processQueue]);
 
-    // Language-specific shortcuts
-    const speakEnglish = useCallback((text) => {
-        speak(text, 'en-US', { rate: 0.92, pitch: 1.0 }); // RCA-041b: was 0.82/1.05
-    }, [speak]);
-
-    const speakChinese = useCallback((text) => {
-        speak(text, 'zh-CN', { rate: 0.7, pitch: 1.0 });
-    }, [speak]);
-
-    const speakVietnamese = useCallback((text) => {
-        speak(text, 'vi-VN', { rate: 0.85, pitch: 1.0 });
-    }, [speak]);
-
-    // v4: Accent + Personality-aware speaking
+    // v4→v5: Accent + Personality-aware speaking — uses speak() with bypass + volume
     const speakWithPersonality = useCallback((text, accentLang = 'en-US', personalityId = DEFAULT_PERSONALITY) => {
         if (!window.speechSynthesis || !text) return;
         const accentId = ACCENT_PROFILES.find((profile) => profile.lang === accentLang)?.id || null;
-        const voice = accentId ? findPersonalityVoice(voices, accentId, personalityId) : null;
-        const prosody = getPersonalityProsody(personalityId);
-        queueRef.current.push({
-            text,
-            lang: accentLang,
-            rate: prosody.rate,
-            pitch: prosody.pitch,
-            onDone: null,
-            _voiceOverride: voice,
+        const voiceProfile = resolveVoiceProfile({
+            langCode: accentLang,
+            voices,
+            accentId,
+            personalityId,
         });
-        processQueue();
-    }, [voices, processQueue]);
+        speak(text, accentLang, {
+            rate: voiceProfile.prosody.rate,
+            pitch: voiceProfile.prosody.pitch,
+            volume: voiceProfile.prosody.volume,
+            _voiceProfile: voiceProfile,
+            _bypassRateFloor: true, // prosody already platform-safe
+        });
+    }, [voices, speak]);
+
+    // Language-specific shortcuts — now personality-aware
+    const speakEnglish = useCallback((text) => {
+        const prefs = getStoredVoicePreferences();
+        if (prefs) {
+            const accentProfile = ACCENT_PROFILES.find(a => a.id === prefs.accent);
+            speakWithPersonality(text, accentProfile?.lang || 'en-US', prefs.personality);
+        } else {
+            speak(text, 'en-US', { rate: 0.92, pitch: 1.0 });
+        }
+    }, [speak, speakWithPersonality]);
+
+    const speakChinese = useCallback((text) => {
+        const prefs = getStoredVoicePreferences();
+        if (prefs) {
+            const voiceProfile = resolveVoiceProfile({
+                langCode: 'zh-CN',
+                voices,
+                personalityId: prefs.personality,
+            });
+            speak(text, 'zh-CN', {
+                rate: Math.min(voiceProfile.prosody.rate, 0.80), // Chinese needs slower base
+                pitch: voiceProfile.prosody.pitch,
+                volume: voiceProfile.prosody.volume,
+                _voiceProfile: voiceProfile,
+                _bypassRateFloor: true,
+            });
+        } else {
+            speak(text, 'zh-CN', { rate: 0.7, pitch: 1.0 });
+        }
+    }, [speak, voices]);
+
+    const speakVietnamese = useCallback((text) => {
+        const prefs = getStoredVoicePreferences();
+        if (prefs) {
+            const voiceProfile = resolveVoiceProfile({
+                langCode: 'vi-VN',
+                voices,
+                personalityId: prefs.personality,
+            });
+            speak(text, 'vi-VN', {
+                rate: Math.min(voiceProfile.prosody.rate, 0.85),
+                pitch: voiceProfile.prosody.pitch,
+                volume: voiceProfile.prosody.volume,
+                _voiceProfile: voiceProfile,
+                _bypassRateFloor: true,
+            });
+        } else {
+            speak(text, 'vi-VN', { rate: 0.85, pitch: 1.0 });
+        }
+    }, [speak, voices]);
 
     // FIX RC-4: speakTwice uses queue properly (no time estimation)
+    // Fixed: rate 0.75→0.80 (was below RCA-041b floor), pitch 1.05→1.0 (avoids mobile thinning)
     const speakTwice = useCallback((text, lang = 'en-US') => {
-        speak(text, lang, { rate: 0.75, pitch: 1.05 });
-        // Second utterance queued — will play after first finishes naturally
-        speak(text, lang, { rate: 0.85, pitch: 1.05 });
+        speak(text, lang, { rate: 0.80, pitch: 1.0 });
+        speak(text, lang, { rate: 0.90, pitch: 1.0 });
     }, [speak]);
 
     // Stop all speech and clear queue
@@ -397,9 +387,9 @@ export function useSpeech() {
         english: voices.filter(v => v.lang.startsWith('en')).map(v => v.name),
         chinese: voices.filter(v => v.lang.startsWith('zh')).map(v => v.name),
         vietnamese: voices.filter(v => v.lang.startsWith('vi')).map(v => v.name),
-        selectedEn: findBestVoice('en-US', voices)?.name,
-        selectedCn: findBestVoice('zh-CN', voices)?.name,
-        selectedVi: findBestVoice('vi-VN', voices)?.name,
+        selectedEn: resolveVoiceProfile({ langCode: 'en-US', voices }).voice?.name,
+        selectedCn: resolveVoiceProfile({ langCode: 'zh-CN', voices }).voice?.name,
+        selectedVi: resolveVoiceProfile({ langCode: 'vi-VN', voices }).voice?.name,
     }), [voices]);
 
     return {

@@ -1,10 +1,14 @@
 // Settings — User preferences page
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { isAdultMode } from '../utils/userMode';
 import SystemCapabilityPanel from '../components/SystemCapabilityPanel';
 import usePremiumStatus from '../hooks/usePremiumStatus';
+import { useGameStore } from '../store/useGameStore';
+import { ACCENT_PROFILES, VOICE_PERSONALITIES } from '../data/voicePersonalities.js';
+import { invalidateVoiceCache } from '../utils/speakText.js';
+import { previewVoicePreference } from '../services/voicePreferenceService.js';
 
 const SPEED_OPTIONS = [
     { key: 'slow', label: 'Chậm', labelEn: 'Slow', emoji: '🐢', rate: 0.6 },
@@ -27,6 +31,49 @@ export default function Settings() {
     const [dailyGoal, setDailyGoal] = useState(
         () => parseInt(localStorage.getItem('linguakids-daily-goal') || '20')
     );
+
+    const { preferredAccent, preferredPersonality, setVoicePreferences } = useGameStore();
+    const [voices, setVoices] = useState(() => window.speechSynthesis?.getVoices() || []);
+    const [previewPlaying, setPreviewPlaying] = useState(false);
+
+    // Load voices
+    useEffect(() => {
+        const loadVoices = () => {
+            const v = window.speechSynthesis?.getVoices() || [];
+            if (v.length > 0) setVoices(v);
+        };
+        loadVoices();
+        window.speechSynthesis?.addEventListener('voiceschanged', loadVoices);
+        const timer = setTimeout(loadVoices, 500);
+        return () => {
+            clearTimeout(timer);
+            window.speechSynthesis?.removeEventListener('voiceschanged', loadVoices);
+        };
+    }, []);
+
+    const handleAccentChange = useCallback((accentId) => {
+        setVoicePreferences(accentId, preferredPersonality);
+        invalidateVoiceCache();
+    }, [preferredPersonality, setVoicePreferences]);
+
+    const handlePersonalityChange = useCallback((personalityId) => {
+        setVoicePreferences(preferredAccent, personalityId);
+        invalidateVoiceCache();
+    }, [preferredAccent, setVoicePreferences]);
+
+    const previewVoice = useCallback((accentId, personalityId) => {
+        if (!window.speechSynthesis || previewPlaying) return;
+        setPreviewPlaying(true);
+        const accent = ACCENT_PROFILES.find((item) => item.id === accentId);
+        previewVoicePreference({
+            langCode: accent?.lang || 'en-US',
+            accentId,
+            personalityId,
+            voices,
+            onEnd: () => setPreviewPlaying(false),
+            onError: () => setPreviewPlaying(false),
+        });
+    }, [voices, previewPlaying]);
 
     const handleSpeechSpeed = (key) => {
         setSpeechSpeed(key);
@@ -86,6 +133,81 @@ export default function Settings() {
                         </button>
                     ))}
                 </div>
+            </div>
+
+            {/* Accent Selector */}
+            <div className="glass-card" style={{ padding: '16px', marginBottom: '12px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', marginBottom: '10px' }}>
+                    🌍 {isAdult ? 'English Accent' : 'Giọng tiếng Anh'}
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    {ACCENT_PROFILES.map(accent => (
+                        <button
+                            key={accent.id}
+                            onClick={() => handleAccentChange(accent.id)}
+                            style={{
+                                flex: 1, padding: '10px 6px', border: 'none',
+                                borderRadius: 'var(--radius-md)',
+                                background: preferredAccent === accent.id ? accent.color : 'var(--color-bg)',
+                                color: preferredAccent === accent.id ? 'white' : 'var(--color-text)',
+                                fontFamily: 'var(--font-display)', fontWeight: 700,
+                                fontSize: '0.8rem', cursor: 'pointer',
+                                transition: 'var(--transition-normal)',
+                            }}
+                        >
+                            {accent.flag} {accent.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Voice Personality Selector */}
+            <div className="glass-card" style={{ padding: '16px', marginBottom: '12px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '0.95rem', marginBottom: '10px' }}>
+                    🎭 {isAdult ? 'Voice Style' : 'Kiểu giọng nói'}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    {VOICE_PERSONALITIES.map(p => {
+                        const isSelected = preferredPersonality === p.id;
+                        return (
+                            <button
+                                key={p.id}
+                                onClick={() => handlePersonalityChange(p.id)}
+                                style={{
+                                    padding: '10px 8px', border: 'none',
+                                    borderRadius: 'var(--radius-md)',
+                                    background: isSelected ? `${p.color}20` : 'var(--color-bg)',
+                                    outline: isSelected ? `2px solid ${p.color}` : '1px solid transparent',
+                                    fontFamily: 'var(--font-display)', fontWeight: 600,
+                                    fontSize: '0.78rem', cursor: 'pointer',
+                                    textAlign: 'center',
+                                    transition: 'var(--transition-normal)',
+                                    color: isSelected ? p.color : 'var(--color-text)',
+                                }}
+                            >
+                                <div style={{ fontSize: '1.2rem' }}>{p.emoji}</div>
+                                <div>{isAdult ? p.label : p.labelVi}</div>
+                                <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
+                                    {p.gender === 'male' ? '♂' : '♀'}
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+                <button
+                    onClick={() => previewVoice(preferredAccent, preferredPersonality)}
+                    disabled={previewPlaying}
+                    style={{
+                        width: '100%', marginTop: '10px', padding: '10px',
+                        borderRadius: 'var(--radius-md)', border: 'none',
+                        background: 'var(--gradient-hero)', color: 'white',
+                        fontFamily: 'var(--font-display)', fontWeight: 700,
+                        fontSize: '0.85rem', cursor: 'pointer',
+                        opacity: previewPlaying ? 0.6 : 1,
+                    }}
+                >
+                    {previewPlaying ? '🔊 Đang phát...' : '🔊 Nghe thử giọng đã chọn'}
+                </button>
             </div>
 
             {/* Auto-play sounds */}

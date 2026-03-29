@@ -2,15 +2,21 @@
 // RCA-041: 17+ components were creating raw SpeechSynthesisUtterance
 // without voice selection → system default voice (muffled/robotic)
 //
-// This module provides a single speakText() function that:
-// 1. Selects the BEST available voice for the language
-// 2. Prefers Enhanced/Premium/Local voices for clarity
-// 3. Caches the voice selection for performance
-// 4. Applies sensible rate/pitch defaults
-// 5. Works outside React (no hooks needed)
+// v2: Personality-aware — reads user's stored voice preference from Zustand
+// and applies personality prosody + platform-specific voice selection.
+// Falls back to basic voice selection if no preference is stored.
+
+import {
+    DEFAULT_ACCENT,
+} from '../data/voicePersonalities.js';
+import {
+    applyVoiceProfileToUtterance,
+    getStoredVoicePreferences,
+    resolveVoiceProfile,
+} from '../services/voicePreferenceService.js';
 
 // ================================================================
-// VOICE PREFERENCE LISTS — best quality first
+// VOICE PREFERENCE LISTS — best quality first (fallback when no personality)
 // ================================================================
 const VOICE_PREFERENCES = {
     'en-US': [
@@ -50,37 +56,42 @@ function _ensureVoices() {
     const voices = window.speechSynthesis.getVoices();
     if (voices.length > 0 && !_voicesLoaded) {
         _voicesLoaded = true;
-        _voiceCache = {}; // reset cache when voices change
+        _voiceCache = {};
     }
 }
 
-// Listen for voice changes (async loading on some browsers)
 if (typeof window !== 'undefined' && window.speechSynthesis) {
     window.speechSynthesis.addEventListener?.('voiceschanged', () => {
         _voicesLoaded = false;
         _voiceCache = {};
         _ensureVoices();
     });
-    // Initial load attempts
     setTimeout(() => _ensureVoices(), 100);
     setTimeout(() => _ensureVoices(), 500);
     setTimeout(() => _ensureVoices(), 1500);
 }
 
 // ================================================================
-// FIND BEST VOICE — with preference list + quality ranking
+// FIND BEST VOICE — personality-aware with fallback
 // ================================================================
 function findBestVoice(lang) {
-    // Check cache first
     if (_voiceCache[lang]) return _voiceCache[lang];
 
     const voices = window.speechSynthesis?.getVoices() || [];
     if (voices.length === 0) return null;
 
-    const prefs = VOICE_PREFERENCES[lang] || [];
+    const profile = resolveVoiceProfile({
+        langCode: lang,
+        voices,
+    });
+    if (profile.voice) {
+        _voiceCache[lang] = profile.voice;
+        return profile.voice;
+    }
 
-    // 1. Try preferred voices by name
-    for (const pref of prefs) {
+    // Fallback: preference list matching
+    const prefList = VOICE_PREFERENCES[lang] || [];
+    for (const pref of prefList) {
         const found = voices.find(v =>
             v.name.includes(pref) && v.lang.startsWith(lang.split('-')[0])
         );
@@ -90,11 +101,9 @@ function findBestVoice(lang) {
         }
     }
 
-    // 2. Try any voice for this language
     const langBase = lang.split('-')[0];
     const langVoices = voices.filter(v => v.lang.startsWith(langBase));
 
-    // Prefer enhanced/premium/natural voices
     const enhanced = langVoices.find(v =>
         v.name.toLowerCase().includes('enhanced') ||
         v.name.toLowerCase().includes('premium') ||
@@ -105,7 +114,6 @@ function findBestVoice(lang) {
         return enhanced;
     }
 
-    // Prefer local voices (better quality, no network delay)
     const local = langVoices.find(v => v.localService);
     if (local) {
         _voiceCache[lang] = local;
@@ -119,50 +127,49 @@ function findBestVoice(lang) {
 
 // ================================================================
 // MAIN API: speakText()
-// Drop-in replacement for raw SpeechSynthesisUtterance patterns
+// Now personality-aware — applies stored voice + prosody automatically.
+// Explicit options override stored prosody when provided.
 // ================================================================
 
 /**
- * Speak text with high-quality voice selection
+ * Speak text with personality-aware voice selection
  * @param {string} text - Text to speak
  * @param {object} options - Options
  * @param {string} options.lang - Language code (default: 'en-US')
- * @param {number} options.rate - Speed 0.1-2.0 (default: 0.88)
- * @param {number} options.pitch - Pitch 0.0-2.0 (default: 1.0)
- * @param {number} options.volume - Volume 0.0-1.0 (default: 1.0)
+ * @param {number} options.rate - Speed override (uses personality rate if not provided)
+ * @param {number} options.pitch - Pitch override (uses personality pitch if not provided)
+ * @param {number} options.volume - Volume override (uses personality volume if not provided)
  * @param {function} options.onEnd - Callback when speech ends
+ * @param {boolean} options.skipPersonality - Force basic voice selection
  */
 export function speakText(text, options = {}) {
     if (!window.speechSynthesis || !text) return;
 
     const lang = options.lang || 'en-US';
-    const rate = options.rate ?? 0.88;
-    const pitch = options.pitch ?? 1.0;
-    const volume = options.volume ?? 1.0;
+    const profile = options.skipPersonality
+        ? {
+            voice: findBestVoice(lang),
+            prosody: { pitch: 1.0, rate: 0.88, volume: 1.0 },
+        }
+        : resolveVoiceProfile({
+            langCode: lang,
+            voices: window.speechSynthesis.getVoices(),
+        });
 
-    // Cancel any ongoing speech
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-
-    // Apply high-quality voice
-    const voice = findBestVoice(lang);
-    if (voice) {
-        utterance.voice = voice;
-        utterance.lang = voice.lang; // Use voice's exact lang for best results
-    } else {
-        utterance.lang = lang;
-    }
-
-    utterance.rate = rate;
-    utterance.pitch = pitch;
-    utterance.volume = volume;
+    applyVoiceProfileToUtterance(utterance, profile, {
+        langCode: lang,
+        rate: options.rate,
+        pitch: options.pitch,
+        volume: options.volume,
+    });
 
     if (options.onEnd) {
         utterance.onend = options.onEnd;
     }
 
-    // Small delay after cancel to prevent iOS Safari glitch
     setTimeout(() => {
         try {
             window.speechSynthesis.speak(utterance);
@@ -173,10 +180,15 @@ export function speakText(text, options = {}) {
 }
 
 /**
- * Quick English speak (most common use case)
+ * Quick English speak — now personality-aware
  */
-export function speakEnglish(text, rate = 0.85) {
-    speakText(text, { lang: 'en-US', rate });
+export function speakEnglish(text, rate) {
+    const prefs = getStoredVoicePreferences();
+    const accentId = prefs?.accent || DEFAULT_ACCENT;
+    const lang = resolveVoiceProfile({
+        accentId,
+    }).accentProfile?.lang || 'en-US';
+    speakText(text, { lang, ...(typeof rate === 'number' ? { rate } : {}) });
 }
 
 /**
@@ -184,6 +196,13 @@ export function speakEnglish(text, rate = 0.85) {
  */
 export function speakChinese(text, rate = 0.8) {
     speakText(text, { lang: 'zh-CN', rate });
+}
+
+/**
+ * Invalidate voice cache — call when user changes voice preferences
+ */
+export function invalidateVoiceCache() {
+    _voiceCache = {};
 }
 
 export default speakText;

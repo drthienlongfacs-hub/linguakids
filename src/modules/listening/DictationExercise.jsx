@@ -31,22 +31,13 @@ export default function DictationExercise({ segments, onComplete, lang = 'en' })
             .filter(Boolean);
     }, [isChinese]);
 
-    const speakText = useCallback((text, rate = 1) => {
-        window.speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = langCode;
-        u.rate = rate;
-        const voices = window.speechSynthesis.getVoices();
-        const langBase = langCode.split('-')[0];
-        const voice = voices.find(v => v.lang === langCode)
-            || voices.find(v => v.lang.startsWith(langBase));
-        if (voice) {
-            u.voice = voice;
-            u.lang = voice.lang;
-        }
-        u.onstart = () => setIsPlaying(true);
-        u.onend = () => setIsPlaying(false);
-        window.speechSynthesis.speak(u);
+    const speakSegment = useCallback((text, rate = 1) => {
+        setIsPlaying(true);
+        speakText(text, {
+            lang: langCode,
+            rate,
+            onEnd: () => setIsPlaying(false),
+        });
     }, [langCode]);
 
     const handleCheck = () => {
@@ -116,14 +107,14 @@ export default function DictationExercise({ segments, onComplete, lang = 'en' })
             <div className="dictation-audio-controls">
                 <button
                     className="dict-play-btn"
-                    onClick={() => speakText(current.text, 1)}
+                    onClick={() => speakSegment(current.text, 1)}
                     disabled={isPlaying}
                 >
                     {isPlaying ? '🔊 Đang phát...' : '▶️ Nghe'}
                 </button>
                 <button
                     className="dict-slow-btn"
-                    onClick={() => speakText(current.text, isChinese ? 0.65 : 0.6)}
+                    onClick={() => speakSegment(current.text, isChinese ? 0.65 : 0.6)}
                     disabled={isPlaying}
                 >
                     🐌 Nghe chậm

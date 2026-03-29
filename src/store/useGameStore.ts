@@ -16,9 +16,11 @@ export interface WordLearned {
 export interface SpeakingRecapMetric {
     key: string;
     label: string;
+    labelVi?: string;
     score: number;
     status: string;
     insight: string;
+    insightVi?: string;
 }
 
 export interface SpeakingRecap {
@@ -90,6 +92,10 @@ export interface GameState {
     // Mode
     userMode: string;
 
+    // Voice Preferences
+    preferredAccent: string;       // 'us' | 'uk' | 'au'
+    preferredPersonality: string;  // personality id from voicePersonalities.js
+
     // Placement Test Results
     userCEFRLevel: string | null;
     userHSKLevel: string | null;
@@ -119,6 +125,7 @@ interface GameActions {
     completeDailyChallenge: (date: string) => void;
     resetState: () => void;
     checkAndResetDaily: () => void;
+    setVoicePreferences: (accent: string, personality: string) => void;
     setExamTarget: (target: string | null) => void;
     setRoadmapWeek: (week: number) => void;
     completeRoadmapTask: (task: { week: number; day: number; taskIdx: number; type: string; xp: number }) => void;
@@ -156,6 +163,8 @@ const DEFAULT_STATE: GameState = {
     coins: 0,
     totalCoinsEarned: 0,
     userMode: USER_MODES.KIDS,
+    preferredAccent: 'us',
+    preferredPersonality: 'natural',
     userCEFRLevel: null,
     userHSKLevel: null,
     placementCompleted: false,
@@ -290,6 +299,10 @@ export const useGameStore = create<GameStore>()(
                 localStorage.removeItem('linguakids_state_z');
             },
 
+            setVoicePreferences: (accent: string, personality: string) => set({
+                preferredAccent: accent,
+                preferredPersonality: personality,
+            }),
             setExamTarget: (target: string | null) => set({ examTarget: target }),
             setRoadmapWeek: (week: number) => set({ roadmapWeek: week }),
             setPlacementResult: (cefrLevel: string | null, hskLevel: string | null) => set({

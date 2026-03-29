@@ -7,6 +7,7 @@ import { useGame } from '../../context/GameStateContext';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { recordCapabilityEvent } from '../../services/capabilityService';
 import { analyzeSpeakingAttempt, buildSpeakingRecap } from '../../services/speakingAnalyticsService';
+import { speakText as speakTextUtil } from '../../utils/speakText';
 
 function normalizeTemplateText(text) {
     return String(text || '')
@@ -177,17 +178,12 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     }, [langCode, lesson.id]);
 
     const speakText = useCallback((text) => {
-        window.speechSynthesis.cancel();
         setIsSpeaking(true);
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = langCode;
-        u.rate = 0.85;
-        const voices = voicesRef.current.length > 0 ? voicesRef.current : window.speechSynthesis.getVoices();
-        const v = voices.find(v => v.lang === langCode) || voices.find(v => v.lang.startsWith(langCode.split('-')[0]));
-        if (v) u.voice = v;
-        u.onend = () => setIsSpeaking(false);
-        u.onerror = () => setIsSpeaking(false);
-        window.speechSynthesis.speak(u);
+        speakTextUtil(text, {
+            lang: langCode,
+            rate: 0.85,
+            onEnd: () => setIsSpeaking(false),
+        });
     }, [langCode]);
 
     const startRecording = useCallback(async () => {

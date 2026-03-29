@@ -24,6 +24,14 @@ export const VOICE_DB = {
             female: ['Google Australian English Female', 'Google Australian English'],
             male: ['Google Australian English Male'],
         },
+        'zh-CN': {
+            female: ['Google 普通话', 'Google 中文'],
+            male: [],
+        },
+        'vi-VN': {
+            female: ['Google Tiếng Việt'],
+            male: [],
+        },
     },
     // iOS Safari (Apple voices)
     ios: {
@@ -38,6 +46,14 @@ export const VOICE_DB = {
         'en-AU': {
             female: ['Karen', 'Catherine', 'Lee'],
             male: ['Gordon', 'James'],
+        },
+        'zh-CN': {
+            female: ['Ting-Ting', 'Mei-Jia'],
+            male: [],
+        },
+        'vi-VN': {
+            female: ['Linh'],
+            male: [],
         },
     },
     // macOS (Apple voices — shared with Safari desktop)
@@ -54,6 +70,14 @@ export const VOICE_DB = {
             female: ['Karen', 'Catherine', 'Lee'],
             male: ['Gordon', 'James'],
         },
+        'zh-CN': {
+            female: ['Ting-Ting', 'Mei-Jia', 'Sin-ji'],
+            male: [],
+        },
+        'vi-VN': {
+            female: ['Linh'],
+            male: [],
+        },
     },
     // Windows (Microsoft voices)
     windows: {
@@ -68,6 +92,14 @@ export const VOICE_DB = {
         'en-AU': {
             female: ['Microsoft Natasha'],
             male: ['Microsoft William'],
+        },
+        'zh-CN': {
+            female: ['Microsoft Xiaoxiao', 'Microsoft Xiaoyi'],
+            male: ['Microsoft Yunyang', 'Microsoft Yunxi'],
+        },
+        'vi-VN': {
+            female: ['Microsoft HoaiMy'],
+            male: [],
         },
     },
 };
@@ -161,6 +193,32 @@ export const VOICE_PERSONALITIES = [
         volume: 1.0,      // strong projection
         color: '#EF4444',
     },
+    {
+        id: 'warm-mature',
+        emoji: '🎻',
+        label: 'Warm Mature',
+        labelVi: 'Trung niên ấm áp',
+        description: 'Mature, warm voice like a seasoned diplomat or professor',
+        descriptionVi: 'Giọng trung niên ấm áp, như giáo sư hoặc ngoại giao',
+        gender: 'male',
+        pitch: 0.93,      // lower end — mature timbre
+        rate: 0.80,       // measured, unhurried
+        volume: 0.82,     // soft, intimate presence
+        color: '#78716C',
+    },
+    {
+        id: 'young-clear',
+        emoji: '🌸',
+        label: 'Young Clear',
+        labelVi: 'Trẻ trong sáng',
+        description: 'Young, bright, crystal-clear enunciation like a language tutor',
+        descriptionVi: 'Giọng trẻ trong sáng, phát âm rõ nét như gia sư',
+        gender: 'female',
+        pitch: 1.10,      // bright, youthful
+        rate: 0.88,       // clear, not rushed
+        volume: 0.95,     // present but not aggressive
+        color: '#F472B6',
+    },
 ];
 
 // ================================================================
@@ -205,6 +263,8 @@ const PERSONALITY_VOICE_HINTS = {
         dramatic: ['Brian', 'Andrew', 'Fred', 'Grandpa'],
         premium: ['Michelle', 'Aria', 'Shelley', 'Kathy'],
         dynamic: ['Guy', 'Roger', 'Andrew', 'Reed'],
+        'warm-mature': ['Alex', 'Tom', 'Fred', 'David', 'Mark'],
+        'young-clear': ['Zoe', 'Susan', 'Nicky', 'Allison', 'Samantha'],
     },
     uk: {
         broadcast: ['Ryan', 'Daniel', 'Reed'],
@@ -213,6 +273,8 @@ const PERSONALITY_VOICE_HINTS = {
         dramatic: ['Thomas', 'Grandpa', 'Arthur', 'Oliver'],
         premium: ['Libby', 'Shelley', 'Martha', 'Grandma'],
         dynamic: ['Ryan', 'Reed', 'Daniel', 'Rocko'],
+        'warm-mature': ['Arthur', 'Oliver', 'Daniel'],
+        'young-clear': ['Fiona', 'Martha', 'Kate', 'Serena'],
     },
     au: {
         broadcast: ['William', 'Gordon'],
@@ -221,6 +283,8 @@ const PERSONALITY_VOICE_HINTS = {
         dramatic: ['William', 'Gordon'],
         premium: ['Natasha', 'Karen'],
         dynamic: ['William', 'Natasha'],
+        'warm-mature': ['Gordon', 'William'],
+        'young-clear': ['Karen', 'Catherine', 'Lee'],
     },
 };
 
