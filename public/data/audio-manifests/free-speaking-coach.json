@@ -1,0 +1,118 @@
+{
+  "source": "controlled_free_speaking_coach_pack",
+  "engine": "edge_tts",
+  "generatedAt": "2026-03-29T06:30:05.916Z",
+  "clips": {
+    "daily-small-talk": {
+      "lang": "en-US",
+      "voice": "en-US-JennyNeural",
+      "voiceLabel": "Jenny Neural",
+      "speakerKey": "en-US-JennyNeural",
+      "variantMode": "distinct_speaker",
+      "rate": "-4%",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "clipCount": 12,
+      "clips": {
+        "starter": "audio/free-speaking-coach/daily-small-talk/starter.mp3",
+        "day-check-in__prompt": "audio/free-speaking-coach/daily-small-talk/day-check-in__prompt.mp3",
+        "day-check-in__default-reply": "audio/free-speaking-coach/daily-small-talk/day-check-in__default-reply.mp3",
+        "day-check-in__followup-1": "audio/free-speaking-coach/daily-small-talk/day-check-in__followup-1.mp3",
+        "day-check-in__followup-2": "audio/free-speaking-coach/daily-small-talk/day-check-in__followup-2.mp3",
+        "routine__prompt": "audio/free-speaking-coach/daily-small-talk/routine__prompt.mp3",
+        "routine__default-reply": "audio/free-speaking-coach/daily-small-talk/routine__default-reply.mp3",
+        "routine__followup-1": "audio/free-speaking-coach/daily-small-talk/routine__followup-1.mp3",
+        "routine__followup-2": "audio/free-speaking-coach/daily-small-talk/routine__followup-2.mp3",
+        "weekend-plan__prompt": "audio/free-speaking-coach/daily-small-talk/weekend-plan__prompt.mp3",
+        "weekend-plan__default-reply": "audio/free-speaking-coach/daily-small-talk/weekend-plan__default-reply.mp3",
+        "closing": "audio/free-speaking-coach/daily-small-talk/closing.mp3"
+      }
+    },
+    "job-interview-brief": {
+      "lang": "en-GB",
+      "voice": "en-GB-RyanNeural",
+      "voiceLabel": "Ryan Neural",
+      "speakerKey": "en-GB-RyanNeural",
+      "variantMode": "distinct_speaker",
+      "rate": "-6%",
+      "pitch": "-1Hz",
+      "volume": "+0%",
+      "clipCount": 10,
+      "clips": {
+        "starter": "audio/free-speaking-coach/job-interview-brief/starter.mp3",
+        "about-yourself__prompt": "audio/free-speaking-coach/job-interview-brief/about-yourself__prompt.mp3",
+        "about-yourself__default-reply": "audio/free-speaking-coach/job-interview-brief/about-yourself__default-reply.mp3",
+        "about-yourself__followup-1": "audio/free-speaking-coach/job-interview-brief/about-yourself__followup-1.mp3",
+        "about-yourself__followup-2": "audio/free-speaking-coach/job-interview-brief/about-yourself__followup-2.mp3",
+        "challenge__prompt": "audio/free-speaking-coach/job-interview-brief/challenge__prompt.mp3",
+        "challenge__default-reply": "audio/free-speaking-coach/job-interview-brief/challenge__default-reply.mp3",
+        "motivation__prompt": "audio/free-speaking-coach/job-interview-brief/motivation__prompt.mp3",
+        "motivation__default-reply": "audio/free-speaking-coach/job-interview-brief/motivation__default-reply.mp3",
+        "closing": "audio/free-speaking-coach/job-interview-brief/closing.mp3"
+      }
+    },
+    "travel-help": {
+      "lang": "en-AU",
+      "voice": "en-AU-NatashaNeural",
+      "voiceLabel": "Natasha Neural",
+      "speakerKey": "en-AU-NatashaNeural",
+      "variantMode": "distinct_speaker",
+      "rate": "-4%",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "clipCount": 8,
+      "clips": {
+        "starter": "audio/free-speaking-coach/travel-help/starter.mp3",
+        "problem__prompt": "audio/free-speaking-coach/travel-help/problem__prompt.mp3",
+        "problem__default-reply": "audio/free-speaking-coach/travel-help/problem__default-reply.mp3",
+        "request-help__prompt": "audio/free-speaking-coach/travel-help/request-help__prompt.mp3",
+        "request-help__default-reply": "audio/free-speaking-coach/travel-help/request-help__default-reply.mp3",
+        "confirm-next-step__prompt": "audio/free-speaking-coach/travel-help/confirm-next-step__prompt.mp3",
+        "confirm-next-step__default-reply": "audio/free-speaking-coach/travel-help/confirm-next-step__default-reply.mp3",
+        "closing": "audio/free-speaking-coach/travel-help/closing.mp3"
+      }
+    },
+    "self-intro-cn": {
+      "lang": "zh-CN",
+      "voice": "zh-CN-XiaoxiaoNeural",
+      "voiceLabel": "Xiaoxiao Neural",
+      "speakerKey": "zh-CN-XiaoxiaoNeural",
+      "variantMode": "distinct_speaker",
+      "rate": "-10%",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "clipCount": 8,
+      "clips": {
+        "starter": "audio/free-speaking-coach/self-intro-cn/starter.mp3",
+        "who-are-you__prompt": "audio/free-speaking-coach/self-intro-cn/who-are-you__prompt.mp3",
+        "who-are-you__default-reply": "audio/free-speaking-coach/self-intro-cn/who-are-you__default-reply.mp3",
+        "what-you-like__prompt": "audio/free-speaking-coach/self-intro-cn/what-you-like__prompt.mp3",
+        "what-you-like__default-reply": "audio/free-speaking-coach/self-intro-cn/what-you-like__default-reply.mp3",
+        "future-plan__prompt": "audio/free-speaking-coach/self-intro-cn/future-plan__prompt.mp3",
+        "future-plan__default-reply": "audio/free-speaking-coach/self-intro-cn/future-plan__default-reply.mp3",
+        "closing": "audio/free-speaking-coach/self-intro-cn/closing.mp3"
+      }
+    },
+    "ordering-cn": {
+      "lang": "zh-CN",
+      "voice": "zh-CN-YunxiNeural",
+      "voiceLabel": "Yunxi Neural",
+      "speakerKey": "zh-CN-YunxiNeural",
+      "variantMode": "distinct_speaker",
+      "rate": "-8%",
+      "pitch": "+0Hz",
+      "volume": "+0%",
+      "clipCount": 8,
+      "clips": {
+        "starter": "audio/free-speaking-coach/ordering-cn/starter.mp3",
+        "order-main__prompt": "audio/free-speaking-coach/ordering-cn/order-main__prompt.mp3",
+        "order-main__default-reply": "audio/free-speaking-coach/ordering-cn/order-main__default-reply.mp3",
+        "preference__prompt": "audio/free-speaking-coach/ordering-cn/preference__prompt.mp3",
+        "preference__default-reply": "audio/free-speaking-coach/ordering-cn/preference__default-reply.mp3",
+        "confirm-order__prompt": "audio/free-speaking-coach/ordering-cn/confirm-order__prompt.mp3",
+        "confirm-order__default-reply": "audio/free-speaking-coach/ordering-cn/confirm-order__default-reply.mp3",
+        "closing": "audio/free-speaking-coach/ordering-cn/closing.mp3"
+      }
+    }
+  }
+}

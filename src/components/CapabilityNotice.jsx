@@ -1,21 +1,23 @@
+import { SPEAKING_UI_THEME } from '../data/speakingUiTheme';
+
 const TONE_STYLES = {
     info: {
-        border: 'rgba(99,102,241,0.22)',
-        background: 'rgba(99,102,241,0.08)',
-        title: '#4338CA',
-        text: '#4B5563',
+        border: '#4F46E5',
+        background: '#1E1B4B',
+        title: '#C7D2FE',
+        text: '#E0E7FF',
     },
     warn: {
-        border: 'rgba(245,158,11,0.24)',
-        background: 'rgba(245,158,11,0.12)',
-        title: '#B45309',
-        text: '#92400E',
+        border: SPEAKING_UI_THEME.warningBorder,
+        background: SPEAKING_UI_THEME.warningSurface,
+        title: SPEAKING_UI_THEME.warningText,
+        text: '#FDE68A',
     },
     success: {
-        border: 'rgba(34,197,94,0.22)',
-        background: 'rgba(34,197,94,0.08)',
-        title: '#15803D',
-        text: '#166534',
+        border: SPEAKING_UI_THEME.successBorder,
+        background: SPEAKING_UI_THEME.successSurface,
+        title: SPEAKING_UI_THEME.successText,
+        text: '#DCFCE7',
     },
 };
 
@@ -61,7 +63,7 @@ export default function CapabilityNotice({
                     <span style={{
                         padding: '4px 10px',
                         borderRadius: '999px',
-                        background: 'rgba(255,255,255,0.72)',
+                        background: SPEAKING_UI_THEME.panelSurfaceSoft,
                         border: `1px solid ${palette.border}`,
                         color: palette.title,
                         fontSize: '0.7rem',
@@ -101,4 +103,3 @@ export default function CapabilityNotice({
         </div>
     );
 }
-

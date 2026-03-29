@@ -1,4 +1,9 @@
 import { FREE_SPEAKING_SCENARIOS } from '../data/freeSpeakingCoachScenarios';
+import {
+    getFreeSpeakingClosingClipId,
+    getFreeSpeakingDefaultReplyClipId,
+    getFreeSpeakingFollowUpClipId,
+} from '../data/freeSpeakingCoachAudioContent';
 
 function normalizeText(text, lang = 'en') {
     const value = String(text || '').trim();
@@ -32,20 +37,33 @@ export function getFreeSpeakingScenarioById(id) {
 }
 
 export function buildCoachReply({ scenario, turnIndex, transcript }) {
+    return resolveCoachReply({ scenario, turnIndex, transcript }).text;
+}
+
+export function resolveCoachReply({ scenario, turnIndex, transcript }) {
     const turn = scenario?.turns?.[turnIndex];
     if (!turn) {
-        return scenario?.closing || '';
+        return {
+            text: scenario?.closing || '',
+            clipId: getFreeSpeakingClosingClipId(),
+            replyMode: 'closing',
+        };
     }
 
     const input = normalizeText(transcript, scenario.lang);
     if (!input) {
-        return turn.defaultReply;
+        return {
+            text: turn.defaultReply,
+            clipId: getFreeSpeakingDefaultReplyClipId(turn.id),
+            replyMode: 'default',
+        };
     }
 
     let bestReply = turn.defaultReply;
     let bestScore = 0;
+    let clipId = getFreeSpeakingDefaultReplyClipId(turn.id);
 
-    for (const followUp of turn.followUps || []) {
+    for (const [followUpIndex, followUp] of (turn.followUps || []).entries()) {
         const score = (followUp.keywords || []).reduce((sum, keyword) => {
             const normalizedKeyword = normalizeText(keyword, scenario.lang);
             if (!normalizedKeyword) return sum;
@@ -55,10 +73,15 @@ export function buildCoachReply({ scenario, turnIndex, transcript }) {
         if (score > bestScore) {
             bestScore = score;
             bestReply = followUp.reply;
+            clipId = getFreeSpeakingFollowUpClipId(turn.id, followUpIndex);
         }
     }
 
-    return bestReply || turn.defaultReply;
+    return {
+        text: bestReply || turn.defaultReply,
+        clipId,
+        replyMode: bestScore > 0 ? 'followup' : 'default',
+    };
 }
 
 export function buildFreeSpeakingSummary({ scenario, turnResults }) {

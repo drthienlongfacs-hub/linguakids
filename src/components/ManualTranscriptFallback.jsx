@@ -1,3 +1,5 @@
+import { SPEAKING_UI_THEME } from '../data/speakingUiTheme';
+
 export default function ManualTranscriptFallback({
     title,
     description,
@@ -16,21 +18,21 @@ export default function ManualTranscriptFallback({
             marginTop: '12px',
             padding: '14px',
             borderRadius: '16px',
-            border: '1px solid rgba(245,158,11,0.24)',
-            background: 'rgba(245,158,11,0.10)',
+            border: `1px solid ${SPEAKING_UI_THEME.warningBorder}`,
+            background: SPEAKING_UI_THEME.warningSurface,
         }}>
             <div style={{
                 fontFamily: 'var(--font-display)',
                 fontWeight: 700,
                 fontSize: '0.92rem',
-                color: '#B45309',
+                color: SPEAKING_UI_THEME.warningText,
                 marginBottom: '6px',
             }}>
                 ✍️ {title}
             </div>
             <p style={{
                 margin: '0 0 10px',
-                color: '#92400E',
+                color: SPEAKING_UI_THEME.warningText,
                 fontSize: '0.8rem',
                 lineHeight: 1.5,
             }}>
@@ -45,12 +47,12 @@ export default function ManualTranscriptFallback({
                     width: '100%',
                     resize: 'vertical',
                     borderRadius: '12px',
-                    border: '1px solid rgba(148,163,184,0.32)',
+                    border: `1px solid ${SPEAKING_UI_THEME.inputBorder}`,
                     padding: '10px 12px',
                     fontSize: '0.9rem',
                     lineHeight: 1.5,
-                    background: 'rgba(255,255,255,0.9)',
-                    color: 'var(--color-text)',
+                    background: SPEAKING_UI_THEME.inputSurface,
+                    color: SPEAKING_UI_THEME.inputText,
                     outline: 'none',
                     marginBottom: '10px',
                 }}
@@ -64,8 +66,8 @@ export default function ManualTranscriptFallback({
                         padding: '10px 12px',
                         borderRadius: '12px',
                         border: 'none',
-                        background: isDisabled ? '#CBD5E1' : 'var(--color-primary)',
-                        color: '#fff',
+                        background: isDisabled ? SPEAKING_UI_THEME.borderSoft : SPEAKING_UI_THEME.primarySurface,
+                        color: SPEAKING_UI_THEME.primaryText,
                         fontFamily: 'var(--font-display)',
                         fontWeight: 700,
                         cursor: isDisabled ? 'not-allowed' : 'pointer',
@@ -78,9 +80,9 @@ export default function ManualTranscriptFallback({
                     style={{
                         padding: '10px 14px',
                         borderRadius: '12px',
-                        border: '1px solid rgba(148,163,184,0.32)',
-                        background: 'rgba(255,255,255,0.85)',
-                        color: 'var(--color-text)',
+                        border: `1px solid ${SPEAKING_UI_THEME.secondaryBorder}`,
+                        background: SPEAKING_UI_THEME.secondarySurface,
+                        color: SPEAKING_UI_THEME.secondaryText,
                         fontFamily: 'var(--font-display)',
                         fontWeight: 700,
                         cursor: 'pointer',
@@ -92,4 +94,3 @@ export default function ManualTranscriptFallback({
         </div>
     );
 }
-

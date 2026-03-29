@@ -1,3 +1,5 @@
+import { SPEAKING_UI_THEME } from '../data/speakingUiTheme';
+
 function metricColor(score) {
     if (score >= 85) return '#16A34A';
     if (score >= 70) return '#2563EB';
@@ -6,10 +8,10 @@ function metricColor(score) {
 }
 
 function wordStatusColor(status) {
-    if (status === 'perfect') return { bg: '#DCFCE7', text: '#166534', border: '#86EFAC' };
-    if (status === 'close') return { bg: '#FEF3C7', text: '#92400E', border: '#FCD34D' };
-    if (status === 'wrong') return { bg: '#FEE2E2', text: '#B91C1C', border: '#FCA5A5' };
-    return { bg: '#F1F5F9', text: '#475569', border: '#CBD5E1' };
+    if (status === 'perfect') return { bg: '#10281E', text: '#DCFCE7', border: '#22C55E' };
+    if (status === 'close') return { bg: '#3F2A0E', text: '#FDE68A', border: '#F59E0B' };
+    if (status === 'wrong') return { bg: '#3F1D1D', text: '#FECACA', border: '#EF4444' };
+    return { bg: '#1E293B', text: '#E2E8F0', border: '#475569' };
 }
 
 function formatPercent(value) {
@@ -31,8 +33,8 @@ export default function SpeakingCoachPanel({
             marginTop: '14px',
             padding: '16px',
             borderRadius: '20px',
-            background: 'rgba(255,255,255,0.92)',
-            border: '1px solid rgba(148,163,184,0.22)',
+            background: SPEAKING_UI_THEME.panelSurfaceRaised,
+            border: `1px solid ${SPEAKING_UI_THEME.border}`,
             boxShadow: '0 20px 50px rgba(15,23,42,0.08)',
         }}>
             <div style={{
@@ -54,7 +56,7 @@ export default function SpeakingCoachPanel({
                     <div style={{
                         marginTop: '4px',
                         fontSize: '0.76rem',
-                        color: 'var(--color-text-light)',
+                        color: SPEAKING_UI_THEME.textMuted,
                         lineHeight: 1.5,
                     }}>
                         {analysis.analysisSummary || analysis.note}
@@ -71,7 +73,7 @@ export default function SpeakingCoachPanel({
                     <div style={{ fontSize: '1.35rem', fontWeight: 800, color: tone }}>
                         {analysis.overallScore}%
                     </div>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>
+                    <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>
                         Coaching
                     </div>
                 </div>
@@ -81,14 +83,14 @@ export default function SpeakingCoachPanel({
                 <div style={{
                     padding: '10px 12px',
                     borderRadius: '14px',
-                    background: 'rgba(99,102,241,0.06)',
-                    border: '1px solid rgba(99,102,241,0.16)',
+                    background: SPEAKING_UI_THEME.accentSurface,
+                    border: `1px solid ${SPEAKING_UI_THEME.accentStrong}`,
                     marginBottom: '12px',
                 }}>
-                    <div style={{ fontSize: '0.72rem', color: '#4F46E5', fontWeight: 700, marginBottom: '4px' }}>
+                    <div style={{ fontSize: '0.72rem', color: SPEAKING_UI_THEME.accentStrong, fontWeight: 700, marginBottom: '4px' }}>
                         {transcriptLabel}
                     </div>
-                    <div style={{ fontSize: '0.86rem', lineHeight: 1.55 }}>
+                    <div style={{ fontSize: '0.86rem', lineHeight: 1.55, color: SPEAKING_UI_THEME.textStrong }}>
                         {transcript}
                     </div>
                 </div>
@@ -107,11 +109,11 @@ export default function SpeakingCoachPanel({
                             style={{
                                 padding: '10px 12px',
                                 borderRadius: '14px',
-                                background: 'rgba(15,23,42,0.03)',
-                                border: '1px solid rgba(148,163,184,0.18)',
+                                background: SPEAKING_UI_THEME.panelSurfaceMuted,
+                                border: `1px solid ${SPEAKING_UI_THEME.borderSoft}`,
                             }}
                         >
-                            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)' }}>
+                            <div style={{ fontSize: '0.72rem', color: SPEAKING_UI_THEME.textMuted }}>
                                 {metric.label}
                             </div>
                             <div style={{
@@ -122,7 +124,7 @@ export default function SpeakingCoachPanel({
                             }}>
                                 {metric.score}%
                             </div>
-                            <div style={{ marginTop: '4px', fontSize: '0.7rem', color: '#64748B', lineHeight: 1.45 }}>
+                            <div style={{ marginTop: '4px', fontSize: '0.7rem', color: SPEAKING_UI_THEME.textSoft, lineHeight: 1.45 }}>
                                 {metric.insight}
                             </div>
                         </div>
@@ -137,21 +139,21 @@ export default function SpeakingCoachPanel({
                     gap: '8px',
                     marginBottom: '12px',
                 }}>
-                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: '#F8FAFC', textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: '#64748B' }}>WPM</div>
-                        <div style={{ fontWeight: 800 }}>{analysis.transcriptStats?.wpm || 0}</div>
+                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>WPM</div>
+                        <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.transcriptStats?.wpm || 0}</div>
                     </div>
-                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: '#F8FAFC', textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Filler</div>
-                        <div style={{ fontWeight: 800 }}>{analysis.signalBreakdown.fillerCount || 0}</div>
+                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Filler</div>
+                        <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.signalBreakdown.fillerCount || 0}</div>
                     </div>
-                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: '#F8FAFC', textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Diversity</div>
-                        <div style={{ fontWeight: 800 }}>{formatPercent(analysis.transcriptStats?.lexicalDiversity || 0)}</div>
+                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Diversity</div>
+                        <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{formatPercent(analysis.transcriptStats?.lexicalDiversity || 0)}</div>
                     </div>
-                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: '#F8FAFC', textAlign: 'center' }}>
-                        <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Relevance</div>
-                        <div style={{ fontWeight: 800 }}>{analysis.signalBreakdown.promptCoverage || 0}%</div>
+                    <div style={{ padding: '8px 10px', borderRadius: '12px', background: SPEAKING_UI_THEME.panelSurface, textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.68rem', color: SPEAKING_UI_THEME.textSoft }}>Relevance</div>
+                        <div style={{ fontWeight: 800, color: SPEAKING_UI_THEME.textStrong }}>{analysis.signalBreakdown.promptCoverage || 0}%</div>
                     </div>
                 </div>
             )}
@@ -161,7 +163,7 @@ export default function SpeakingCoachPanel({
                     <div style={{
                         fontSize: '0.76rem',
                         fontWeight: 700,
-                        color: '#334155',
+                        color: SPEAKING_UI_THEME.textMuted,
                         marginBottom: '8px',
                     }}>
                         Word-level alignment
@@ -192,7 +194,7 @@ export default function SpeakingCoachPanel({
 
             {analysis.strengths?.length > 0 && (
                 <div style={{ marginBottom: '10px' }}>
-                    <div style={{ fontSize: '0.76rem', fontWeight: 700, color: '#166534', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.successText, marginBottom: '6px' }}>
                         What went well
                     </div>
                     <div style={{ display: 'grid', gap: '6px' }}>
@@ -202,10 +204,11 @@ export default function SpeakingCoachPanel({
                                 style={{
                                     padding: '8px 10px',
                                     borderRadius: '12px',
-                                    background: 'rgba(34,197,94,0.08)',
-                                    border: '1px solid rgba(34,197,94,0.18)',
+                                    background: SPEAKING_UI_THEME.successSurface,
+                                    border: `1px solid ${SPEAKING_UI_THEME.successBorder}`,
                                     fontSize: '0.76rem',
                                     lineHeight: 1.45,
+                                    color: SPEAKING_UI_THEME.successText,
                                 }}
                             >
                                 {item}
@@ -217,7 +220,7 @@ export default function SpeakingCoachPanel({
 
             {analysis.recommendations?.length > 0 && (
                 <div style={{ marginBottom: footer ? '10px' : 0 }}>
-                    <div style={{ fontSize: '0.76rem', fontWeight: 700, color: '#92400E', marginBottom: '6px' }}>
+                    <div style={{ fontSize: '0.76rem', fontWeight: 700, color: SPEAKING_UI_THEME.warningText, marginBottom: '6px' }}>
                         Next-step coaching
                     </div>
                     <div style={{ display: 'grid', gap: '6px' }}>
@@ -227,10 +230,11 @@ export default function SpeakingCoachPanel({
                                 style={{
                                     padding: '8px 10px',
                                     borderRadius: '12px',
-                                    background: 'rgba(245,158,11,0.08)',
-                                    border: '1px solid rgba(245,158,11,0.18)',
+                                    background: SPEAKING_UI_THEME.warningSurface,
+                                    border: `1px solid ${SPEAKING_UI_THEME.warningBorder}`,
                                     fontSize: '0.76rem',
                                     lineHeight: 1.45,
+                                    color: SPEAKING_UI_THEME.warningText,
                                 }}
                             >
                                 {item}
@@ -245,7 +249,7 @@ export default function SpeakingCoachPanel({
             <div style={{
                 marginTop: '10px',
                 fontSize: '0.7rem',
-                color: '#64748B',
+                color: SPEAKING_UI_THEME.textSoft,
                 lineHeight: 1.45,
             }}>
                 Evidence: {analysis.evidenceLevel || 'Transcript-based coaching'} · {analysis.note}
