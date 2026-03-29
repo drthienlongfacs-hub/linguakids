@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { isAdultMode } from '../utils/userMode';
 import SystemCapabilityPanel from '../components/SystemCapabilityPanel';
-import { isPremium, getPremiumStatus } from '../services/premiumService';
+import usePremiumStatus from '../hooks/usePremiumStatus';
 
 const SPEED_OPTIONS = [
     { key: 'slow', label: 'Chậm', labelEn: 'Slow', emoji: '🐢', rate: 0.6 },
@@ -16,6 +16,7 @@ export default function Settings() {
     const navigate = useNavigate();
     const { state, dispatch } = useGame();
     const isAdult = isAdultMode(state.userMode);
+    const { premiumStatus, runtimeStatus } = usePremiumStatus();
 
     const [speechSpeed, setSpeechSpeed] = useState(
         () => localStorage.getItem('linguakids-speech-speed') || 'normal'
@@ -174,9 +175,15 @@ export default function Settings() {
                     📱 {isAdult ? 'App & Account' : 'Ứng dụng & Tài khoản'}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                    <SettingsLink emoji={isPremium() ? '👑' : '🔒'} label={isPremium() ? 'Premium Active' : (isAdult ? 'Upgrade to Premium' : 'Nâng cấp Premium')}
-                        sublabel={isPremium() ? (getPremiumStatus().type === 'trial' ? 'Dùng thử' : 'Trọn đời') : '99.000₫ — Mở khóa tất cả'}
-                        onClick={() => navigate('/premium')} highlight={!isPremium()} />
+                    <SettingsLink
+                        emoji={premiumStatus.active ? '👑' : '🔒'}
+                        label={premiumStatus.active ? 'Premium Active' : (isAdult ? 'Upgrade to Premium' : 'Nâng cấp Premium')}
+                        sublabel={premiumStatus.active
+                            ? `${premiumStatus.type === 'trial' ? 'Dùng thử' : 'Đã kích hoạt'} · ${premiumStatus.sourceOfTruth || 'local'}`
+                            : (runtimeStatus.configured ? 'Server-backed activation available' : 'Signed token / trial cho web edition')}
+                        onClick={() => navigate('/premium')}
+                        highlight={!premiumStatus.active}
+                    />
                     <SettingsLink emoji="👨‍👩‍👧" label={isAdult ? 'Parent Dashboard' : 'Bảng điều khiển phụ huynh'}
                         sublabel={isAdult ? 'Track learning progress' : 'Theo dõi tiến trình học'}
                         onClick={() => navigate('/parent-dashboard')} />

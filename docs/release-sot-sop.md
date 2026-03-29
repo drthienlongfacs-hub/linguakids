@@ -10,10 +10,22 @@ The following files are the operational source of truth for release-critical che
   Premium token prefix, audience, version, and public verification key.
 - `src/services/premiumService.js`
   Client-side premium activation and entitlement behavior for the web edition.
+- `public/runtime-config.json`
+  Deployment-time runtime switch for entitlement server mode and fallback policy.
+- `src/services/runtimeConfigService.js`
+  Runtime config loader and merge logic.
+- `src/services/entitlementApiClient.js`
+  Client adapter for entitlement health, activation, and resolve.
+- `src/hooks/usePremiumStatus.js`
+  Shared UI subscription layer for premium runtime truth.
+- `server/entitlement-api.mjs`
+  Reference backend for server-backed web entitlement.
 - `scripts/generate-premium-token.js`
   Offline signed-token issuance, using a private key outside the repo.
 - `scripts/audit-premium-architecture.mjs`
   Premium architecture audit and optional signed-token round-trip test.
+- `scripts/audit-entitlement-stack.mjs`
+  End-to-end server-backed entitlement audit.
 - `scripts/audit-free-speaking-module.mjs`
   Free-speaking readability and controlled-audio audit.
 - `scripts/audit-teacher-lessons-audio.mjs`
@@ -25,14 +37,16 @@ The following files are the operational source of truth for release-critical che
 
 1. Run `npm run audit:premium`.
    Result must be `pass: true`.
-2. Run `npm run audit:free-speaking`.
+2. Run `npm run audit:entitlement`.
+   Result must be `pass: true`.
+3. Run `npm run audit:free-speaking`.
    Result must be `strictModulePass: true`.
-3. Run `npm run audit:teacher-lessons`.
+4. Run `npm run audit:teacher-lessons`.
    Result must be `strictModulePass: true`.
-4. Run `npm run build`.
+5. Run `npm run build`.
    Result must complete successfully.
-5. Push `main`.
-6. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
+6. Push `main`.
+7. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
 
 ## Audio regression control
 
@@ -43,6 +57,7 @@ The following files are the operational source of truth for release-critical che
 
 - Web edition:
   - may use signed activation tokens as a soft paywall.
+  - should switch to server-backed entitlement automatically when `runtime-config.json` provides an entitlement API URL.
   - must not claim strong authorization or DRM.
 - App Store / Google Play editions:
   - must not reuse the web activation UX as-is for digital entitlements.

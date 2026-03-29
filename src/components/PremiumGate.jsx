@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    isPremium,
     unlockPremium,
     startTrial,
     PREMIUM_FEATURES,
     PREMIUM_TOKEN_PLACEHOLDER,
 } from '../services/premiumService';
+import usePremiumStatus from '../hooks/usePremiumStatus';
 
 /**
  * PremiumGate — wraps content that requires premium.
@@ -16,25 +16,24 @@ import {
 export default function PremiumGate({ children, featureName = '' }) {
     const [code, setCode] = useState('');
     const [msg, setMsg] = useState(null);
-    const [unlocked, setUnlocked] = useState(isPremium());
+    const { premiumStatus, runtimeStatus, refresh } = usePremiumStatus();
     const navigate = useNavigate();
 
-    if (unlocked) return children;
+    if (premiumStatus.active) return children;
 
     const handleUnlock = async () => {
         const result = await unlockPremium(code);
         setMsg(result);
         if (result.success) {
-            setTimeout(() => setUnlocked(true), 1500);
+            setCode('');
         }
+        await refresh(true);
     };
 
-    const handleTrial = () => {
+    const handleTrial = async () => {
         const result = startTrial();
         setMsg(result);
-        if (result.success) {
-            setTimeout(() => setUnlocked(true), 1500);
-        }
+        await refresh(true);
     };
 
     return (
@@ -64,7 +63,11 @@ export default function PremiumGate({ children, featureName = '' }) {
                     {/* Price badge */}
                     <div className="premium-gate__price">
                         <span className="premium-gate__price-current">Premium access</span>
-                        <span className="premium-gate__price-label">Kích hoạt bằng token ký số hoặc trial nội bộ</span>
+                        <span className="premium-gate__price-label">
+                            {runtimeStatus.configured
+                                ? 'Ưu tiên entitlement server, fallback sang signed token theo runtime policy'
+                                : 'Kích hoạt bằng signed token hoặc trial nội bộ'}
+                        </span>
                     </div>
 
                     {/* CTA buttons */}

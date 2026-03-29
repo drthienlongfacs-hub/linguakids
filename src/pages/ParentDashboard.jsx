@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
-import { getPremiumStatus } from '../services/premiumService';
-import { getXPData, getUnlockedBadges, getAllBadges } from '../services/xpEngine';
+import { getUnlockedBadges, getAllBadges } from '../services/xpEngine';
 import { getDueWordIds } from '../services/fsrs';
+import usePremiumStatus from '../hooks/usePremiumStatus';
 
 export default function ParentDashboard() {
     const navigate = useNavigate();
     const { state, currentLevel, levelProgress, getDailyStats } = useGame();
-    const premiumStatus = getPremiumStatus();
-    const xpData = getXPData();
+    const { premiumStatus, runtimeStatus } = usePremiumStatus();
     const unlockedBadges = getUnlockedBadges();
     const allBadges = getAllBadges();
     const dueWords = getDueWordIds();
@@ -162,7 +161,9 @@ export default function ParentDashboard() {
                 background: '#e8f5e9', borderRadius: 12, padding: '0.8rem 1rem',
                 textAlign: 'center', fontSize: '0.8rem', color: '#388e3c',
             }}>
-                🔒 Tất cả dữ liệu chỉ lưu trên thiết bị. Không gửi đi đâu cả.
+                {runtimeStatus.configured
+                    ? '🔒 Tiến trình học vẫn nằm trên thiết bị; entitlement premium có thể đồng bộ với server đã cấu hình.'
+                    : '🔒 Tất cả dữ liệu học tập và entitlement hiện chỉ lưu trên thiết bị của bạn.'}
             </div>
         </div>
     );

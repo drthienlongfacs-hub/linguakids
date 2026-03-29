@@ -1,200 +1,398 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    isPremium,
     unlockPremium,
     startTrial,
-    getPremiumStatus,
     PREMIUM_FEATURES,
     PREMIUM_TOKEN_PLACEHOLDER,
 } from '../services/premiumService';
+import usePremiumStatus from '../hooks/usePremiumStatus';
+
+function formatDate(value) {
+    if (!value) return 'Chưa có';
+    return new Date(value).toLocaleString('vi-VN');
+}
+
+function shortId(value) {
+    if (!value) return 'Chưa có';
+    if (value.length <= 18) return value;
+    return `${value.slice(0, 8)}...${value.slice(-6)}`;
+}
+
+function getRuntimeTone(runtimeStatus, premiumStatus) {
+    if (runtimeStatus.configured && runtimeStatus.reachable) {
+        return {
+            label: 'Server-backed entitlement',
+            color: '#155724',
+            background: '#d4edda',
+            border: '#b7e4c7',
+        };
+    }
+
+    if (runtimeStatus.configured && !runtimeStatus.reachable && premiumStatus.sourceOfTruth === 'client_signed_token_fallback') {
+        return {
+            label: 'Client fallback đang hoạt động',
+            color: '#8a4b00',
+            background: '#fff3cd',
+            border: '#ffe08a',
+        };
+    }
+
+    return {
+        label: 'Soft paywall local-only',
+        color: '#0b5ed7',
+        background: '#e7f1ff',
+        border: '#bfd8ff',
+    };
+}
 
 export default function PremiumUpgrade() {
-    const [code, setCode] = useState('');
-    const [msg, setMsg] = useState(null);
-    const [premium, setPremium] = useState(isPremium());
     const navigate = useNavigate();
-    const status = getPremiumStatus();
+    const [code, setCode] = useState('');
+    const [actionMessage, setActionMessage] = useState(null);
+    const {
+        premiumStatus,
+        runtimeStatus,
+        loading,
+        syncing,
+        lastAction,
+        refresh,
+        syncNow,
+    } = usePremiumStatus();
 
-    const handleUnlock = async () => {
+    const runtimeTone = useMemo(
+        () => getRuntimeTone(runtimeStatus, premiumStatus),
+        [premiumStatus, runtimeStatus]
+    );
+    const feedback = actionMessage || lastAction;
+
+    async function handleUnlock() {
         const result = await unlockPremium(code);
-        setMsg(result);
-        if (result.success) setTimeout(() => setPremium(true), 1200);
-    };
+        setActionMessage(result);
+        if (result.success) {
+            setCode('');
+        }
+        await refresh(true);
+    }
 
-    const handleTrial = () => {
+    async function handleTrial() {
         const result = startTrial();
-        setMsg(result);
-        if (result.success) setTimeout(() => setPremium(true), 1200);
-    };
+        setActionMessage(result);
+        await refresh(true);
+    }
 
-    if (premium) {
-        return (
-            <div className="page-container" style={{ padding: '2rem 1rem', maxWidth: 600, margin: 'auto' }}>
-                <div style={{
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    borderRadius: 20, padding: '2rem', textAlign: 'center', color: '#fff',
-                }}>
-                    <div style={{ fontSize: '3rem', marginBottom: 8 }}>👑</div>
-                    <h2 style={{ margin: '0 0 8px', fontFamily: 'var(--font-display)' }}>Premium Active</h2>
-                    <p style={{ opacity: 0.9, margin: 0 }}>
-                        {status.type === 'trial'
-                            ? `Dùng thử đến ${new Date(status.expiresAt).toLocaleDateString('vi-VN')}`
-                            : 'Trọn đời — Cảm ơn bạn đã ủng hộ!'}
-                    </p>
-                    {status.activationMethod && (
-                        <p style={{ opacity: 0.72, marginTop: 8, fontSize: '0.8rem' }}>
-                            Activation: {status.activationMethod}
-                        </p>
-                    )}
-                </div>
-                <button onClick={() => navigate('/')} style={{
-                    display: 'block', margin: '1.5rem auto 0', background: 'var(--color-primary)',
-                    color: '#fff', border: 'none', borderRadius: 12, padding: '12px 32px',
-                    fontFamily: 'var(--font-display)', fontSize: '1rem', cursor: 'pointer',
-                }}>
-                    ← Về trang chủ
-                </button>
-            </div>
-        );
+    async function handleSync() {
+        const result = await syncNow();
+        setActionMessage(result);
     }
 
     return (
-        <div className="page-container" style={{ padding: '1rem', maxWidth: 640, margin: 'auto' }}>
-            {/* Hero */}
+        <div className="page-container" style={{ padding: '1rem', maxWidth: 760, margin: '0 auto 5rem' }}>
+            <button
+                onClick={() => navigate(-1)}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--color-primary)',
+                    fontSize: '0.95rem',
+                    cursor: 'pointer',
+                    marginBottom: '0.75rem',
+                    fontFamily: 'var(--font-display)',
+                }}
+            >
+                ← Quay lại
+            </button>
+
             <div style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                borderRadius: 24, padding: '2rem 1.5rem', textAlign: 'center', color: '#fff',
-                marginBottom: '1.5rem',
+                background: 'linear-gradient(135deg, #182848 0%, #4b6cb7 100%)',
+                borderRadius: 24,
+                padding: '1.6rem',
+                color: '#fff',
+                marginBottom: '1rem',
+                boxShadow: '0 18px 40px rgba(24, 40, 72, 0.18)',
             }}>
-                <div style={{ fontSize: '3.5rem', marginBottom: 4 }}>👑</div>
+                <div style={{ fontSize: '2.8rem', marginBottom: 6 }}>👑</div>
                 <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', margin: '0 0 8px' }}>
-                    LinguaKids Premium
+                    LinguaKids Premium Runtime
                 </h1>
-                <p style={{ opacity: 0.9, margin: 0, fontSize: '1rem', lineHeight: 1.5 }}>
-                    Mở khóa trọn bộ chương trình học <br />cho bé yêu của bạn
+                <p style={{ margin: 0, opacity: 0.92, lineHeight: 1.6 }}>
+                    Trang này phản ánh trạng thái entitlement thật của web edition: đang local-only,
+                    signed-token fallback hay server-backed. Không còn chỉ là màn nhập mã tĩnh.
                 </p>
             </div>
 
-            {/* Features grid */}
             <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px',
-                marginBottom: '1.5rem',
-            }}>
-                {PREMIUM_FEATURES.map(f => (
-                    <div key={f.id} style={{
-                        background: '#fff', borderRadius: 16, padding: '16px 12px',
-                        textAlign: 'center', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                        border: '1px solid #f0f0f0',
-                    }}>
-                        <div style={{ fontSize: '2rem', marginBottom: 4 }}>{f.icon}</div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.85rem', color: '#333' }}>{f.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#888', marginTop: 2 }}>{f.desc}</div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Activation */}
-            <div style={{
-                background: '#fff', borderRadius: 20, padding: '1.5rem',
-                textAlign: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                border: '2px solid var(--color-primary)', marginBottom: '1.5rem',
-            }}>
-                <div style={{ fontSize: '2rem', fontFamily: 'var(--font-display)', color: 'var(--color-primary)', fontWeight: 800 }}>
-                    Premium activation
-                </div>
-                <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                    Trang này tập trung vào trial nội bộ và kích hoạt bằng token đã được cấp.
-                </div>
-
-                {/* Activation-first copy to avoid overclaiming payment compliance */}
-                <div style={{
-                    background: '#f8f9fa', borderRadius: 12, padding: '16px',
-                    fontSize: '0.85rem', color: '#555', lineHeight: 1.6,
-                    textAlign: 'left',
-                }}>
-                    <strong>📋 Kích hoạt Premium cho web edition:</strong>
-                    <div style={{ marginTop: 8 }}>
-                        Trang này chỉ dùng để <strong>bắt đầu trial</strong> hoặc <strong>dán token kích hoạt đã được cấp</strong>.
-                        Việc bán hàng, chăm sóc khách hàng và cấp token được xử lý ngoài ứng dụng.
-                    </div>
-                    <div style={{ marginTop: 8, fontSize: '0.8rem', color: '#888' }}>
-                        Nếu sau này có bản iOS/Android store, entitlement nên đi qua StoreKit / Google Play Billing riêng cho từng nền tảng.
-                    </div>
-                </div>
-            </div>
-
-            {/* Trial */}
-            <button onClick={handleTrial} style={{
-                display: 'block', width: '100%', background: '#f0f7ff', color: 'var(--color-primary)',
-                border: '2px dashed var(--color-primary)', borderRadius: 16, padding: '14px',
-                fontSize: '1rem', fontFamily: 'var(--font-display)', cursor: 'pointer',
+                background: runtimeTone.background,
+                borderRadius: 18,
+                border: `1px solid ${runtimeTone.border}`,
+                padding: '1rem 1.1rem',
                 marginBottom: '1rem',
+                color: runtimeTone.color,
             }}>
-                🎁 Dùng thử miễn phí 7 ngày
-            </button>
-
-            {/* Unlock code */}
-            <div style={{
-                background: '#fff', borderRadius: 16, padding: '1.5rem',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-            }}>
-                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', marginTop: 0 }}>
-                    🔑 Dán token kích hoạt
-                </h3>
-                <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
-                    <input
-                        type="text"
-                        placeholder={PREMIUM_TOKEN_PLACEHOLDER}
-                        value={code}
-                        onChange={e => setCode(e.target.value)}
-                        maxLength={240}
-                        autoCapitalize="none"
-                        autoCorrect="off"
-                        spellCheck={false}
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 800 }}>
+                            {runtimeTone.label}
+                        </div>
+                        <div style={{ fontSize: '0.82rem', opacity: 0.9, marginTop: 4 }}>
+                            Service mode: {runtimeStatus.mode || 'soft_paywall'} · Sync on boot: {runtimeStatus.syncOnBoot === false ? 'off' : 'on'}
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => refresh(true)}
+                        disabled={loading}
                         style={{
-                            flex: 1, border: '2px solid #e0e0e0', borderRadius: 12,
-                            padding: '12px', fontSize: '0.92rem', fontFamily: 'monospace',
-                            letterSpacing: 0.5,
+                            background: '#fff',
+                            border: `1px solid ${runtimeTone.border}`,
+                            borderRadius: 999,
+                            padding: '10px 16px',
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            color: runtimeTone.color,
+                            cursor: loading ? 'wait' : 'pointer',
                         }}
-                    />
-                    <button onClick={handleUnlock} style={{
-                        background: 'var(--color-primary)', color: '#fff', border: 'none',
-                        borderRadius: 12, padding: '12px 20px', fontSize: '0.95rem',
-                        fontFamily: 'var(--font-display)', cursor: 'pointer', whiteSpace: 'nowrap',
-                    }}>
-                        Kích hoạt
+                    >
+                        {loading ? 'Đang kiểm tra...' : 'Làm mới runtime'}
                     </button>
                 </div>
-                {msg && (
-                    <p style={{
-                        margin: 0, padding: '8px 12px', borderRadius: 8, fontSize: '0.9rem',
-                        background: msg.success ? '#d4edda' : '#f8d7da',
-                        color: msg.success ? '#155724' : '#721c24',
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                    gap: 10,
+                    marginTop: '0.9rem',
+                }}>
+                    <MetaCard label="Reachability" value={runtimeStatus.configured ? (runtimeStatus.reachable ? 'Reachable' : 'Unreachable') : 'Not configured'} />
+                    <MetaCard label="Source of truth" value={premiumStatus.sourceOfTruth || 'free'} />
+                    <MetaCard label="Installation" value={shortId(runtimeStatus.installationId || premiumStatus.installationId)} />
+                    <MetaCard label="Last sync" value={premiumStatus.lastSyncedAt ? formatDate(premiumStatus.lastSyncedAt) : 'Chưa sync'} />
+                </div>
+            </div>
+
+            {premiumStatus.active ? (
+                <div style={{
+                    background: '#fff',
+                    borderRadius: 22,
+                    padding: '1.3rem',
+                    boxShadow: '0 12px 32px rgba(15, 23, 42, 0.08)',
+                    marginBottom: '1rem',
+                    border: '1px solid rgba(79, 70, 229, 0.12)',
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', color: '#1f2937' }}>
+                                {premiumStatus.type === 'trial'
+                                    ? '🎁 Trial đang hoạt động'
+                                    : '✅ Premium đang hoạt động'}
+                            </div>
+                            <div style={{ color: '#64748b', marginTop: 6, fontSize: '0.92rem' }}>
+                                {premiumStatus.type === 'trial'
+                                    ? `Hết hạn: ${formatDate(premiumStatus.expiresAt)}`
+                                    : `Kích hoạt lúc: ${formatDate(premiumStatus.activatedAt)}`}
+                            </div>
+                        </div>
+                        {runtimeStatus.configured && (
+                            <button
+                                onClick={handleSync}
+                                disabled={syncing}
+                                style={{
+                                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: 14,
+                                    padding: '12px 18px',
+                                    fontFamily: 'var(--font-display)',
+                                    fontWeight: 700,
+                                    cursor: syncing ? 'wait' : 'pointer',
+                                }}
+                            >
+                                {syncing ? 'Đang đồng bộ...' : 'Đồng bộ entitlement'}
+                            </button>
+                        )}
+                    </div>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                        gap: 10,
+                        marginTop: '1rem',
                     }}>
-                        {msg.message}
-                    </p>
-                )}
-            </div>
+                        <MetaCard label="Activation method" value={premiumStatus.activationMethod || 'n/a'} />
+                        <MetaCard label="Token version" value={premiumStatus.tokenVersion || 'n/a'} />
+                        <MetaCard label="Entitlement" value={shortId(premiumStatus.entitlementId)} />
+                        <MetaCard label="Session expires" value={premiumStatus.sessionExpiresAt ? formatDate(premiumStatus.sessionExpiresAt) : 'Không có'} />
+                    </div>
 
-            {/* Honest guarantees — no impossible security claims */}
+                    {premiumStatus.syncMessage && (
+                        <div style={{
+                            marginTop: '1rem',
+                            borderRadius: 14,
+                            padding: '12px 14px',
+                            background: '#f8fafc',
+                            color: '#334155',
+                            border: '1px solid #e2e8f0',
+                            lineHeight: 1.5,
+                        }}>
+                            {premiumStatus.syncMessage}
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                        gap: 12,
+                        marginBottom: '1rem',
+                    }}>
+                        {PREMIUM_FEATURES.map((feature) => (
+                            <div
+                                key={feature.id}
+                                style={{
+                                    background: '#fff',
+                                    borderRadius: 18,
+                                    padding: '1rem',
+                                    border: '1px solid rgba(15, 23, 42, 0.06)',
+                                    boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)',
+                                }}
+                            >
+                                <div style={{ fontSize: '1.8rem', marginBottom: 6 }}>{feature.icon}</div>
+                                <div style={{ fontFamily: 'var(--font-display)', color: '#1f2937' }}>{feature.name}</div>
+                                <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: 4, lineHeight: 1.5 }}>
+                                    {feature.desc}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div style={{
+                        background: '#fff',
+                        borderRadius: 22,
+                        padding: '1.3rem',
+                        boxShadow: '0 12px 32px rgba(15, 23, 42, 0.08)',
+                        border: '1px solid rgba(79, 70, 229, 0.12)',
+                        marginBottom: '1rem',
+                    }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', color: '#1f2937', marginBottom: 10 }}>
+                            Trial hoặc token kích hoạt
+                        </div>
+                        <div style={{
+                            background: '#f8fafc',
+                            borderRadius: 14,
+                            padding: '12px 14px',
+                            border: '1px solid #e2e8f0',
+                            color: '#475569',
+                            fontSize: '0.88rem',
+                            lineHeight: 1.65,
+                            marginBottom: '1rem',
+                        }}>
+                            Web edition hiện hỗ trợ hai chế độ vận hành:
+                            nếu operator cấu hình entitlement API thì app sẽ ưu tiên server-backed activation;
+                            nếu chưa cấu hình hoặc server lỗi, app mới rơi về signed-token fallback theo runtime policy.
+                        </div>
+
+                        <button
+                            onClick={handleTrial}
+                            style={{
+                                width: '100%',
+                                background: '#eef6ff',
+                                color: '#0b5ed7',
+                                border: '2px dashed #9ec5fe',
+                                borderRadius: 16,
+                                padding: '14px',
+                                fontFamily: 'var(--font-display)',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                marginBottom: '1rem',
+                            }}
+                        >
+                            🎁 Bắt đầu trial 7 ngày
+                        </button>
+
+                        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                            <input
+                                type="text"
+                                placeholder={PREMIUM_TOKEN_PLACEHOLDER}
+                                value={code}
+                                onChange={(event) => setCode(event.target.value)}
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                maxLength={240}
+                                style={{
+                                    flex: '1 1 360px',
+                                    border: '1px solid #cbd5e1',
+                                    borderRadius: 14,
+                                    padding: '14px 16px',
+                                    fontFamily: 'monospace',
+                                    fontSize: '0.9rem',
+                                    letterSpacing: 0.3,
+                                }}
+                            />
+                            <button
+                                onClick={handleUnlock}
+                                style={{
+                                    background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: 14,
+                                    padding: '14px 20px',
+                                    fontFamily: 'var(--font-display)',
+                                    fontWeight: 700,
+                                    cursor: 'pointer',
+                                    whiteSpace: 'nowrap',
+                                }}
+                            >
+                                Kích hoạt
+                            </button>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {feedback && (
+                <div style={{
+                    background: feedback.success ? '#d4edda' : '#f8d7da',
+                    color: feedback.success ? '#155724' : '#842029',
+                    borderRadius: 14,
+                    padding: '12px 14px',
+                    border: `1px solid ${feedback.success ? '#b7e4c7' : '#f1aeb5'}`,
+                    marginBottom: '1rem',
+                }}>
+                    {feedback.message}
+                </div>
+            )}
+
             <div style={{
-                display: 'flex', justifyContent: 'center', gap: '1.5rem',
-                marginTop: '1.5rem', fontSize: '0.8rem', color: '#888',
-                flexWrap: 'wrap',
+                background: '#fff',
+                borderRadius: 18,
+                padding: '1rem 1.1rem',
+                border: '1px solid rgba(15, 23, 42, 0.06)',
+                boxShadow: '0 8px 24px rgba(15, 23, 42, 0.05)',
             }}>
-                <span>📵 Không thu dữ liệu</span>
-                <span>💯 Hoàn tiền 7 ngày</span>
-                <span>❤️ Ủng hộ tác giả</span>
+                <div style={{ fontFamily: 'var(--font-display)', color: '#1f2937', marginBottom: 8 }}>
+                    Vận hành theo chuẩn hiện tại
+                </div>
+                <div style={{ color: '#64748b', fontSize: '0.86rem', lineHeight: 1.7 }}>
+                    Soft paywall chỉ là mô hình local/web fallback. Khi entitlement API được cấu hình và reachable,
+                    web edition sẽ tự chuyển sang server-backed web entitlement và đồng bộ lại trên mỗi lần khởi động theo runtime policy.
+                </div>
             </div>
+        </div>
+    );
+}
 
-            <button onClick={() => navigate(-1)} style={{
-                display: 'block', margin: '1.5rem auto', background: 'none', border: 'none',
-                color: 'var(--color-primary)', fontSize: '0.95rem', cursor: 'pointer',
-                fontFamily: 'var(--font-display)',
-            }}>
-                ← Quay lại
-            </button>
+function MetaCard({ label, value }) {
+    return (
+        <div style={{
+            background: 'rgba(255, 255, 255, 0.72)',
+            borderRadius: 14,
+            border: '1px solid rgba(148, 163, 184, 0.25)',
+            padding: '10px 12px',
+        }}>
+            <div style={{ fontSize: '0.72rem', color: '#64748b', marginBottom: 4 }}>{label}</div>
+            <div style={{ fontFamily: 'var(--font-display)', color: '#0f172a', fontSize: '0.86rem', lineHeight: 1.45 }}>
+                {value}
+            </div>
         </div>
     );
 }

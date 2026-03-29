@@ -1,4 +1,4 @@
-// premiumService.js v3.0 — Signed token activation for LinguaKids web
+// premiumService.js v4.0 — Server-first entitlement sync for LinguaKids web
 // ================================================================
 // SECURITY MODEL: Soft paywall with asymmetric token verification
 // - Premium entitlement is still enforced on the client
@@ -9,6 +9,11 @@
 // - For App Store / Google Play builds, use native billing entitlements
 // ================================================================
 
+import {
+    activateRemoteEntitlement,
+    getPremiumRuntimeStatus,
+    resolveRemoteEntitlement,
+} from './entitlementApiClient.js';
 import {
     base64UrlToBytes,
     decodePremiumPayload,
@@ -23,8 +28,11 @@ export { PREMIUM_TOKEN_PLACEHOLDER };
 
 const STORAGE_KEY = 'linguakids_premium';
 const TRIAL_KEY = 'linguakids_trial';
+const PREMIUM_SYNC_MESSAGE_KEY = 'linguakids_premium_sync_message';
+export const PREMIUM_STATE_CHANGED_EVENT = 'linguakids:premium-state-changed';
 
 let importedPremiumKeyPromise = null;
+let premiumBootPromise = null;
 
 export const FREE_ENGLISH_TOPICS = [
     'alphabet', 'colors', 'numbers', 'animals', 'family',
@@ -67,8 +75,101 @@ function loadPremiumState() {
     }
 }
 
-function savePremiumState(state) {
+function persistPremiumState(state) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function persistPremiumSyncMessage(message) {
+    if (!message) {
+        localStorage.removeItem(PREMIUM_SYNC_MESSAGE_KEY);
+        return;
+    }
+    localStorage.setItem(PREMIUM_SYNC_MESSAGE_KEY, String(message));
+}
+
+function notifyPremiumStateChanged(reason = 'updated') {
+    if (typeof window === 'undefined' || typeof window.dispatchEvent !== 'function') {
+        return;
+    }
+
+    const detail = {
+        reason,
+        status: getPremiumStatus(),
+    };
+
+    const PremiumEvent = typeof CustomEvent === 'function'
+        ? CustomEvent
+        : class PremiumStateChangedEvent extends Event {
+            constructor(name, options = {}) {
+                super(name);
+                this.detail = options.detail;
+            }
+        };
+
+    window.dispatchEvent(new PremiumEvent(PREMIUM_STATE_CHANGED_EVENT, { detail }));
+}
+
+function commitPremiumState(state, syncMessage = null, reason = 'updated') {
+    persistPremiumState(state);
+    persistPremiumSyncMessage(syncMessage);
+    notifyPremiumStateChanged(reason);
+}
+
+function loadPremiumSyncMessage() {
+    return localStorage.getItem(PREMIUM_SYNC_MESSAGE_KEY) || null;
+}
+
+function humanizePremiumMessage(message) {
+    const dictionary = {
+        activation_limit_reached: 'Mã kích hoạt này đã đạt giới hạn thiết bị trên entitlement server.',
+        activation_token_required: 'Vui lòng dán token kích hoạt.',
+        activation_token_format_invalid: 'Token kích hoạt không đúng định dạng.',
+        activation_token_signature_invalid: 'Chữ ký token không hợp lệ.',
+        activation_token_payload_invalid: 'Payload token không hợp lệ.',
+        activation_token_verification_failed: 'Không thể xác thực token trên entitlement server.',
+        entitlement_api_not_configured: 'Entitlement server chưa được cấu hình cho bản web này.',
+        entitlement_request_timeout: 'Entitlement server phản hồi quá chậm.',
+        entitlement_request_failed: 'Không kết nối được entitlement server.',
+        entitlement_not_found: 'Không tìm thấy entitlement trên server.',
+        installation_id_required: 'Thiếu installation id.',
+        installation_mismatch: 'Thiết bị hiện tại không khớp với entitlement session.',
+        installation_not_registered: 'Thiết bị này chưa được entitlement server ghi nhận.',
+        route_not_found: 'API entitlement không đúng route.',
+        session_token_required: 'Thiếu session token.',
+        session_token_format_invalid: 'Session token không đúng định dạng.',
+        session_token_signature_invalid: 'Session token không hợp lệ.',
+        session_token_expired: 'Session entitlement đã hết hạn.',
+        token_audience_invalid: 'Token audience không hợp lệ.',
+        token_expired: 'Mã kích hoạt đã hết hạn.',
+        token_id_missing: 'Token thiếu định danh entitlement.',
+        token_payload_invalid: 'Token payload không hợp lệ.',
+        token_type_invalid: 'Token type không hợp lệ.',
+        token_version_unsupported: 'Token version không được hỗ trợ.',
+    };
+    return dictionary[message] || message || 'Không xác định được trạng thái premium.';
+}
+
+function buildRemotePremiumState(entitlement, runtimeStatus, previousState = null) {
+    return {
+        active: entitlement.active === true,
+        type: entitlement.type || 'lifetime',
+        activatedAt: entitlement.activatedAt || previousState?.activatedAt || new Date().toISOString(),
+        expiresAt: entitlement.expiresAt || null,
+        tokenVersion: entitlement.tokenVersion || previousState?.tokenVersion || null,
+        activationMethod: entitlement.activationMethod || 'remote_entitlement_api',
+        issuedAt: previousState?.issuedAt || null,
+        tokenId: entitlement.tokenId || previousState?.tokenId || null,
+        sourceOfTruth: entitlement.sourceOfTruth || 'server_backed_web_entitlement',
+        entitlementId: entitlement.entitlementId || previousState?.entitlementId || null,
+        installationId: entitlement.installationId || previousState?.installationId || null,
+        sessionToken: entitlement.session?.token || previousState?.sessionToken || null,
+        sessionIssuedAt: entitlement.session?.issuedAt || previousState?.sessionIssuedAt || null,
+        sessionExpiresAt: entitlement.session?.expiresAt || previousState?.sessionExpiresAt || null,
+        entitlementApiBaseUrl: runtimeStatus?.baseUrl || previousState?.entitlementApiBaseUrl || null,
+        serviceMode: entitlement.serviceMode || runtimeStatus?.mode || 'server_backed_web_entitlement',
+        syncState: runtimeStatus?.reachable ? 'fresh' : 'degraded',
+        lastSyncedAt: entitlement.lastSyncedAt || new Date().toISOString(),
+    };
 }
 
 function supportsPremiumTokenVerify() {
@@ -193,6 +294,14 @@ export function getPremiumStatus() {
             expiresAt: null,
             tokenVersion: null,
             activationMethod: null,
+            sourceOfTruth: null,
+            entitlementId: null,
+            installationId: null,
+            sessionExpiresAt: null,
+            serviceMode: null,
+            syncState: null,
+            lastSyncedAt: null,
+            syncMessage: null,
         };
     }
 
@@ -205,6 +314,14 @@ export function getPremiumStatus() {
         expiresAt: state.expiresAt,
         tokenVersion: state.tokenVersion || null,
         activationMethod: state.activationMethod || null,
+        sourceOfTruth: state.sourceOfTruth || null,
+        entitlementId: state.entitlementId || null,
+        installationId: state.installationId || null,
+        sessionExpiresAt: state.sessionExpiresAt || null,
+        serviceMode: state.serviceMode || null,
+        syncState: state.syncState || null,
+        lastSyncedAt: state.lastSyncedAt || null,
+        syncMessage: loadPremiumSyncMessage(),
     };
 }
 
@@ -213,13 +330,38 @@ export async function unlockPremium(token) {
         return { success: false, message: 'Vui lòng dán token kích hoạt' };
     }
 
+    const runtimeStatus = await getPremiumRuntimeStatus();
+    if (runtimeStatus.configured) {
+        const remoteResult = await activateRemoteEntitlement(token);
+        if (remoteResult.success && remoteResult.body?.entitlement) {
+            commitPremiumState(
+                buildRemotePremiumState(remoteResult.body.entitlement, runtimeStatus, loadPremiumState()),
+                'Premium đang đồng bộ theo entitlement server.',
+                'unlock_remote_success'
+            );
+            return {
+                success: true,
+                message: '🎉 Kích hoạt thành công qua entitlement server.',
+                channel: 'remote_entitlement_api',
+            };
+        }
+
+        if (runtimeStatus.allowClientSignedTokenFallback === false) {
+            return {
+                success: false,
+                message: humanizePremiumMessage(remoteResult.message),
+                channel: 'remote_entitlement_api',
+            };
+        }
+    }
+
     const verification = await verifySignedToken(token);
     if (!verification.ok) {
         return { success: false, message: verification.message };
     }
 
     const { payload } = verification;
-    savePremiumState({
+    commitPremiumState({
         active: true,
         type: payload.t === 'trial_token' ? 'trial_token' : 'lifetime',
         activatedAt: new Date().toISOString(),
@@ -228,7 +370,19 @@ export async function unlockPremium(token) {
         activationMethod: 'signed_token',
         issuedAt: normalizeDateFromEpochSeconds(Number(payload.i)),
         tokenId: payload.n || null,
-    });
+        sourceOfTruth: runtimeStatus.configured ? 'client_signed_token_fallback' : 'client_signed_token',
+        entitlementId: null,
+        installationId: null,
+        sessionToken: null,
+        sessionIssuedAt: null,
+        sessionExpiresAt: null,
+        entitlementApiBaseUrl: runtimeStatus.baseUrl || null,
+        serviceMode: runtimeStatus.configured ? 'soft_paywall_with_entitlement_fallback' : 'soft_paywall',
+        syncState: runtimeStatus.configured ? 'degraded' : 'local_only',
+        lastSyncedAt: runtimeStatus.configured ? new Date().toISOString() : null,
+    }, runtimeStatus.configured
+        ? 'Entitlement server chưa sẵn sàng; đang dùng signed-token fallback trên client.'
+        : null, 'unlock_signed_token_success');
 
     return {
         success: true,
@@ -256,28 +410,112 @@ export function startTrial() {
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
-    savePremiumState({
+    commitPremiumState({
         active: true,
         type: 'trial',
         activatedAt: new Date().toISOString(),
         expiresAt: expiresAt.toISOString(),
         tokenVersion: null,
         activationMethod: 'local_trial',
-    });
+        sourceOfTruth: 'local_trial',
+        entitlementId: null,
+        installationId: null,
+        sessionToken: null,
+        sessionIssuedAt: null,
+        sessionExpiresAt: null,
+        entitlementApiBaseUrl: null,
+        serviceMode: 'soft_paywall',
+        syncState: 'local_only',
+        lastSyncedAt: null,
+    }, null, 'trial_started');
     localStorage.setItem(TRIAL_KEY, 'used');
     return { success: true, message: '🎉 Dùng thử 7 ngày đã kích hoạt!' };
 }
 
 export function deactivatePremium() {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PREMIUM_SYNC_MESSAGE_KEY);
+    notifyPremiumStateChanged('deactivated');
+}
+
+export async function syncPremiumEntitlement() {
+    const state = loadPremiumState();
+    if (!state?.sessionToken) {
+        return {
+            success: false,
+            skipped: true,
+            message: 'Không có remote entitlement session để đồng bộ.',
+        };
+    }
+
+    const remoteResult = await resolveRemoteEntitlement(state.sessionToken);
+    if (remoteResult.success && remoteResult.body?.entitlement) {
+        commitPremiumState(
+            buildRemotePremiumState(remoteResult.body.entitlement, remoteResult.runtimeStatus, state),
+            'Premium đã đồng bộ thành công với entitlement server.',
+            'sync_success'
+        );
+        return {
+            success: true,
+            message: 'Premium đã đồng bộ với entitlement server.',
+        };
+    }
+
+    const nextState = {
+        ...state,
+        syncState: remoteResult.networkError ? 'degraded' : 'invalid',
+        lastSyncedAt: new Date().toISOString(),
+    };
+
+    if (!remoteResult.networkError) {
+        nextState.active = false;
+    }
+
+    commitPremiumState(nextState, humanizePremiumMessage(remoteResult.message), 'sync_failed');
+
+    return {
+        success: false,
+        message: humanizePremiumMessage(remoteResult.message),
+    };
+}
+
+export async function inspectPremiumRuntime(options = {}) {
+    const runtimeStatus = await getPremiumRuntimeStatus({
+        force: options.forceRuntime === true,
+    });
+    return {
+        runtimeStatus,
+        premiumStatus: getPremiumStatus(),
+    };
+}
+
+export async function bootstrapPremiumEntitlementSync() {
+    if (!premiumBootPromise) {
+        premiumBootPromise = getPremiumRuntimeStatus()
+            .then((runtimeStatus) => {
+                if (!runtimeStatus.configured || runtimeStatus.syncOnBoot === false) {
+                    return { skipped: true, message: 'Entitlement sync not configured.' };
+                }
+                return syncPremiumEntitlement();
+            })
+            .catch((error) => ({
+                skipped: true,
+                message: error?.message || 'premium_bootstrap_failed',
+            }));
+    }
+
+    return premiumBootPromise;
 }
 
 export default {
+    bootstrapPremiumEntitlementSync,
+    inspectPremiumRuntime,
     isPremium,
     getPremiumStatus,
     unlockPremium,
     isRouteGated,
     startTrial,
+    syncPremiumEntitlement,
     deactivatePremium,
     PREMIUM_FEATURES,
     FREE_ROUTES,
