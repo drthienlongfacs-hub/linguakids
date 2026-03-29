@@ -172,7 +172,7 @@ function WritingExercise({ prompt, onBack, adult }) {
 
                     {grammarResult.matches.map((m, i) => (
                         <div key={i} style={{ marginBottom: '10px', padding: '10px', background: 'rgba(0,0,0,0.15)', borderRadius: '10px', borderLeft: `3px solid ${m.type === 'typographical' ? '#F59E0B' : m.type === 'grammar' ? '#EF4444' : '#818CF8'}` }}>
-                            <p style={{ margin: '0 0 4px', fontSize: '0.85rem', fontWeight: 600, color: '#E2E8F0' }}>{m.message}</p>
+                            <p style={{ margin: '0 0 4px', fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>{m.message}</p>
                             <p style={{ margin: '0 0 4px', fontSize: '0.78rem', color: '#64748B' }}>Category: {m.category}</p>
                             {m.replacements.length > 0 && (
                                 <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '4px' }}>
@@ -188,7 +188,7 @@ function WritingExercise({ prompt, onBack, adult }) {
                     {grammarResult.correctedText !== essay && (
                         <details style={{ marginTop: '12px' }}>
                             <summary style={{ cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, color: '#818CF8' }}>📝 View corrected text</summary>
-                            <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(34,197,94,0.08)', borderRadius: '10px', fontSize: '0.85rem', lineHeight: 1.7, color: '#E2E8F0' }}>
+                            <div style={{ marginTop: '8px', padding: '12px', background: 'rgba(34,197,94,0.08)', borderRadius: '10px', fontSize: '0.85rem', lineHeight: 1.7, color: 'var(--color-text)' }}>
                                 {grammarResult.correctedText}
                             </div>
                         </details>

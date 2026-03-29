@@ -243,7 +243,7 @@ export default function ConversationAI() {
                             maxWidth: '80%', padding: '10px 14px', borderRadius: '16px',
                             background: msg.role === 'user'
                                 ? 'linear-gradient(135deg, #6366F1, #818CF8)'
-                                : 'rgba(255,255,255,0.08)',
+                                : 'var(--color-container-bg)',
                             color: msg.role === 'user' ? '#fff' : 'var(--color-text)',
                             fontSize: '0.88rem', lineHeight: 1.6,
                             borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
@@ -257,7 +257,7 @@ export default function ConversationAI() {
                     <div style={{ display: 'flex', marginBottom: '10px' }}>
                         <div style={{
                             padding: '10px 18px', borderRadius: '16px', borderBottomLeftRadius: '4px',
-                            background: 'rgba(255,255,255,0.08)', fontSize: '0.88rem',
+                            background: 'var(--color-container-bg)', fontSize: '0.88rem',
                         }}>
                             <span className="typing-dots">
                                 <span style={{ animationDelay: '0s' }}>•</span>
@@ -283,15 +283,15 @@ export default function ConversationAI() {
                     placeholder={adult ? "Type your response..." : "Nhập câu trả lời..."}
                     style={{
                         flex: 1, padding: '10px 16px', borderRadius: '12px',
-                        border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)',
-                        color: 'var(--color-text)', fontSize: '0.9rem', outline: 'none',
+                        border: '1px solid var(--color-input-border)', background: 'var(--color-input-bg)',
+                        color: 'var(--color-input-text)', fontSize: '0.9rem', outline: 'none',
                     }}
                 />
                 <button onClick={sendMessage}
                     disabled={!input.trim()}
                     style={{
                         padding: '10px 18px', borderRadius: '12px', border: 'none',
-                        background: input.trim() ? 'var(--color-primary)' : 'rgba(255,255,255,0.05)',
+                        background: input.trim() ? 'var(--color-primary)' : 'var(--color-input-bg)',
                         color: '#fff', fontSize: '1rem', cursor: input.trim() ? 'pointer' : 'default',
                         transition: 'all 0.2s',
                     }}>

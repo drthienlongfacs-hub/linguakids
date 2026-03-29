@@ -263,9 +263,9 @@ export default function SpeakingPractice({
     // Render
     // ============================================================
     return (
-        <div style={{ padding: '16px', background: 'rgba(30,41,59,0.6)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '12px' }}>
+        <div style={{ padding: '16px', background: 'var(--color-container-bg)', borderRadius: '16px', border: '2px solid var(--color-input-border)', marginBottom: '12px', boxShadow: 'var(--color-container-shadow)' }}>
             {/* Question */}
-            <p style={{ fontWeight: 600, fontSize: '0.95rem', color: '#F1F5F9', margin: '0 0 12px', lineHeight: 1.6 }}>
+            <p style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text)', margin: '0 0 12px', lineHeight: 1.6 }}>
                 Q: {question}
             </p>
 
@@ -280,7 +280,7 @@ export default function SpeakingPractice({
             {phase === 'prep' && (
                 <div style={{ textAlign: 'center', padding: '20px' }}>
                     <div style={{ fontSize: '3rem', marginBottom: '8px' }}>📝</div>
-                    <p style={{ color: '#E2E8F0', fontSize: '0.9rem', marginBottom: '8px' }}>Preparation Time</p>
+                    <p style={{ color: 'var(--color-text)', fontSize: '0.9rem', marginBottom: '8px' }}>Preparation Time</p>
                     <div style={{
                         fontSize: '2.5rem', fontWeight: 700, color: timer <= 10 ? '#FB7185' : '#818CF8',
                         fontFamily: 'monospace', transition: 'color 0.3s',
@@ -309,7 +309,7 @@ export default function SpeakingPractice({
                         }}>
                         🎤
                     </button>
-                    <p style={{ color: '#E2E8F0', fontSize: '0.85rem', marginTop: '12px' }}>
+                    <p style={{ color: 'var(--color-text)', fontSize: '0.85rem', marginTop: '12px' }}>
                         Tap to start recording your answer
                     </p>
                     {modelAnswer && (
@@ -352,9 +352,9 @@ export default function SpeakingPractice({
                         <div style={{
                             background: 'rgba(15,23,42,0.7)', borderRadius: '10px', padding: '12px',
                             textAlign: 'left', marginBottom: '12px', fontSize: '0.85rem', lineHeight: 1.7,
-                            border: '1px solid rgba(255,255,255,0.05)', minHeight: '60px',
+                            border: '1px solid var(--color-input-border)', minHeight: '60px',
                         }}>
-                            <span style={{ color: '#E2E8F0' }}>{transcript}</span>
+                            <span style={{ color: 'var(--color-text)' }}>{transcript}</span>
                             <span style={{ color: '#64748B', fontStyle: 'italic' }}>{interimTranscript}</span>
                         </div>
                     )}
@@ -469,7 +469,7 @@ export default function SpeakingPractice({
                     {/* Your transcript */}
                     <div style={{ marginBottom: '16px' }}>
                         <p style={{ fontSize: '0.8rem', color: '#94A3B8', marginBottom: '4px' }}>Your Answer:</p>
-                        <div style={{ background: 'rgba(15,23,42,0.6)', borderRadius: '10px', padding: '12px', fontSize: '0.85rem', color: '#E2E8F0', lineHeight: 1.7 }}>
+                        <div style={{ background: 'var(--color-transcript-bg)', borderRadius: '10px', padding: '12px', fontSize: '0.85rem', color: 'var(--color-transcript-text)', lineHeight: 1.7 }}>
                             {results.transcript || <span style={{ color: '#64748B', fontStyle: 'italic' }}>No speech detected</span>}
                         </div>
                     </div>
@@ -490,7 +490,7 @@ export default function SpeakingPractice({
                             </button>
                         )}
                         <button onClick={reset}
-                            style={{ padding: '8px 16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#CBD5E1', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 500 }}>
+                            style={{ padding: '8px 16px', borderRadius: '10px', border: '2px solid var(--color-input-border)', background: 'var(--color-option-bg)', color: 'var(--color-option-text)', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 500 }}>
                             🔄 Try Again
                         </button>
                     </div>

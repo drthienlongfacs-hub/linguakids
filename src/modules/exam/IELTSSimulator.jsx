@@ -324,7 +324,7 @@ export default function IELTSSimulator() {
             </p>
             {IELTS_SPEAKING.part1.map((set, idx) => (
                 <details key={idx} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>💬 {set.topic}</summary>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: 'var(--color-text)', fontSize: '0.95rem' }}>💬 {set.topic}</summary>
                     <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {set.questions.map((q, qIdx) => (
                             <SpeakingPractice
@@ -346,10 +346,10 @@ export default function IELTSSimulator() {
             </p>
             {IELTS_SPEAKING.part2.map(card => (
                 <details key={card.id} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>🃏 {card.cueCard}</summary>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: 'var(--color-text)', fontSize: '0.95rem' }}>🃏 {card.cueCard}</summary>
                     <div style={{ background: 'rgba(251,191,36,0.08)', padding: '12px', borderRadius: '10px', margin: '12px 0', border: '1px solid rgba(251,191,36,0.2)' }}>
                         <p style={{ margin: '0 0 6px', fontWeight: 600, fontSize: '0.85rem', color: '#FCD34D' }}>You should say:</p>
-                        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.82rem', color: '#E2E8F0' }}>
+                        <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '0.82rem', color: 'var(--color-text)' }}>
                             {card.points.map((p, i) => <li key={i} style={{ marginBottom: '4px' }}>{p}</li>)}
                         </ul>
                     </div>
@@ -370,7 +370,7 @@ export default function IELTSSimulator() {
             </p>
             {IELTS_SPEAKING.part3.map((set, idx) => (
                 <details key={idx} style={{ marginBottom: '12px', background: 'rgba(30,41,59,0.7)', borderRadius: '14px', padding: '16px', border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: '#E2E8F0', fontSize: '0.95rem' }}>🧠 {set.topic}</summary>
+                    <summary style={{ cursor: 'pointer', fontWeight: 600, color: 'var(--color-text)', fontSize: '0.95rem' }}>🧠 {set.topic}</summary>
                     <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {set.questions.map((q, qIdx) => (
                             <SpeakingPractice
