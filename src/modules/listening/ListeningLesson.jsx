@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LISTENING_LESSONS } from '../../data/listening';
 import ListeningPlayer from './ListeningPlayer';
 import DictationExercise from './DictationExercise';
 import ListeningQuiz from './ListeningQuiz';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
+import { loadAudioManifest } from '../../services/audioManifestService';
 
 // Full Listening Lesson experience: 3 tabs — Listen, Dictation, Quiz
 export default function ListeningLesson() {
@@ -12,6 +15,21 @@ export default function ListeningLesson() {
     const lesson = LISTENING_LESSONS.find(l => l.id === lessonId);
     const [activeTab, setActiveTab] = useState('listen');
     const [completedTabs, setCompletedTabs] = useState([]);
+    const [audioManifest, setAudioManifest] = useState(null);
+    const { capabilities } = useDeviceCapabilities();
+
+    useEffect(() => {
+        let cancelled = false;
+        loadAudioManifest('en', lessonId).then((manifest) => {
+            if (!cancelled) {
+                setAudioManifest(manifest);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [lessonId]);
 
     if (!lesson) {
         return (
@@ -74,8 +92,19 @@ export default function ListeningLesson() {
                             <h3>🎧 Bước 1: Nghe bài</h3>
                             <p>Nghe toàn bộ bài, dùng transcript nếu cần. Thử tắt transcript sau khi nghe quen.</p>
                         </div>
+                        <CapabilityNotice
+                            icon="🎛️"
+                            title="Nguồn âm thanh bài nghe"
+                            badge={audioManifest ? 'Controlled audio' : 'Browser TTS'}
+                            tone={audioManifest ? 'success' : capabilities.ttsSupported ? 'warn' : 'warn'}
+                            summary={audioManifest
+                                ? 'Lesson này đang ưu tiên audio asset kiểm soát để giảm lệ thuộc vào giọng của browser.'
+                                : 'Lesson này hiện chưa có audio pack riêng, nên đang phát bằng TTS của browser. Nội dung nghe và transcript vẫn là dữ liệu thật.'}
+                            compact
+                        />
                         <ListeningPlayer
                             segments={lesson.segments}
+                            audioManifest={audioManifest}
                             onSegmentChange={() => { }}
                         />
                         <button

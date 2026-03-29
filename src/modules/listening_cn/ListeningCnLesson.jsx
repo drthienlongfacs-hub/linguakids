@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { LISTENING_CN_LESSONS } from '../../data/listening_cn';
 import ListeningPlayer from '../listening/ListeningPlayer';
 import DictationExercise from '../listening/DictationExercise';
 import ListeningQuiz from '../listening/ListeningQuiz';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
+import { loadAudioManifest } from '../../services/audioManifestService';
 
 export default function ListeningCnLesson() {
     const { lessonId } = useParams();
@@ -11,6 +14,21 @@ export default function ListeningCnLesson() {
     const lesson = LISTENING_CN_LESSONS.find(item => item.id === lessonId);
     const [activeTab, setActiveTab] = useState('listen');
     const [completedTabs, setCompletedTabs] = useState([]);
+    const [audioManifest, setAudioManifest] = useState(null);
+    const { capabilities } = useDeviceCapabilities();
+
+    useEffect(() => {
+        let cancelled = false;
+        loadAudioManifest('zh', lessonId).then((manifest) => {
+            if (!cancelled) {
+                setAudioManifest(manifest);
+            }
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [lessonId]);
 
     if (!lesson) {
         return (
@@ -70,10 +88,21 @@ export default function ListeningCnLesson() {
                             <h3>🎧 Bước 1: Nghe bài</h3>
                             <p>Nghe với pinyin trước, sau đó tắt pinyin để tăng khả năng xử lý tiếng Trung thật.</p>
                         </div>
+                        <CapabilityNotice
+                            icon="🎛️"
+                            title="Nguồn âm thanh bài nghe"
+                            badge={audioManifest ? 'Controlled audio' : 'Browser TTS'}
+                            tone={audioManifest ? 'success' : capabilities.ttsSupported ? 'warn' : 'warn'}
+                            summary={audioManifest
+                                ? 'Lesson này đang ưu tiên audio asset kiểm soát để chất lượng phát ổn định hơn giữa các thiết bị.'
+                                : 'Lesson này hiện chưa có audio pack riêng, nên đang phát bằng TTS của browser. Pinyin, transcript và quiz vẫn là dữ liệu thật.'}
+                            compact
+                        />
                         <ListeningPlayer
                             segments={lesson.segments}
                             langCode="zh-CN"
                             showPinyin
+                            audioManifest={audioManifest}
                             onSegmentChange={() => {}}
                         />
                         <button

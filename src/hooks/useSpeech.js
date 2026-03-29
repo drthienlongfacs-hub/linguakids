@@ -3,6 +3,7 @@
 // v3: Enhanced recognition with confidence + N-best alternatives
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { checkWordPronunciation } from '../utils/pronunciationEngine';
+import { recordCapabilityEvent } from '../services/capabilityService';
 
 // Voice preference lists — best quality first
 const VOICE_PREFERENCES = {
@@ -88,7 +89,7 @@ export function useSpeech() {
     // =============================================
     // FIX RC-3: Proper Speech Queue
     // =============================================
-    const processQueue = useCallback(() => {
+    const processQueue = useCallback(function processQueueImpl() {
         if (processingRef.current) return;
         if (queueRef.current.length === 0) {
             setIsSpeaking(false);
@@ -134,7 +135,7 @@ export function useSpeech() {
             processingRef.current = false;
             if (onDone) onDone();
             // Process next in queue after a small gap
-            setTimeout(() => processQueue(), 150);
+            setTimeout(() => processQueueImpl(), 150);
         };
 
         utterance.onerror = (e) => {
@@ -142,7 +143,7 @@ export function useSpeech() {
             clearInterval(resumeTimerRef.current);
             processingRef.current = false;
             // Still try next in queue
-            setTimeout(() => processQueue(), 200);
+            setTimeout(() => processQueueImpl(), 200);
         };
 
         // FIX RC-1: iOS Safari needs delay after cancel
@@ -152,7 +153,7 @@ export function useSpeech() {
             } catch (e) {
                 console.warn('TTS speak failed:', e);
                 processingRef.current = false;
-                processQueue();
+                processQueueImpl();
             }
         }, 80);
     }, [voices]);
@@ -173,6 +174,11 @@ export function useSpeech() {
             rate,
             pitch: options.pitch || 1.05,
             onDone: options.onDone,
+        });
+
+        recordCapabilityEvent('speech_output_enqueued', {
+            lang,
+            chars: text.length,
         });
 
         processQueue();
@@ -221,10 +227,20 @@ export function useSpeech() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             speechSupported.current = false;
+            recordCapabilityEvent('speech_input_fallback_triggered', {
+                lang,
+                reason: 'speech_recognition_unavailable',
+                source: 'useSpeech',
+            });
             const input = prompt('🎤 Nhập câu con muốn nói (mic không khả dụng):');
             if (input && onResult) {
                 setTranscript(input.toLowerCase().trim());
                 onResult([input.toLowerCase().trim()]);
+                recordCapabilityEvent('speech_input_manual_submitted', {
+                    lang,
+                    chars: input.trim().length,
+                    source: 'useSpeech',
+                });
             }
             return;
         }
@@ -239,16 +255,37 @@ export function useSpeech() {
             recognition.interimResults = false;
             recognition.maxAlternatives = 5;
 
-            recognition.onstart = () => setIsListening(true);
+            recognition.onstart = () => {
+                setIsListening(true);
+                recordCapabilityEvent('speech_input_started', {
+                    lang,
+                    source: 'useSpeech',
+                });
+            };
 
             recognition.onerror = (e) => {
                 console.warn('Recognition error:', e.error);
                 setIsListening(false);
+                recordCapabilityEvent('speech_input_error', {
+                    lang,
+                    error: e.error,
+                    source: 'useSpeech',
+                });
                 if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'audio-capture') {
+                    recordCapabilityEvent('speech_input_fallback_triggered', {
+                        lang,
+                        error: e.error,
+                        source: 'useSpeech',
+                    });
                     const input = prompt('🎤 Mic không khả dụng. Nhập câu con muốn nói:');
                     if (input && onResult) {
                         setTranscript(input.toLowerCase().trim());
                         onResult([input.toLowerCase().trim()]);
+                        recordCapabilityEvent('speech_input_manual_submitted', {
+                            lang,
+                            chars: input.trim().length,
+                            source: 'useSpeech',
+                        });
                     }
                 }
             };
@@ -264,11 +301,16 @@ export function useSpeech() {
                 }
                 setTranscript(results[0]?.text || '');
                 if (onResult) onResult(results);
+                recordCapabilityEvent('speech_input_result', {
+                    lang,
+                    alternatives: results.length,
+                    source: 'useSpeech',
+                });
             };
 
             // Auto-stop after 8 seconds
             const timeout = setTimeout(() => {
-                try { recognition.stop(); } catch (_err) { /* ignore */ }
+                try { recognition.stop(); } catch { /* ignore */ }
                 setIsListening(false);
             }, 8000);
 
@@ -282,10 +324,20 @@ export function useSpeech() {
         } catch (e) {
             console.warn('Failed to start recognition:', e);
             setIsListening(false);
+            recordCapabilityEvent('speech_input_fallback_triggered', {
+                lang,
+                reason: 'start_failed',
+                source: 'useSpeech',
+            });
             const input = prompt('🎤 Nhập câu con muốn nói:');
             if (input && onResult) {
                 setTranscript(input.toLowerCase().trim());
                 onResult([input.toLowerCase().trim()]);
+                recordCapabilityEvent('speech_input_manual_submitted', {
+                    lang,
+                    chars: input.trim().length,
+                    source: 'useSpeech',
+                });
             }
         }
     }, [stopSpeaking]);

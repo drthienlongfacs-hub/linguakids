@@ -1,6 +1,10 @@
 // SpeakingExercise.jsx — Extracted to fix React hooks violation
 // (Previously inline in SpeakingHub, hooks were called after conditional return)
 import { useState, useRef, useCallback, useEffect } from 'react';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import ManualTranscriptFallback from '../../components/ManualTranscriptFallback';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
+import { recordCapabilityEvent } from '../../services/capabilityService';
 
 export default function SpeakingExercise({ lesson, onBack, adult }) {
     const [currentIdx, setCurrentIdx] = useState(0);
@@ -13,10 +17,13 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [prepPhase, setPrepPhase] = useState(lesson.prepTime > 0);
     const [prepTimer, setPrepTimer] = useState(lesson.prepTime || 0);
+    const [manualTranscript, setManualTranscript] = useState('');
+    const [manualPrompt, setManualPrompt] = useState('');
     const recognitionRef = useRef(null);
     const timeoutRef = useRef(null);
     const prepTimerRef = useRef(null);
     const voicesRef = useRef([]);
+    const { readiness } = useDeviceCapabilities();
 
     const items = lesson.type === 'ielts_speaking'
         ? (lesson.questions || [{ question: lesson.cueCard?.topic || '' }])
@@ -88,15 +95,15 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
     }, [current, isChinese]);
 
     const requestTypedFallback = useCallback((message) => {
-        const typed = prompt(message);
-        if (typed && typed.trim()) {
-            setRecState('processing');
-            scoreTranscript(typed.trim());
-            return;
-        }
-
-        setRecState('idle');
-    }, [scoreTranscript]);
+        setManualPrompt(message);
+        setManualTranscript('');
+        setRecState('manual');
+        recordCapabilityEvent('speech_input_fallback_triggered', {
+            module: 'SpeakingExercise',
+            lessonId: lesson.id,
+            lang: langCode,
+        });
+    }, [langCode, lesson.id]);
 
     const speakText = useCallback((text) => {
         window.speechSynthesis.cancel();
@@ -141,6 +148,11 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         rec.interimResults = true;
         rec.continuous = true;
         rec.maxAlternatives = 3;
+        recordCapabilityEvent('speech_input_started', {
+            module: 'SpeakingExercise',
+            lessonId: lesson.id,
+            lang: langCode,
+        });
 
         let fullTranscript = '';
 
@@ -169,6 +181,12 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
                     : 'Không truy cập được micro. Hãy nhập câu con vừa nói để tiếp tục chấm điểm:');
                 return;
             }
+            recordCapabilityEvent('speech_input_error', {
+                module: 'SpeakingExercise',
+                lessonId: lesson.id,
+                lang: langCode,
+                error: e.error,
+            });
             setRecState('error');
             const msgs = {
                 'not-allowed': adult ? 'Microphone blocked. Check settings.' : 'Micro bị chặn!',
@@ -183,6 +201,12 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             clearTimeout(timeoutRef.current);
             if (fullTranscript) {
                 setRecState('processing');
+                recordCapabilityEvent('speech_input_result', {
+                    module: 'SpeakingExercise',
+                    lessonId: lesson.id,
+                    lang: langCode,
+                    chars: fullTranscript.trim().length,
+                });
                 scoreTranscript(fullTranscript);
             } else {
                 setRecState('error');
@@ -199,7 +223,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
             setRecState('error');
             setErrorMsg(adult ? 'Failed to start. Try again.' : 'Không bắt đầu được. Thử lại!');
         }
-    }, [adult, requestTypedFallback, scoreTranscript, langCode]);
+    }, [adult, requestTypedFallback, scoreTranscript, langCode, lesson.id]);
 
     const stopRecording = useCallback(() => {
         clearTimeout(timeoutRef.current);
@@ -224,6 +248,24 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         setShowResult(false);
     };
 
+    const submitManualTranscript = () => {
+        if (!manualTranscript.trim()) return;
+        setRecState('processing');
+        recordCapabilityEvent('speech_input_manual_submitted', {
+            module: 'SpeakingExercise',
+            lessonId: lesson.id,
+            lang: langCode,
+            chars: manualTranscript.trim().length,
+        });
+        scoreTranscript(manualTranscript.trim());
+    };
+
+    const cancelManualTranscript = () => {
+        setManualPrompt('');
+        setManualTranscript('');
+        setRecState('idle');
+    };
+
     const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
 
     const statusConfig = {
@@ -232,6 +274,7 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
         listening: { label: adult ? '🔴 Listening... Speak now!' : '🔴 Đang nghe... Nói đi!', color: '#EF4444' },
         processing: { label: adult ? 'Processing...' : 'Đang xử lý...', color: '#6366F1' },
         done: { label: adult ? 'Result ready' : 'Có kết quả', color: '#10B981' },
+        manual: { label: adult ? 'Manual transcript mode' : 'Chế độ nhập câu thủ công', color: '#B45309' },
         error: { label: errorMsg || 'Error', color: '#EF4444' },
     };
     const status = statusConfig[recState];
@@ -279,6 +322,14 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
 
             {/* Current sentence/question */}
             <div className="sp-sentence-card">
+                <CapabilityNotice
+                    icon="🎙️"
+                    title={adult ? 'Speech capture mode' : 'Chế độ nhận diện giọng nói'}
+                    badge={readiness.speechInput.badge}
+                    tone={readiness.speechInput.status === 'supported' ? 'success' : 'warn'}
+                    summary={readiness.speechInput.summary}
+                    compact
+                />
                 <p className="sp-sentence-text">{current?.text || current?.question}</p>
                 {current?.textVi && <p className="sp-sentence-vi">🇻🇳 {current.textVi}</p>}
                 {current?.pinyin && <p style={{ color: '#8B5CF6', fontSize: '0.9rem', margin: '4px 0' }}>{current.pinyin}</p>}
@@ -349,6 +400,22 @@ export default function SpeakingExercise({ lesson, onBack, adult }) {
                             🔄 {adult ? 'Try Again' : 'Thử lại'}
                         </button>
                     </div>
+                )}
+
+                {recState === 'manual' && (
+                    <ManualTranscriptFallback
+                        title={adult ? 'Manual transcript fallback' : 'Nhập câu để tiếp tục chấm điểm'}
+                        description={manualPrompt || (adult
+                            ? 'Speech capture is unavailable on this device. Type what you said to keep practicing.'
+                            : 'Thiết bị chưa thu giọng nói ổn định. Hãy nhập câu vừa nói để vẫn tiếp tục chấm điểm.')}
+                        value={manualTranscript}
+                        onChange={setManualTranscript}
+                        onSubmit={submitManualTranscript}
+                        onCancel={cancelManualTranscript}
+                        placeholder={adult ? 'Type your response here...' : 'Nhập câu vừa nói ở đây...'}
+                        submitLabel={adult ? 'Score This Attempt' : 'Chấm lần nói này'}
+                        cancelLabel={adult ? 'Cancel' : 'Hủy'}
+                    />
                 )}
 
                 {showResult && (

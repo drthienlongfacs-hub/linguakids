@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from 'react'; // useEffect used for cleanup
+import { useState, useRef, useEffect, useCallback } from 'react'; // useEffect used for cleanup
+import { recordCapabilityEvent } from '../../services/capabilityService';
 
 // Custom audio player with speed control, transcript sync, A/B loop
 export default function ListeningPlayer({
@@ -6,6 +7,7 @@ export default function ListeningPlayer({
     onSegmentChange,
     langCode = 'en-US',
     showPinyin = false,
+    audioManifest = null,
 }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
@@ -20,12 +22,91 @@ export default function ListeningPlayer({
     const utteranceRef = useRef(null);
     const timerRef = useRef(null);
     const segmentIndexRef = useRef(0);
+    const audioRef = useRef(null);
 
     const speeds = [0.5, 0.75, 1, 1.25, 1.5, 2];
+    const controlledSegments = audioManifest?.segments || {};
+    const hasControlledAudio = Object.keys(controlledSegments).length > 0;
 
     const totalDuration = segments.length > 0
         ? segments[segments.length - 1].endTime
         : 0;
+
+    const stopPlaybackState = useCallback(() => {
+        window.speechSynthesis.cancel();
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+            audioRef.current = null;
+        }
+        clearInterval(timerRef.current);
+        setIsPlaying(false);
+    }, []);
+
+    function playControlledSegment(index) {
+        if (index >= segments.length) {
+            setIsPlaying(false);
+            setCurrentTime(0);
+            segmentIndexRef.current = 0;
+            return;
+        }
+
+        const seg = segments[index];
+        const source = controlledSegments[String(seg.id)];
+        if (!source) {
+            speakSegment(index);
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+        const audio = new Audio(source);
+        audioRef.current = audio;
+        audio.playbackRate = speed;
+        setActiveSegmentId(seg.id);
+        setCurrentTime(seg.startTime);
+        setCurrentSegmentIndex(index);
+        onSegmentChange?.(seg.id);
+        recordCapabilityEvent('listening_playback_started', {
+            source: 'controlled_audio',
+            lang: langCode,
+            segmentId: seg.id,
+        });
+
+        audio.ontimeupdate = () => {
+            const duration = audio.duration || 0;
+            if (duration > 0) {
+                const progress = Math.min(audio.currentTime / duration, 1);
+                setCurrentTime(seg.startTime + progress * (seg.endTime - seg.startTime));
+            }
+        };
+
+        audio.onended = () => {
+            if (loopSegment === index) {
+                playControlledSegment(index);
+            } else {
+                segmentIndexRef.current = index + 1;
+                playSegment(index + 1);
+            }
+        };
+
+        audio.onerror = () => {
+            recordCapabilityEvent('listening_playback_error', {
+                source: 'controlled_audio',
+                lang: langCode,
+                segmentId: seg.id,
+            });
+            speakSegment(index);
+        };
+
+        audio.play().catch(() => {
+            recordCapabilityEvent('listening_playback_error', {
+                source: 'controlled_audio',
+                lang: langCode,
+                segmentId: seg.id,
+            });
+            speakSegment(index);
+        });
+    }
 
     // Simulate playback using SpeechSynthesis
     function speakSegment(index) {
@@ -37,11 +118,21 @@ export default function ListeningPlayer({
         }
 
         window.speechSynthesis.cancel();
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = '';
+            audioRef.current = null;
+        }
         const seg = segments[index];
         setActiveSegmentId(seg.id);
         setCurrentTime(seg.startTime);
         setCurrentSegmentIndex(index);
         onSegmentChange?.(seg.id);
+        recordCapabilityEvent('listening_playback_started', {
+            source: 'browser_tts',
+            lang: langCode,
+            segmentId: seg.id,
+        });
 
         const utterance = new SpeechSynthesisUtterance(seg.text);
         utterance.lang = langCode;
@@ -71,11 +162,19 @@ export default function ListeningPlayer({
 
         utterance.onend = () => {
             if (loopSegment === index) {
-                speakSegment(index); // loop same segment
+                playSegment(index);
             } else {
                 segmentIndexRef.current = index + 1;
-                speakSegment(index + 1);
+                playSegment(index + 1);
             }
+        };
+        utterance.onerror = () => {
+            recordCapabilityEvent('listening_playback_error', {
+                source: 'browser_tts',
+                lang: langCode,
+                segmentId: seg.id,
+            });
+            setIsPlaying(false);
         };
 
         utteranceRef.current = utterance;
@@ -92,29 +191,35 @@ export default function ListeningPlayer({
         }, 100);
     }
 
+    function playSegment(index) {
+        if (controlledSegments[String(segments[index]?.id)]) {
+            playControlledSegment(index);
+            return;
+        }
+        speakSegment(index);
+    }
+
     const handlePlay = () => {
         if (isPlaying) {
-            window.speechSynthesis.cancel();
-            clearInterval(timerRef.current);
-            setIsPlaying(false);
+            stopPlaybackState();
         } else {
             setIsPlaying(true);
-            speakSegment(segmentIndexRef.current);
+            playSegment(segmentIndexRef.current);
         }
     };
 
     const handleSegmentClick = (index) => {
-        window.speechSynthesis.cancel();
-        clearInterval(timerRef.current);
-            segmentIndexRef.current = index;
-            if (isPlaying) {
-                speakSegment(index);
-            } else {
-                setActiveSegmentId(segments[index].id);
-                setCurrentTime(segments[index].startTime);
-                setCurrentSegmentIndex(index);
-            }
-        };
+        stopPlaybackState();
+        segmentIndexRef.current = index;
+        if (isPlaying) {
+            setIsPlaying(true);
+            playSegment(index);
+        } else {
+            setActiveSegmentId(segments[index].id);
+            setCurrentTime(segments[index].startTime);
+            setCurrentSegmentIndex(index);
+        }
+    };
 
     const handleSpeedChange = () => {
         const idx = speeds.indexOf(speed);
@@ -130,10 +235,9 @@ export default function ListeningPlayer({
         // Load voices
         window.speechSynthesis.getVoices();
         return () => {
-            window.speechSynthesis.cancel();
-            clearInterval(timerRef.current);
+            stopPlaybackState();
         };
-    }, []);
+    }, [stopPlaybackState]);
 
     const progressPercent = totalDuration > 0 ? (currentTime / totalDuration) * 100 : 0;
 
@@ -179,6 +283,23 @@ export default function ListeningPlayer({
                 <button className="lp-speed-btn" onClick={handleSpeedChange}>
                     {speed}x
                 </button>
+            </div>
+
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                gap: '8px',
+                marginBottom: '10px',
+                fontSize: '0.72rem',
+                color: 'var(--color-text-light)',
+            }}>
+                <span>
+                    Source: {hasControlledAudio ? 'Controlled audio pack' : 'Browser TTS'}
+                </span>
+                <span>
+                    {hasControlledAudio ? 'Consistent cross-device playback' : 'Quality depends on browser voice'}
+                </span>
             </div>
 
             {/* Toggle buttons */}

@@ -5,6 +5,10 @@
 // Supports: English (en-US) and Chinese Mandarin (zh-CN)
 
 import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import ManualTranscriptFallback from '../../components/ManualTranscriptFallback';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
+import { recordCapabilityEvent } from '../../services/capabilityService';
 
 // ============================================================
 // Levenshtein distance for word-level similarity scoring
@@ -116,6 +120,9 @@ export default function ShadowingEngine({
     const [error, setError] = useState('');
     const [waveAmplitude, setWaveAmplitude] = useState(0);
     const [revealIdx, setRevealIdx] = useState(-1); // slow-reveal word index
+    const [manualTranscript, setManualTranscript] = useState('');
+    const [manualPrompt, setManualPrompt] = useState('');
+    const { readiness } = useDeviceCapabilities();
 
     const recRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -223,16 +230,16 @@ export default function ShadowingEngine({
     }, [text, lang, bestScore]);
 
     const requestTypedFallback = useCallback((message) => {
-        const typed = prompt(message);
-        if (typed && typed.trim()) {
-            stopWaveform();
-            applyTranscript(typed.trim());
-            return true;
-        }
-
-        setState('idle');
-        return false;
-    }, [applyTranscript, stopWaveform]);
+        stopWaveform();
+        setManualPrompt(message);
+        setManualTranscript('');
+        setState('manual');
+        recordCapabilityEvent('speech_input_fallback_triggered', {
+            module: 'ShadowingEngine',
+            lang,
+        });
+        return true;
+    }, [lang, stopWaveform]);
 
     // ====== Speech Recognition ======
     const startRecording = useCallback(async () => {
@@ -260,6 +267,10 @@ export default function ShadowingEngine({
         rec.interimResults = true;
         rec.continuous = true;
         rec.maxAlternatives = 3;
+        recordCapabilityEvent('speech_input_started', {
+            module: 'ShadowingEngine',
+            lang,
+        });
 
         let fullTranscript = '';
 
@@ -293,6 +304,11 @@ export default function ShadowingEngine({
                     return;
                 }
 
+                recordCapabilityEvent('speech_input_error', {
+                    module: 'ShadowingEngine',
+                    lang,
+                    error: e.error,
+                });
                 const msgs = {
                     'no-speech': 'Không nghe thấy giọng nói. Hãy thử lại hoặc nhập câu bằng tay.',
                     'network': 'Lỗi mạng khi nhận diện. Hãy thử lại hoặc nhập câu bằng tay.',
@@ -307,6 +323,11 @@ export default function ShadowingEngine({
             stopWaveform();
 
             if (fullTranscript) {
+                recordCapabilityEvent('speech_input_result', {
+                    module: 'ShadowingEngine',
+                    lang,
+                    chars: fullTranscript.trim().length,
+                });
                 applyTranscript(fullTranscript);
             } else if (state === 'recording') {
                 setError('No speech detected. Speak clearly!');
@@ -332,6 +353,22 @@ export default function ShadowingEngine({
     // ====== Grade emoji ======
     const gradeEmoji = accuracy >= 90 ? '🌟' : accuracy >= 75 ? '👍' : accuracy >= 50 ? '💪' : '🔄';
     const gradeLabel = accuracy >= 90 ? 'Excellent!' : accuracy >= 75 ? 'Good job!' : accuracy >= 50 ? 'Not bad!' : 'Try again!';
+    const submitManualTranscript = () => {
+        if (!manualTranscript.trim()) return;
+        setState('processing');
+        recordCapabilityEvent('speech_input_manual_submitted', {
+            module: 'ShadowingEngine',
+            lang,
+            chars: manualTranscript.trim().length,
+        });
+        applyTranscript(manualTranscript.trim());
+    };
+
+    const cancelManualTranscript = () => {
+        setManualPrompt('');
+        setManualTranscript('');
+        setState('idle');
+    };
 
     return (
         <div style={{ maxWidth: '480px', margin: '0 auto' }}>
@@ -356,20 +393,14 @@ export default function ShadowingEngine({
             </div>
 
             {/* ===== Speed Control ===== */}
-            {!(window.SpeechRecognition || window.webkitSpeechRecognition) && (
-                <div style={{
-                    padding: '10px 14px',
-                    borderRadius: '12px',
-                    marginBottom: '12px',
-                    background: 'rgba(245,158,11,0.12)',
-                    border: '1px solid rgba(245,158,11,0.25)',
-                    color: '#B45309',
-                    fontSize: '0.8rem',
-                    textAlign: 'center',
-                }}>
-                    Thiết bị hiện không hỗ trợ nhận diện giọng nói trực tiếp. Nút ghi âm sẽ chuyển sang chế độ nhập câu để vẫn chấm được bài.
-                </div>
-            )}
+            <CapabilityNotice
+                icon="🎙️"
+                title="Speech capture mode"
+                badge={readiness.speechInput.badge}
+                tone={readiness.speechInput.status === 'supported' ? 'success' : 'warn'}
+                summary={readiness.speechInput.summary}
+                compact
+            />
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginBottom: '12px' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>🐢</span>
@@ -463,6 +494,20 @@ export default function ShadowingEngine({
                 }}>
                     ⚠️ {error}
                 </div>
+            )}
+
+            {state === 'manual' && (
+                <ManualTranscriptFallback
+                    title="Manual transcript fallback"
+                    description={manualPrompt || 'Speech capture is unavailable on this device. Type what you said to keep the shadowing loop active.'}
+                    value={manualTranscript}
+                    onChange={setManualTranscript}
+                    onSubmit={submitManualTranscript}
+                    onCancel={cancelManualTranscript}
+                    placeholder="Type what you just said..."
+                    submitLabel="Score This Attempt"
+                    cancelLabel="Cancel"
+                />
             )}
 
             {/* ===== RESULT: Word-by-Word Diff ===== */}

@@ -5,11 +5,14 @@ import { getSpeakingByMode } from '../../data/speaking';
 import { isAdultMode } from '../../utils/userMode';
 import ShadowingEngine from './ShadowingEngine';
 import SpeakingExercise from './SpeakingExercise';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 
 export default function SpeakingHub() {
     const navigate = useNavigate();
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
+    const { readiness } = useDeviceCapabilities();
     const lessons = getSpeakingByMode(state.userMode);
     const shadowingLessons = lessons.filter(l => l.type === 'shadowing');
     const totalShadowingSentences = shadowingLessons.reduce(
@@ -86,6 +89,15 @@ export default function SpeakingHub() {
                     ? 'Improve your speaking with shadowing, pronunciation drills, and IELTS speaking practice.'
                     : `Luyện nói tiếng Anh cùng bé với ${totalShadowingSentences} câu shadowing theo CEFR A1-A2 và Cambridge YLE.`}
             </p>
+
+            <CapabilityNotice
+                icon="🎙️"
+                title={adult ? 'Speech capture status' : 'Trạng thái nhận diện giọng nói'}
+                badge={readiness.speechInput.badge}
+                tone={readiness.speechInput.status === 'supported' ? 'success' : 'warn'}
+                summary={readiness.speechInput.summary}
+                compact
+            />
 
             <div className="lh-stats">
                 {stats.map(stat => (

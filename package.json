@@ -9,6 +9,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:standard-data": "node scripts/build-standard-lexicon.mjs",
+    "build:controlled-audio": "node scripts/generate-controlled-audio.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "verify:live": "node scripts/verify-live-deploy.mjs --site https://drthienlongfacs-hub.github.io/linguakids/ --dist dist/index.html"

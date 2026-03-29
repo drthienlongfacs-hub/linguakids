@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import { isAdultMode } from '../utils/userMode';
+import SystemCapabilityPanel from '../components/SystemCapabilityPanel';
 
 const SPEED_OPTIONS = [
     { key: 'slow', label: 'Chậm', labelEn: 'Slow', emoji: '🐢', rate: 0.6 },
@@ -163,6 +164,8 @@ export default function Settings() {
                     {isAdult ? '👧 Switch to Kids' : '👨 Người lớn'}
                 </button>
             </div>
+
+            <SystemCapabilityPanel />
 
             {/* App Info */}
             <div className="glass-card" style={{ padding: '16px', marginBottom: '12px', textAlign: 'center' }}>

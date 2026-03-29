@@ -6,6 +6,8 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { isAdultMode } from '../../utils/userMode';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 
 const SCENARIOS = [
     {
@@ -119,6 +121,7 @@ export default function ConversationAI() {
     const navigate = useNavigate();
     const { state, dispatch } = useGame();
     const adult = isAdultMode(state.userMode);
+    const { readiness } = useDeviceCapabilities();
 
     const [selectedScenario, setSelectedScenario] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -170,6 +173,13 @@ export default function ConversationAI() {
                 <p style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', marginBottom: '20px' }}>
                     {adult ? 'Choose a real-life scenario to practice speaking:' : 'Chọn tình huống thực tế để luyện nói:'}
                 </p>
+                <CapabilityNotice
+                    icon="🧭"
+                    title="Conversation engine status"
+                    badge={readiness.conversation.badge}
+                    tone="info"
+                    summary={readiness.conversation.summary}
+                />
                 <div style={{ display: 'grid', gap: '10px' }}>
                     {SCENARIOS.map(s => (
                         <div key={s.id} className="glass-card" onClick={() => startScenario(s)}

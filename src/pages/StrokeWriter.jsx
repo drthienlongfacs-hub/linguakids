@@ -6,6 +6,8 @@ import HanziWriter from 'hanzi-writer';
 import { useGame } from '../context/GameStateContext';
 import { useSpeech } from '../hooks/useSpeech';
 import StarBurst from '../components/StarBurst';
+import CapabilityNotice from '../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../hooks/useDeviceCapabilities';
 
 const CHARACTERS = [
     { char: '一', pinyin: 'yī', meaning: 'một', strokes: 1 },
@@ -34,6 +36,7 @@ export default function StrokeWriter() {
     const navigate = useNavigate();
     const { addXP, state } = useGame();
     const { speakChinese } = useSpeech();
+    const { readiness } = useDeviceCapabilities();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [mode, setMode] = useState('learn'); // learn | quiz
@@ -48,15 +51,14 @@ export default function StrokeWriter() {
     // Initialize HanziWriter
     useEffect(() => {
         if (!containerRef.current) return;
+        const container = containerRef.current;
 
         // Clear previous
-        containerRef.current.innerHTML = '';
-        setQuizResult(null);
-        setMistakes(0);
+        container.innerHTML = '';
 
         const size = Math.min(280, window.innerWidth - 80);
 
-        const writer = HanziWriter.create(containerRef.current, char.char, {
+        const writer = HanziWriter.create(container, char.char, {
             width: size,
             height: size,
             padding: 15,
@@ -97,20 +99,24 @@ export default function StrokeWriter() {
         }
 
         return () => {
-            if (containerRef.current) containerRef.current.innerHTML = '';
+            container.innerHTML = '';
         };
-    }, [currentIndex, mode, char.char]);
+    }, [addXP, currentIndex, mode, char.char]);
 
     const handleAnimate = () => {
         writerRef.current?.animateCharacter();
     };
 
     const handleQuiz = () => {
+        setQuizResult(null);
+        setMistakes(0);
         setMode('quiz');
     };
 
     const handleNext = () => {
         if (currentIndex + 1 < CHARACTERS.length) {
+            setQuizResult(null);
+            setMistakes(0);
             setCurrentIndex(i => i + 1);
             setMode('learn');
         }
@@ -136,6 +142,15 @@ export default function StrokeWriter() {
                 </div>
                 <span className="lesson-progress__text">{currentIndex + 1}/{CHARACTERS.length}</span>
             </div>
+
+            <CapabilityNotice
+                icon="笔"
+                title="Hanzi writing status"
+                badge={readiness.hanziWriting.badge}
+                tone="info"
+                summary={readiness.hanziWriting.summary}
+                compact
+            />
 
             {/* Character info */}
             <div style={{ textAlign: 'center', marginBottom: '16px' }}>
@@ -223,7 +238,7 @@ export default function StrokeWriter() {
                     display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '8px',
                 }}>
                     {CHARACTERS.map((c, i) => (
-                        <button key={c.char} onClick={() => { setCurrentIndex(i); setMode('learn'); }}
+                        <button key={c.char} onClick={() => { setQuizResult(null); setMistakes(0); setCurrentIndex(i); setMode('learn'); }}
                             style={{
                                 padding: '10px 4px', borderRadius: 'var(--radius-md)',
                                 border: i === currentIndex ? '2px solid var(--color-primary)' : '2px solid var(--color-border)',

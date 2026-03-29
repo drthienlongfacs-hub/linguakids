@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getLessonsByMode } from '../../data/listening';
 import { isAdultMode } from '../../utils/userMode';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 
 // Premium Listening Hub with difficulty filter + progress tracking
 export default function ListeningHub() {
     const navigate = useNavigate();
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
+    const { readiness } = useDeviceCapabilities();
     const lessons = getLessonsByMode(state.userMode);
     const totalSegments = lessons.reduce((sum, lesson) => sum + (lesson.segments?.length || 0), 0);
     const totalVocabulary = lessons.reduce((sum, lesson) => sum + (lesson.vocabulary?.length || 0), 0);
@@ -57,6 +60,15 @@ export default function ListeningHub() {
                     ? 'Build your listening skills with structured exercises. Each lesson includes audio, dictation, quiz, and vocabulary.'
                     : `Luyện nghe tiếng Anh với ${totalSegments} đoạn audio giả lập, ${totalVocabulary} từ vựng và ${totalQuizItems} câu kiểm tra.`}
             </p>
+
+            <CapabilityNotice
+                icon="🎛️"
+                title="Listening rail status"
+                badge={readiness.listening.badge}
+                tone="warn"
+                summary="Hiện tại toàn bộ rail nghe vẫn ưu tiên browser TTS nếu lesson chưa có controlled audio pack. Đây là lớp chuyển tiếp trước khi thay dần bằng audio asset riêng."
+                compact
+            />
 
             {/* Stats bar */}
             <div className="lh-stats">

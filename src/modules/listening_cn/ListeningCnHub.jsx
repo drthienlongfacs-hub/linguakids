@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getCnLessonsByMode } from '../../data/listening_cn';
 import { isAdultMode } from '../../utils/userMode';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 
 export default function ListeningCnHub() {
     const navigate = useNavigate();
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
+    const { readiness } = useDeviceCapabilities();
     const lessons = getCnLessonsByMode(state.userMode);
     const totalSegments = lessons.reduce((sum, lesson) => sum + (lesson.segments?.length || 0), 0);
     const totalVocabulary = lessons.reduce((sum, lesson) => sum + (lesson.vocabulary?.length || 0), 0);
@@ -38,6 +41,15 @@ export default function ListeningCnHub() {
                     ? 'Practice Chinese listening with HSK/YCT-style lessons. Each lesson includes guided audio, dictation, quiz, and vocabulary.'
                     : `Luyện nghe tiếng Trung với ${totalSegments} đoạn nghe, ${totalVocabulary} mục từ trọng tâm và ${totalQuizItems} câu kiểm tra.`}
             </p>
+
+            <CapabilityNotice
+                icon="🎛️"
+                title="Listening rail status"
+                badge={readiness.listening.badge}
+                tone="warn"
+                summary="Bài nghe tiếng Trung hiện vẫn dùng browser TTS nếu lesson chưa có controlled audio pack. Các lesson có pack riêng sẽ được ưu tiên phát asset trước."
+                compact
+            />
 
             <div className="lh-stats">
                 <div className="lh-stat">

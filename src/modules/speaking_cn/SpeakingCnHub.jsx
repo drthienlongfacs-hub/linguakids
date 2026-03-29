@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { getCnSpeakingByMode } from '../../data/speaking_cn';
 import { isAdultMode } from '../../utils/userMode';
+import CapabilityNotice from '../../components/CapabilityNotice';
+import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 
 export default function SpeakingCnHub() {
     const navigate = useNavigate();
     const { state } = useGame();
     const adult = isAdultMode(state.userMode);
+    const { readiness } = useDeviceCapabilities();
     const lessons = getCnSpeakingByMode(state.userMode);
     const totalShadowingSentences = lessons
         .filter(lesson => lesson.type === 'shadowing')
@@ -42,6 +45,15 @@ export default function SpeakingCnHub() {
                     ? 'Master Chinese pronunciation with tone drills, large shadowing banks, and guided conversation practice.'
                     : `Luyện nói tiếng Trung với ${totalShadowingSentences} câu shadowing, ${totalToneItems} cụm thanh điệu và ${totalConversationPrompts} prompt hội thoại.`}
             </p>
+
+            <CapabilityNotice
+                icon="🎙️"
+                title={adult ? 'Speech capture status' : 'Trạng thái nhận diện giọng nói'}
+                badge={readiness.speechInput.badge}
+                tone={readiness.speechInput.status === 'supported' ? 'success' : 'warn'}
+                summary={readiness.speechInput.summary}
+                compact
+            />
 
             <div className="lh-stats">
                 <div className="lh-stat">
