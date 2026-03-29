@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-29T09:51:21.874Z",
+  "generatedAt": "2026-03-29T10:14:56.472Z",
   "sourceManifest": "free-speaking-coach.json",
   "summary": {
     "scenarioCount": 5,
@@ -8,6 +8,7 @@
     "zeroByteFiles": 0,
     "forbiddenLightSurfaceMatches": 0,
     "contrastFailures": 0,
+    "requiredPatternFailures": 0,
     "strictModulePass": true
   },
   "scenarios": {
@@ -119,5 +120,6 @@
       "pass": true
     }
   ],
-  "sourceMatches": []
+  "sourceMatches": [],
+  "requiredPatternFindings": []
 }
