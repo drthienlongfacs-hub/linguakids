@@ -17,6 +17,10 @@ export const videoLessonApprovedSourcesPath = path.join(repoRoot, 'content', 'vi
 export const videoLessonManifestPath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.json');
 export const videoLessonQaPath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.qa.json');
 export const videoLessonAlignmentQaPath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.alignment.qa.json');
+export const videoLessonReviewQueuePath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.review-queue.json');
+export const videoLessonOpsPath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.ops.json');
+export const videoLessonSourceCandidatesPath = path.join(repoRoot, 'content', 'video-lessons', 'source-candidates.json');
+export const videoLessonDiscoveryQaPath = path.join(repoRoot, 'public', 'data', 'video-manifests', 'video-lessons.discovery.qa.json');
 
 export async function ensureDir(dirPath) {
     await fs.mkdir(dirPath, { recursive: true });
@@ -172,9 +176,28 @@ function normalizeSourceVerification(value, defaults) {
         contentMatchStatus: ensureString(value?.contentMatchStatus) || defaults.contentMatchStatus,
         automatedCheckStatus: ensureString(value?.automatedCheckStatus) || defaults.automatedCheckStatus,
         automatedMatchScore: Number.isFinite(value?.automatedMatchScore) ? value.automatedMatchScore : defaults.automatedMatchScore,
+        riskScore: Number.isFinite(value?.riskScore) ? value.riskScore : null,
+        autoDecision: ensureString(value?.autoDecision) || null,
+        autoReasons: ensureArray(value?.autoReasons).map((entry) => ensureString(entry)).filter(Boolean),
+        canonicalMatchEvidence: {
+            titleMatchScore: Number.isFinite(value?.canonicalMatchEvidence?.titleMatchScore) ? value.canonicalMatchEvidence.titleMatchScore : null,
+            channelMatch: ensureBoolean(value?.canonicalMatchEvidence?.channelMatch),
+            keywordCoverage: Number.isFinite(value?.canonicalMatchEvidence?.keywordCoverage) ? value.canonicalMatchEvidence.keywordCoverage : null,
+            reviewSnapshotUrl: ensureString(value?.canonicalMatchEvidence?.reviewSnapshotUrl) || null,
+        },
+        reviewChecklist: {
+            titleCategoryMatch: ensureBoolean(value?.reviewChecklist?.titleCategoryMatch),
+            ageAppropriate: value?.reviewChecklist?.ageAppropriate !== false,
+            licenseValid: ensureBoolean(value?.reviewChecklist?.licenseValid),
+            scriptAcceptable: ensureBoolean(value?.reviewChecklist?.scriptAcceptable),
+            quizAcceptable: ensureBoolean(value?.reviewChecklist?.quizAcceptable),
+        },
+        blockingReasons: ensureArray(value?.blockingReasons).map((entry) => ensureString(entry)).filter(Boolean),
         reviewedBy: ensureString(value?.reviewedBy) || null,
         reviewedAt: toIsoOrNull(value?.reviewedAt),
         evidenceUrl: ensureString(value?.evidenceUrl) || null,
+        rejectionReasonCode: ensureString(value?.rejectionReasonCode) || null,
+        lastAlignedAt: toIsoOrNull(value?.lastAlignedAt),
         notes: notes.length > 0 ? notes : fallbackNotes,
     };
 }
@@ -207,6 +230,17 @@ function normalizeLearningPacket(value, defaults) {
         script: {
             type: ensureString(value?.script?.type) || defaults.script.type,
             displayMode: ensureString(value?.script?.displayMode) || defaults.script.displayMode,
+            variant: ensureString(value?.script?.variant) || defaults.script.variant,
+            captionsEnVtt: ensureString(value?.script?.captionsEnVtt) || null,
+            captionsViVtt: ensureString(value?.script?.captionsViVtt) || null,
+            timedSegments: ensureArray(value?.script?.timedSegments).map((entry, index) => ({
+                id: ensureString(entry?.id) || `timed-${index + 1}`,
+                startMs: ensureNumber(entry?.startMs),
+                endMs: ensureNumber(entry?.endMs),
+                en: ensureString(entry?.en),
+                vi: ensureString(entry?.vi),
+            })).filter((entry) => Number.isFinite(entry.startMs) && Number.isFinite(entry.endMs) && (entry.en || entry.vi)),
+            publicLabel: ensureString(value?.script?.publicLabel) || defaults.script.publicLabel,
             segments: scriptSegments.length > 0 ? scriptSegments : defaults.script.segments,
         },
         quiz: {
@@ -429,6 +463,10 @@ export function buildVideoLessonManifest(catalog, approvedSources) {
             totalQuizQuestionCount: totalQuizQuestions,
             publicQuizQuestionCount: publicQuizQuestions,
             hiddenLessonCount: statusCounts.hidden || 0,
+            candidateLessonCount: statusCounts.candidate || 0,
+            reviewQueueLessonCount: statusCounts.review_queue || 0,
+            readyToPublishLessonCount: statusCounts.ready_to_publish || 0,
+            blockedLessonCount: statusCounts.blocked || 0,
             draftLessonCount: statusCounts.draft || 0,
             retiredLessonCount: statusCounts.retired || 0,
             emptyPublicLevelCount: normalizedCatalog.levels.filter((level) => !publicLevels.some((entry) => entry.id === level.id)).length,
@@ -453,6 +491,10 @@ export function buildBaseQa(manifest, approvedSources) {
             totalLessons: allLessons.length,
             publicLessons: publicLessons.length,
             hiddenLessons: hiddenLessons.length,
+            candidateLessons: allLessons.filter((entry) => entry.lesson.status === 'candidate').length,
+            reviewQueueLessons: allLessons.filter((entry) => entry.lesson.status === 'review_queue').length,
+            readyToPublishLessons: allLessons.filter((entry) => entry.lesson.status === 'ready_to_publish').length,
+            blockedLessons: allLessons.filter((entry) => entry.lesson.status === 'blocked').length,
             draftLessons: allLessons.filter((entry) => entry.lesson.status === 'draft').length,
             retiredLessons: allLessons.filter((entry) => entry.lesson.status === 'retired').length,
             approvedDomainCount: new Set(getApprovedDomains(approvedSources)).size,

@@ -68,7 +68,23 @@ async function main() {
         extractAsset(distHtml, /<link[^>]+href="([^"]+\/assets\/[^"]+\.css)"/, 'CSS asset'),
         extractAsset(distHtml, /serviceWorker\.register\('([^']+sw\.js)'/, 'service worker path'),
     ];
-    const manifestUrl = new URL('data/video-manifests/video-lessons.json', site).toString();
+    const manifestChecks = [
+        {
+            label: 'video manifest',
+            url: new URL('data/video-manifests/video-lessons.json', site).toString(),
+            expectedVersion: localManifest.version,
+        },
+        {
+            label: 'review queue',
+            url: new URL('data/video-manifests/video-lessons.review-queue.json', site).toString(),
+            expectedVersion: localManifest.version,
+        },
+        {
+            label: 'ops manifest',
+            url: new URL('data/video-manifests/video-lessons.ops.json', site).toString(),
+            expectedVersion: localManifest.version,
+        },
+    ];
 
     console.log(`Verifying live deployment for ${site}`);
     console.log(`Expected markers: ${markers.join(', ')}`);
@@ -83,35 +99,47 @@ async function main() {
         try {
             const liveHtml = await fetchHtml(site);
             const missing = markers.filter((marker) => !liveHtml.includes(marker));
-            let manifestVersionMatches = false;
-            let liveManifestVersion = null;
+            const manifestResults = [];
 
-            try {
-                const liveManifestResponse = await fetch(`${manifestUrl}?verify=${Date.now()}`, {
-                    headers: {
-                        'cache-control': 'no-cache',
-                        pragma: 'no-cache',
-                    },
-                });
+            for (const manifestCheck of manifestChecks) {
+                try {
+                    const liveManifestResponse = await fetch(`${manifestCheck.url}?verify=${Date.now()}`, {
+                        headers: {
+                            'cache-control': 'no-cache',
+                            pragma: 'no-cache',
+                        },
+                    });
 
-                if (!liveManifestResponse.ok) {
-                    throw new Error(`manifest HTTP ${liveManifestResponse.status}`);
+                    if (!liveManifestResponse.ok) {
+                        throw new Error(`HTTP ${liveManifestResponse.status}`);
+                    }
+
+                    const liveManifest = await liveManifestResponse.json();
+                    manifestResults.push({
+                        label: manifestCheck.label,
+                        version: liveManifest?.version || null,
+                        pass: liveManifest?.version === manifestCheck.expectedVersion,
+                    });
+                } catch (error) {
+                    manifestResults.push({
+                        label: manifestCheck.label,
+                        version: null,
+                        pass: false,
+                        error: error.message,
+                    });
                 }
-
-                const liveManifest = await liveManifestResponse.json();
-                liveManifestVersion = liveManifest?.version || null;
-                manifestVersionMatches = liveManifestVersion === localManifest.version;
-            } catch (error) {
-                console.log(`Attempt ${attempt}: could not verify live video manifest: ${error.message}`);
             }
 
-            if (missing.length === 0 && manifestVersionMatches) {
+            if (missing.length === 0 && manifestResults.every((result) => result.pass)) {
                 console.log(`Live deployment verified on attempt ${attempt}.`);
                 return;
             }
 
+            const manifestSummary = manifestResults
+                .map((result) => `${result.label}=${result.version || result.error || 'unavailable'}`)
+                .join(', ');
             console.log(
-                `Attempt ${attempt}: live HTML missing ${missing.length} marker(s); live video manifest=${liveManifestVersion || 'unavailable'}`
+                `Attempt ${attempt}: live HTML missing ${missing.length} marker(s); ${manifestSummary}`
             );
         } catch (error) {
             console.log(`Attempt ${attempt}: ${error.message}`);

@@ -1,8 +1,12 @@
 const MANIFEST_PATH = 'data/video-manifests/video-lessons.json';
 const QA_PATH = 'data/video-manifests/video-lessons.qa.json';
+const REVIEW_QUEUE_PATH = 'data/video-manifests/video-lessons.review-queue.json';
+const OPS_PATH = 'data/video-manifests/video-lessons.ops.json';
 
 let manifestPromise = null;
 let qaPromise = null;
+let reviewQueuePromise = null;
+let opsPromise = null;
 
 function resolveBaseUrl() {
     return import.meta.env.BASE_URL || '/';
@@ -48,6 +52,30 @@ export async function loadVideoLessonQA() {
     }
 
     return qaPromise;
+}
+
+export async function loadVideoLessonReviewQueue() {
+    if (!reviewQueuePromise) {
+        reviewQueuePromise = loadJson(REVIEW_QUEUE_PATH, 'video_lessons_review_queue')
+            .catch((error) => {
+                reviewQueuePromise = null;
+                throw error;
+            });
+    }
+
+    return reviewQueuePromise;
+}
+
+export async function loadVideoLessonOps() {
+    if (!opsPromise) {
+        opsPromise = loadJson(OPS_PATH, 'video_lessons_ops')
+            .catch((error) => {
+                opsPromise = null;
+                throw error;
+            });
+    }
+
+    return opsPromise;
 }
 
 export function formatVideoLessonDuration(durationSeconds) {
@@ -116,6 +144,12 @@ export function getLessonScriptSegments(lesson) {
         : [];
 }
 
+export function getLessonTimedScriptSegments(lesson) {
+    return Array.isArray(lesson?.learningPacket?.script?.timedSegments)
+        ? lesson.learningPacket.script.timedSegments
+        : [];
+}
+
 export function getLessonFocusVocabulary(lesson) {
     return Array.isArray(lesson?.learningPacket?.focusVocabulary)
         ? lesson.learningPacket.focusVocabulary
@@ -130,6 +164,41 @@ export function getLessonObjectives(lesson) {
 
 export function getLessonPracticeBlocks(lesson) {
     return lesson?.learningPacket?.practice || null;
+}
+
+export function getLessonSubtitleVariant(lesson) {
+    return lesson?.learningPacket?.script?.variant || 'companion';
+}
+
+export function getLessonSubtitleLabel(lesson) {
+    return lesson?.learningPacket?.script?.publicLabel
+        || (getLessonSubtitleVariant(lesson) === 'exact_timed' ? 'Exact Subtitles' : 'Companion Script');
+}
+
+export function getLessonCaptionTrack(lesson, language) {
+    const script = lesson?.learningPacket?.script || {};
+    if (language === 'en') {
+        return script.captionsEnVtt || null;
+    }
+    if (language === 'vi') {
+        return script.captionsViVtt || null;
+    }
+    return null;
+}
+
+export function getLessonReviewBadge(lesson) {
+    const sourceVerification = lesson?.sourceVerification || {};
+    if (sourceVerification.manualReviewStatus === 'approved' && sourceVerification.contentMatchStatus === 'aligned') {
+        return {
+            tone: 'approved',
+            label: 'Reviewed source',
+        };
+    }
+
+    return {
+        tone: 'pending',
+        label: 'Review pending',
+    };
 }
 
 export function getCanonicalVideoSource(lesson) {

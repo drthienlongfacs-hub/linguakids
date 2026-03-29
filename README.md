@@ -92,9 +92,12 @@ Deploy production dùng workflow `.github/workflows/deploy.yml`, xuất `dist/` 
 
 ```bash
 npm run sync:video-lessons:learning
+npm run triage:video-lessons
+npm run discover:video-lessons:sources
 npm run build:video-lessons
 npm run audit:video-lessons
 npm run audit:video-lessons:alignment
+npm run validate:video-lessons:canonical
 npm run build
 npm run verify:live
 ```
@@ -107,6 +110,7 @@ Nếu lệnh này fail thì không được coi là đã phát hành xong, dù `
 - Nguon phat canonical phai duoc host tren object storage/CDN nam trong `content/video-lessons/approved-sources.json`.
 - Lesson chua co license evidence, quyen rehost, va playback pass trong app/PWA se bi an khoi giao dien public.
 - Moi lesson duoc materialize thanh `learningPacket` voi script EN/VI, quiz nhieu tang, vong lap tri nho, va `sourceVerification` de chong lech title/category/video.
+- Workflow fast reopen sinh them `video-lessons.review-queue.json` va `video-lessons.ops.json` de xep wave, blocker, risk score, va trang thai review.
 - Dung `npm run audit:video-lessons:alignment` de sinh RCA mismatch cho link tham chieu cu truoc khi thay nguon canonical.
 - Chi tiet van hanh xem `docs/video-lessons-sot.md`.
 

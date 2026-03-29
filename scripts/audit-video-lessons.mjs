@@ -7,12 +7,21 @@ import {
     getApprovedDomains,
     isBlockedDomain,
     readJson,
+    videoLessonAlignmentQaPath,
     videoLessonApprovedSourcesPath,
     videoLessonCatalogPath,
     videoLessonManifestPath,
+    videoLessonOpsPath,
     videoLessonQaPath,
+    videoLessonReviewQueuePath,
     writeJson,
 } from './lib/videoLessonManifestShared.mjs';
+import {
+    applyAutomatedTriage,
+    buildOpsArtifact,
+    buildReviewQueueArtifact,
+    readOptionalJson,
+} from './lib/videoLessonReviewOps.mjs';
 
 function addFinding(findings, file, message, lessonId = null) {
     findings.push({
@@ -66,6 +75,27 @@ function hasPedagogicalFrame(lesson) {
         && lesson.learningPacket.pedagogicalFrame.learningScience.length >= 3;
 }
 
+function hasValidSubtitleMode(lesson) {
+    const script = lesson?.learningPacket?.script || {};
+    const variant = String(script?.variant || '').trim();
+    const publicLabel = String(script?.publicLabel || '').trim();
+    if (!variant || !publicLabel) {
+        return false;
+    }
+
+    if (variant === 'companion') {
+        return hasBilingualSegments(lesson);
+    }
+
+    if (variant === 'exact_timed') {
+        const hasTracks = (script?.captionsEnVtt && script?.captionsViVtt)
+            || (Array.isArray(script?.timedSegments) && script.timedSegments.length > 0);
+        return hasBilingualSegments(lesson) && hasTracks;
+    }
+
+    return false;
+}
+
 async function probeVideoSource(url) {
     const baseHeaders = {
         'cache-control': 'no-cache',
@@ -117,12 +147,18 @@ async function probeVideoSource(url) {
 async function main() {
     const catalog = await readJson(videoLessonCatalogPath);
     const approvedSources = await readJson(videoLessonApprovedSourcesPath);
-    const manifest = buildVideoLessonManifest(catalog, approvedSources);
+    const alignmentQa = await readOptionalJson(videoLessonAlignmentQaPath, null);
+    const triagedCatalog = applyAutomatedTriage(catalog, approvedSources, alignmentQa);
+    const manifest = buildVideoLessonManifest(triagedCatalog, approvedSources);
     const qa = buildBaseQa(manifest, approvedSources);
+    const reviewQueue = buildReviewQueueArtifact(triagedCatalog, manifest.version);
+    const ops = buildOpsArtifact(triagedCatalog, manifest.version);
     const findings = [];
     const approvedDomains = getApprovedDomains(approvedSources);
 
     await writeJson(videoLessonManifestPath, manifest);
+    await writeJson(videoLessonReviewQueuePath, reviewQueue);
+    await writeJson(videoLessonOpsPath, ops);
 
     const flattened = flattenLessons(manifest.levels);
     const publicEntries = flattened.filter((entry) => entry.lesson.status === 'public');
@@ -220,6 +256,29 @@ async function main() {
             addFinding(findings, 'content/video-lessons/catalog.json', 'Public lesson sourceVerification must include reviewedBy, reviewedAt, and evidenceUrl.', lesson.id);
         }
 
+        if (lesson?.sourceVerification?.autoDecision !== 'green') {
+            addFinding(findings, 'content/video-lessons/catalog.json', 'Public lesson sourceVerification.autoDecision must be "green".', lesson.id);
+        }
+
+        if (lesson?.sourceVerification?.riskScore === null || lesson?.sourceVerification?.riskScore < 85) {
+            addFinding(findings, 'content/video-lessons/catalog.json', 'Public lesson must carry a riskScore >= 85.', lesson.id);
+        }
+
+        const checklist = lesson?.sourceVerification?.reviewChecklist || {};
+        if (
+            checklist.titleCategoryMatch !== true
+            || checklist.ageAppropriate !== true
+            || checklist.licenseValid !== true
+            || checklist.scriptAcceptable !== true
+            || checklist.quizAcceptable !== true
+        ) {
+            addFinding(findings, 'content/video-lessons/catalog.json', 'Public lesson reviewChecklist must be fully approved.', lesson.id);
+        }
+
+        if (!hasValidSubtitleMode(lesson)) {
+            addFinding(findings, 'content/video-lessons/catalog.json', 'Public lesson must declare a valid subtitle mode and public label.', lesson.id);
+        }
+
         let parsedUrl;
         try {
             parsedUrl = new URL(canonical.src);
@@ -284,10 +343,16 @@ async function main() {
     qa.summary.totalQuizQuestions = allQuestionCount;
     qa.summary.totalBilingualScripts = flattened.filter((entry) => hasBilingualSegments(entry.lesson)).length;
     qa.summary.totalSourceVerificationRecords = flattened.filter((entry) => entry.lesson.sourceVerification).length;
+    qa.summary.candidateLessons = flattened.filter((entry) => entry.lesson.status === 'candidate').length;
+    qa.summary.reviewQueueLessons = flattened.filter((entry) => entry.lesson.status === 'review_queue').length;
+    qa.summary.readyToPublishLessons = flattened.filter((entry) => entry.lesson.status === 'ready_to_publish').length;
+    qa.summary.blockedLessons = flattened.filter((entry) => entry.lesson.status === 'blocked').length;
     qa.findings = findings;
 
     await writeJson(videoLessonManifestPath, manifest);
     await writeJson(videoLessonQaPath, qa);
+    await writeJson(videoLessonReviewQueuePath, reviewQueue);
+    await writeJson(videoLessonOpsPath, ops);
 
     console.log(JSON.stringify({
         summary: {
@@ -302,6 +367,9 @@ async function main() {
                 totalLessons: flattened.length,
                 publicLessons: publicEntries.length,
                 hiddenLessons: flattened.filter((entry) => entry.lesson.status === 'hidden').length,
+                candidateLessons: flattened.filter((entry) => entry.lesson.status === 'candidate').length,
+                reviewQueueLessons: flattened.filter((entry) => entry.lesson.status === 'review_queue').length,
+                blockedLessons: flattened.filter((entry) => entry.lesson.status === 'blocked').length,
             },
         ],
         findings,

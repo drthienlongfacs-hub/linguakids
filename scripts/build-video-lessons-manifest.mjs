@@ -4,12 +4,21 @@ import {
     buildBaseQa,
     buildVideoLessonManifest,
     readJson,
+    videoLessonAlignmentQaPath,
     videoLessonApprovedSourcesPath,
     videoLessonCatalogPath,
     videoLessonManifestPath,
+    videoLessonOpsPath,
     videoLessonQaPath,
+    videoLessonReviewQueuePath,
     writeJson,
 } from './lib/videoLessonManifestShared.mjs';
+import {
+    applyAutomatedTriage,
+    buildOpsArtifact,
+    buildReviewQueueArtifact,
+    readOptionalJson,
+} from './lib/videoLessonReviewOps.mjs';
 
 async function readExistingQaIfCompatible(version) {
     try {
@@ -26,9 +35,13 @@ async function readExistingQaIfCompatible(version) {
 async function main() {
     const catalog = await readJson(videoLessonCatalogPath);
     const approvedSources = await readJson(videoLessonApprovedSourcesPath);
-    const manifest = buildVideoLessonManifest(catalog, approvedSources);
+    const alignmentQa = await readOptionalJson(videoLessonAlignmentQaPath, null);
+    const triagedCatalog = applyAutomatedTriage(catalog, approvedSources, alignmentQa);
+    const manifest = buildVideoLessonManifest(triagedCatalog, approvedSources);
     const baseQa = buildBaseQa(manifest, approvedSources);
     const existingQa = await readExistingQaIfCompatible(manifest.version);
+    const reviewQueue = buildReviewQueueArtifact(triagedCatalog, manifest.version);
+    const ops = buildOpsArtifact(triagedCatalog, manifest.version);
 
     const qa = existingQa
         ? {
@@ -45,12 +58,17 @@ async function main() {
 
     await writeJson(videoLessonManifestPath, manifest);
     await writeJson(videoLessonQaPath, qa);
+    await writeJson(videoLessonReviewQueuePath, reviewQueue);
+    await writeJson(videoLessonOpsPath, ops);
 
     console.log(JSON.stringify({
         version: manifest.version,
         lessonCount: manifest.summary.lessonCount,
         publicLessonCount: manifest.summary.publicLessonCount,
         hiddenLessonCount: manifest.summary.hiddenLessonCount,
+        candidateLessonCount: manifest.summary.candidateLessonCount,
+        reviewQueueLessonCount: manifest.summary.reviewQueueLessonCount,
+        blockedLessonCount: manifest.summary.blockedLessonCount,
     }, null, 2));
 }
 

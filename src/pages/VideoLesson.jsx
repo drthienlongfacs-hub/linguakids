@@ -8,15 +8,21 @@ import {
     formatVideoLessonDuration,
     getCanonicalPosterSource,
     getCanonicalVideoSource,
+    getLessonCaptionTrack,
     getLessonFocusVocabulary,
     getLessonObjectives,
     getLessonPracticeBlocks,
     getLessonQuizQuestions,
+    getLessonReviewBadge,
     getLessonScriptSegments,
+    getLessonSubtitleLabel,
+    getLessonSubtitleVariant,
     getPublicVideoLevels,
     getVideoReferenceLink,
     loadVideoLessonManifest,
+    loadVideoLessonOps,
 } from '../services/videoLessonManifestService';
+import { recordVideoLessonTelemetry } from '../services/videoLessonTelemetryService';
 import { getRuntimeMode } from '../utils/runtimeMode';
 import { isAdultMode } from '../utils/userMode';
 
@@ -40,7 +46,7 @@ function LoadingState({ adult }) {
     );
 }
 
-function EmptyState({ adult, hiddenCount, runtimeMode, onBack }) {
+function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpenReviewQueue }) {
     const runtimeLabel = runtimeMode === 'standalone_pwa'
         ? (adult ? 'standalone PWA' : 'PWA doc lap')
         : (adult ? 'browser tab' : 'trinh duyet');
@@ -72,11 +78,33 @@ function EmptyState({ adult, hiddenCount, runtimeMode, onBack }) {
                 }}>
                     <strong>{adult ? 'Hidden lessons:' : 'Lesson dang an:'}</strong> {hiddenCount}
                     <br />
+                    <strong>{adult ? 'Candidate:' : 'Ung vien:'}</strong> {opsSummary?.statusCounts?.candidate || 0}
+                    <br />
+                    <strong>{adult ? 'Review queue:' : 'Hang duyet:'}</strong> {opsSummary?.statusCounts?.review_queue || 0}
+                    <br />
+                    <strong>{adult ? 'Blocked:' : 'Bi chan:'}</strong> {opsSummary?.statusCounts?.blocked || 0}
+                    <br />
                     <strong>{adult ? 'Release policy:' : 'Chinh sach release:'}</strong>{' '}
                     {adult
                         ? 'Only approved CDN-backed videos can be public.'
                         : 'Chi video da duoc kiem duyet va host tren CDN moi duoc public.'}
                 </div>
+                <button
+                    type="button"
+                    onClick={onOpenReviewQueue}
+                    style={{
+                        marginTop: '14px',
+                        padding: '10px 16px',
+                        borderRadius: '12px',
+                        border: 'none',
+                        background: 'var(--color-primary)',
+                        color: '#fff',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                    }}
+                >
+                    {adult ? 'Open Review Queue' : 'Mo hang duyet'}
+                </button>
             </div>
         </div>
     );
@@ -120,6 +148,11 @@ export default function VideoLesson() {
         manifest: null,
         error: null,
     });
+    const [opsState, setOpsState] = useState({
+        status: 'loading',
+        ops: null,
+        error: null,
+    });
     const [selectedLevelId, setSelectedLevelId] = useState(null);
     const [selectedCatId, setSelectedCatId] = useState(null);
     const [activeVideoId, setActiveVideoId] = useState(null);
@@ -132,6 +165,7 @@ export default function VideoLesson() {
     const [searchQuery, setSearchQuery] = useState('');
     const [sourceStatus, setSourceStatus] = useState('idle');
     const [sourceError, setSourceError] = useState(null);
+    const [subtitleViewMode, setSubtitleViewMode] = useState('dual');
     const videoRef = useRef(null);
 
     useEffect(() => {
@@ -151,6 +185,24 @@ export default function VideoLesson() {
                 setManifestState({
                     status: 'error',
                     manifest: null,
+                    error,
+                });
+            });
+
+        loadVideoLessonOps()
+            .then((ops) => {
+                if (!active) return;
+                setOpsState({
+                    status: 'ready',
+                    ops,
+                    error: null,
+                });
+            })
+            .catch((error) => {
+                if (!active) return;
+                setOpsState({
+                    status: 'error',
+                    ops: null,
                     error,
                 });
             });
@@ -234,6 +286,8 @@ export default function VideoLesson() {
         setQuizDone(false);
         setSourceError(null);
         setSourceStatus(getCanonicalVideoSource(video) ? 'loading' : 'source_error');
+        setSubtitleViewMode('dual');
+        recordVideoLessonTelemetry('public_lesson_open', { lessonId: video.id });
     }
 
     function startQuiz() {
@@ -246,6 +300,7 @@ export default function VideoLesson() {
         setScore(0);
         setAnswered(null);
         setQuizDone(false);
+        recordVideoLessonTelemetry('quiz_start', { lessonId: activeVideo?.id || null });
     }
 
     function answerQuiz(optIdx) {
@@ -269,6 +324,11 @@ export default function VideoLesson() {
             setQuizDone(true);
             const finalScore = correct ? score + 1 : score;
             const pct = finalScore / activeQuizQuestions.length;
+            recordVideoLessonTelemetry('quiz_complete', {
+                lessonId: activeVideo?.id || null,
+                score: finalScore,
+                total: activeQuizQuestions.length,
+            });
             if (pct === 1) {
                 setCelebration({ type: 'perfect' });
             } else if (pct >= 0.7) {
@@ -343,6 +403,8 @@ export default function VideoLesson() {
                 hiddenCount={hiddenCount}
                 runtimeMode={runtimeMode}
                 onBack={() => navigate(-1)}
+                opsSummary={opsState.ops?.summary || null}
+                onOpenReviewQueue={() => navigate('/video-lessons-review')}
             />
         );
     }
@@ -636,6 +698,11 @@ export default function VideoLesson() {
     const referenceLink = getVideoReferenceLink(activeVideo);
     const currentQuestion = activeQuizQuestions[quizIdx] || null;
     const sourceVerification = activeVideo.sourceVerification || null;
+    const subtitleVariant = getLessonSubtitleVariant(activeVideo);
+    const subtitleLabel = getLessonSubtitleLabel(activeVideo);
+    const reviewBadge = getLessonReviewBadge(activeVideo);
+    const captionTrackEn = getLessonCaptionTrack(activeVideo, 'en');
+    const captionTrackVi = getLessonCaptionTrack(activeVideo, 'vi');
 
     return (
         <div className="page" style={{ padding: '0' }}>
@@ -664,6 +731,30 @@ export default function VideoLesson() {
                     <div style={{ fontSize: '0.62rem', color: 'var(--color-text-light)' }}>
                         {activeVideo.channel} · {formatVideoLessonDuration(activeVideo.durationSeconds)}
                     </div>
+                    <div style={{ display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap' }}>
+                        <span style={{
+                            padding: '4px 8px',
+                            borderRadius: '999px',
+                            fontSize: '0.62rem',
+                            fontWeight: 700,
+                            background: reviewBadge.tone === 'approved' ? 'rgba(34,197,94,0.14)' : 'rgba(245,158,11,0.14)',
+                            color: reviewBadge.tone === 'approved' ? '#166534' : '#92400E',
+                        }}
+                        >
+                            {reviewBadge.label}
+                        </span>
+                        <span style={{
+                            padding: '4px 8px',
+                            borderRadius: '999px',
+                            fontSize: '0.62rem',
+                            fontWeight: 700,
+                            background: 'rgba(79,70,229,0.12)',
+                            color: 'var(--color-primary)',
+                        }}
+                        >
+                            {subtitleLabel}
+                        </span>
+                    </div>
                 </div>
             </div>
 
@@ -685,13 +776,31 @@ export default function VideoLesson() {
                                 onCanPlay={() => {
                                     setSourceStatus('playable');
                                     setSourceError(null);
+                                    recordVideoLessonTelemetry('video_source_playable', { lessonId: activeVideo.id });
                                 }}
                                 onError={() => {
                                     setSourceStatus('source_error');
                                     setSourceError(adult ? 'Could not play the canonical in-app source.' : 'Khong phat duoc nguon video chuan trong app.');
+                                    recordVideoLessonTelemetry('video_source_error', { lessonId: activeVideo.id });
                                 }}
                             >
                                 <source src={canonicalSrc} type={activeVideo.playback?.canonical?.mimeType || 'video/mp4'} />
+                                {captionTrackEn ? (
+                                    <track
+                                        kind="subtitles"
+                                        srcLang="en"
+                                        label="English"
+                                        src={captionTrackEn}
+                                    />
+                                ) : null}
+                                {captionTrackVi ? (
+                                    <track
+                                        kind="subtitles"
+                                        srcLang="vi"
+                                        label="Tieng Viet"
+                                        src={captionTrackVi}
+                                    />
+                                ) : null}
                             </video>
                         ) : (
                             <div style={{ padding: '28px 20px', textAlign: 'center', color: '#fff' }}>
@@ -796,8 +905,41 @@ export default function VideoLesson() {
 
                     {activeScriptSegments.length > 0 ? (
                         <div className="glass-card" style={{ padding: '14px' }}>
-                            <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '8px', fontWeight: 700 }}>
-                                {adult ? 'Bilingual study script' : 'Script hoc song ngu'}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap' }}>
+                                <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', fontWeight: 700 }}>
+                                    {adult ? 'Bilingual study script' : 'Script hoc song ngu'}
+                                </div>
+                                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                                    {[
+                                        { id: 'en', label: 'EN only' },
+                                        { id: 'vi', label: 'VI only' },
+                                        { id: 'dual', label: 'EN + VI' },
+                                    ].map((mode) => (
+                                        <button
+                                            key={mode.id}
+                                            type="button"
+                                            onClick={() => {
+                                                setSubtitleViewMode(mode.id);
+                                                recordVideoLessonTelemetry('subtitle_toggle', {
+                                                    lessonId: activeVideo.id,
+                                                    mode: mode.id,
+                                                });
+                                            }}
+                                            style={{
+                                                padding: '6px 10px',
+                                                borderRadius: '999px',
+                                                border: '1px solid var(--color-border)',
+                                                background: subtitleViewMode === mode.id ? 'var(--color-primary)' : 'var(--color-card)',
+                                                color: subtitleViewMode === mode.id ? '#fff' : 'var(--color-text)',
+                                                fontSize: '0.68rem',
+                                                fontWeight: 700,
+                                                cursor: 'pointer',
+                                            }}
+                                        >
+                                            {mode.label}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                             <div style={{ display: 'grid', gap: '10px' }}>
                                 {activeScriptSegments.map((segment) => (
@@ -816,12 +958,16 @@ export default function VideoLesson() {
                                                 vi: segment.labelVi || getStageLabel(segment.phase, false),
                                             }, adult)}
                                         </div>
-                                        <div style={{ fontSize: '0.82rem', lineHeight: 1.55, fontWeight: 600 }}>
-                                            {segment.en}
-                                        </div>
-                                        <div style={{ fontSize: '0.78rem', lineHeight: 1.55, color: 'var(--color-text-light)', marginTop: '4px' }}>
-                                            {segment.vi}
-                                        </div>
+                                        {subtitleViewMode !== 'vi' ? (
+                                            <div style={{ fontSize: '0.82rem', lineHeight: 1.55, fontWeight: 600 }}>
+                                                {segment.en}
+                                            </div>
+                                        ) : null}
+                                        {subtitleViewMode !== 'en' ? (
+                                            <div style={{ fontSize: '0.78rem', lineHeight: 1.55, color: subtitleViewMode === 'dual' ? 'var(--color-text-light)' : 'var(--color-text)', marginTop: subtitleViewMode === 'dual' ? '4px' : '0' }}>
+                                                {segment.vi}
+                                            </div>
+                                        ) : null}
                                     </div>
                                 ))}
                             </div>
@@ -840,8 +986,16 @@ export default function VideoLesson() {
                             <strong>{adult ? 'Review status:' : 'Trang thai duyet:'}</strong>{' '}
                             {sourceVerification?.manualReviewStatus || (adult ? 'Pending' : 'Dang cho')}
                             <br />
+                            <strong>{adult ? 'Review badge:' : 'Huy hieu duyet:'}</strong>{' '}
+                            {reviewBadge.label}
+                            <br />
                             <strong>{adult ? 'Content match:' : 'Do khop noi dung:'}</strong>{' '}
                             {sourceVerification?.contentMatchStatus || (adult ? 'Unverified' : 'Chua xac minh')}
+                            <br />
+                            <strong>{adult ? 'Subtitle mode:' : 'Che do phu de:'}</strong>{' '}
+                            {subtitleVariant === 'exact_timed'
+                                ? (adult ? 'Exact timed subtitles' : 'Phu de dong bo theo thoi gian')
+                                : (adult ? 'Companion learning script' : 'Script dong hanh de hoc')}
                             <br />
                             <strong>{adult ? 'Reviewed by:' : 'Nguoi duyet:'}</strong>{' '}
                             {sourceVerification?.reviewedBy || activeVideo.attribution?.reviewedBy || '--'}

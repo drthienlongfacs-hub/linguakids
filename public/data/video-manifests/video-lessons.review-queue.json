@@ -1,0 +1,4065 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-03-29T15:17:44.102Z",
+  "version": "video-lessons-88de5d5bd85b",
+  "summary": {
+    "totalLessons": 120,
+    "candidateLessons": 8,
+    "reviewQueueLessons": 17,
+    "readyToPublishLessons": 0,
+    "blockedLessons": 95,
+    "publicLessons": 0
+  },
+  "decisionSchema": {
+    "approve": {
+      "required": [
+        "lesson-id",
+        "reviewer",
+        "evidence-url"
+      ],
+      "command": "node scripts/review-video-lessons.mjs approve --lesson-id <id> --reviewer \"<name>\" --evidence-url \"<url>\""
+    },
+    "reject": {
+      "required": [
+        "lesson-id",
+        "reviewer",
+        "reason-code"
+      ],
+      "optional": [
+        "fallback-status"
+      ],
+      "command": "node scripts/review-video-lessons.mjs reject --lesson-id <id> --reviewer \"<name>\" --reason-code \"<code>\" [--fallback-status candidate]"
+    },
+    "publishWave": {
+      "required": [
+        "wave"
+      ],
+      "command": "node scripts/review-video-lessons.mjs publish-wave --wave <1-4>"
+    }
+  },
+  "waves": [
+    {
+      "wave": 1,
+      "targetSize": 12,
+      "lessonIds": [
+        "k-p4",
+        "k-a3",
+        "k-s5",
+        "k-s6",
+        "b-v1",
+        "b-v5",
+        "b-g1",
+        "b-g4",
+        "b-l4",
+        "b-pr3",
+        "b-pr4",
+        "b-pr5"
+      ],
+      "publicableNowCount": 0,
+      "greenCount": 0,
+      "yellowCount": 0,
+      "redCount": 12
+    },
+    {
+      "wave": 2,
+      "targetSize": 24,
+      "lessonIds": [
+        "b-pr6",
+        "i-g3",
+        "i-g5",
+        "i-g6",
+        "i-v7",
+        "i-s5",
+        "i-li1",
+        "i-li2",
+        "i-li3",
+        "a-f5",
+        "a-b2",
+        "a-ac1",
+        "a-ac6"
+      ],
+      "publicableNowCount": 0,
+      "greenCount": 0,
+      "yellowCount": 0,
+      "redCount": 13
+    },
+    {
+      "wave": 3,
+      "targetSize": 36,
+      "lessonIds": [],
+      "publicableNowCount": 0,
+      "greenCount": 0,
+      "yellowCount": 0,
+      "redCount": 0
+    },
+    {
+      "wave": 4,
+      "targetSize": 0,
+      "lessonIds": [],
+      "publicableNowCount": 0,
+      "greenCount": 0,
+      "yellowCount": 0,
+      "redCount": 0
+    }
+  ],
+  "items": [
+    {
+      "lessonId": "k-p1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "ABC Song",
+      "titleVi": "Bài hát ABC",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "Phonics Song",
+      "titleVi": "Bài hát Phonics",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p3",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "Phonics Song 2",
+      "titleVi": "Bài hát Phonics 2",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p4",
+      "status": "candidate",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "Learn Letter A",
+      "titleVi": "Học chữ A",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p5",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "ABC Uppercase",
+      "titleVi": "ABC Chữ in hoa",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p6",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "ABC Lowercase",
+      "titleVi": "ABC Chữ thường",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p7",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "Short Vowel Sounds",
+      "titleVi": "Nguyên âm ngắn",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p7 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p7 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-p8",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-phonics",
+      "categoryTitle": "Phonics & ABC",
+      "title": "Long Vowel Sounds",
+      "titleVi": "Nguyên âm dài",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-p8 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-p8 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Count 1-10",
+      "titleVi": "Đếm 1-10",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Count 1-20",
+      "titleVi": "Đếm 1-20",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n3",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Count 1-100",
+      "titleVi": "Đếm 1-100",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n4",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Number Song 1-10",
+      "titleVi": "Bài hát số 1-10",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n5",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Count by 2s",
+      "titleVi": "Đếm nhảy 2",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-n6",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-numbers",
+      "categoryTitle": "Numbers & Counting",
+      "title": "Count by 5s",
+      "titleVi": "Đếm nhảy 5",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-n6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-n6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "Color Song",
+      "titleVi": "Bài hát Màu sắc",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "I See Something Blue",
+      "titleVi": "Tôi thấy màu xanh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c3",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "Shape Song",
+      "titleVi": "Bài hát Hình dạng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c4",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "Rainbow Colors",
+      "titleVi": "Bảy sắc cầu vồng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c5",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "Mix Colors",
+      "titleVi": "Pha màu",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-c6",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-colors",
+      "categoryTitle": "Colors & Shapes",
+      "title": "Shapes All Around",
+      "titleVi": "Hình dạng xung quanh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-c6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-c6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Animal Sounds",
+      "titleVi": "Tiếng kêu động vật",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Walking in the Jungle",
+      "titleVi": "Đi trong rừng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a3",
+      "status": "candidate",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Baby Shark",
+      "titleVi": "Cá mập con",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a4",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Farm Animals",
+      "titleVi": "Động vật nông trại",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a5",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Sea Animals",
+      "titleVi": "Động vật biển",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-a6",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-animals",
+      "categoryTitle": "Animals & Nature",
+      "title": "Insects Song",
+      "titleVi": "Bài hát côn trùng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-a6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-a6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "Head Shoulders Knees Toes",
+      "titleVi": "Đầu Vai Đầu gối Ngón chân",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "If You're Happy",
+      "titleVi": "Nếu bạn vui",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b3",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "My Body Parts",
+      "titleVi": "Bộ phận cơ thể",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b4",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "Action Verbs Song",
+      "titleVi": "Bài hát động từ",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b5",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "Five Senses",
+      "titleVi": "Năm giác quan",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-b6",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-body",
+      "categoryTitle": "Body & Actions",
+      "title": "Exercise Song",
+      "titleVi": "Bài hát tập thể dục",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-b6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-b6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s1",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Wheels on the Bus",
+      "titleVi": "Bánh xe trên xe buýt",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s2",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Old MacDonald",
+      "titleVi": "Bác MacDonald",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s3",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Twinkle Twinkle",
+      "titleVi": "Ngôi sao lấp lánh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s4",
+      "status": "blocked",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Row Row Row",
+      "titleVi": "Chèo chèo chèo",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "age_appropriateness_risk",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s5",
+      "status": "candidate",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Rain Rain Go Away",
+      "titleVi": "Mưa mưa đi đi",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "k-s6",
+      "status": "candidate",
+      "levelId": "kids-prea1",
+      "levelTitle": "Kids Foundation",
+      "categoryId": "k-songs",
+      "categoryTitle": "Nursery Rhymes",
+      "title": "Itsy Bitsy Spider",
+      "titleVi": "Nhện nhỏ leo",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id k-s6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id k-s6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v1",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "100 Basic Words",
+      "titleVi": "100 từ cơ bản",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v2",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "Daily Actions",
+      "titleVi": "Hành động hàng ngày",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v3",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "Family Members",
+      "titleVi": "Thành viên gia đình",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v4",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "Food Vocabulary",
+      "titleVi": "Từ vựng thức ăn",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v5",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "Clothes & Fashion",
+      "titleVi": "Quần áo & Thời trang",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-v6",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-vocab",
+      "categoryTitle": "Essential Vocabulary",
+      "title": "Weather Words",
+      "titleVi": "Từ vựng thời tiết",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-v6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-v6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g1",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "Am/Is/Are",
+      "titleVi": "Am/Is/Are",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g2",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "A/An/The",
+      "titleVi": "Mạo từ A/An/The",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g3",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "Simple Present",
+      "titleVi": "Thì hiện tại đơn",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g4",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "This/That/These/Those",
+      "titleVi": "This/That/These/Those",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g5",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "Can/Can't",
+      "titleVi": "Có thể/Không thể",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-g6",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-grammar",
+      "categoryTitle": "Basic Grammar",
+      "title": "Prepositions in/on/at",
+      "titleVi": "Giới từ in/on/at",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-g6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-g6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l1",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "Greetings",
+      "titleVi": "Chào hỏi",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l2",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "At the Shop",
+      "titleVi": "Tại cửa hàng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l3",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "At School",
+      "titleVi": "Ở trường",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l4",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "Three Little Pigs",
+      "titleVi": "Ba chú heo con",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l5",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "Goldilocks",
+      "titleVi": "Goldilocks & 3 Gấu",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-l6",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-listen",
+      "categoryTitle": "Listening Practice",
+      "title": "Daily Routines",
+      "titleVi": "Thói quen hàng ngày",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-l6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-l6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c1",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Self Introduction",
+      "titleVi": "Tự giới thiệu",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c2",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Asking Directions",
+      "titleVi": "Hỏi đường",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c3",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Restaurant Dialogue",
+      "titleVi": "Hội thoại nhà hàng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c4",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Doctor Visit",
+      "titleVi": "Đi khám bệnh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c5",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Phone Conversation",
+      "titleVi": "Nói chuyện điện thoại",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-c6",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-convo",
+      "categoryTitle": "Simple Conversations",
+      "title": "Making Friends",
+      "titleVi": "Kết bạn mới",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-c6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-c6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr1",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "Vowel Sounds",
+      "titleVi": "Nguyên âm tiếng Anh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr2",
+      "status": "blocked",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "TH Sound",
+      "titleVi": "Âm TH",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr3",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "R vs L",
+      "titleVi": "Phân biệt R và L",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr4",
+      "status": "candidate",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "Word Stress",
+      "titleVi": "Trọng âm từ",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr5",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "S vs SH",
+      "titleVi": "Phân biệt S và SH",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 1,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "b-pr6",
+      "status": "review_queue",
+      "levelId": "beginner-a1",
+      "levelTitle": "Beginner",
+      "categoryId": "b-pronun",
+      "categoryTitle": "Pronunciation",
+      "title": "Silent Letters",
+      "titleVi": "Chữ câm",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id b-pr6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id b-pr6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g1",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Present Perfect",
+      "titleVi": "Hiện tại hoàn thành",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g2",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Past Simple vs Continuous",
+      "titleVi": "Quá khứ đơn vs Tiếp diễn",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g3",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Modal Verbs",
+      "titleVi": "Động từ khiếm khuyết",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g4",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Conditionals 0 & 1",
+      "titleVi": "Câu điều kiện 0 & 1",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g5",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Passive Voice",
+      "titleVi": "Câu bị động",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g6",
+      "status": "candidate",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Reported Speech",
+      "titleVi": "Câu tường thuật",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g7",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Relative Clauses",
+      "titleVi": "Mệnh đề quan hệ",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g7 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g7 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-g8",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-grammar",
+      "categoryTitle": "Grammar Mastery",
+      "title": "Conditionals 2 & 3",
+      "titleVi": "Câu điều kiện 2 & 3",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-g8 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-g8 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v1",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Work & Office",
+      "titleVi": "Công việc & Văn phòng",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v2",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Travel Vocabulary",
+      "titleVi": "Từ vựng Du lịch",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v3",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Health & Medical",
+      "titleVi": "Sức khỏe & Y tế",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v4",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Environment",
+      "titleVi": "Môi trường",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v5",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Technology Words",
+      "titleVi": "Từ vựng Công nghệ",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v6",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Personality Adjectives",
+      "titleVi": "Tính từ tính cách",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v7",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Phrasal Verbs 50",
+      "titleVi": "50 Cụm động từ",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v7 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v7 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-v8",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-vocab",
+      "categoryTitle": "Topic Vocabulary",
+      "title": "Idioms & Expressions",
+      "titleVi": "Thành ngữ & Cách nói",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-v8 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-v8 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s1",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "How to Describe",
+      "titleVi": "Cách miêu tả",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s2",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "Express Opinions",
+      "titleVi": "Bày tỏ ý kiến",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s3",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "Debate & Argue",
+      "titleVi": "Tranh luận",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s4",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "Small Talk Master",
+      "titleVi": "Nói chuyện xã giao",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s5",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "Presentation Skills",
+      "titleVi": "Kỹ năng thuyết trình",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-s6",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-speak",
+      "categoryTitle": "Speaking Skills",
+      "title": "Job Interview",
+      "titleVi": "Phỏng vấn xin việc",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-s6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-s6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li1",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "News English",
+      "titleVi": "Nghe tin tức",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li2",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "TED Talk: Grit",
+      "titleVi": "TED: Sự kiên trì",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li3",
+      "status": "review_queue",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "TED: Inside Mind",
+      "titleVi": "TED: Bên trong tâm trí",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li4",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "Movie Clips English",
+      "titleVi": "Học từ phim",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li5",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "Song Lyrics",
+      "titleVi": "Lời bài hát",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "i-li6",
+      "status": "blocked",
+      "levelId": "intermediate-a2b1",
+      "levelTitle": "Intermediate",
+      "categoryId": "i-listen",
+      "categoryTitle": "Advanced Listening",
+      "title": "BBC 6 Minute English",
+      "titleVi": "BBC 6 phút tiếng Anh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id i-li6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id i-li6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f1",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "Think in English",
+      "titleVi": "Suy nghĩ bằng tiếng Anh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f2",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "Connected Speech",
+      "titleVi": "Nối âm",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f3",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "Shadowing Method",
+      "titleVi": "Phương pháp Shadowing",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f4",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "Filler Words",
+      "titleVi": "Từ đệm tự nhiên",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f5",
+      "status": "review_queue",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "British vs American",
+      "titleVi": "Anh-Anh vs Anh-Mỹ",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-f6",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-fluency",
+      "categoryTitle": "Fluency & Natural English",
+      "title": "Accent Reduction",
+      "titleVi": "Giảm accent",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-f6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-f6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b1",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "Email Writing",
+      "titleVi": "Viết email",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b2",
+      "status": "review_queue",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "Meeting Vocabulary",
+      "titleVi": "Từ vựng cuộc họp",
+      "riskScore": 35,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "alignment_suspect",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b3",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "Negotiation Skills",
+      "titleVi": "Kỹ năng đàm phán",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b4",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "Phone Etiquette",
+      "titleVi": "Giao tiếp điện thoại",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b5",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "Finance Vocabulary",
+      "titleVi": "Từ vựng tài chính",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-b6",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-business",
+      "categoryTitle": "Business English",
+      "title": "CV & Resume",
+      "titleVi": "Hồ sơ xin việc",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-b6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-b6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac1",
+      "status": "candidate",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "IELTS Writing Task 2",
+      "titleVi": "IELTS Writing Task 2",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac2",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "IELTS Speaking Tips",
+      "titleVi": "Mẹo IELTS Speaking",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac3",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "Academic Vocabulary",
+      "titleVi": "Từ vựng học thuật",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac4",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "Essay Structure",
+      "titleVi": "Cấu trúc bài luận",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac5",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "TOEIC Listening",
+      "titleVi": "TOEIC Listening",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-ac6",
+      "status": "candidate",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-academic",
+      "categoryTitle": "Academic & IELTS",
+      "title": "Critical Thinking",
+      "titleVi": "Tư duy phản biện",
+      "riskScore": 55,
+      "autoDecision": "red",
+      "blockingReasons": [],
+      "autoReasons": [
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": 2,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-ac6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-ac6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu1",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "British Culture",
+      "titleVi": "Văn hóa Anh",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu1 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu1 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu2",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "American Slang",
+      "titleVi": "Tiếng lóng Mỹ",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu2 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu2 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu3",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "Australian English",
+      "titleVi": "Tiếng Anh Úc",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu3 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu3 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu4",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "Body Language",
+      "titleVi": "Ngôn ngữ cơ thể",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu4 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu4 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu5",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "Social Media English",
+      "titleVi": "Tiếng Anh mạng xã hội",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu5 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu5 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    },
+    {
+      "lessonId": "a-cu6",
+      "status": "blocked",
+      "levelId": "advanced-b1b2",
+      "levelTitle": "Advanced",
+      "categoryId": "a-culture",
+      "categoryTitle": "Culture & Real World",
+      "title": "Food Around World",
+      "titleVi": "Ẩm thực thế giới",
+      "riskScore": 0,
+      "autoDecision": "red",
+      "blockingReasons": [
+        "title_category_mismatch"
+      ],
+      "autoReasons": [
+        "title_category_mismatch",
+        "no_canonical_source",
+        "license_review_pending",
+        "human_review_pending",
+        "exact_subtitles_not_ready"
+      ],
+      "subtitleMode": "companion",
+      "subtitleLabel": "Companion Script",
+      "quizCount": 5,
+      "canonicalSrc": null,
+      "manualReviewStatus": "pending",
+      "rejectionReasonCode": null,
+      "wave": null,
+      "reviewActions": {
+        "approve": "node scripts/review-video-lessons.mjs approve --lesson-id a-cu6 --reviewer \"<name>\" --evidence-url \"<url>\"",
+        "reject": "node scripts/review-video-lessons.mjs reject --lesson-id a-cu6 --reviewer \"<name>\" --reason-code \"<code>\""
+      }
+    }
+  ]
+}

@@ -21,12 +21,24 @@ licensed or CC source that streams inside the app and standalone PWA.
   Generated QA snapshot.
 - `public/data/video-manifests/video-lessons.alignment.qa.json`
   Automated alignment RCA snapshot for legacy backup references.
+- `public/data/video-manifests/video-lessons.review-queue.json`
+  Generated reviewer queue with rollout waves, blockers, and approve/reject command schema.
+- `public/data/video-manifests/video-lessons.ops.json`
+  Generated operational snapshot with status counts, blocker counts, subtitle coverage, and rollout stop conditions.
 - `scripts/build-video-lessons-manifest.mjs`
   Manifest generator.
 - `scripts/audit-video-lessons.mjs`
   Release-blocking audit.
 - `scripts/audit-video-lesson-alignment.mjs`
   Migration-time RCA for title/category mismatch against legacy reference sources.
+- `scripts/triage-video-lessons.mjs`
+  Deterministic scorer that assigns `candidate`, `review_queue`, `ready_to_publish`, or `blocked`.
+- `scripts/review-video-lessons.mjs`
+  Review/publish workflow for approve, reject, and wave publication.
+- `scripts/discover-video-lesson-sources.mjs`
+  Approved-domain candidate matching for canonical source discovery.
+- `scripts/validate-video-lesson-canonical-assets.mjs`
+  Canonical asset probe for MP4, poster, and exact-timed subtitle tracks.
 - `scripts/sync-video-lessons-learning-packets.mjs`
   Materializes generated bilingual scripts, multi-stage quizzes, and source-verification defaults into `catalog.json`.
 
@@ -82,11 +94,30 @@ Each lesson now carries a `learningPacket` and a `sourceVerification` block.
 `sourceVerification` must include:
 
 - expected title, category, and keywords
+- risk score, auto decision, and automated reasons
+- canonical match evidence
+- review checklist
+- blocking reasons when a lesson cannot move forward
 - manual review status
 - content match status
 - reviewer identity and evidence URL before publication
 
 The runtime shows the bilingual script and richer quiz only for public lessons, but the catalog stores the packet for all 120 lessons so the migration remains traceable and reviewable.
+
+## Lifecycle policy
+
+- `hidden`
+  Not yet surfaced to the fast-reopen queue.
+- `candidate`
+  Auto-generated packet exists and lesson is eligible for source replacement work.
+- `review_queue`
+  Needs human review or still has reopen blockers.
+- `ready_to_publish`
+  Automation and manual review both passed; lesson can be promoted by wave.
+- `public`
+  Published to the public route and search surfaces.
+- `blocked`
+  Hard stop caused by mismatch, legal risk, or reviewer rejection.
 
 ## Hidden lesson policy
 
@@ -96,6 +127,8 @@ The runtime shows the bilingual script and richer quiz only for public lessons, 
   - route stats
   - search overlay video results
   - public category counts
+
+`review_queue` and `blocked` lessons also must not leak into public browse or search surfaces.
 
 ## Migration workflow
 
@@ -121,6 +154,18 @@ Per lesson:
 9. Mark the lesson `public` only after the audit passes.
 
 If any step fails, keep the lesson `hidden`.
+
+## Fast reopen workflow
+
+1. Run `npm run triage:video-lessons`.
+   This refreshes risk score, auto decision, blockers, and lifecycle status across all 120 lessons.
+2. Run `npm run discover:video-lessons:sources`.
+   This ranks candidate sources from the approved-domain inventory in `content/video-lessons/source-candidates.json`.
+3. Review `public/data/video-manifests/video-lessons.review-queue.json` or the in-app `/video-lessons-review` screen.
+4. Approve or reject lessons with `npm run review:video-lessons -- approve ...` or `npm run review:video-lessons -- reject ...`.
+5. Publish only by wave with `npm run review:video-lessons -- publish-wave --wave <1-4>`.
+6. Run `npm run validate:video-lessons:canonical` for any lesson upgraded to canonical media.
+7. Run `npm run audit:video-lessons`, `npm run audit:release`, `npm run build`, and `npm run verify:live`.
 
 ## Alignment RCA workflow
 

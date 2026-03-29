@@ -48,6 +48,10 @@ The following files are the operational source of truth for release-critical che
   Generated QA snapshot for release review and live verification.
 - `public/data/video-manifests/video-lessons.alignment.qa.json`
   RCA snapshot for legacy reference mismatch triage.
+- `public/data/video-manifests/video-lessons.review-queue.json`
+  Reviewer queue, rollout waves, blocker reasons, and publish commands.
+- `public/data/video-manifests/video-lessons.ops.json`
+  Operational snapshot for rollout metrics and stop conditions.
 - `scripts/build-video-lessons-manifest.mjs`
   Video lesson manifest build step from the editorial catalog.
 - `scripts/audit-video-lessons.mjs`
@@ -56,6 +60,14 @@ The following files are the operational source of truth for release-critical che
   Materializes bilingual scripts, richer quiz packs, and source-verification defaults into the catalog.
 - `scripts/audit-video-lesson-alignment.mjs`
   Non-release RCA audit for mismatch between expected lesson topic and legacy reference links.
+- `scripts/triage-video-lessons.mjs`
+  Deterministic lesson scorer for candidate, review queue, blocked, and ready-to-publish status.
+- `scripts/review-video-lessons.mjs`
+  Approve, reject, and publish-wave workflow for hybrid review gating.
+- `scripts/discover-video-lesson-sources.mjs`
+  Approved-domain source discovery helper.
+- `scripts/validate-video-lesson-canonical-assets.mjs`
+  Canonical MP4/poster/VTT validation helper.
 - `.github/workflows/deploy.yml`
   Mandatory release gates before publish.
 
@@ -63,27 +75,31 @@ The following files are the operational source of truth for release-critical che
 
 1. Run `npm run sync:video-lessons:learning` if video titles, categories, or quiz design changed.
    Result must refresh learning packets, bilingual scripts, and source-verification defaults in the catalog.
-2. Run `npm run build:video-lessons`.
-   Result must emit the current runtime manifest and QA snapshot.
-3. Run `npm run audit:video-lessons`.
+2. Run `npm run triage:video-lessons` after alignment RCA, source replacement work, or review decisions.
+   Result must refresh risk score, auto decision, blocking reasons, and lifecycle status.
+3. Optionally run `npm run discover:video-lessons:sources` when replenishing canonical source candidates.
+   Result must emit the approved-domain candidate ranking report.
+4. Run `npm run build:video-lessons`.
+   Result must emit the runtime manifest, QA snapshot, review queue, and ops snapshot.
+5. Run `npm run audit:video-lessons`.
    Result must be `pass: true`.
-4. Run `npm run audit:premium`.
+6. Run `npm run audit:premium`.
    Result must be `pass: true`.
-5. Run `npm run audit:entitlement`.
+7. Run `npm run audit:entitlement`.
    Result must be `pass: true`.
-6. Run `npm run audit:voice-runtime`.
+8. Run `npm run audit:voice-runtime`.
    Result must be `pass: true`.
-7. Run `npm run audit:kids-library`.
+9. Run `npm run audit:kids-library`.
    Result must be `pass: true`.
-8. Run `npm run audit:free-speaking`.
+10. Run `npm run audit:free-speaking`.
    Result must be `strictModulePass: true`.
-9. Run `npm run audit:teacher-lessons`.
+11. Run `npm run audit:teacher-lessons`.
    Result must be `strictModulePass: true`.
-10. Run `npm run build`.
+12. Run `npm run build`.
    Result must complete successfully.
-11. Optionally run `npm run audit:video-lessons:alignment` during migration to review mismatch RCA before replacing legacy backup references.
-12. Push `main`.
-13. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
+13. Optionally run `npm run audit:video-lessons:alignment` during migration to review mismatch RCA before replacing legacy backup references.
+14. Push `main`.
+15. Wait for GitHub Actions deploy and verify live bundle rollout with `npm run verify:live`.
 
 ## Audio regression control
 
@@ -100,6 +116,7 @@ The following files are the operational source of truth for release-critical che
 - Public video lessons are no longer treated as "100% offline". They are streamed from a controlled object-storage CDN.
 - YouTube may remain as a reference URL only. It is not a valid canonical source for public playback, especially in standalone PWA mode.
 - If a lesson has no approved replacement source, it stays hidden until the migration checklist in `docs/video-lessons-sot.md` is complete.
+- A lesson cannot move from `review_queue` to `public` unless review approval, auto decision `green`, and rollout wave publication all succeed.
 
 ## Distribution policy
 
