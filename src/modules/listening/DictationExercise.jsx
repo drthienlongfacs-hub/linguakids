@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { speakText } from '../../utils/speakText';
 
 // Dictation Exercise: listen to segment → type what you hear → check accuracy
 export default function DictationExercise({ segments, onComplete, lang = 'en' }) {

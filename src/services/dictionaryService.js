@@ -1,4 +1,5 @@
 // dictionaryService.js — FreeDictionaryAPI Integration
+import { speakText } from '../utils/speakText';
 // Provides: IPA pronunciation, audio URLs, definitions, examples, synonyms
 // API: https://api.dictionaryapi.dev/api/v2/entries/en/{word}
 // Free, unlimited, no key required
@@ -84,12 +85,8 @@ export async function getAudioURL(word) {
 export async function playPronunciation(word) {
     const url = await getAudioURL(word);
     if (!url) {
-        // Fallback to browser TTS
-        const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.85;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
+        // Fallback to browser TTS with voice selection
+        speakText(word, { lang: 'en-US', rate: 0.85 });
         return false; // Used TTS fallback
     }
     const audio = new Audio(url);

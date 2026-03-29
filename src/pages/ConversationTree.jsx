@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const STORIES = [
     {
@@ -125,10 +126,7 @@ export default function ConversationTree() {
     const story = storyId ? STORIES.find(s => s.id === storyId) : null;
 
     const speak = useCallback((text) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = 0.85;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate: 0.85 });
     }, []);
 
     const handleChoice = (choice) => {

@@ -7,6 +7,7 @@ import ListeningQuiz from './ListeningQuiz';
 import CapabilityNotice from '../../components/CapabilityNotice';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { loadAudioManifest } from '../../services/audioManifestService';
+import { speakText } from '../../utils/speakText';
 
 // Full Listening Lesson experience: 3 tabs — Listen, Dictation, Quiz
 export default function ListeningLesson() {
@@ -157,11 +158,7 @@ export default function ListeningLesson() {
                                     {v.example && <div className="vocab-example">💬 {v.example}</div>}
                                     <button
                                         className="vocab-speak-btn"
-                                        onClick={() => {
-                                            const u = new SpeechSynthesisUtterance(v.word);
-                                            u.lang = 'en-US';
-                                            window.speechSynthesis.speak(u);
-                                        }}
+                                        onClick={() => { speakText(v.word, { lang: 'en-US' }); }}
                                     >
                                         🔊
                                     </button>

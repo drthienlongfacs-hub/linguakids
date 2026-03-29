@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const WORDS = [
     { word: 'necessary', level: 'B1', vi: 'cần thiết', tip: 'one C, two Ss' },
@@ -46,10 +47,7 @@ export default function SpellingBee() {
     const current = words[idx];
 
     const speak = useCallback((text, rate = 0.7) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = rate;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate });
     }, []);
 
     const handleCheck = () => {

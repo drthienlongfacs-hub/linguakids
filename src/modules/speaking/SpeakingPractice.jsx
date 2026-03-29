@@ -5,6 +5,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { diffWords, calculateAccuracy, assessFluency, estimateBandScore, STATUS_COLORS } from '../../utils/speakingUtils';
+import { speakText as speakTextUtil } from '../../utils/speakText';
 
 // ============================================================
 // SpeakingPractice Component
@@ -216,14 +217,12 @@ export default function SpeakingPractice({
     // ============================================================
     const playModelAnswer = useCallback((text) => {
         if (isSpeakingModel || !text) return;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.85;
-        utterance.onstart = () => setIsSpeakingModel(true);
-        utterance.onend = () => setIsSpeakingModel(false);
-        utterance.onerror = () => setIsSpeakingModel(false);
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
+        setIsSpeakingModel(true);
+        speakTextUtil(text, {
+            lang: 'en-US',
+            rate: 0.85,
+            onEnd: () => setIsSpeakingModel(false),
+        });
     }, [isSpeakingModel]);
 
     // ============================================================

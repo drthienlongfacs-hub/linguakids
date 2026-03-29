@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const PASSAGES = [
     {
@@ -69,10 +70,7 @@ export default function ListeningComprehension() {
     const passage = PASSAGES[passageIdx];
 
     const speak = useCallback((text, rate) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = rate || speed;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate: rate || speed });
     }, [speed]);
 
     const handleAnswer = (idx) => {

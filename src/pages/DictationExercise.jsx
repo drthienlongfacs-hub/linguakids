@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const EN_SENTENCES = [
     { text: 'The weather is beautiful today.', vi: 'Thời tiết hôm nay đẹp.' },
@@ -64,11 +65,7 @@ export default function DictationExercise() {
     const [speed, setSpeed] = useState(0.8);
 
     const speak = useCallback((text, rate) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = isEN ? 'en-US' : 'zh-CN';
-        u.rate = rate || speed;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: isEN ? 'en-US' : 'zh-CN', rate: rate || speed });
     }, [isEN, speed]);
 
     const handleSubmit = (e) => {

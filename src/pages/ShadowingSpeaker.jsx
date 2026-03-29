@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
 
@@ -99,12 +100,7 @@ export default function ShadowingSpeaker() {
 
     const speak = useCallback((text) => {
         if (!speaker) return;
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US';
-        u.rate = speaker.rate;
-        u.pitch = speaker.pitch;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate: speaker.rate, pitch: speaker.pitch });
     }, [speaker]);
 
     const startListening = useCallback(() => {

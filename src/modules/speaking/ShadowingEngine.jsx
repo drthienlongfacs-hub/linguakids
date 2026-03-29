@@ -11,6 +11,7 @@ import { useGame } from '../../context/GameStateContext';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { recordCapabilityEvent } from '../../services/capabilityService';
 import { analyzeSpeakingAttempt, buildSpeakingRecap } from '../../services/speakingAnalyticsService';
+import { speakText } from '../../utils/speakText';
 
 // ============================================================
 // Levenshtein distance for word-level similarity scoring

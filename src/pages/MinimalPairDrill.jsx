@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const PAIRS = [
     { a: 'ship', b: 'sheep', ipa: '/ɪ/ vs /iː/', vi: 'tàu vs con cừu', tip: 'Short /ɪ/ (ship) vs Long /iː/ (sheep)' },
@@ -41,10 +42,7 @@ export default function MinimalPairDrill() {
     const pair = pairs[idx];
 
     const speak = useCallback((text, rate = 0.8) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = rate;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate });
     }, []);
 
     const playRandom = () => {

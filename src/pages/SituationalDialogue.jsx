@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
 
@@ -99,10 +100,7 @@ export default function SituationalDialogue() {
     const scenario = scenarioId ? SCENARIOS.find(s => s.id === scenarioId) : null;
 
     const speakAI = useCallback((text) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = 0.85;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'en-US', rate: 0.85 });
     }, []);
 
     const startListening = useCallback(() => {

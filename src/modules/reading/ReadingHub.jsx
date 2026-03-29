@@ -4,6 +4,7 @@ import { useGame } from '../../context/GameStateContext';
 import { getReadingByMode } from '../../data/reading';
 import { isAdultMode } from '../../utils/userMode';
 import { fetchWordDetail } from '../../services/dictionaryService';
+import { speakText } from '../../utils/speakText';
 
 export default function ReadingHub() {
     const navigate = useNavigate();
@@ -216,7 +217,7 @@ function ReadingExercise({ passage, onBack, adult }) {
                             <div className="rwp-actions">
                                 <button className="vocab-speak-btn" onClick={() => {
                                     if (wordDetail?.audio) { new Audio(wordDetail.audio).play(); }
-                                    else { const u = new SpeechSynthesisUtterance(selectedWord); u.lang = 'en-US'; window.speechSynthesis.speak(u); }
+                                    else { speakText(selectedWord, { lang: 'en-US' }); }
                                 }}>🔊 {adult ? 'Listen' : 'Nghe'}</button>
                             </div>
                         </div>
@@ -259,7 +260,7 @@ function ReadingExercise({ passage, onBack, adult }) {
             {tab === 'vocab' && (
                 <div className="ll-vocab-tab">
                     <div className="vocab-grid">{passage.vocabulary.map((v, i) => (
-                        <div key={i} className="vocab-card"><div className="vocab-word">{v.word}</div><div className="vocab-meaning">🇻🇳 {v.meaning}</div>{v.example && <div className="vocab-example">💬 {v.example}</div>}<button className="vocab-speak-btn" onClick={() => { const u = new SpeechSynthesisUtterance(v.word); u.lang = 'en-US'; window.speechSynthesis.speak(u); }}>🔊</button></div>
+                        <div key={i} className="vocab-card"><div className="vocab-word">{v.word}</div><div className="vocab-meaning">🇻🇳 {v.meaning}</div>{v.example && <div className="vocab-example">💬 {v.example}</div>}<button className="vocab-speak-btn" onClick={() => { speakText(v.word, { lang: 'en-US' }); }}>🔊</button></div>
                     ))}</div>
                 </div>
             )}

@@ -8,6 +8,7 @@ import { useGame } from '../context/GameStateContext';
 import { usePracticeLexicon } from '../hooks/usePracticeLexicon';
 import { isAdultMode } from '../utils/userMode';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 function shuffle(arr) {
     const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; } return a;
@@ -100,12 +101,7 @@ function PronunciationSession({ addXP, allWords, isEN, navigate, sourceLabel, st
     const recognizerRef = useRef(null);
 
     const speak = useCallback((text) => {
-        if (!window.speechSynthesis) return;
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = isEN ? 'en-US' : 'zh-CN';
-        utterance.rate = 0.85;
-        window.speechSynthesis.speak(utterance);
+        speakText(text, { lang: isEN ? 'en-US' : 'zh-CN', rate: 0.85 });
     }, [isEN]);
 
     function startListening() {

@@ -7,6 +7,7 @@ import ListeningQuiz from '../listening/ListeningQuiz';
 import CapabilityNotice from '../../components/CapabilityNotice';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
 import { loadAudioManifest } from '../../services/audioManifestService';
+import { speakText } from '../../utils/speakText';
 
 export default function ListeningCnLesson() {
     const { lessonId } = useParams();
@@ -103,7 +104,7 @@ export default function ListeningCnLesson() {
                             langCode="zh-CN"
                             showPinyin
                             audioManifest={audioManifest}
-                            onSegmentChange={() => {}}
+                            onSegmentChange={() => { }}
                         />
                         <button
                             className="ll-done-btn"
@@ -162,15 +163,7 @@ export default function ListeningCnLesson() {
                                     <button
                                         className="vocab-speak-btn"
                                         onClick={() => {
-                                            const utterance = new SpeechSynthesisUtterance(item.word);
-                                            utterance.lang = 'zh-CN';
-                                            const voices = window.speechSynthesis.getVoices();
-                                            const voice = voices.find(entry => entry.lang.startsWith('zh'));
-                                            if (voice) {
-                                                utterance.voice = voice;
-                                                utterance.lang = voice.lang;
-                                            }
-                                            window.speechSynthesis.speak(utterance);
+                                            speakText(item.word, { lang: 'zh-CN' });
                                         }}
                                     >
                                         🔊

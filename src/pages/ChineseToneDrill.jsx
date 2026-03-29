@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import { speakText } from '../utils/speakText';
 
 const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
 
@@ -57,10 +58,7 @@ export default function ChineseToneDrill() {
     const ex = exercises[idx];
 
     const speak = useCallback((text, rate = 0.7) => {
-        window.speechSynthesis?.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'zh-CN'; u.rate = rate;
-        window.speechSynthesis?.speak(u);
+        speakText(text, { lang: 'zh-CN', rate });
     }, []);
 
     const handleToneSelect = (tone) => {
