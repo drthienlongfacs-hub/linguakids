@@ -91,6 +91,8 @@ async function main() {
             manifest.clips[accentId][personalityId] = {
                 voice: config.voice,
                 voiceLabel: config.voiceLabel,
+                speakerKey: config.speakerKey || config.voice,
+                variantMode: config.variantMode || 'styled_variant',
                 rate: config.rate || '+0%',
                 pitch: config.pitch || '+0Hz',
                 volume: config.volume || '+0%',

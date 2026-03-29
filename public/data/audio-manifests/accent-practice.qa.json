@@ -1,0 +1,224 @@
+{
+  "generatedAt": "2026-03-29T05:29:01.597Z",
+  "sourceManifest": "accent-practice.json",
+  "summary": {
+    "presetCount": 18,
+    "distinctSpeakerCount": 13,
+    "distinctPreviewCount": 18,
+    "missingFiles": 0,
+    "strict18DistinctSpeakers": false
+  },
+  "accents": {
+    "us": {
+      "presetCount": 6,
+      "distinctSpeakerCount": 6,
+      "distinctPreviewCount": 6,
+      "variantModes": {
+        "distinct_speaker": 6
+      },
+      "entries": [
+        {
+          "accentId": "us",
+          "personalityId": "broadcast",
+          "voice": "en-US-ChristopherNeural",
+          "voiceLabel": "Christopher Neural",
+          "speakerKey": "en-US-ChristopherNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "7a42e2432d148b7ab8a45f8a4953bc6bb0a46d5907300c8f4402a1b324fcb113"
+        },
+        {
+          "accentId": "us",
+          "personalityId": "natural",
+          "voice": "en-US-AvaNeural",
+          "voiceLabel": "Ava Neural",
+          "speakerKey": "en-US-AvaNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "7810cb662e48e273fd44d576eb36c52f743f8395732f5c6d76bdc2702439a064"
+        },
+        {
+          "accentId": "us",
+          "personalityId": "energetic",
+          "voice": "en-US-EmmaNeural",
+          "voiceLabel": "Emma Neural",
+          "speakerKey": "en-US-EmmaNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "3f0d82f935d8f0f1a067ffb72d326974ecfe78b654ba277daa6d75f3bd05cd90"
+        },
+        {
+          "accentId": "us",
+          "personalityId": "dramatic",
+          "voice": "en-US-BrianNeural",
+          "voiceLabel": "Brian Neural",
+          "speakerKey": "en-US-BrianNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "8c2acc96803b9ce6e3128beb74115a305e40ba55130a4651e9d5cf5e8f61b6d1"
+        },
+        {
+          "accentId": "us",
+          "personalityId": "premium",
+          "voice": "en-US-MichelleNeural",
+          "voiceLabel": "Michelle Neural",
+          "speakerKey": "en-US-MichelleNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "bc599935df2347a3c6d5558cf95730cfea9aaa3b60db51c01b61b9b694172d2a"
+        },
+        {
+          "accentId": "us",
+          "personalityId": "dynamic",
+          "voice": "en-US-GuyNeural",
+          "voiceLabel": "Guy Neural",
+          "speakerKey": "en-US-GuyNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "0dd9c41f7c02c41bc38a8a2f5eb9c5206d8c4c138340b2b1a2729c76108b6a54"
+        }
+      ]
+    },
+    "uk": {
+      "presetCount": 6,
+      "distinctSpeakerCount": 5,
+      "distinctPreviewCount": 6,
+      "variantModes": {
+        "distinct_speaker": 5,
+        "styled_variant": 1
+      },
+      "entries": [
+        {
+          "accentId": "uk",
+          "personalityId": "broadcast",
+          "voice": "en-GB-RyanNeural",
+          "voiceLabel": "Ryan Neural",
+          "speakerKey": "en-GB-RyanNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "1f888a88c1590432e1ebeacf362e0b29de7a687c5ede9024019bf4175a1076ee"
+        },
+        {
+          "accentId": "uk",
+          "personalityId": "natural",
+          "voice": "en-GB-SoniaNeural",
+          "voiceLabel": "Sonia Neural",
+          "speakerKey": "en-GB-SoniaNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "bc33ea623696027d24fb0c152ff9f1fc22a8e56c65769f8db702c4e0b1bd5cf2"
+        },
+        {
+          "accentId": "uk",
+          "personalityId": "energetic",
+          "voice": "en-GB-MaisieNeural",
+          "voiceLabel": "Maisie Neural",
+          "speakerKey": "en-GB-MaisieNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "4b83322942616ebc77df843da3b7a99ce896acf9cfdf2914a5806541cdc3fb0e"
+        },
+        {
+          "accentId": "uk",
+          "personalityId": "dramatic",
+          "voice": "en-GB-ThomasNeural",
+          "voiceLabel": "Thomas Neural",
+          "speakerKey": "en-GB-ThomasNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "9056c2a890994f8a7cd98becde4029652b0784812b780ded8660bbf1c84f6e14"
+        },
+        {
+          "accentId": "uk",
+          "personalityId": "premium",
+          "voice": "en-GB-LibbyNeural",
+          "voiceLabel": "Libby Neural",
+          "speakerKey": "en-GB-LibbyNeural",
+          "variantMode": "distinct_speaker",
+          "clipCount": 7,
+          "previewHash": "bddc023ed41235872b3ec731ba7d3cf531b559552c2afc200aa6fc3773e8cc73"
+        },
+        {
+          "accentId": "uk",
+          "personalityId": "dynamic",
+          "voice": "en-GB-RyanNeural",
+          "voiceLabel": "Ryan Neural+",
+          "speakerKey": "en-GB-RyanNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "ff425120bf8b29500847c892f6d6fe8edcba5244cc947ec62f3fab60fed97f19"
+        }
+      ]
+    },
+    "au": {
+      "presetCount": 6,
+      "distinctSpeakerCount": 2,
+      "distinctPreviewCount": 6,
+      "variantModes": {
+        "styled_variant": 6
+      },
+      "entries": [
+        {
+          "accentId": "au",
+          "personalityId": "broadcast",
+          "voice": "en-AU-WilliamMultilingualNeural",
+          "voiceLabel": "William Neural",
+          "speakerKey": "en-AU-WilliamMultilingualNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "0611d8cc5c2f7d8e20fe76009cc2fc0583e39298d0514caa59d5902cf01770d8"
+        },
+        {
+          "accentId": "au",
+          "personalityId": "natural",
+          "voice": "en-AU-NatashaNeural",
+          "voiceLabel": "Natasha Neural",
+          "speakerKey": "en-AU-NatashaNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "10189a5fb915060c88d672b559dcd816204c5a0d5c9e47b5e2a917ab9144c53b"
+        },
+        {
+          "accentId": "au",
+          "personalityId": "energetic",
+          "voice": "en-AU-NatashaNeural",
+          "voiceLabel": "Natasha Neural+",
+          "speakerKey": "en-AU-NatashaNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "eeae19c7f73d982901bf63248fd7ca188249ca155673b89b5169ebabd45bbeb3"
+        },
+        {
+          "accentId": "au",
+          "personalityId": "dramatic",
+          "voice": "en-AU-WilliamMultilingualNeural",
+          "voiceLabel": "William Neural+",
+          "speakerKey": "en-AU-WilliamMultilingualNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "b65e0e32686c9ba793dc6c5213c76930bc61e4b26d15c8ec148e04aaf7695474"
+        },
+        {
+          "accentId": "au",
+          "personalityId": "premium",
+          "voice": "en-AU-NatashaNeural",
+          "voiceLabel": "Natasha Neural Studio",
+          "speakerKey": "en-AU-NatashaNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "948bba6830545c25e8bd977ba10b3ba0384186db35fd205003125d7e81d6ad9f"
+        },
+        {
+          "accentId": "au",
+          "personalityId": "dynamic",
+          "voice": "en-AU-WilliamMultilingualNeural",
+          "voiceLabel": "William Neural TED",
+          "speakerKey": "en-AU-WilliamMultilingualNeural",
+          "variantMode": "styled_variant",
+          "clipCount": 7,
+          "previewHash": "1268b4933668d4924fc95b08ca267f2c1f10071ea4c4b4e26a94d0fd1307fb8d"
+        }
+      ]
+    }
+  }
+}

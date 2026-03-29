@@ -23,6 +23,7 @@ import {
     getAccentVoicePackClip,
     getAccentVoicePackEntry,
     loadAccentVoicePackManifest,
+    loadAccentVoicePackQA,
 } from '../services/accentVoicePackService';
 
 const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
@@ -58,6 +59,7 @@ export default function AccentPractice() {
     const [selectedPersonality, setSelectedPersonality] = useState(DEFAULT_PERSONALITY);
     const [voices, setVoices] = useState([]);
     const [voicePackManifest, setVoicePackManifest] = useState(null);
+    const [voicePackQA, setVoicePackQA] = useState(null);
     const [voicePackStatus, setVoicePackStatus] = useState('loading');
     const [step, setStep] = useState('accent'); // accent | personality | practice | results
     const [sIdx, setSIdx] = useState(0);
@@ -97,6 +99,23 @@ export default function AccentPractice() {
                 if (!active) return;
                 setVoicePackManifest(null);
                 setVoicePackStatus('missing');
+            });
+
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        let active = true;
+        loadAccentVoicePackQA()
+            .then((qa) => {
+                if (!active) return;
+                setVoicePackQA(qa);
+            })
+            .catch(() => {
+                if (!active) return;
+                setVoicePackQA(null);
             });
 
         return () => {
@@ -209,6 +228,7 @@ export default function AccentPractice() {
                 label: `Studio · ${packEntry.voiceLabel}`,
                 mode: 'controlled',
                 voiceLabel: packEntry.voiceLabel,
+                variantMode: packEntry.variantMode || 'styled_variant',
             };
         }
 
@@ -218,6 +238,7 @@ export default function AccentPractice() {
                 label: `Browser · ${voice.name}`,
                 mode: 'browser',
                 voiceLabel: voice.name,
+                variantMode: 'browser_fallback',
             };
         }
 
@@ -225,6 +246,7 @@ export default function AccentPractice() {
             label: `Fallback · ${platform}`,
             mode: 'missing',
             voiceLabel: null,
+            variantMode: 'missing',
         };
     }, [platform, voicePackManifest, voices]);
 
@@ -247,6 +269,7 @@ export default function AccentPractice() {
     const selectedPackEntry = selectedAccent
         ? getAccentVoicePackEntry(voicePackManifest, selectedAccent, selectedPersonality)
         : null;
+    const selectedAccentQA = selectedAccent ? voicePackQA?.accents?.[selectedAccent] : null;
 
     const startListening = useCallback(() => {
         if (!SpeechRecognition) return;
@@ -369,6 +392,11 @@ export default function AccentPractice() {
                     {voicePackStatus === 'ready'
                         ? ' Preview trên mobile sẽ ưu tiên audio pack render sẵn để tránh hiện tượng giọng ù, hẹp, hoặc collapse về cùng một voice.'
                         : ' Nếu chưa tải được voice pack, app sẽ rơi về browser TTS nên chất lượng sẽ phụ thuộc voice cài trên thiết bị.'}
+                    {voicePackQA?.summary && (
+                        <div style={{ marginTop: '6px' }}>
+                            QA: {voicePackQA.summary.presetCount} preset, {voicePackQA.summary.distinctSpeakerCount} base speaker, {voicePackQA.summary.distinctPreviewCount} preview output distinct.
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -403,6 +431,11 @@ export default function AccentPractice() {
                             ? 'Mỗi preset sẽ ưu tiên voice pack render sẵn. Browser voice chỉ dùng khi asset thiếu.'
                             : `Browser hiện mới resolve được ${browserAudit.uniqueCount}/${browserAudit.totalResolved || VOICE_PERSONALITIES.length} voice unique cho accent này, nên một số preset có thể trùng timbre nếu asset pack chưa sẵn.`}
                     </div>
+                    {selectedAccentQA && (
+                        <div style={{ fontSize: '0.76rem', color: 'var(--color-text-light)', marginTop: '6px' }}>
+                            Audit accent này: {selectedAccentQA.presetCount} preset, {selectedAccentQA.distinctSpeakerCount} base speaker, {selectedAccentQA.distinctPreviewCount} output preview distinct.
+                        </div>
+                    )}
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
@@ -436,6 +469,11 @@ export default function AccentPractice() {
                                 </div>
                                 <div style={{ fontSize: '0.58rem', color: 'var(--color-text-light)', marginTop: '2px', minHeight: '16px' }}>
                                     {outputMeta.label}
+                                </div>
+                                <div style={{ fontSize: '0.56rem', color: 'var(--color-text-light)', marginTop: '2px', minHeight: '14px' }}>
+                                    {outputMeta.variantMode === 'distinct_speaker' && 'Distinct speaker'}
+                                    {outputMeta.variantMode === 'styled_variant' && 'Styled studio variant'}
+                                    {outputMeta.variantMode === 'browser_fallback' && 'Browser fallback'}
                                 </div>
                                 <button
                                     onClick={(event) => {
@@ -553,7 +591,7 @@ export default function AccentPractice() {
                 </strong>
                 <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
                     {selectedPackEntry
-                        ? `${selectedPackEntry.voiceLabel} dang duoc dung cho preset nay. Nut cham/nhanh chi doi playback rate tren audio pack, khong doi timbre goc.`
+                        ? `${selectedPackEntry.voiceLabel} dang duoc dung cho preset nay. ${selectedPackEntry.variantMode === 'distinct_speaker' ? 'Preset nay la speaker rieng.' : 'Preset nay la studio style variant tren base speaker hien co.'} Nut cham/nhanh chi doi playback rate tren audio pack, khong doi timbre goc.`
                         : 'Preset nay dang dung browser TTS. Chat luong va do khac biet giua cac voice se phu thuoc cac voice da cai trong may.'}
                 </div>
             </div>
