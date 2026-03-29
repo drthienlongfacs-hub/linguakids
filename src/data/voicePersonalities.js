@@ -197,6 +197,33 @@ export const ACCENT_PROFILES = [
     },
 ];
 
+const PERSONALITY_VOICE_HINTS = {
+    us: {
+        broadcast: ['Christopher', 'Aria', 'Eric', 'Roger', 'Albert', 'Ralph'],
+        natural: ['Ava', 'Jenny', 'Samantha', 'Emma', 'Michelle', 'Flo'],
+        energetic: ['Emma', 'Roger', 'Ana', 'Eddy', 'Junior'],
+        dramatic: ['Brian', 'Andrew', 'Fred', 'Grandpa'],
+        premium: ['Michelle', 'Aria', 'Shelley', 'Kathy'],
+        dynamic: ['Guy', 'Roger', 'Andrew', 'Reed'],
+    },
+    uk: {
+        broadcast: ['Ryan', 'Daniel', 'Reed'],
+        natural: ['Sonia', 'Libby', 'Serena', 'Kate', 'Shelley', 'Flo'],
+        energetic: ['Maisie', 'Eddy', 'Rocko', 'Sandy'],
+        dramatic: ['Thomas', 'Grandpa', 'Arthur', 'Oliver'],
+        premium: ['Libby', 'Shelley', 'Martha', 'Grandma'],
+        dynamic: ['Ryan', 'Reed', 'Daniel', 'Rocko'],
+    },
+    au: {
+        broadcast: ['William', 'Gordon'],
+        natural: ['Natasha', 'Karen', 'Lee'],
+        energetic: ['Natasha', 'Karen'],
+        dramatic: ['William', 'Gordon'],
+        premium: ['Natasha', 'Karen'],
+        dynamic: ['William', 'Natasha'],
+    },
+};
+
 // ================================================================
 // PLATFORM DETECTION
 // ================================================================
@@ -209,6 +236,21 @@ export function detectPlatform() {
     if (/Mac/.test(navigator.platform)) return 'macos';
     if (/Win/.test(navigator.platform)) return 'windows';
     return 'unknown';
+}
+
+function matchVoiceHints(voices, lang, accentId, personalityId) {
+    if (!accentId || !personalityId) return null;
+    const hints = PERSONALITY_VOICE_HINTS[accentId]?.[personalityId] || [];
+    if (hints.length === 0) return null;
+
+    const langBase = lang.split('-')[0];
+    const scopedVoices = voices.filter((voice) => voice.lang === lang || voice.lang.startsWith(langBase));
+    for (const hint of hints) {
+        const match = scopedVoices.find((voice) => voice.name.includes(hint));
+        if (match) return match;
+    }
+
+    return null;
 }
 
 // ================================================================
@@ -227,6 +269,9 @@ export function findPersonalityVoice(voices, accentId, personalityId) {
     const platform = detectPlatform();
     const lang = accent.lang;
     const gender = personality?.gender || 'female';
+
+    const hintedMatch = matchVoiceHints(voices, lang, accentId, personalityId);
+    if (hintedMatch) return hintedMatch;
 
     // 1. Try platform-specific voice names (highest quality match)
     const platformDB = VOICE_DB[platform];

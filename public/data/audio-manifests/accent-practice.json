@@ -1,0 +1,301 @@
+{
+  "source": "controlled_studio_voice_pack",
+  "engine": "edge_tts",
+  "generatedAt": "2026-03-29T04:40:39.770Z",
+  "clips": {
+    "us": {
+      "broadcast": {
+        "voice": "en-US-ChristopherNeural",
+        "voiceLabel": "Christopher Neural",
+        "rate": "-4%",
+        "pitch": "-2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/broadcast/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/broadcast/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/broadcast/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/broadcast/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/broadcast/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/broadcast/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/broadcast/sentence-5.mp3"
+        }
+      },
+      "natural": {
+        "voice": "en-US-AvaNeural",
+        "voiceLabel": "Ava Neural",
+        "rate": "+0%",
+        "pitch": "+0Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/natural/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/natural/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/natural/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/natural/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/natural/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/natural/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/natural/sentence-5.mp3"
+        }
+      },
+      "energetic": {
+        "voice": "en-US-EmmaNeural",
+        "voiceLabel": "Emma Neural",
+        "rate": "+14%",
+        "pitch": "+3Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/energetic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/energetic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/energetic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/energetic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/energetic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/energetic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/energetic/sentence-5.mp3"
+        }
+      },
+      "dramatic": {
+        "voice": "en-US-BrianNeural",
+        "voiceLabel": "Brian Neural",
+        "rate": "-16%",
+        "pitch": "-4Hz",
+        "volume": "-5%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/dramatic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/dramatic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/dramatic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/dramatic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/dramatic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/dramatic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/dramatic/sentence-5.mp3"
+        }
+      },
+      "premium": {
+        "voice": "en-US-MichelleNeural",
+        "voiceLabel": "Michelle Neural",
+        "rate": "-8%",
+        "pitch": "+0Hz",
+        "volume": "-2%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/premium/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/premium/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/premium/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/premium/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/premium/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/premium/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/premium/sentence-5.mp3"
+        }
+      },
+      "dynamic": {
+        "voice": "en-US-GuyNeural",
+        "voiceLabel": "Guy Neural",
+        "rate": "+8%",
+        "pitch": "+2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/us/dynamic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/us/dynamic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/us/dynamic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/us/dynamic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/us/dynamic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/us/dynamic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/us/dynamic/sentence-5.mp3"
+        }
+      }
+    },
+    "uk": {
+      "broadcast": {
+        "voice": "en-GB-RyanNeural",
+        "voiceLabel": "Ryan Neural",
+        "rate": "-4%",
+        "pitch": "-2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/broadcast/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/broadcast/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/broadcast/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/broadcast/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/broadcast/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/broadcast/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/broadcast/sentence-5.mp3"
+        }
+      },
+      "natural": {
+        "voice": "en-GB-SoniaNeural",
+        "voiceLabel": "Sonia Neural",
+        "rate": "+0%",
+        "pitch": "+0Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/natural/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/natural/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/natural/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/natural/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/natural/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/natural/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/natural/sentence-5.mp3"
+        }
+      },
+      "energetic": {
+        "voice": "en-GB-MaisieNeural",
+        "voiceLabel": "Maisie Neural",
+        "rate": "+12%",
+        "pitch": "+3Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/energetic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/energetic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/energetic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/energetic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/energetic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/energetic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/energetic/sentence-5.mp3"
+        }
+      },
+      "dramatic": {
+        "voice": "en-GB-ThomasNeural",
+        "voiceLabel": "Thomas Neural",
+        "rate": "-16%",
+        "pitch": "-4Hz",
+        "volume": "-4%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/dramatic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/dramatic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/dramatic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/dramatic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/dramatic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/dramatic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/dramatic/sentence-5.mp3"
+        }
+      },
+      "premium": {
+        "voice": "en-GB-LibbyNeural",
+        "voiceLabel": "Libby Neural",
+        "rate": "-8%",
+        "pitch": "+0Hz",
+        "volume": "-2%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/premium/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/premium/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/premium/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/premium/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/premium/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/premium/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/premium/sentence-5.mp3"
+        }
+      },
+      "dynamic": {
+        "voice": "en-GB-RyanNeural",
+        "voiceLabel": "Ryan Neural+",
+        "rate": "+9%",
+        "pitch": "+2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/uk/dynamic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/uk/dynamic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/uk/dynamic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/uk/dynamic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/uk/dynamic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/uk/dynamic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/uk/dynamic/sentence-5.mp3"
+        }
+      }
+    },
+    "au": {
+      "broadcast": {
+        "voice": "en-AU-WilliamMultilingualNeural",
+        "voiceLabel": "William Neural",
+        "rate": "-4%",
+        "pitch": "-2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/broadcast/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/broadcast/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/broadcast/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/broadcast/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/broadcast/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/broadcast/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/broadcast/sentence-5.mp3"
+        }
+      },
+      "natural": {
+        "voice": "en-AU-NatashaNeural",
+        "voiceLabel": "Natasha Neural",
+        "rate": "+0%",
+        "pitch": "+0Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/natural/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/natural/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/natural/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/natural/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/natural/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/natural/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/natural/sentence-5.mp3"
+        }
+      },
+      "energetic": {
+        "voice": "en-AU-NatashaNeural",
+        "voiceLabel": "Natasha Neural+",
+        "rate": "+13%",
+        "pitch": "+3Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/energetic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/energetic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/energetic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/energetic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/energetic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/energetic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/energetic/sentence-5.mp3"
+        }
+      },
+      "dramatic": {
+        "voice": "en-AU-WilliamMultilingualNeural",
+        "voiceLabel": "William Neural+",
+        "rate": "-16%",
+        "pitch": "-4Hz",
+        "volume": "-4%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/dramatic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/dramatic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/dramatic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/dramatic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/dramatic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/dramatic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/dramatic/sentence-5.mp3"
+        }
+      },
+      "premium": {
+        "voice": "en-AU-NatashaNeural",
+        "voiceLabel": "Natasha Neural Studio",
+        "rate": "-8%",
+        "pitch": "-1Hz",
+        "volume": "-2%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/premium/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/premium/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/premium/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/premium/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/premium/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/premium/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/premium/sentence-5.mp3"
+        }
+      },
+      "dynamic": {
+        "voice": "en-AU-WilliamMultilingualNeural",
+        "voiceLabel": "William Neural TED",
+        "rate": "+9%",
+        "pitch": "+2Hz",
+        "volume": "+0%",
+        "clips": {
+          "accent-preview": "audio/accent-voice-pack/au/dynamic/accent-preview.mp3",
+          "personality-preview": "audio/accent-voice-pack/au/dynamic/personality-preview.mp3",
+          "sentence-1": "audio/accent-voice-pack/au/dynamic/sentence-1.mp3",
+          "sentence-2": "audio/accent-voice-pack/au/dynamic/sentence-2.mp3",
+          "sentence-3": "audio/accent-voice-pack/au/dynamic/sentence-3.mp3",
+          "sentence-4": "audio/accent-voice-pack/au/dynamic/sentence-4.mp3",
+          "sentence-5": "audio/accent-voice-pack/au/dynamic/sentence-5.mp3"
+        }
+      }
+    }
+  }
+}

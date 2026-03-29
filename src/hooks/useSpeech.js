@@ -5,7 +5,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { checkWordPronunciation } from '../utils/pronunciationEngine';
 import { recordCapabilityEvent } from '../services/capabilityService';
-import { findPersonalityVoice, getPersonalityProsody, DEFAULT_PERSONALITY } from '../data/voicePersonalities';
+import { ACCENT_PROFILES, findPersonalityVoice, getPersonalityProsody, DEFAULT_PERSONALITY } from '../data/voicePersonalities';
 
 // Voice preference lists — best quality first
 const VOICE_PREFERENCES = {
@@ -107,7 +107,7 @@ export function useSpeech() {
 
         processingRef.current = true;
         setIsSpeaking(true);
-        const { text, lang, rate, pitch, onDone } = queueRef.current.shift();
+        const { text, lang, rate, pitch, onDone, _voiceOverride } = queueRef.current.shift();
 
         // FIX RC-1: Only cancel if there's stale speech, not our queue
         if (window.speechSynthesis?.speaking) {
@@ -115,7 +115,7 @@ export function useSpeech() {
         }
 
         const utterance = new SpeechSynthesisUtterance(text);
-        const bestVoice = findBestVoice(lang, voices);
+        const bestVoice = _voiceOverride || findBestVoice(lang, voices);
         if (bestVoice) {
             utterance.voice = bestVoice;
             utterance.lang = bestVoice.lang;
@@ -209,7 +209,8 @@ export function useSpeech() {
     // v4: Accent + Personality-aware speaking
     const speakWithPersonality = useCallback((text, accentLang = 'en-US', personalityId = DEFAULT_PERSONALITY) => {
         if (!window.speechSynthesis || !text) return;
-        const voice = findPersonalityVoice(voices, null, personalityId);
+        const accentId = ACCENT_PROFILES.find((profile) => profile.lang === accentLang)?.id || null;
+        const voice = accentId ? findPersonalityVoice(voices, accentId, personalityId) : null;
         const prosody = getPersonalityProsody(personalityId);
         queueRef.current.push({
             text,
