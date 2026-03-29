@@ -4,7 +4,7 @@ import { useGame } from '../context/GameStateContext';
 import MascotBuddy from '../components/MascotBuddy';
 const WordOfDay = lazy(() => import('../components/WordOfDay'));
 import { isAdultMode } from '../utils/userMode';
-import { getDailyQuote, getDailyFallbackQuote } from '../services/quoteService';
+import { getDailyQuote } from '../services/quoteService';
 import { getXPData } from '../services/xpEngine';
 
 const LEARNING_TIPS = [
@@ -17,10 +17,11 @@ const LEARNING_TIPS = [
 ];
 
 export default function Home() {
-    const { state, currentLevel, levelProgress, nextLevel, getDailyStats, toggleMode, modeConfig } = useGame();
+    const { state, currentLevel, levelProgress, nextLevel, getDailyStats, toggleMode } = useGame();
     const dailyStats = getDailyStats();
     const isAdult = isAdultMode(state.userMode);
     const xpData = getXPData();
+    const [tipIndex] = useState(() => Math.floor(Date.now() / 86400000) % LEARNING_TIPS.length);
 
     // Live daily quote from Quotable API
     const [dailyQuote, setDailyQuote] = useState(null);
@@ -345,30 +346,25 @@ export default function Home() {
             })()}
 
             {/* Daily Tip + Live Quote */}
-            {(() => {
-                const tip = LEARNING_TIPS[Math.floor(Date.now() / 86400000) % LEARNING_TIPS.length];
-                return (
-                    <>
-                        {dailyQuote && (
-                            <div className="daily-tip-card glass-card" style={{ marginBottom: 8 }}>
-                                <span className="daily-tip-emoji">💬</span>
-                                <div className="daily-tip-text">
-                                    <strong>{isAdult ? 'Quote of the Day' : 'Câu nói hay'}</strong>
-                                    <p>"{dailyQuote.content}"</p>
-                                    <p style={{ fontSize: '0.72rem', fontStyle: 'italic', opacity: 0.7, marginTop: 2 }}>— {dailyQuote.author}</p>
-                                </div>
-                            </div>
-                        )}
-                        <div className="daily-tip-card glass-card">
-                            <span className="daily-tip-emoji">{tip.emoji}</span>
-                            <div className="daily-tip-text">
-                                <strong>{isAdult ? 'Learning Tip' : 'Mẹo học tập'}</strong>
-                                <p>{isAdult ? tip.en : tip.vi}</p>
-                            </div>
+            <>
+                {dailyQuote && (
+                    <div className="daily-tip-card glass-card" style={{ marginBottom: 8 }}>
+                        <span className="daily-tip-emoji">💬</span>
+                        <div className="daily-tip-text">
+                            <strong>{isAdult ? 'Quote of the Day' : 'Câu nói hay'}</strong>
+                            <p>"{dailyQuote.content}"</p>
+                            <p style={{ fontSize: '0.72rem', fontStyle: 'italic', opacity: 0.7, marginTop: 2 }}>— {dailyQuote.author}</p>
                         </div>
-                    </>
-                );
-            })()}
+                    </div>
+                )}
+                <div className="daily-tip-card glass-card">
+                    <span className="daily-tip-emoji">{LEARNING_TIPS[tipIndex].emoji}</span>
+                    <div className="daily-tip-text">
+                        <strong>{isAdult ? 'Learning Tip' : 'Mẹo học tập'}</strong>
+                        <p>{isAdult ? LEARNING_TIPS[tipIndex].en : LEARNING_TIPS[tipIndex].vi}</p>
+                    </div>
+                </div>
+            </>
 
             {/* Section Title */}
             <h2 className="section-title">

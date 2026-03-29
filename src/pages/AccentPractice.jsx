@@ -508,7 +508,7 @@ export default function AccentPractice() {
                     })}
                 </div>
                 <button
-                    onClick={() => { setSIdx(0); setResults([]); setScore(null); setStep('practice'); }}
+                    onClick={() => { setSIdx(0); setResults([]); setAnalysis(null); setSpoken(''); setTypedTranscript(''); resetSession(); setStep('practice'); }}
                     className="btn btn--primary btn--block"
                     style={{ marginTop: '16px' }}
                 >
@@ -519,7 +519,7 @@ export default function AccentPractice() {
     }
 
     if (step === 'results') {
-        const avg = results.length ? Math.round(results.reduce((sum, item) => sum + item.score, 0) / results.length) : 0;
+        const avg = results.length ? Math.round(results.reduce((sum, item) => sum + (item.analysis?.overallScore || 0), 0) / results.length) : 0;
         const accent = ACCENT_PROFILES.find((item) => item.id === selectedAccent);
         const personality = VOICE_PERSONALITIES.find((item) => item.id === selectedPersonality);
         return (
@@ -542,15 +542,18 @@ export default function AccentPractice() {
                                 borderRadius: 'var(--radius-md)',
                                 marginBottom: '4px',
                                 background: 'var(--color-card)',
-                                borderLeft: `3px solid ${item.score >= 80 ? '#22C55E' : item.score >= 50 ? '#F59E0B' : '#EF4444'}`,
+                                borderLeft: `3px solid ${(item.analysis?.overallScore || 0) >= 80 ? '#22C55E' : (item.analysis?.overallScore || 0) >= 50 ? '#F59E0B' : '#EF4444'}`,
                             }}
                         >
                             <div style={{ fontSize: '0.8rem', fontWeight: 600 }}>{item.sentence}</div>
-                            <div style={{ fontSize: '0.75rem', color: item.score >= 80 ? '#22C55E' : '#EF4444' }}>
-                                → {item.spoken} ({item.score}%)
+                            <div style={{ fontSize: '0.75rem', color: (item.analysis?.overallScore || 0) >= 80 ? '#22C55E' : '#EF4444' }}>
+                                → {item.spoken} ({item.analysis?.overallScore || 0}%)
                             </div>
                             <div style={{ fontSize: '0.66rem', color: 'var(--color-text-light)' }}>
                                 Nguồn mẫu: {item.playbackSource === 'controlled' ? 'Studio voice pack' : 'Browser fallback'}
+                            </div>
+                            <div style={{ fontSize: '0.66rem', color: 'var(--color-text-light)', marginTop: '4px' }}>
+                                {item.analysis?.analysisSummary}
                             </div>
                         </div>
                     ))}
@@ -567,6 +570,8 @@ export default function AccentPractice() {
     const sentence = PRACTICE_SENTENCES[sIdx];
     const accent = ACCENT_PROFILES.find((item) => item.id === selectedAccent);
     const personality = VOICE_PERSONALITIES.find((item) => item.id === selectedPersonality);
+    const latestScore = analysis?.overallScore ?? null;
+    const isRecording = capturePhase === 'recording' || capturePhase === 'requesting' || capturePhase === 'processing';
 
     return (
         <div className="page">
@@ -625,47 +630,124 @@ export default function AccentPractice() {
 
             <div style={{ textAlign: 'center', margin: '16px 0' }}>
                 <button
-                    onClick={startListening}
-                    disabled={listening || isSpeaking}
+                    onClick={capturePhase === 'recording' ? stopCapture : startListening}
+                    disabled={isRecording && capturePhase !== 'recording' ? true : isSpeaking}
                     style={{
                         width: '90px',
                         height: '90px',
                         borderRadius: '50%',
                         border: 'none',
-                        background: listening ? '#EF4444' : accent?.color,
+                        background: capturePhase === 'recording' ? '#EF4444' : accent?.color,
                         color: 'white',
                         fontSize: '2.2rem',
                         cursor: 'pointer',
-                        boxShadow: listening ? '0 0 0 8px #EF444440' : `0 0 0 8px ${accent?.color}30`,
-                        animation: listening ? 'pulse 1.2s infinite' : 'none',
+                        boxShadow: capturePhase === 'recording' ? '0 0 0 8px #EF444440' : `0 0 0 8px ${accent?.color}30`,
+                        animation: capturePhase === 'recording' ? 'pulse 1.2s infinite' : 'none',
                         opacity: isSpeaking ? 0.4 : 1,
                     }}
                 >
-                    {listening ? '⏹️' : '🎙️'}
+                    {capturePhase === 'recording' ? '⏹️' : '🎙️'}
                 </button>
                 <p style={{ marginTop: '6px', fontSize: '0.75rem', color: 'var(--color-text-light)' }}>
-                    {listening ? '🔴 Đang nghe...' : isSpeaking ? '🔊 Chờ phát xong...' : 'Bấm → Nói theo giọng mẫu'}
+                    {isSpeaking
+                        ? '🔊 Chờ phát xong...'
+                        : capturePhase === 'recording'
+                            ? '🔴 Đang ghi nhận câu trả lời...'
+                            : capturePhase === 'processing'
+                                ? '🧠 Đang phân tích transcript và nhịp nói...'
+                                : capturePhase === 'requesting'
+                                    ? '🎙️ Đang xin quyền micro...'
+                                    : capturePhase === 'done'
+                                        ? 'Đã có coaching. Xem recap bên dưới.'
+                                        : 'Bấm → Nói theo giọng mẫu'}
                 </p>
+                {interimText && capturePhase === 'recording' && (
+                    <div style={{
+                        marginTop: '10px',
+                        padding: '10px 12px',
+                        borderRadius: '14px',
+                        background: 'rgba(59,130,246,0.08)',
+                        border: '1px solid rgba(59,130,246,0.18)',
+                        color: '#1D4ED8',
+                        fontSize: '0.8rem',
+                        lineHeight: 1.5,
+                    }}>
+                        {interimText}
+                    </div>
+                )}
+                {audioUrl && (
+                    <button
+                        className="btn btn--outline"
+                        style={{ marginTop: '10px' }}
+                        onClick={() => {
+                            const audio = new Audio(audioUrl);
+                            void audio.play();
+                        }}
+                    >
+                        ▶ Nghe lại giọng mình
+                    </button>
+                )}
             </div>
 
-            {score !== null && (
-                <div style={{
-                    textAlign: 'center',
-                    padding: '16px',
-                    borderRadius: 'var(--radius-lg)',
-                    background: `${score >= 80 ? '#22C55E' : score >= 50 ? '#F59E0B' : '#EF4444'}10`,
-                    border: `2px solid ${score >= 80 ? '#22C55E' : score >= 50 ? '#F59E0B' : '#EF4444'}`,
-                    margin: '12px 0',
-                }}>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 800, color: score >= 80 ? '#22C55E' : '#F59E0B' }}>
-                        {score >= 90 ? '🌟' : score >= 70 ? '👍' : '💪'} {score}%
+            {manualFallback && (
+                <ManualTranscriptFallback
+                    title={manualFallback.title}
+                    description={manualFallback.description}
+                    value={typedTranscript}
+                    onChange={setTypedTranscript}
+                    onSubmit={() => submitManualTranscript(typedTranscript)}
+                    onCancel={() => {
+                        setTypedTranscript('');
+                        resetSession();
+                    }}
+                    placeholder="Nhập câu bạn vừa nói..."
+                    submitLabel="Chấm transcript này"
+                    cancelLabel="Hủy"
+                />
+            )}
+
+            {latestScore !== null && (
+                <>
+                    <div style={{
+                        textAlign: 'center',
+                        padding: '16px',
+                        borderRadius: 'var(--radius-lg)',
+                        background: `${latestScore >= 80 ? '#22C55E' : latestScore >= 50 ? '#F59E0B' : '#EF4444'}10`,
+                        border: `2px solid ${latestScore >= 80 ? '#22C55E' : latestScore >= 50 ? '#F59E0B' : '#EF4444'}`,
+                        margin: '12px 0',
+                    }}>
+                        <div style={{ fontSize: '1.8rem', fontWeight: 800, color: latestScore >= 80 ? '#22C55E' : latestScore >= 50 ? '#F59E0B' : '#EF4444' }}>
+                            {latestScore >= 90 ? '🌟' : latestScore >= 70 ? '👍' : '💪'} {latestScore}%
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', marginTop: '4px' }}>Bạn nói: "{spoken}"</div>
+                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '10px', flexWrap: 'wrap' }}>
+                            {latestScore < 70 && <button className="btn btn--outline" onClick={startListening}>🔄 Thử lại</button>}
+                            <button className="btn btn--primary" onClick={next}>{sIdx + 1 >= TOTAL ? '📊 Kết quả' : '➡️ Tiếp'}</button>
+                        </div>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', marginTop: '4px' }}>Bạn nói: "{spoken}"</div>
-                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '10px' }}>
-                        {score < 70 && <button className="btn btn--outline" onClick={startListening}>🔄 Thử lại</button>}
-                        <button className="btn btn--primary" onClick={next}>{sIdx + 1 >= TOTAL ? '📊 Kết quả' : '➡️ Tiếp'}</button>
-                    </div>
-                </div>
+
+                    <SpeakingCoachPanel
+                        analysis={analysis}
+                        title="Accent coaching recap"
+                        transcriptLabel="Your take"
+                        transcript={spoken}
+                        tone={accent?.color || '#4F46E5'}
+                        footer={(
+                            <div style={{
+                                marginTop: '10px',
+                                padding: '10px 12px',
+                                borderRadius: '14px',
+                                background: 'rgba(15,23,42,0.03)',
+                                border: '1px solid rgba(148,163,184,0.18)',
+                                fontSize: '0.76rem',
+                                lineHeight: 1.5,
+                            }}>
+                                Model source: {playbackSource === 'controlled' ? 'Studio voice pack' : 'Browser fallback'}.
+                                This coaching is reference-aligned and transcript-based, so it is stricter than the old single-score view but still not acoustic phoneme scoring.
+                            </div>
+                        )}
+                    />
+                </>
             )}
         </div>
     );

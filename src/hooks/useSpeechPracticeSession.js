@@ -30,6 +30,11 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
     const stoppingRef = useRef(false);
     const autoStopOnEndRef = useRef(true);
     const finalizeCallbackRef = useRef(null);
+    const phaseRef = useRef('idle');
+    const interimTextRef = useRef('');
+    const finalTextRef = useRef('');
+    const confidenceRef = useRef(0);
+    const alternativesRef = useRef([]);
 
     const revokeAudioUrl = useCallback(() => {
         if (audioUrlRef.current) {
@@ -64,8 +69,16 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         setManualFallback(null);
         setConfidence(0);
         setAlternatives([]);
+        interimTextRef.current = '';
+        finalTextRef.current = '';
+        confidenceRef.current = 0;
+        alternativesRef.current = [];
         stoppingRef.current = false;
     }, [revokeAudioUrl, stopMediaTracks]);
+
+    useEffect(() => {
+        phaseRef.current = phase;
+    }, [phase]);
 
     useEffect(() => {
         return () => {
@@ -74,6 +87,9 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
     }, [resetSession]);
 
     const requestManualFallback = useCallback((fallback) => {
+        if (mediaRecorderRef.current?.state && mediaRecorderRef.current.state !== 'inactive') {
+            mediaRecorderRef.current.stop();
+        }
         stopMediaTracks();
         setPhase('manual');
         setManualFallback(fallback || {
@@ -83,8 +99,8 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
     }, [stopMediaTracks]);
 
     const finalizeCapture = useCallback((transcriptOverride) => {
-        const transcript = String(transcriptOverride ?? finalText ?? '').trim()
-            || String(interimText || '').trim();
+        const transcript = String(transcriptOverride ?? finalTextRef.current ?? '').trim()
+            || String(interimTextRef.current || '').trim();
         const duration = startedAtRef.current ? Math.max(0, Date.now() - startedAtRef.current) : 0;
         setFinalText(transcript);
         setInterimText('');
@@ -98,13 +114,13 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         finalizeCallbackRef.current?.({
             transcript,
             durationMs: duration,
-            confidence,
-            alternatives,
+            confidence: confidenceRef.current,
+            alternatives: alternativesRef.current,
         });
-    }, [alternatives, confidence, finalText, interimText, moduleName]);
+    }, [moduleName]);
 
     const stopCapture = useCallback(() => {
-        if (phase !== 'recording' && phase !== 'requesting') return;
+        if (phaseRef.current !== 'recording' && phaseRef.current !== 'requesting') return;
 
         stoppingRef.current = true;
         setPhase('processing');
@@ -119,7 +135,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
             finalizeCapture();
             stoppingRef.current = false;
         }, 220);
-    }, [finalizeCapture, phase, stopMediaTracks]);
+    }, [finalizeCapture, stopMediaTracks]);
 
     const startCapture = useCallback(async ({
         lang = 'en-US',
@@ -209,13 +225,17 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
                 if (result.isFinal) {
                     stableTranscript = `${stableTranscript} ${result[0].transcript}`.trim();
                     setFinalText(stableTranscript);
+                    finalTextRef.current = stableTranscript;
                     setAlternatives(resultAlternatives);
+                    alternativesRef.current = resultAlternatives;
                     setConfidence(resultAlternatives[0]?.confidence || 0);
+                    confidenceRef.current = resultAlternatives[0]?.confidence || 0;
                 } else {
                     interim += result[0].transcript;
                 }
             }
             setInterimText(interim.trim());
+            interimTextRef.current = interim.trim();
         };
 
         recognition.onerror = (event) => {
@@ -261,7 +281,9 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         if (!transcript) return;
         setManualFallback(null);
         setFinalText(transcript);
+        finalTextRef.current = transcript;
         setInterimText('');
+        interimTextRef.current = '';
         setDurationMs(0);
         setPhase('done');
         finalizeCallbackRef.current?.({
