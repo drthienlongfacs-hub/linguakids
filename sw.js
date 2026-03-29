@@ -1,8 +1,9 @@
-// LinguaKids Progressive Service Worker v6
+// LinguaKids Progressive Service Worker v7
 // Copyright © 2026 ThS.BS CK2. Lê Trọng Thiên Long. All rights reserved.
-// Strategy: Stale-While-Revalidate for assets, Cache-First for data files
-const CACHE_NAME = 'linguakids-v6';
-const DATA_CACHE = 'linguakids-data-v5';
+// Strategy: Stale-While-Revalidate for shell, Cache-First for immutable assets,
+// Network-First for public video manifests, Network-Only for streamed video.
+const CACHE_NAME = 'linguakids-v7';
+const DATA_CACHE = 'linguakids-data-v6';
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
 const INDEX_URL = `${BASE_PATH}/index.html`;
 
@@ -18,6 +19,10 @@ const SHELL_ASSETS = [
 const DATA_PATTERNS = [
     /\/assets\/.*\.js$/,   // Bundled JS (contains data files)
     /\/assets\/.*\.css$/,  // Styles
+];
+
+const NETWORK_FIRST_PATTERNS = [
+    /\/data\/video-manifests\/.*\.json$/,
 ];
 
 const API_PATTERNS = [
@@ -51,8 +56,22 @@ self.addEventListener('fetch', (event) => {
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
 
+    // Stream video directly from the canonical host. Never cache lesson video blobs.
+    if (event.request.destination === 'video') {
+        event.respondWith(networkOnly(event.request));
+        return;
+    }
+
     // Strategy 1: API calls — Network first, cache fallback (5s timeout)
     if (API_PATTERNS.some(p => p.test(url.href))) {
+        event.respondWith(
+            networkFirstWithTimeout(event.request, 5000)
+        );
+        return;
+    }
+
+    // Strategy 1b: public video manifests — network first so hotfixes are not trapped behind stale caches
+    if (NETWORK_FIRST_PATTERNS.some(p => p.test(url.pathname))) {
         event.respondWith(
             networkFirstWithTimeout(event.request, 5000)
         );
@@ -110,6 +129,14 @@ async function networkFirstWithTimeout(request, timeoutMs) {
             headers: { 'Content-Type': 'application/json' },
             status: 503,
         });
+    }
+}
+
+async function networkOnly(request) {
+    try {
+        return await fetch(request);
+    } catch {
+        return new Response('Offline', { status: 503 });
     }
 }
 

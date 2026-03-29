@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-03-29T14:37:34.367Z",
+  "version": "video-lessons-6ace619402e8",
+  "summary": {
+    "totalLessons": 120,
+    "publicLessons": 0,
+    "hiddenLessons": 120,
+    "draftLessons": 0,
+    "retiredLessons": 0,
+    "approvedDomainCount": 1,
+    "findings": 0,
+    "pass": true
+  },
+  "audit": {
+    "status": "pass",
+    "checkedAt": "2026-03-29T14:37:33.184Z"
+  },
+  "findings": []
+}
