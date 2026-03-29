@@ -61,6 +61,7 @@ const DictationExercise = lazy(() => import('./pages/DictationExercise'));
 const ReadingComprehension = lazy(() => import('./pages/ReadingComprehension'));
 const StudyStats = lazy(() => import('./pages/StudyStats'));
 const AccentPractice = lazy(() => import('./pages/AccentPractice'));
+const FreeSpeakingCoach = lazy(() => import('./pages/FreeSpeakingCoach'));
 const ShadowingSpeaker = lazy(() => import('./pages/ShadowingSpeaker'));
 const SituationalDialogue = lazy(() => import('./pages/SituationalDialogue'));
 const ErrorCorrection = lazy(() => import('./pages/ErrorCorrection'));
@@ -182,6 +183,7 @@ function AppContent() {
             <Route path="/reading-practice" element={<ReadingComprehension />} />
             <Route path="/study-stats" element={<StudyStats />} />
             <Route path="/accent-practice" element={<AccentPractice />} />
+            <Route path="/free-speaking" element={<FreeSpeakingCoach />} />
             <Route path="/shadowing" element={<ShadowingSpeaker />} />
             <Route path="/roleplay" element={<SituationalDialogue />} />
             <Route path="/error-correction" element={<ErrorCorrection />} />

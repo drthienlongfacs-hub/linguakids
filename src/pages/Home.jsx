@@ -160,6 +160,7 @@ export default function Home() {
                     {[
                         { emoji: '🎙️', title: 'Phát âm', desc: 'AI chấm điểm', path: '/pronunciation/en', bg: 'linear-gradient(135deg, #0891B220, #06B6D420)' },
                         { emoji: '🌍', title: 'Accent', desc: 'US/UK/AU 3 giọng', path: '/accent-practice', bg: 'linear-gradient(135deg, #3B82F620, #6366F120)' },
+                        { emoji: '🧠', title: 'Free Talk', desc: 'Coach hội thoại tự do', path: '/free-speaking', bg: 'linear-gradient(135deg, #0EA5E920, #4F46E520)' },
                         { emoji: '🎭', title: 'Shadowing', desc: '5 phong cách nói', path: '/shadowing', bg: 'linear-gradient(135deg, #EF444420, #DC262620)' },
                         { emoji: '🗣️', title: 'Role-play', desc: '5 tình huống 1:1', path: '/roleplay', bg: 'linear-gradient(135deg, #6366F120, #818CF820)' },
                         { emoji: '📐', title: 'Ngữ pháp', desc: '8 bài A1→B2', path: '/grammar-explainer', bg: 'linear-gradient(135deg, #7C3AED20, #8B5CF620)' },

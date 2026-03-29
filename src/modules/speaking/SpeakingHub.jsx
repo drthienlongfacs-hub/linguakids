@@ -99,6 +99,33 @@ export default function SpeakingHub() {
                 compact
             />
 
+            {adult && (
+                <div
+                    onClick={() => navigate('/free-speaking')}
+                    style={{
+                        marginBottom: '14px',
+                        padding: '16px',
+                        borderRadius: '18px',
+                        background: 'linear-gradient(135deg, rgba(37,99,235,0.12), rgba(79,70,229,0.10))',
+                        border: '1px solid rgba(99,102,241,0.18)',
+                        boxShadow: '0 18px 40px rgba(15,23,42,0.06)',
+                        cursor: 'pointer',
+                    }}
+                >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                        <div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '0.96rem', fontWeight: 800 }}>
+                                🧠 Free Speaking Coach
+                            </div>
+                            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-light)', marginTop: '4px', lineHeight: 1.5 }}>
+                                Guided open speaking with turn recap, recording playback, and transcript-based coaching.
+                            </div>
+                        </div>
+                        <div style={{ fontSize: '1.2rem', color: '#4338CA', fontWeight: 700 }}>→</div>
+                    </div>
+                </div>
+            )}
+
             <div className="lh-stats">
                 {stats.map(stat => (
                     <div key={stat.label} className="lh-stat">

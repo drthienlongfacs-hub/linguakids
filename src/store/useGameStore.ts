@@ -36,12 +36,25 @@ export interface SpeakingRecap {
     metrics: SpeakingRecapMetric[];
     recommendations: string[];
     note: string;
+    coachModel?: string;
+    evidenceLevel?: string;
+    strengths?: string[];
+    risks?: string[];
     transcriptStats: {
         tokenCount: number;
         uniqueTokens: number;
         wpm: number;
         lexicalDiversity: number;
     };
+    signalBreakdown?: {
+        fillerCount?: number;
+        fillerRatio?: number;
+        sentenceCount?: number;
+        promptCoverage?: number;
+        sampleCoverage?: number;
+        contentDensity?: number;
+        contentTokenCount?: number;
+    } | null;
 }
 
 export interface GameState {

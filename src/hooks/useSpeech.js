@@ -171,17 +171,18 @@ export function useSpeech() {
     const speak = useCallback((text, lang = 'en-US', options = {}) => {
         if (!window.speechSynthesis || !text) return;
 
-        // FIX RC-5: Adjust rate based on sentence length
+        // FIX RC-5 v2: Gentle rate adjustment — never go below 0.90 to avoid
+        // time-stretching distortion (RCA-041b: rate=0.78 caused muffled audio)
         const wordCount = text.split(/\s+/).length;
-        let rate = options.rate || 0.85;
-        if (wordCount > 8) rate = Math.max(rate, 0.85);  // Don't go too slow on long sentences
-        if (wordCount <= 3) rate = Math.min(rate, 0.78); // Single words/short: slower for clarity
+        let rate = options.rate || 0.90;
+        if (wordCount > 8) rate = Math.max(rate, 0.90);  // Don't go too slow on long sentences
+        if (wordCount <= 3) rate = Math.min(rate, 0.90); // Short words: slightly slower, NOT below 0.90
 
         queueRef.current.push({
             text,
             lang,
             rate,
-            pitch: options.pitch || 1.05,
+            pitch: options.pitch || 1.0,  // RCA-041b: 1.05 thins audio on mobile → use 1.0
             onDone: options.onDone,
         });
 
@@ -195,7 +196,7 @@ export function useSpeech() {
 
     // Language-specific shortcuts
     const speakEnglish = useCallback((text) => {
-        speak(text, 'en-US', { rate: 0.82, pitch: 1.05 });
+        speak(text, 'en-US', { rate: 0.92, pitch: 1.0 }); // RCA-041b: was 0.82/1.05
     }, [speak]);
 
     const speakChinese = useCallback((text) => {

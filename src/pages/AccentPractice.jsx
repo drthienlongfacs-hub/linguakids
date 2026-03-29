@@ -5,6 +5,8 @@ import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import ManualTranscriptFallback from '../components/ManualTranscriptFallback';
+import SpeakingCoachPanel from '../components/SpeakingCoachPanel';
 import {
     ACCENT_PROFILES,
     VOICE_PERSONALITIES,
@@ -25,32 +27,8 @@ import {
     loadAccentVoicePackManifest,
     loadAccentVoicePackQA,
 } from '../services/accentVoicePackService';
-
-const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
-
-function getScore(target, spoken) {
-    const t = target.toLowerCase().replace(/[^\w\s]/g, '').trim();
-    const s = spoken.toLowerCase().replace(/[^\w\s]/g, '').trim();
-    if (t === s) return 100;
-    const len = Math.max(t.length, s.length);
-    if (!len) return 100;
-    const dp = Array.from({ length: t.length + 1 }, (_, i) => {
-        const row = Array(s.length + 1).fill(0);
-        row[0] = i;
-        return row;
-    });
-    for (let j = 0; j <= s.length; j++) dp[0][j] = j;
-    for (let i = 1; i <= t.length; i++) {
-        for (let j = 1; j <= s.length; j++) {
-            dp[i][j] = Math.min(
-                dp[i - 1][j] + 1,
-                dp[i][j - 1] + 1,
-                dp[i - 1][j - 1] + (t[i - 1] !== s[j - 1] ? 1 : 0)
-            );
-        }
-    }
-    return Math.max(0, Math.round((1 - dp[t.length][s.length] / len) * 100));
-}
+import { analyzeSpeakingAttempt } from '../services/speakingAnalyticsService';
+import { useSpeechPracticeSession } from '../hooks/useSpeechPracticeSession';
 
 export default function AccentPractice() {
     const navigate = useNavigate();
@@ -63,16 +41,25 @@ export default function AccentPractice() {
     const [voicePackStatus, setVoicePackStatus] = useState('loading');
     const [step, setStep] = useState('accent'); // accent | personality | practice | results
     const [sIdx, setSIdx] = useState(0);
-    const [listening, setListening] = useState(false);
     const [spoken, setSpoken] = useState('');
-    const [score, setScore] = useState(null);
+    const [analysis, setAnalysis] = useState(null);
     const [celebration, setCelebration] = useState(0);
     const [results, setResults] = useState([]);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [playbackSource, setPlaybackSource] = useState('idle');
-    const recRef = useRef(null);
+    const [typedTranscript, setTypedTranscript] = useState('');
     const audioRef = useRef(null);
     const TOTAL = ACCENT_PRACTICE_TOTAL;
+    const {
+        phase: capturePhase,
+        interimText,
+        audioUrl,
+        manualFallback,
+        startCapture,
+        stopCapture,
+        resetSession,
+        submitManualTranscript,
+    } = useSpeechPracticeSession('AccentPractice');
 
     useEffect(() => {
         const loadVoices = () => setVoices(window.speechSynthesis?.getVoices() || []);
@@ -137,8 +124,8 @@ export default function AccentPractice() {
 
     useEffect(() => () => {
         stopPlayback();
-        recRef.current?.abort?.();
-    }, [stopPlayback]);
+        resetSession();
+    }, [resetSession, stopPlayback]);
 
     const tryPlayStudioClip = useCallback(async (accentId, personalityId, clipId, playbackRate = 1) => {
         const src = getAccentVoicePackClip(voicePackManifest, accentId, personalityId, clipId);
@@ -271,52 +258,72 @@ export default function AccentPractice() {
         : null;
     const selectedAccentQA = selectedAccent ? voicePackQA?.accents?.[selectedAccent] : null;
 
+    const handleAttemptFinalized = useCallback((transcript, durationMs) => {
+        const sentence = PRACTICE_SENTENCES[sIdx];
+        const analytics = analyzeSpeakingAttempt({
+            spokenText: transcript,
+            lang: 'en',
+            durationMs,
+            targetText: sentence.text,
+            promptText: sentence.text,
+            sampleAnswer: sentence.text,
+            tip: 'Mirror the full sentence clearly, then compare your pacing against the model.',
+            expectedMinTokens: sentence.text.split(/\s+/).filter(Boolean).length,
+        });
+        const nextScore = analytics.overallScore;
+
+        setSpoken(transcript);
+        setAnalysis(analytics);
+
+        if (nextScore >= 70) {
+            addXP(nextScore >= 90 ? 15 : 10);
+            setCelebration((value) => value + 1);
+        }
+    }, [addXP, sIdx]);
+
     const startListening = useCallback(() => {
-        if (!SpeechRecognition) return;
         stopPlayback();
         setSpoken('');
-        setScore(null);
-
-        const recognition = new SpeechRecognition();
-        recognition.lang = ACCENT_PROFILES.find((item) => item.id === selectedAccent)?.lang || 'en-US';
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            setSpoken(transcript);
-            const nextScore = getScore(PRACTICE_SENTENCES[sIdx].text, transcript);
-            setScore(nextScore);
-            if (nextScore >= 70) {
-                addXP(nextScore >= 90 ? 15 : 10);
-                setCelebration((value) => value + 1);
-            }
-            setResults((previous) => [
-                ...previous,
-                {
-                    sentence: PRACTICE_SENTENCES[sIdx].text,
-                    spoken: transcript,
-                    score: nextScore,
-                    accent: selectedAccent,
-                    personality: selectedPersonality,
-                    playbackSource,
-                },
-            ]);
-            setListening(false);
-        };
-        recognition.onerror = () => setListening(false);
-        recognition.onend = () => setListening(false);
-        recRef.current = recognition;
-        recognition.start();
-        setListening(true);
-    }, [addXP, playbackSource, sIdx, selectedAccent, selectedPersonality, stopPlayback]);
+        setAnalysis(null);
+        setTypedTranscript('');
+        startCapture({
+            lang: ACCENT_PROFILES.find((item) => item.id === selectedAccent)?.lang || 'en-US',
+            continuous: false,
+            interimResults: true,
+            maxAlternatives: 3,
+            autoStopOnEnd: true,
+            fallback: {
+                title: 'Nhập lại câu bạn vừa nói',
+                description: 'Nếu browser không chấm nói trực tiếp được, hãy nhập transcript để tiếp tục coaching.',
+            },
+            onFinalize: ({ transcript, durationMs }) => {
+                handleAttemptFinalized(transcript, durationMs);
+            },
+        });
+    }, [handleAttemptFinalized, selectedAccent, startCapture, stopPlayback]);
 
     const next = () => {
+        if (!analysis) return;
+        const nextResult = {
+            sentence: PRACTICE_SENTENCES[sIdx].text,
+            spoken,
+            analysis,
+            accent: selectedAccent,
+            personality: selectedPersonality,
+            playbackSource,
+        };
+        const nextResults = [...results, nextResult];
+        setResults(nextResults);
+
         if (sIdx + 1 >= TOTAL) {
+            resetSession();
             setStep('results');
         } else {
             setSIdx((value) => value + 1);
             setSpoken('');
-            setScore(null);
+            setAnalysis(null);
+            setTypedTranscript('');
+            resetSession();
         }
     };
 

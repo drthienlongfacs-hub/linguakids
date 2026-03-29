@@ -289,7 +289,7 @@ function FlashcardExercise({ chapter, onBack, onComplete }) {
     const progress = ((idx + 1) / cards.length) * 100;
 
     const playAudio = useCallback(() => {
-        if (current) speak(current.en, 'en-US', { rate: 0.82, pitch: 1.0 });
+        if (current) speak(current.en, 'en-US', { rate: 0.92, pitch: 1.0 });
     }, [current, speak]);
 
     useEffect(() => {
@@ -425,7 +425,7 @@ function ListenQuiz({ chapter, onBack, onComplete }) {
     const current = questions[qIdx];
 
     const playAudio = useCallback(() => {
-        if (current) speak(current.audio, 'en-US', { rate: 0.8, pitch: 1.0 });
+        if (current) speak(current.audio, 'en-US', { rate: 0.92, pitch: 1.0 });
     }, [current, speak]);
 
     useEffect(() => {
@@ -540,7 +540,7 @@ function SayItExercise({ chapter, onBack, onComplete }) {
     const progress = ((idx + 1) / items.length) * 100;
 
     const playModel = useCallback(() => {
-        if (current) speak(current.en, 'en-US', { rate: 0.8, pitch: 1.0 });
+        if (current) speak(current.en, 'en-US', { rate: 0.92, pitch: 1.0 });
     }, [current, speak]);
 
     useEffect(() => {
