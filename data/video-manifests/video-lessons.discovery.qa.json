@@ -1,0 +1,972 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-03-29T15:17:43.402Z",
+  "summary": {
+    "lessonCount": 120,
+    "sourceInventoryCount": 0,
+    "approvedSourceInventoryCount": 0,
+    "lessonsWithMatches": 0
+  },
+  "results": [
+    {
+      "lessonId": "k-p1",
+      "title": "ABC Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p2",
+      "title": "Phonics Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p3",
+      "title": "Phonics Song 2",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p4",
+      "title": "Learn Letter A",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p5",
+      "title": "ABC Uppercase",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p6",
+      "title": "ABC Lowercase",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p7",
+      "title": "Short Vowel Sounds",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-p8",
+      "title": "Long Vowel Sounds",
+      "levelId": "kids-prea1",
+      "categoryId": "k-phonics",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n1",
+      "title": "Count 1-10",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n2",
+      "title": "Count 1-20",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n3",
+      "title": "Count 1-100",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n4",
+      "title": "Number Song 1-10",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n5",
+      "title": "Count by 2s",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-n6",
+      "title": "Count by 5s",
+      "levelId": "kids-prea1",
+      "categoryId": "k-numbers",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c1",
+      "title": "Color Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c2",
+      "title": "I See Something Blue",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c3",
+      "title": "Shape Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c4",
+      "title": "Rainbow Colors",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c5",
+      "title": "Mix Colors",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-c6",
+      "title": "Shapes All Around",
+      "levelId": "kids-prea1",
+      "categoryId": "k-colors",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a1",
+      "title": "Animal Sounds",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a2",
+      "title": "Walking in the Jungle",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a3",
+      "title": "Baby Shark",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a4",
+      "title": "Farm Animals",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a5",
+      "title": "Sea Animals",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-a6",
+      "title": "Insects Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-animals",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b1",
+      "title": "Head Shoulders Knees Toes",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b2",
+      "title": "If You're Happy",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b3",
+      "title": "My Body Parts",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b4",
+      "title": "Action Verbs Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b5",
+      "title": "Five Senses",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-b6",
+      "title": "Exercise Song",
+      "levelId": "kids-prea1",
+      "categoryId": "k-body",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s1",
+      "title": "Wheels on the Bus",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s2",
+      "title": "Old MacDonald",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s3",
+      "title": "Twinkle Twinkle",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s4",
+      "title": "Row Row Row",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s5",
+      "title": "Rain Rain Go Away",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "k-s6",
+      "title": "Itsy Bitsy Spider",
+      "levelId": "kids-prea1",
+      "categoryId": "k-songs",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v1",
+      "title": "100 Basic Words",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v2",
+      "title": "Daily Actions",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v3",
+      "title": "Family Members",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v4",
+      "title": "Food Vocabulary",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v5",
+      "title": "Clothes & Fashion",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-v6",
+      "title": "Weather Words",
+      "levelId": "beginner-a1",
+      "categoryId": "b-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g1",
+      "title": "Am/Is/Are",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g2",
+      "title": "A/An/The",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g3",
+      "title": "Simple Present",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g4",
+      "title": "This/That/These/Those",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g5",
+      "title": "Can/Can't",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-g6",
+      "title": "Prepositions in/on/at",
+      "levelId": "beginner-a1",
+      "categoryId": "b-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l1",
+      "title": "Greetings",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l2",
+      "title": "At the Shop",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l3",
+      "title": "At School",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l4",
+      "title": "Three Little Pigs",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l5",
+      "title": "Goldilocks",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-l6",
+      "title": "Daily Routines",
+      "levelId": "beginner-a1",
+      "categoryId": "b-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c1",
+      "title": "Self Introduction",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c2",
+      "title": "Asking Directions",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c3",
+      "title": "Restaurant Dialogue",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c4",
+      "title": "Doctor Visit",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c5",
+      "title": "Phone Conversation",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-c6",
+      "title": "Making Friends",
+      "levelId": "beginner-a1",
+      "categoryId": "b-convo",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr1",
+      "title": "Vowel Sounds",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr2",
+      "title": "TH Sound",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr3",
+      "title": "R vs L",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr4",
+      "title": "Word Stress",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr5",
+      "title": "S vs SH",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "b-pr6",
+      "title": "Silent Letters",
+      "levelId": "beginner-a1",
+      "categoryId": "b-pronun",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g1",
+      "title": "Present Perfect",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g2",
+      "title": "Past Simple vs Continuous",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g3",
+      "title": "Modal Verbs",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g4",
+      "title": "Conditionals 0 & 1",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g5",
+      "title": "Passive Voice",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g6",
+      "title": "Reported Speech",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g7",
+      "title": "Relative Clauses",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-g8",
+      "title": "Conditionals 2 & 3",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-grammar",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v1",
+      "title": "Work & Office",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v2",
+      "title": "Travel Vocabulary",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v3",
+      "title": "Health & Medical",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v4",
+      "title": "Environment",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v5",
+      "title": "Technology Words",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v6",
+      "title": "Personality Adjectives",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v7",
+      "title": "Phrasal Verbs 50",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-v8",
+      "title": "Idioms & Expressions",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-vocab",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s1",
+      "title": "How to Describe",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s2",
+      "title": "Express Opinions",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s3",
+      "title": "Debate & Argue",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s4",
+      "title": "Small Talk Master",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s5",
+      "title": "Presentation Skills",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-s6",
+      "title": "Job Interview",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-speak",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li1",
+      "title": "News English",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li2",
+      "title": "TED Talk: Grit",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li3",
+      "title": "TED: Inside Mind",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li4",
+      "title": "Movie Clips English",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li5",
+      "title": "Song Lyrics",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "i-li6",
+      "title": "BBC 6 Minute English",
+      "levelId": "intermediate-a2b1",
+      "categoryId": "i-listen",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f1",
+      "title": "Think in English",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f2",
+      "title": "Connected Speech",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f3",
+      "title": "Shadowing Method",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f4",
+      "title": "Filler Words",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f5",
+      "title": "British vs American",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-f6",
+      "title": "Accent Reduction",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-fluency",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b1",
+      "title": "Email Writing",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b2",
+      "title": "Meeting Vocabulary",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b3",
+      "title": "Negotiation Skills",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b4",
+      "title": "Phone Etiquette",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b5",
+      "title": "Finance Vocabulary",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-b6",
+      "title": "CV & Resume",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-business",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac1",
+      "title": "IELTS Writing Task 2",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac2",
+      "title": "IELTS Speaking Tips",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac3",
+      "title": "Academic Vocabulary",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac4",
+      "title": "Essay Structure",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac5",
+      "title": "TOEIC Listening",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-ac6",
+      "title": "Critical Thinking",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-academic",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu1",
+      "title": "British Culture",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu2",
+      "title": "American Slang",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu3",
+      "title": "Australian English",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu4",
+      "title": "Body Language",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu5",
+      "title": "Social Media English",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    },
+    {
+      "lessonId": "a-cu6",
+      "title": "Food Around World",
+      "levelId": "advanced-b1b2",
+      "categoryId": "a-culture",
+      "approvedCandidateCount": 0,
+      "topCandidates": []
+    }
+  ]
+}

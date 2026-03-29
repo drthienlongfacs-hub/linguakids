@@ -1,11 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-29T14:37:34.367Z",
-  "version": "video-lessons-6ace619402e8",
+  "generatedAt": "2026-03-29T22:47:14.821Z",
+  "version": "video-lessons-88de5d5bd85b",
   "summary": {
     "totalLessons": 120,
     "publicLessons": 0,
-    "hiddenLessons": 120,
+    "hiddenLessons": 0,
+    "candidateLessons": 8,
+    "reviewQueueLessons": 17,
+    "readyToPublishLessons": 0,
+    "blockedLessons": 95,
     "draftLessons": 0,
     "retiredLessons": 0,
     "approvedDomainCount": 1,
@@ -14,7 +18,7 @@
   },
   "audit": {
     "status": "pass",
-    "checkedAt": "2026-03-29T14:37:33.184Z"
+    "checkedAt": "2026-03-29T22:47:13.131Z"
   },
   "findings": []
 }
