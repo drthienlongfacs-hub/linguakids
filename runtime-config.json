@@ -1,0 +1,9 @@
+{
+  "premium": {
+    "mode": "soft_paywall",
+    "entitlementApiBaseUrl": "",
+    "allowClientSignedTokenFallback": true,
+    "syncOnBoot": true,
+    "syncTimeoutMs": 4000
+  }
+}
