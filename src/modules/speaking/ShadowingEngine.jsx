@@ -617,12 +617,18 @@ export default function ShadowingEngine({
                                 >
                                     <div style={{ fontSize: '0.74rem', color: '#64748B', marginBottom: '4px' }}>
                                         {metric.label}
+                                        {metric.labelVi && metric.labelVi !== metric.label && (
+                                            <span style={{ opacity: 0.7, marginLeft: 4 }}>· {metric.labelVi}</span>
+                                        )}
                                     </div>
                                     <div style={{ fontSize: '1rem', fontWeight: 800 }}>
                                         {metric.score}%
                                     </div>
                                     <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '4px', lineHeight: 1.35 }}>
                                         {metric.insight}
+                                        {metric.insightVi && metric.insightVi !== metric.insight && (
+                                            <div style={{ marginTop: '2px', opacity: 0.8, fontStyle: 'italic' }}>{metric.insightVi}</div>
+                                        )}
                                     </div>
                                 </div>
                             ))}

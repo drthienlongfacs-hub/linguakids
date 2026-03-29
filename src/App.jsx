@@ -89,6 +89,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const ParentDashboard = lazy(() => import('./pages/ParentDashboard'));
 const KidsLibrary = lazy(() => import('./pages/KidsLibrary'));
+const VideoLesson = lazy(() => import('./pages/VideoLesson'));
 
 // Loading fallback with spinner
 function LoadingFallback() {
@@ -143,6 +144,7 @@ function AppContent() {
             <Route path="/premium" element={<PremiumUpgrade />} />
             <Route path="/parent-dashboard" element={<ParentDashboard />} />
             <Route path="/kids-library" element={<KidsLibrary />} />
+            <Route path="/video-lessons" element={<VideoLesson />} />
             <Route path="/review" element={<DailyReview />} />
             <Route path="/achievements" element={<Achievements />} />
             <Route path="/vocabulary" element={<VocabularyDashboard />} />

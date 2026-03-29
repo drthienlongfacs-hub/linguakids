@@ -181,7 +181,7 @@ export default function ClozeExercise() {
             </div>
 
             {/* Progress bar */}
-            <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginBottom: '24px' }}>
+            <div style={{ height: '4px', background: 'var(--color-border)', borderRadius: '2px', marginBottom: '24px' }}>
                 <div style={{ height: '100%', width: `${((currentIdx) / exercises.length) * 100}%`, background: 'var(--color-primary)', borderRadius: '2px', transition: 'width 0.3s' }} />
             </div>
 
@@ -197,7 +197,7 @@ export default function ClozeExercise() {
                 <span style={{ padding: '2px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 700, background: 'rgba(59,130,246,0.15)', color: '#3B82F6' }}>
                     {current.level}
                 </span>
-                <span style={{ padding: '2px 10px', borderRadius: '8px', fontSize: '0.7rem', background: 'rgba(255,255,255,0.06)', color: 'var(--color-text-light)' }}>
+                <span style={{ padding: '2px 10px', borderRadius: '8px', fontSize: '0.7rem', background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text-light)' }}>
                     {current.topic}
                 </span>
             </div>
@@ -221,8 +221,8 @@ export default function ClozeExercise() {
             {/* Options grid */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '20px' }}>
                 {current.options.map((opt, i) => {
-                    let bg = 'rgba(255,255,255,0.06)';
-                    let border = '1px solid rgba(255,255,255,0.1)';
+                    let bg = 'var(--color-bg)';
+                    let border = '1px solid var(--color-border)';
                     let color = 'var(--color-text)';
 
                     if (showResult) {
@@ -231,7 +231,7 @@ export default function ClozeExercise() {
                         } else if (opt === selected) {
                             bg = 'rgba(239,68,68,0.2)'; border = '2px solid #EF4444'; color = '#EF4444';
                         } else {
-                            bg = 'rgba(255,255,255,0.03)'; color = 'var(--color-text-light)';
+                            bg = 'var(--color-bg)'; color = 'var(--color-text-light)';
                         }
                     }
 
@@ -271,9 +271,11 @@ export default function ClozeExercise() {
             {/* Score bar */}
             <div style={{
                 position: 'fixed', bottom: '70px', left: '50%', transform: 'translateX(-50%)',
-                background: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(8px)',
+                background: 'var(--color-card)', backdropFilter: 'blur(8px)',
                 padding: '8px 20px', borderRadius: '20px', fontSize: '0.8rem',
-                display: 'flex', gap: '16px', border: '1px solid rgba(255,255,255,0.1)',
+                display: 'flex', gap: '16px', border: '1px solid var(--color-border)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                color: 'var(--color-text)',
             }}>
                 <span>✅ {score.correct}</span>
                 <span>❌ {score.total - score.correct}</span>

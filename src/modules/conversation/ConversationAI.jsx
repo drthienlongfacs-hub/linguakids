@@ -1,14 +1,20 @@
-// ConversationAI.jsx — Free-form AI conversation practice
-// Uses built-in response templates with contextual matching
-// No external AI API needed — smart pattern-matching conversation engine
+// ConversationAI.jsx — Voice-First AI Conversation Practice
+// Phase 1: Voice Engine (Web Speech API) + Phase 3: Real-time Coaching
+// Benchmarked against Loora AI, Elsa Speak, Practice Me
+// Features: push-to-talk, waveform, AI voice response, inline coaching,
+//           pronunciation scoring, "say it better", session summary
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../context/GameStateContext';
 import { isAdultMode } from '../../utils/userMode';
 import CapabilityNotice from '../../components/CapabilityNotice';
 import { useDeviceCapabilities } from '../../hooks/useDeviceCapabilities';
+import { speakText } from '../../utils/speakText';
+import TutorSelector, { TUTORS } from '../../components/TutorSelector';
+import CelebrationOverlay from '../../components/CelebrationOverlay';
 
+// ============ SCENARIOS ============
 const SCENARIOS = [
     {
         id: 'restaurant', emoji: '🍽️', title: 'At a Restaurant', titleVi: 'Tại nhà hàng', lang: 'en',
@@ -95,6 +101,73 @@ const SCENARIOS = [
     },
 ];
 
+// ============ GRAMMAR CHECKER (lightweight) ============
+const GRAMMAR_RULES = [
+    { pattern: /\bi (am|was|have|had|will|would|can|could|should|want|need|like|think|know|go|went|see|saw)\b/g, fix: (m) => m.replace(/^i\b/, 'I'), label: "Capitalize 'I'", labelVi: "Viết hoa 'I'" },
+    { pattern: /\b(he|she|it) (go|have|do|want|need|like|come|make|take|say)\b/gi, fix: (m) => { const w = m.split(' '); return `${w[0]} ${w[1]}s`; }, label: 'Subject-verb agreement · 3rd person -s', labelVi: 'Chia động từ ngôi 3 +s' },
+    { pattern: /\b(yesterday|last week|last month|ago) .*(go|come|have|make|take|do|see|get|say|tell|give|find)\b/gi, fix: null, label: 'Use past tense with time markers', labelVi: 'Dùng thì quá khứ với dấu hiệu thời gian' },
+    { pattern: /\bdoes ('nt|not) \w+s\b/gi, fix: null, label: "Don't add -s after does/doesn't", labelVi: "Không thêm -s sau does/doesn't" },
+];
+
+function checkGrammar(text) {
+    const issues = [];
+    for (const rule of GRAMMAR_RULES) {
+        const matches = text.match(rule.pattern);
+        if (matches) {
+            for (const match of matches) {
+                const fixed = rule.fix ? rule.fix(match) : null;
+                if (fixed && fixed !== match) {
+                    issues.push({
+                        original: match,
+                        suggestion: fixed,
+                        label: rule.label,
+                        labelVi: rule.labelVi,
+                    });
+                } else if (!rule.fix) {
+                    issues.push({
+                        original: match,
+                        suggestion: null,
+                        label: rule.label,
+                        labelVi: rule.labelVi,
+                    });
+                }
+            }
+        }
+    }
+    return issues;
+}
+
+// ============ VOCABULARY SCORING ============
+function scoreVocabUsage(text, vocabulary) {
+    const lower = text.toLowerCase();
+    const used = vocabulary.filter(v => lower.includes(v.toLowerCase()));
+    return { used, total: vocabulary.length, pct: Math.round((used.length / vocabulary.length) * 100) };
+}
+
+// ============ NATIVE REPHRASE (rule-based) ============
+function suggestNativeRephrase(text) {
+    let better = text;
+    // Common rephrase patterns
+    const patterns = [
+        [/\bi want to\b/gi, "I'd like to"],
+        [/\bcan you\b/gi, "Could you"],
+        [/\bgive me\b/gi, "Could I have"],
+        [/\bi think it is\b/gi, "I believe it's"],
+        [/\bi need\b/gi, "I'd need"],
+        [/\btell me about\b/gi, "Could you tell me about"],
+        [/\bi don't know\b/gi, "I'm not sure"],
+        [/\bwhat is\b/gi, "What's"],
+        [/\bvery good\b/gi, "excellent"],
+        [/\bvery bad\b/gi, "terrible"],
+        [/\bvery big\b/gi, "enormous"],
+        [/\bvery small\b/gi, "tiny"],
+    ];
+    for (const [rx, rep] of patterns) {
+        better = better.replace(rx, rep);
+    }
+    return better !== text ? better : null;
+}
+
 function findBestResponse(userInput, scenario) {
     const input = userInput.toLowerCase();
     let best = null;
@@ -107,7 +180,6 @@ function findBestResponse(userInput, scenario) {
 
     if (best && bestScore > 0) return best.reply;
 
-    // Fallback generic responses
     const fallbacks = [
         "That's interesting! Could you tell me more?",
         "I understand. Is there anything else I can help you with?",
@@ -117,52 +189,245 @@ function findBestResponse(userInput, scenario) {
     return fallbacks[Math.floor(Math.random() * fallbacks.length)];
 }
 
+// ============ MAIN COMPONENT ============
 export default function ConversationAI() {
     const navigate = useNavigate();
     const { state, dispatch } = useGame();
     const adult = isAdultMode(state.userMode);
     const { readiness } = useDeviceCapabilities();
 
+    // Core state
     const [selectedScenario, setSelectedScenario] = useState(null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+
+    // Voice state
+    const [voiceMode, setVoiceMode] = useState(false);
+    const [recState, setRecState] = useState('idle'); // idle | listening | processing
+    const [interimText, setInterimText] = useState('');
+    const [waveAmplitude, setWaveAmplitude] = useState(0);
+    const [aiSpeaking, setAiSpeaking] = useState(false);
+    const [speechSpeed, setSpeechSpeed] = useState(0.85);
+
+    // Coaching state
+    const [expandedCoaching, setExpandedCoaching] = useState(null); // message index
+    const [showSummary, setShowSummary] = useState(false);
+
+    // Tutor state (Track D)
+    const [selectedTutor, setSelectedTutor] = useState(TUTORS[0]);
+    const [celebration, setCelebration] = useState(null); // { type, message }
+
+    // Refs
     const chatEndRef = useRef(null);
     const inputRef = useRef(null);
+    const recognitionRef = useRef(null);
+    const timeoutRef = useRef(null);
+    const analyserRef = useRef(null);
+    const frameRef = useRef(null);
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    // Cleanup
+    useEffect(() => {
+        return () => {
+            recognitionRef.current?.abort();
+            clearTimeout(timeoutRef.current);
+            cancelAnimationFrame(frameRef.current);
+            window.speechSynthesis.cancel();
+            if (analyserRef.current) {
+                analyserRef.current.stream?.getTracks().forEach(t => t.stop());
+                analyserRef.current.ctx?.close();
+            }
+        };
+    }, []);
+
+    // Session stats
+    const sessionStats = useMemo(() => {
+        const userMsgs = messages.filter(m => m.role === 'user');
+        const allGrammar = userMsgs.flatMap(m => m.grammar || []);
+        const allVocab = [...new Set(userMsgs.flatMap(m => m.vocabUsed || []))];
+        const rephrases = userMsgs.filter(m => m.rephrase).length;
+        return {
+            turns: userMsgs.length,
+            grammarIssues: allGrammar.length,
+            grammarItems: allGrammar.slice(0, 8),
+            vocabUsed: allVocab,
+            vocabTotal: selectedScenario?.vocabulary?.length || 10,
+            rephraseOpps: rephrases,
+        };
+    }, [messages, selectedScenario]);
+
+    // ============ WAVEFORM ============
+    const startWaveform = useCallback(async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const source = ctx.createMediaStreamSource(stream);
+            const analyser = ctx.createAnalyser();
+            analyser.fftSize = 256;
+            source.connect(analyser);
+            analyserRef.current = { analyser, ctx, stream };
+            const data = new Uint8Array(analyser.frequencyBinCount);
+            const tick = () => {
+                analyser.getByteFrequencyData(data);
+                setWaveAmplitude(data.reduce((a, b) => a + b, 0) / data.length / 128);
+                frameRef.current = requestAnimationFrame(tick);
+            };
+            tick();
+        } catch { /* fail silently */ }
+    }, []);
+
+    const stopWaveform = useCallback(() => {
+        cancelAnimationFrame(frameRef.current);
+        setWaveAmplitude(0);
+        if (analyserRef.current) {
+            analyserRef.current.stream?.getTracks().forEach(t => t.stop());
+            analyserRef.current.ctx?.close();
+            analyserRef.current = null;
+        }
+    }, []);
+
+    // ============ SPEAK AI RESPONSE ============
+    const speakAiResponse = useCallback((text) => {
+        if (!voiceMode) return;
+        setAiSpeaking(true);
+        speakText(text, {
+            lang: 'en-US',
+            rate: speechSpeed,
+            onEnd: () => setAiSpeaking(false),
+        });
+    }, [voiceMode, speechSpeed]);
+
+    // ============ START SCENARIO ============
     const startScenario = useCallback((scenario) => {
         setSelectedScenario(scenario);
-        setMessages([{
-            role: 'ai',
-            text: scenario.starter,
-            time: new Date(),
-        }]);
+        const starterMsg = { role: 'ai', text: scenario.starter, time: new Date() };
+        setMessages([starterMsg]);
+        setShowSummary(false);
+        setExpandedCoaching(null);
         setTimeout(() => inputRef.current?.focus(), 300);
     }, []);
 
-    const sendMessage = useCallback(() => {
-        if (!input.trim() || !selectedScenario) return;
+    // ============ PROCESS USER INPUT ============
+    const processUserInput = useCallback((text) => {
+        if (!text.trim() || !selectedScenario) return;
 
-        const userMsg = { role: 'user', text: input.trim(), time: new Date() };
+        const grammar = checkGrammar(text);
+        const vocab = scoreVocabUsage(text, selectedScenario.vocabulary);
+        const rephrase = suggestNativeRephrase(text);
+
+        const userMsg = {
+            role: 'user',
+            text: text.trim(),
+            time: new Date(),
+            grammar,
+            vocabUsed: vocab.used,
+            rephrase,
+            hasCoaching: grammar.length > 0 || rephrase,
+        };
+
         setMessages(prev => [...prev, userMsg]);
         setInput('');
         setIsTyping(true);
 
-        // Simulate typing delay
-        const delay = 500 + Math.random() * 1000;
+        const delay = 600 + Math.random() * 800;
         setTimeout(() => {
             const reply = findBestResponse(userMsg.text, selectedScenario);
-            setMessages(prev => [...prev, { role: 'ai', text: reply, time: new Date() }]);
+            const aiMsg = { role: 'ai', text: reply, time: new Date() };
+            setMessages(prev => [...prev, aiMsg]);
             setIsTyping(false);
-            dispatch({ type: 'ADD_XP', payload: 3 });
+            dispatch({ type: 'ADD_XP', payload: 5 });
+            speakAiResponse(reply);
         }, delay);
-    }, [input, selectedScenario, dispatch]);
+    }, [selectedScenario, dispatch, speakAiResponse]);
 
-    // Scenario selection screen
+    // ============ SEND TEXT MESSAGE ============
+    const sendMessage = useCallback(() => {
+        processUserInput(input);
+    }, [input, processUserInput]);
+
+    // ============ VOICE RECORDING ============
+    const startRecording = useCallback(async () => {
+        setInterimText('');
+        setRecState('listening');
+
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SR) {
+            setVoiceMode(false);
+            return;
+        }
+
+        try {
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+        } catch {
+            setRecState('idle');
+            return;
+        }
+
+        const rec = new SR();
+        rec.lang = 'en-US';
+        rec.interimResults = true;
+        rec.continuous = true;
+        rec.maxAlternatives = 3;
+
+        let fullTranscript = '';
+
+        rec.onresult = (e) => {
+            let interim = '';
+            let final = '';
+            for (let i = 0; i < e.results.length; i++) {
+                if (e.results[i].isFinal) final += e.results[i][0].transcript;
+                else interim += e.results[i][0].transcript;
+            }
+            if (final) {
+                fullTranscript = final;
+                setInterimText('');
+            } else {
+                setInterimText(interim);
+            }
+        };
+
+        rec.onerror = (e) => {
+            clearTimeout(timeoutRef.current);
+            stopWaveform();
+            if (e.error !== 'aborted') {
+                setRecState('idle');
+            }
+        };
+
+        rec.onend = () => {
+            clearTimeout(timeoutRef.current);
+            stopWaveform();
+            if (fullTranscript.trim()) {
+                setRecState('processing');
+                setTimeout(() => {
+                    processUserInput(fullTranscript.trim());
+                    setRecState('idle');
+                }, 200);
+            } else {
+                setRecState('idle');
+            }
+        };
+
+        recognitionRef.current = rec;
+        try {
+            rec.start();
+            startWaveform();
+            timeoutRef.current = setTimeout(() => recognitionRef.current?.stop(), 15000);
+        } catch {
+            setRecState('idle');
+        }
+    }, [processUserInput, startWaveform, stopWaveform]);
+
+    const stopRecording = useCallback(() => {
+        clearTimeout(timeoutRef.current);
+        recognitionRef.current?.stop();
+    }, []);
+
+    // ============ SCENARIO SELECTION ============
     if (!selectedScenario) {
         return (
             <div className="page">
@@ -170,6 +435,20 @@ export default function ConversationAI() {
                     <button className="page-header__back" onClick={() => navigate(-1)}>←</button>
                     <h2 className="page-header__title">💬 {adult ? 'AI Conversation' : 'Hội thoại AI'}</h2>
                 </div>
+
+                {/* Track D: Tutor Selector */}
+                <div style={{ marginBottom: '14px' }}>
+                    <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--color-text-light)', marginBottom: '6px' }}>
+                        {adult ? 'Your Tutor' : 'Gia sư của bạn'}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <TutorSelector currentTutorId={selectedTutor.id} onSelect={setSelectedTutor} isAdult={adult} />
+                        <span style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', fontStyle: 'italic' }}>
+                            {adult ? selectedTutor.personality : selectedTutor.personalityVi}
+                        </span>
+                    </div>
+                </div>
+
                 <p style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', marginBottom: '20px' }}>
                     {adult ? 'Choose a real-life scenario to practice speaking:' : 'Chọn tình huống thực tế để luyện nói:'}
                 </p>
@@ -195,69 +474,246 @@ export default function ConversationAI() {
                         </div>
                     ))}
                 </div>
+
+                {celebration && <CelebrationOverlay type={celebration.type} message={celebration.message} onDone={() => setCelebration(null)} />}
             </div>
         );
     }
 
-    // Chat interface
+    // ============ CHAT INTERFACE ============
+    const hasSpeech = typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
     return (
         <div className="page" style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 60px)', padding: '0' }}>
-            {/* Chat header */}
+            {/* Header */}
             <div style={{
-                padding: '12px 16px', background: 'rgba(15,23,42,0.8)', backdropFilter: 'blur(8px)',
-                display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)',
+                padding: '10px 16px', background: 'var(--color-card)', backdropFilter: 'blur(8px)',
+                display: 'flex', alignItems: 'center', gap: '10px',
+                borderBottom: '1px solid var(--color-border)', boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
             }}>
-                <button onClick={() => { setSelectedScenario(null); setMessages([]); }}
+                <button onClick={() => { setSelectedScenario(null); setMessages([]); setShowSummary(false); window.speechSynthesis.cancel(); }}
                     style={{ background: 'none', border: 'none', color: 'var(--color-text)', fontSize: '1.2rem', cursor: 'pointer' }}>←</button>
                 <div style={{ fontSize: '1.5rem' }}>{selectedScenario.emoji}</div>
-                <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{adult ? selectedScenario.title : selectedScenario.titleVi}</div>
-                    <div style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>{selectedScenario.systemPrompt}</div>
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--color-text)' }}>{adult ? selectedScenario.title : selectedScenario.titleVi}</div>
+                    <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)' }}>{selectedScenario.systemPrompt}</div>
                 </div>
+                {/* Voice toggle */}
+                {hasSpeech && (
+                    <button onClick={() => { setVoiceMode(!voiceMode); window.speechSynthesis.cancel(); setAiSpeaking(false); }}
+                        style={{
+                            padding: '6px 12px', borderRadius: '16px', border: 'none', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                            background: voiceMode ? 'linear-gradient(135deg, #4F46E5, #6366F1)' : 'var(--color-bg)',
+                            color: voiceMode ? '#fff' : 'var(--color-text-light)',
+                            transition: 'all 0.2s',
+                        }}>
+                        {voiceMode ? '🎙️ Voice ON' : '⌨️ Text'}
+                    </button>
+                )}
+                {/* Summary button */}
+                {messages.filter(m => m.role === 'user').length >= 2 && (
+                    <button onClick={() => setShowSummary(!showSummary)}
+                        style={{
+                            padding: '6px 10px', borderRadius: '16px', border: 'none', fontSize: '0.7rem', fontWeight: 700, cursor: 'pointer',
+                            background: showSummary ? 'rgba(34,197,94,0.15)' : 'var(--color-bg)',
+                            color: showSummary ? '#059669' : 'var(--color-text-light)',
+                        }}>
+                        📊
+                    </button>
+                )}
             </div>
+
+            {/* Voice speed control (when voice mode active) */}
+            {voiceMode && (
+                <div style={{
+                    padding: '6px 16px', borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg)',
+                    display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center',
+                }}>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>AI speed:</span>
+                    {[0.7, 0.85, 1.0].map(s => (
+                        <button key={s} onClick={() => setSpeechSpeed(s)}
+                            style={{
+                                padding: '2px 8px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                                fontSize: '0.65rem', fontWeight: speechSpeed === s ? 700 : 400,
+                                background: speechSpeed === s ? 'var(--color-primary)' : 'transparent',
+                                color: speechSpeed === s ? '#fff' : 'var(--color-text-light)',
+                            }}>{s}x</button>
+                    ))}
+                    {aiSpeaking && <span style={{ fontSize: '0.68rem', color: '#6366F1', animation: 'pulse 1.5s infinite' }}>🔊 Speaking...</span>}
+                </div>
+            )}
 
             {/* Vocabulary helper */}
             <div style={{
-                padding: '8px 16px', borderBottom: '1px solid rgba(255,255,255,0.04)',
-                display: 'flex', gap: '6px', flexWrap: 'wrap', overflowX: 'auto',
+                padding: '8px 16px', borderBottom: '1px solid var(--color-border)',
+                display: 'flex', gap: '6px', flexWrap: 'wrap', overflowX: 'auto', background: 'var(--color-bg)',
             }}>
-                <span style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap' }}>Key words:</span>
-                {selectedScenario.vocabulary.map((v, i) => (
-                    <button key={i} onClick={() => setInput(prev => prev + (prev ? ' ' : '') + v)}
-                        style={{
-                            padding: '2px 8px', borderRadius: '6px', fontSize: '0.65rem',
-                            background: 'rgba(129,140,248,0.1)', border: '1px solid rgba(129,140,248,0.2)',
-                            color: '#A5B4FC', cursor: 'pointer', whiteSpace: 'nowrap',
-                        }}>{v}</button>
-                ))}
+                <span style={{ fontSize: '0.7rem', color: 'var(--color-text-light)', whiteSpace: 'nowrap', fontWeight: 600 }}>Key words:</span>
+                {selectedScenario.vocabulary.map((v, i) => {
+                    const isUsed = sessionStats.vocabUsed.includes(v);
+                    return (
+                        <button key={i} onClick={() => !voiceMode && setInput(prev => prev + (prev ? ' ' : '') + v)}
+                            style={{
+                                padding: '3px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: 600,
+                                background: isUsed ? 'rgba(34,197,94,0.15)' : 'var(--color-primary)',
+                                border: isUsed ? '1px solid rgba(34,197,94,0.3)' : 'none',
+                                color: isUsed ? '#059669' : '#FFFFFF', cursor: 'pointer', whiteSpace: 'nowrap',
+                                opacity: 0.85, transition: 'all 0.2s',
+                            }}>
+                            {isUsed && '✓ '}{v}
+                        </button>
+                    );
+                })}
             </div>
 
-            {/* Messages */}
+            {/* ============ SESSION SUMMARY PANEL ============ */}
+            {showSummary && (
+                <div style={{
+                    padding: '16px', background: 'var(--color-bg)', borderBottom: '1px solid var(--color-border)',
+                    maxHeight: '300px', overflowY: 'auto',
+                }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        📊 {adult ? 'Session Summary' : 'Tổng kết phiên'}
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', marginBottom: '12px' }}>
+                        <div style={{ background: 'var(--color-card)', padding: '10px', borderRadius: '10px', textAlign: 'center', border: '1px solid var(--color-border)' }}>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#4F46E5' }}>{sessionStats.turns}</div>
+                            <div style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>{adult ? 'Turns' : 'Lượt nói'}</div>
+                        </div>
+                        <div style={{ background: 'var(--color-card)', padding: '10px', borderRadius: '10px', textAlign: 'center', border: '1px solid var(--color-border)' }}>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: sessionStats.grammarIssues > 0 ? '#F59E0B' : '#22C55E' }}>{sessionStats.grammarIssues}</div>
+                            <div style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>{adult ? 'Grammar' : 'Ngữ pháp'}</div>
+                        </div>
+                        <div style={{ background: 'var(--color-card)', padding: '10px', borderRadius: '10px', textAlign: 'center', border: '1px solid var(--color-border)' }}>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#059669' }}>
+                                {sessionStats.vocabUsed.length}/{sessionStats.vocabTotal}
+                            </div>
+                            <div style={{ fontSize: '0.68rem', color: 'var(--color-text-light)' }}>{adult ? 'Vocab' : 'Từ vựng'}</div>
+                        </div>
+                    </div>
+                    {sessionStats.grammarItems.length > 0 && (
+                        <div style={{ marginBottom: '8px' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 700, marginBottom: '4px' }}>
+                                {adult ? '⚠️ Grammar issues found:' : '⚠️ Lỗi ngữ pháp phát hiện:'}
+                            </div>
+                            {sessionStats.grammarItems.map((g, i) => (
+                                <div key={i} style={{
+                                    padding: '6px 10px', borderRadius: '8px', fontSize: '0.72rem', marginBottom: '4px',
+                                    background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)',
+                                }}>
+                                    <span style={{ textDecoration: 'line-through', color: '#DC2626' }}>{g.original}</span>
+                                    {g.suggestion && <span> → <strong style={{ color: '#059669' }}>{g.suggestion}</strong></span>}
+                                    <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
+                                        {g.label} · {g.labelVi}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {sessionStats.vocabUsed.length > 0 && (
+                        <div>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 700, marginBottom: '4px' }}>
+                                {adult ? '✅ Vocabulary used:' : '✅ Từ vựng đã dùng:'}
+                            </div>
+                            <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                                {sessionStats.vocabUsed.map(v => (
+                                    <span key={v} style={{ padding: '2px 8px', borderRadius: '6px', fontSize: '0.68rem', background: 'rgba(34,197,94,0.1)', color: '#059669', fontWeight: 600 }}>{v}</span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {/* ============ MESSAGES ============ */}
             <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
                 {messages.map((msg, i) => (
-                    <div key={i} style={{
-                        display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                        marginBottom: '10px',
-                    }}>
+                    <div key={i} style={{ marginBottom: '12px' }}>
                         <div style={{
-                            maxWidth: '80%', padding: '10px 14px', borderRadius: '16px',
-                            background: msg.role === 'user'
-                                ? 'linear-gradient(135deg, #6366F1, #818CF8)'
-                                : 'var(--color-container-bg)',
-                            color: msg.role === 'user' ? '#fff' : 'var(--color-text)',
-                            fontSize: '0.88rem', lineHeight: 1.6,
-                            borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
-                            borderBottomLeftRadius: msg.role === 'ai' ? '4px' : '16px',
+                            display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start',
                         }}>
-                            {msg.text}
+                            <div style={{
+                                maxWidth: '80%', padding: '10px 14px', borderRadius: '16px',
+                                background: msg.role === 'user'
+                                    ? 'linear-gradient(135deg, #4F46E5, #6366F1)'
+                                    : 'var(--color-card)',
+                                color: msg.role === 'user' ? '#FFFFFF' : 'var(--color-text)',
+                                fontSize: '0.88rem', lineHeight: 1.6,
+                                borderBottomRightRadius: msg.role === 'user' ? '4px' : '16px',
+                                borderBottomLeftRadius: msg.role === 'ai' ? '4px' : '16px',
+                                border: msg.role === 'ai' ? '1px solid var(--color-border)' : 'none',
+                                boxShadow: msg.role === 'ai' ? '0 1px 4px rgba(0,0,0,0.06)' : '0 2px 8px rgba(79,70,229,0.25)',
+                                cursor: msg.hasCoaching ? 'pointer' : 'default',
+                            }}
+                                onClick={() => msg.hasCoaching && setExpandedCoaching(expandedCoaching === i ? null : i)}
+                            >
+                                {msg.text}
+                                {msg.hasCoaching && (
+                                    <span style={{ marginLeft: '6px', fontSize: '0.65rem', opacity: 0.7 }}>
+                                        {expandedCoaching === i ? '▲' : '💡 tap to improve · nhấn để cải thiện'}
+                                    </span>
+                                )}
+                            </div>
                         </div>
+
+                        {/* ============ INLINE COACHING CARD ============ */}
+                        {expandedCoaching === i && msg.hasCoaching && (
+                            <div style={{
+                                marginTop: '6px', marginLeft: 'auto', maxWidth: '85%', padding: '12px',
+                                borderRadius: '12px', background: 'rgba(99,102,241,0.06)',
+                                border: '1px solid rgba(99,102,241,0.15)',
+                            }}>
+                                {/* Grammar fixes */}
+                                {msg.grammar?.length > 0 && (
+                                    <div style={{ marginBottom: '8px' }}>
+                                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#F59E0B', marginBottom: '4px' }}>
+                                            ✏️ {adult ? 'Grammar correction' : 'Sửa ngữ pháp'}
+                                        </div>
+                                        {msg.grammar.map((g, gi) => (
+                                            <div key={gi} style={{ fontSize: '0.78rem', marginBottom: '3px', lineHeight: 1.4 }}>
+                                                <span style={{ textDecoration: 'line-through', color: '#EF4444' }}>{g.original}</span>
+                                                {g.suggestion && <span> → <strong style={{ color: '#22C55E' }}>{g.suggestion}</strong></span>}
+                                                <div style={{ fontSize: '0.65rem', color: 'var(--color-text-light)' }}>
+                                                    {g.label} · {g.labelVi}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                {/* Native rephrase */}
+                                {msg.rephrase && (
+                                    <div>
+                                        <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#6366F1', marginBottom: '4px' }}>
+                                            🗣️ {adult ? 'Say it like a native' : 'Nói như người bản xứ'}
+                                        </div>
+                                        <div style={{
+                                            padding: '8px 10px', borderRadius: '8px', fontSize: '0.82rem',
+                                            background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.15)',
+                                            fontStyle: 'italic', lineHeight: 1.5,
+                                        }}>
+                                            "{msg.rephrase}"
+                                        </div>
+                                        {voiceMode && (
+                                            <button onClick={(e) => { e.stopPropagation(); speakText(msg.rephrase, { lang: 'en-US', rate: 0.85 }); }}
+                                                style={{
+                                                    marginTop: '6px', padding: '4px 12px', borderRadius: '8px', border: '1px solid rgba(99,102,241,0.2)',
+                                                    background: 'transparent', fontSize: '0.68rem', color: '#6366F1', cursor: 'pointer', fontWeight: 600,
+                                                }}>
+                                                🔊 {adult ? 'Listen' : 'Nghe mẫu'}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 ))}
                 {isTyping && (
                     <div style={{ display: 'flex', marginBottom: '10px' }}>
                         <div style={{
                             padding: '10px 18px', borderRadius: '16px', borderBottomLeftRadius: '4px',
-                            background: 'var(--color-container-bg)', fontSize: '0.88rem',
+                            background: 'var(--color-card)', border: '1px solid var(--color-border)',
+                            fontSize: '0.88rem',
                         }}>
                             <span className="typing-dots">
                                 <span style={{ animationDelay: '0s' }}>•</span>
@@ -270,33 +726,105 @@ export default function ConversationAI() {
                 <div ref={chatEndRef} />
             </div>
 
-            {/* Input */}
+            {/* ============ VOICE RECORDING AREA ============ */}
+            {voiceMode && recState === 'listening' && (
+                <div style={{
+                    padding: '8px 16px', background: 'rgba(239,68,68,0.05)', borderTop: '1px solid rgba(239,68,68,0.15)',
+                    textAlign: 'center',
+                }}>
+                    {/* Waveform */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px', height: '32px', marginBottom: '4px' }}>
+                        {Array.from({ length: 16 }, (_, i) => {
+                            const h = Math.max(3, waveAmplitude * 20 * (0.5 + Math.sin(i * 0.7 + Date.now() * 0.003) * 0.5));
+                            return (
+                                <div key={i} style={{
+                                    width: '3px', borderRadius: '2px', height: `${h}px`,
+                                    background: `hsl(${220 + i * 8}, 80%, 60%)`, transition: 'height 0.1s',
+                                }} />
+                            );
+                        })}
+                    </div>
+                    {interimText && (
+                        <div style={{ fontSize: '0.8rem', color: '#6366F1', fontStyle: 'italic', marginBottom: '4px' }}>
+                            ✏️ {interimText}...
+                        </div>
+                    )}
+                    <div style={{ fontSize: '0.7rem', color: '#EF4444', fontWeight: 600, animation: 'pulse 1.5s infinite' }}>
+                        🔴 {adult ? 'Listening... Tap ⏹ when done' : 'Đang nghe... Nhấn ⏹ khi xong'}
+                    </div>
+                </div>
+            )}
+
+            {/* ============ INPUT BAR ============ */}
             <div style={{
-                padding: '12px 16px', background: 'rgba(15,23,42,0.9)', backdropFilter: 'blur(8px)',
-                borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', gap: '8px',
+                padding: '10px 16px', background: 'var(--color-card)', backdropFilter: 'blur(8px)',
+                borderTop: '1px solid var(--color-border)', display: 'flex', gap: '8px', alignItems: 'center',
+                boxShadow: '0 -2px 8px rgba(0,0,0,0.04)',
             }}>
-                <input
-                    ref={inputRef}
-                    value={input}
-                    onChange={e => setInput(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && sendMessage()}
-                    placeholder={adult ? "Type your response..." : "Nhập câu trả lời..."}
-                    style={{
-                        flex: 1, padding: '10px 16px', borderRadius: '12px',
-                        border: '1px solid var(--color-input-border)', background: 'var(--color-input-bg)',
-                        color: 'var(--color-input-text)', fontSize: '0.9rem', outline: 'none',
-                    }}
-                />
-                <button onClick={sendMessage}
-                    disabled={!input.trim()}
-                    style={{
-                        padding: '10px 18px', borderRadius: '12px', border: 'none',
-                        background: input.trim() ? 'var(--color-primary)' : 'var(--color-input-bg)',
-                        color: '#fff', fontSize: '1rem', cursor: input.trim() ? 'pointer' : 'default',
-                        transition: 'all 0.2s',
-                    }}>
-                    ➤
-                </button>
+                {voiceMode ? (
+                    <>
+                        {recState === 'idle' ? (
+                            <button onClick={startRecording}
+                                disabled={aiSpeaking}
+                                style={{
+                                    flex: 1, padding: '12px', borderRadius: '24px', border: 'none', cursor: aiSpeaking ? 'default' : 'pointer',
+                                    background: aiSpeaking ? 'var(--color-border)' : 'linear-gradient(135deg, #EF4444, #DC2626)',
+                                    color: '#fff', fontSize: '0.9rem', fontWeight: 700,
+                                    boxShadow: aiSpeaking ? 'none' : '0 4px 12px rgba(239,68,68,0.3)',
+                                    opacity: aiSpeaking ? 0.5 : 1, transition: 'all 0.2s',
+                                }}>
+                                🎙️ {adult ? 'Hold to Speak' : 'Nhấn để Nói'}
+                            </button>
+                        ) : (
+                            <button onClick={stopRecording}
+                                style={{
+                                    flex: 1, padding: '12px', borderRadius: '24px', border: 'none', cursor: 'pointer',
+                                    background: '#1F2937', color: '#fff', fontSize: '0.9rem', fontWeight: 700,
+                                    animation: 'pulse 1.5s infinite',
+                                }}>
+                                ⏹️ {adult ? 'Stop Recording' : 'Dừng ghi'}
+                            </button>
+                        )}
+                        {/* Quick-switch to text */}
+                        <button onClick={() => { setVoiceMode(false); setTimeout(() => inputRef.current?.focus(), 100); }}
+                            style={{
+                                padding: '12px', borderRadius: '50%', border: '1px solid var(--color-border)',
+                                background: 'var(--color-bg)', cursor: 'pointer', fontSize: '0.9rem',
+                            }}>⌨️</button>
+                    </>
+                ) : (
+                    <>
+                        <input
+                            ref={inputRef}
+                            value={input}
+                            onChange={e => setInput(e.target.value)}
+                            onKeyDown={e => e.key === 'Enter' && sendMessage()}
+                            placeholder={adult ? 'Type your response...' : 'Nhập câu trả lời...'}
+                            style={{
+                                flex: 1, padding: '10px 16px', borderRadius: '12px',
+                                border: '1px solid var(--color-input-border)', background: 'var(--color-input-bg)',
+                                color: 'var(--color-input-text)', fontSize: '0.9rem', outline: 'none',
+                            }}
+                        />
+                        <button onClick={sendMessage}
+                            disabled={!input.trim()}
+                            style={{
+                                padding: '10px 18px', borderRadius: '12px', border: 'none',
+                                background: input.trim() ? 'var(--color-primary)' : 'var(--color-border)',
+                                color: '#fff', fontSize: '1rem', cursor: input.trim() ? 'pointer' : 'default',
+                                transition: 'all 0.2s',
+                                boxShadow: input.trim() ? '0 2px 8px rgba(108,99,255,0.3)' : 'none',
+                            }}>➤</button>
+                        {/* Quick-switch to voice */}
+                        {hasSpeech && (
+                            <button onClick={() => setVoiceMode(true)}
+                                style={{
+                                    padding: '10px', borderRadius: '50%', border: '1px solid var(--color-border)',
+                                    background: 'var(--color-bg)', cursor: 'pointer', fontSize: '0.9rem',
+                                }}>🎙️</button>
+                        )}
+                    </>
+                )}
             </div>
 
             <style>{`
@@ -309,6 +837,10 @@ export default function ConversationAI() {
                 @keyframes typingBounce {
                     0%, 80%, 100% { transform: translateY(0); }
                     40% { transform: translateY(-4px); }
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.5; }
                 }
             `}</style>
         </div>
