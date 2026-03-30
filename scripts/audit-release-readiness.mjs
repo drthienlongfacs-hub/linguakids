@@ -21,6 +21,8 @@ function run(command, args) {
 async function main() {
     await run('npm', ['run', 'build:video-lessons']);
     await run('npm', ['run', 'audit:video-lessons']);
+    await run('npm', ['run', 'audit:video-lessons:vi']);
+    await run('npm', ['run', 'audit:video-lessons:study-quality']);
     await run('npm', ['run', 'audit:premium']);
     await run('npm', ['run', 'audit:entitlement']);
     await run('npm', ['run', 'audit:voice-runtime']);

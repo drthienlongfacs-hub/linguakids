@@ -29,6 +29,8 @@
     "audit:premium": "node scripts/audit-premium-architecture.mjs",
     "audit:teacher-lessons": "node scripts/audit-teacher-lessons-audio.mjs",
     "audit:video-lessons": "node scripts/audit-video-lessons.mjs",
+    "audit:video-lessons:study-quality": "node scripts/audit-video-lessons-study-quality.mjs",
+    "audit:video-lessons:vi": "node scripts/audit-video-lessons-vietnamese.mjs",
     "audit:video-lessons:alignment": "node scripts/audit-video-lesson-alignment.mjs",
     "audit:voice-runtime": "node scripts/audit-voice-runtime.mjs",
     "audit:release": "node scripts/audit-release-readiness.mjs",

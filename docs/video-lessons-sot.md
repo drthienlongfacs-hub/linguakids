@@ -29,6 +29,10 @@ licensed or CC source that streams inside the app and standalone PWA.
   Manifest generator.
 - `scripts/audit-video-lessons.mjs`
   Release-blocking audit.
+- `scripts/audit-video-lessons-vietnamese.mjs`
+  Release-blocking audit for Vietnamese localization regressions in SOT and manifest.
+- `scripts/audit-video-lessons-study-quality.mjs`
+  Release-blocking audit for script/quiz completeness, blank options, and duplicate detail prompts.
 - `scripts/audit-video-lesson-alignment.mjs`
   Migration-time RCA for title/category mismatch against legacy reference sources.
 - `scripts/triage-video-lessons.mjs`
@@ -102,7 +106,7 @@ Each lesson now carries a `learningPacket` and a `sourceVerification` block.
 - content match status
 - reviewer identity and evidence URL before publication
 
-The runtime shows the bilingual script and richer quiz only for public lessons, but the catalog stores the packet for all 120 lessons so the migration remains traceable and reviewable.
+The runtime now exposes the bilingual script and richer quiz for every lesson that has a complete study packet, while still preserving the distinction between `public` canonical playback and reference-backed study mode.
 
 ## Lifecycle policy
 
@@ -128,7 +132,7 @@ The runtime shows the bilingual script and richer quiz only for public lessons, 
   - search overlay video results
   - public category counts
 
-`review_queue` and `blocked` lessons also must not leak into public browse or search surfaces.
+`review_queue` and `blocked` lessons must not be mislabeled as `public`, but they may appear in the study surface when a complete packet and a reference source are available, with their review state shown explicitly in the UI.
 
 ## Migration workflow
 
@@ -200,6 +204,8 @@ Reference readings used for this design:
 - `npm run sync:video-lessons:learning`
 - `npm run build:video-lessons`
 - `npm run audit:video-lessons`
+- `npm run audit:video-lessons:vi`
+- `npm run audit:video-lessons:study-quality`
 - `npm run audit:release`
 - `npm run build`
 - `npm run verify:live`

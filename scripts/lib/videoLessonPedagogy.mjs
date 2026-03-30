@@ -514,11 +514,32 @@ function translatePhrase(value) {
         .join(' ');
 }
 
-function makeOption(en, vi = null) {
+function normalizeOptionValue(option, fallbackVi = null) {
+    if (typeof option === 'string') {
+        const en = ensureString(option);
+        return {
+            en,
+            vi: ensureString(fallbackVi) || translatePhrase(en),
+        };
+    }
+
+    const en = ensureString(option?.en);
+    const vi = ensureString(option?.vi) || ensureString(fallbackVi);
+    if (!en && !vi) {
+        return {
+            en: '',
+            vi: '',
+        };
+    }
+
     return {
-        en: ensureString(en),
-        vi: ensureString(vi) || translatePhrase(en),
+        en: en || vi,
+        vi: vi || translatePhrase(en),
     };
+}
+
+function makeOption(en, vi = null) {
+    return normalizeOptionValue(en, vi);
 }
 
 function makeQuestion({
@@ -537,7 +558,7 @@ function makeQuestion({
         type: 'multiple_choice',
         q: ensureString(q),
         qVi: ensureString(qVi),
-        options: options.map((option) => (typeof option === 'string' ? makeOption(option) : makeOption(option.en, option.vi))),
+        options: options.map((option) => makeOption(option)),
         answer,
         explanation: ensureString(explanation),
         explanationVi: ensureString(explanationVi),
@@ -579,21 +600,68 @@ function extractQuotedTerm(text) {
     return match ? ensureString(match[1] || match[2]) : null;
 }
 
+function hasPopulatedOptions(question) {
+    const options = Array.isArray(question?.options) ? question.options : [];
+    if (options.length < 2) {
+        return false;
+    }
+
+    return options.every((option) => {
+        const normalized = normalizeOptionValue(option);
+        return normalized.en || normalized.vi;
+    });
+}
+
+function isGeneratedQuestion(question) {
+    const id = ensureString(question?.id);
+    const prompt = ensureString(question?.q);
+
+    if (/^q[1-5]$/i.test(id)) {
+        return true;
+    }
+
+    return [
+        /^Which title best matches the approved content for this lesson\?$/i,
+        /^While watching ".*", which cue should the learner track\?$/i,
+        /^In ".*", which detail should the learner confirm while watching\?$/i,
+        /^Which Vietnamese cue best matches ".*" in this lesson\?$/i,
+        /^After watching ".*", what is the strongest next study move\?$/i,
+        /^Which statement fits the lesson ".*" best\?$/i,
+    ].some((pattern) => pattern.test(prompt));
+}
+
+function isLegacyQuestionCandidate(question) {
+    if (isGeneratedQuestion(question) || !hasPopulatedOptions(question)) {
+        return false;
+    }
+
+    const answerIndex = Number.isInteger(question?.answer) ? question.answer : -1;
+    const options = Array.isArray(question?.options) ? question.options : [];
+    if (answerIndex < 0 || answerIndex >= options.length) {
+        return false;
+    }
+
+    return ensureString(question?.q) || ensureString(question?.qVi);
+}
+
 function getLegacyQuestion(lesson) {
     const questions = Array.isArray(lesson?.quiz) ? lesson.quiz : [];
-    return questions.find((question) => Array.isArray(question?.options) && Number.isInteger(question?.answer)) || null;
+    return questions.find(isLegacyQuestionCandidate) || null;
 }
 
 function getLegacyCorrectAnswer(legacyQuestion) {
     if (!legacyQuestion) return null;
-    return ensureString(legacyQuestion.options?.[legacyQuestion.answer]) || null;
+    const answerIndex = Number.isInteger(legacyQuestion.answer) ? legacyQuestion.answer : -1;
+    const option = answerIndex >= 0 ? legacyQuestion.options?.[answerIndex] : null;
+    const normalized = normalizeOptionValue(option);
+    return normalized.en || normalized.vi || null;
 }
 
 function buildLegacyAnchor(lesson, legacyQuestion) {
     if (!legacyQuestion) {
         return {
             statementEn: `The lesson stays focused on ${lesson.title}.`,
-            statementVi: `Bai hoc giu dung trong tam vao ${lesson.titleVi || translatePhrase(lesson.title)}.`,
+            statementVi: `Bài học giữ đúng trọng tâm vào ${lesson.titleVi || translatePhrase(lesson.title)}.`,
         };
     }
 
@@ -606,7 +674,7 @@ function buildLegacyAnchor(lesson, legacyQuestion) {
             statementEn: englishPrompt.replace('___', correctAnswer),
             statementVi: vietnamesePrompt
                 ? vietnamesePrompt.replace('___', correctAnswer)
-                : `Cau mau dung voi bai hoc nay la: ${correctAnswer}.`,
+                : `Câu mẫu đúng với bài học này là: ${correctAnswer}.`,
         };
     }
 
@@ -614,20 +682,20 @@ function buildLegacyAnchor(lesson, legacyQuestion) {
     if (quotedTerm && /means|is|for|stands for|sounds like/i.test(englishPrompt)) {
         return {
             statementEn: `"${quotedTerm}" is linked with ${correctAnswer} in this lesson.`,
-            statementVi: `"${quotedTerm}" duoc gan voi ${correctAnswer} trong bai hoc nay.`,
+            statementVi: `"${quotedTerm}" được gắn với ${correctAnswer} trong bài học này.`,
         };
     }
 
     if (/how many/i.test(englishPrompt)) {
         return {
             statementEn: `A key fact in this lesson is ${correctAnswer}.`,
-            statementVi: `Mot thong tin chinh trong bai hoc nay la ${correctAnswer}.`,
+            statementVi: `Một thông tin chính trong bài học này là ${correctAnswer}.`,
         };
     }
 
     return {
         statementEn: `A key answer for this lesson is ${correctAnswer}.`,
-        statementVi: `Mot dap an cot loi cua bai hoc nay la ${correctAnswer}.`,
+        statementVi: `Một đáp án cốt lõi của bài học này là ${correctAnswer}.`,
     };
 }
 
@@ -676,7 +744,7 @@ function buildKeywordTerms(lesson, category, context, legacyQuestion) {
         term,
         meaningVi: translatePhrase(term),
         exampleEn: `Use "${term}" while studying ${lesson.title}.`,
-        exampleVi: `Dung "${term}" khi hoc bai ${context.titleVi}.`,
+        exampleVi: `Dùng "${term}" khi học bài ${context.titleVi}.`,
     }));
 }
 
@@ -686,27 +754,27 @@ function buildWatchCue(lesson, category, context) {
     if (context.range?.type === 'range') {
         return {
             en: `Watch for the counting sequence from ${context.range.start} to ${context.range.end}, and say the next number before it appears.`,
-            vi: `Hay nghe day dem tu ${context.range.start} den ${context.range.end}, va doc so tiep theo truoc khi video hien ra.`,
+            vi: `Hãy nghe dãy đếm từ ${context.range.start} đến ${context.range.end}, và đọc số tiếp theo trước khi video hiện ra.`,
         };
     }
 
     if (context.range?.type === 'skip') {
         return {
             en: `Watch for the skip-count pattern in steps of ${context.range.step} and clap each jump.`,
-            vi: `Hay de y mau dem cach ${context.range.step} va vo tay moi lan nhay so.`,
+            vi: `Hãy để ý mẫu đếm cách ${context.range.step} và vỗ tay mỗi lần nhảy số.`,
         };
     }
 
     if (context.letter) {
         return {
             en: `Watch for the letter ${context.letter}, repeat its sound, and notice one example word that starts with it.`,
-            vi: `Hay de y chu ${context.letter}, lap lai am cua no va nhan ra mot tu vi du bat dau bang chu do.`,
+            vi: `Hãy để ý chữ ${context.letter}, lặp lại âm của nó và nhận ra một từ ví dụ bắt đầu bằng chữ đó.`,
         };
     }
 
     return {
         en: `${guide.watchCueEn.charAt(0).toUpperCase()}${guide.watchCueEn.slice(1)} while the video stays on ${lesson.title}.`,
-        vi: `${guide.watchCueVi.charAt(0).toUpperCase()}${guide.watchCueVi.slice(1)} khi video tap trung vao ${context.titleVi}.`,
+        vi: `${guide.watchCueVi.charAt(0).toUpperCase()}${guide.watchCueVi.slice(1)} khi video tập trung vào ${context.titleVi}.`,
     };
 }
 
@@ -716,7 +784,7 @@ function buildTransferCue(lesson, category, context) {
     if (category.id === 'b-convo' || category.id === 'i-speak' || category.id === 'a-business') {
         return {
             en: `After watching, record a 20-second response about ${lesson.title} using one line from the video and one line of your own.`,
-            vi: `Sau khi xem, hay tu ghi am mot doan 20 giay ve ${context.titleVi} voi mot cau tu video va mot cau cua rieng ban.`,
+            vi: `Sau khi xem, hãy tự ghi âm một đoạn 20 giây về ${context.titleVi} với một câu từ video và một câu của riêng bạn.`,
         };
     }
 
@@ -734,15 +802,15 @@ function buildObjectives(lesson, category, context, keywords, anchor) {
     return [
         {
             en: `Identify the main idea of ${lesson.title} and keep attention on the right content cues.`,
-            vi: `Xac dinh y chinh cua bai ${context.titleVi} va giu su chu y vao cac dau hieu noi dung dung.`,
+            vi: `Xác định ý chính của bài ${context.titleVi} và giữ sự chú ý vào các dấu hiệu nội dung đúng.`,
         },
         {
             en: `Notice and recall core language such as ${firstKeyword} and ${secondKeyword}.`,
-            vi: `Nhan ra va goi lai ngon ngu cot loi nhu ${translatePhrase(firstKeyword)} va ${translatePhrase(secondKeyword)}.`,
+            vi: `Nhận ra và gọi lại ngôn ngữ cốt lõi như ${translatePhrase(firstKeyword)} và ${translatePhrase(secondKeyword)}.`,
         },
         {
             en: `Use the video as input for ${guide.focusEn}, then produce one short response of your own.`,
-            vi: `Dung video lam dau vao cho ${guide.focusVi}, roi tu tao mot phan hoi ngan cua rieng minh.`,
+            vi: `Dùng video làm đầu vào cho ${guide.focusVi}, rồi tự tạo một phản hồi ngắn của riêng mình.`,
         },
         {
             en: anchor.statementEn,
@@ -759,15 +827,15 @@ function buildScriptSegments(lesson, category, context, keywords, watchCue, tran
             id: 'preview',
             phase: 'preview',
             label: 'Preview',
-            labelVi: 'Truoc khi xem',
+            labelVi: 'Trước khi xem',
             en: `Today we study ${lesson.title}. Predict what the video should teach before you press play.`,
-            vi: `Hom nay chung ta hoc ${context.titleVi}. Hay doan truoc video se day gi truoc khi bam phat.`,
+            vi: `Hôm nay chúng ta học ${context.titleVi}. Hãy đoán trước video sẽ dạy gì trước khi bấm phát.`,
         },
         {
             id: 'watch_cue',
             phase: 'while_watch',
             label: 'Watch Cue',
-            labelVi: 'Luc xem',
+            labelVi: 'Lúc xem',
             en: watchCue.en,
             vi: watchCue.vi,
         },
@@ -775,15 +843,15 @@ function buildScriptSegments(lesson, category, context, keywords, watchCue, tran
             id: 'focus_words',
             phase: 'while_watch',
             label: 'Focus Words',
-            labelVi: 'Tu khoa',
+            labelVi: 'Từ khóa',
             en: `Listen for these anchor words: ${keywordList}.`,
-            vi: `Hay nghe cac tu moc nay: ${keywords.slice(0, 3).map((entry) => entry.meaningVi).join(', ')}.`,
+            vi: `Hãy nghe các từ mốc này: ${keywords.slice(0, 3).map((entry) => entry.meaningVi).join(', ')}.`,
         },
         {
             id: 'anchor',
             phase: 'notice',
             label: 'Anchor Idea',
-            labelVi: 'Y neo',
+            labelVi: 'Ý neo',
             en: anchor.statementEn,
             vi: anchor.statementVi,
         },
@@ -791,15 +859,15 @@ function buildScriptSegments(lesson, category, context, keywords, watchCue, tran
             id: 'retrieve',
             phase: 'retrieve',
             label: 'Retrieve',
-            labelVi: 'Goi lai',
+            labelVi: 'Gọi lại',
             en: `Pause the video and say three things you remember about ${lesson.title} without looking at the screen.`,
-            vi: `Tam dung video va noi ba dieu ban con nho ve ${context.titleVi} ma khong nhin man hinh.`,
+            vi: `Tạm dừng video và nói ba điều bạn còn nhớ về ${context.titleVi} mà không nhìn màn hình.`,
         },
         {
             id: 'transfer',
             phase: 'transfer',
             label: 'Transfer',
-            labelVi: 'Van dung',
+            labelVi: 'Vận dụng',
             en: transferCue.en,
             vi: transferCue.vi,
         },
@@ -832,15 +900,15 @@ function buildWatchCueOptions(watchCue, category) {
         makeOption(watchCue.en, watchCue.vi),
         makeOption(
             `Ignore the key cue and only wait for subtitles.`,
-            'Bo qua dau hieu chinh va chi doi phu de.'
+            'Bỏ qua dấu hiệu chính và chỉ đợi phụ đề.'
         ),
         makeOption(
             `Focus on every detail equally and avoid pausing or repeating.`,
-            'Tap trung vao moi chi tiet nhu nhau va khong tam dung hay lap lai.'
+            'Tập trung vào mọi chi tiết như nhau và không tạm dừng hay lặp lại.'
         ),
         makeOption(
             `Memorize random words without checking the lesson goal.`,
-            'Hoc thuoc tu ngau nhien ma khong kiem tra muc tieu bai hoc.'
+            'Học thuộc từ ngẫu nhiên mà không kiểm tra mục tiêu bài học.'
         ),
     ];
 }
@@ -851,16 +919,16 @@ function buildLegacyDetailQuestion(lesson, legacyQuestion, anchor, index) {
             id: `q${index}`,
             stage: 'detail',
             q: `Which statement fits the lesson "${lesson.title}" best?`,
-            qVi: `Cau nao phu hop nhat voi bai "${lesson.titleVi || translatePhrase(lesson.title)}"?`,
+            qVi: `Câu nào phù hợp nhất với bài "${lesson.titleVi || translatePhrase(lesson.title)}"?`,
             options: [
                 makeOption(anchor.statementEn, anchor.statementVi),
-                makeOption('The lesson should ignore the main topic and change to something unrelated.', 'Bai hoc nen bo qua chu de chinh va chuyen sang noi dung khong lien quan.'),
-                makeOption('The lesson is only for silent viewing with no recall practice.', 'Bai hoc chi de xem im lang va khong can goi lai.'),
-                makeOption('The learner should skip checking meaning or form.', 'Nguoi hoc nen bo qua viec kiem tra nghia hoac cau truc.'),
+                makeOption('The lesson should ignore the main topic and change to something unrelated.', 'Bài học không nên bỏ qua chủ đề chính và chuyển sang nội dung không liên quan.'),
+                makeOption('The lesson is only for silent viewing with no recall practice.', 'Bài học không chỉ để xem im lặng mà không cần gọi lại.'),
+                makeOption('The learner should skip checking meaning or form.', 'Người học không nên bỏ qua việc kiểm tra nghĩa hoặc cấu trúc.'),
             ],
             answer: 0,
             explanation: 'The aligned statement must stay anchored to the intended lesson outcome.',
-            explanationVi: 'Phat bieu dung phai giu noi dung bam sat ket qua hoc tap du kien cua bai hoc.',
+            explanationVi: 'Phát biểu đúng phải giữ nội dung bám sát kết quả học tập dự kiến của bài học.',
         });
     }
 
@@ -871,12 +939,252 @@ function buildLegacyDetailQuestion(lesson, legacyQuestion, anchor, index) {
         id: `q${index}`,
         stage: 'detail',
         q: legacyQuestion.q,
-        qVi: legacyQuestion.qVi || `Cau chi tiet cho bai ${lesson.titleVi || translatePhrase(lesson.title)}`,
-        options: options.map((option) => makeOption(option)),
+        qVi: legacyQuestion.qVi || `Câu chi tiết cho bài ${lesson.titleVi || translatePhrase(lesson.title)}`,
+        options,
         answer: Math.max(0, Math.min(answerIndex, Math.max(0, options.length - 1))),
         explanation: `This detail question is preserved from the legacy curriculum because it captures a concrete content checkpoint for ${lesson.title}.`,
-        explanationVi: `Cau hoi chi tiet nay duoc giu lai tu curriculum cu vi no nho den mot moc noi dung cu the cho bai ${lesson.titleVi || translatePhrase(lesson.title)}.`,
+        explanationVi: `Câu hỏi chi tiết này được giữ lại từ curriculum cũ vì nó nhắc đến một mốc nội dung cụ thể cho bài ${lesson.titleVi || translatePhrase(lesson.title)}.`,
     });
+}
+
+function buildGeneratedDetailQuestion(lesson, category, context, anchor, index) {
+    const promptEn = `In "${lesson.title}", which detail should the learner confirm while watching?`;
+    const promptVi = `Trong bài "${context.titleVi}", người học cần xác nhận chi tiết nào khi xem?`;
+
+    if (context.range?.type === 'range') {
+        return makeQuestion({
+            id: `q${index}`,
+            stage: 'detail',
+            q: promptEn,
+            qVi: promptVi,
+            options: [
+                makeOption(
+                    `The numbers stay in order from ${context.range.start} to ${context.range.end}, and the learner predicts the next one.`,
+                    `Các số đi đúng thứ tự từ ${context.range.start} đến ${context.range.end}, và người học đoán số tiếp theo.`
+                ),
+                makeOption(
+                    'The lesson should jump to unrelated colors and stop tracking number order.',
+                    'Bài học nên chuyển sang màu sắc không liên quan và bỏ việc theo dõi thứ tự số.'
+                ),
+                makeOption(
+                    'The learner should only read subtitles and skip saying the sequence out loud.',
+                    'Người học chỉ nên đọc phụ đề và bỏ qua việc nói dãy số thành tiếng.'
+                ),
+                makeOption(
+                    'The lesson works best when numbers are memorized randomly with no sequence check.',
+                    'Bài học sẽ tốt nhất nếu thuộc số ngẫu nhiên mà không kiểm tra chuỗi.'
+                ),
+            ],
+            answer: 0,
+            explanation: 'A strong detail check in a counting-range lesson confirms sequence and next-number prediction.',
+            explanationVi: 'Một câu hỏi chi tiết tốt trong bài đếm dãy phải kiểm tra được thứ tự số và khả năng đoán số kế tiếp.',
+        });
+    }
+
+    if (context.range?.type === 'skip') {
+        return makeQuestion({
+            id: `q${index}`,
+            stage: 'detail',
+            q: promptEn,
+            qVi: promptVi,
+            options: [
+                makeOption(
+                    `The learner should notice that the number pattern jumps by ${context.range.step} each time.`,
+                    `Người học cần nhận ra rằng dãy số nhảy thêm ${context.range.step} ở mỗi bước.`
+                ),
+                makeOption(
+                    'The pattern should move by unpredictable amounts and ignore the repeated jump.',
+                    'Dãy số nên tăng giảm ngẫu nhiên và bỏ qua bước nhảy lặp lại.'
+                ),
+                makeOption(
+                    'The learner only needs to memorize one isolated number and ignore the pattern.',
+                    'Người học chỉ cần thuộc một số riêng lẻ và bỏ qua quy luật của dãy.'
+                ),
+                makeOption(
+                    'The lesson should switch from numbers to an unrelated story with no counting pattern.',
+                    'Bài học nên chuyển từ số đếm sang một câu chuyện không liên quan và không còn quy luật đếm.'
+                ),
+            ],
+            answer: 0,
+            explanation: 'Skip-count lessons are understood correctly only when the repeated jump size is tracked.',
+            explanationVi: 'Bài học đếm cách chỉ được hiểu đúng khi người học theo dõi được độ dài bước nhảy lặp lại.',
+        });
+    }
+
+    if (context.letter) {
+        return makeQuestion({
+            id: `q${index}`,
+            stage: 'detail',
+            q: promptEn,
+            qVi: promptVi,
+            options: [
+                makeOption(
+                    `The learner should connect the letter ${context.letter} with its sound and one example word.`,
+                    `Người học cần nối chữ ${context.letter} với âm của nó và một từ ví dụ.`
+                ),
+                makeOption(
+                    'The lesson should hide the letter and focus only on random counting.',
+                    'Bài học nên giấu chữ cái đi và chỉ tập trung vào đếm số ngẫu nhiên.'
+                ),
+                makeOption(
+                    'The learner should skip the sound and memorize subtitles word for word.',
+                    'Người học nên bỏ qua âm và chép thuộc phụ đề từng chữ.'
+                ),
+                makeOption(
+                    'The best strategy is to ignore the picture and avoid saying the target sound.',
+                    'Cách học tốt nhất là bỏ qua hình minh họa và không phát âm âm mục tiêu.'
+                ),
+            ],
+            answer: 0,
+            explanation: 'Letter lessons become meaningful when the learner connects symbol, sound, and a concrete example.',
+            explanationVi: 'Bài học chữ cái chỉ thật sự có ý nghĩa khi người học nối được ký hiệu, âm và một ví dụ cụ thể.',
+        });
+    }
+
+    const detailBlueprints = {
+        'k-colors': {
+            correctEn: 'The learner names the color or shape as soon as it appears and links it to the right object.',
+            correctVi: 'Người học gọi đúng màu hoặc hình ngay khi nó xuất hiện và nối nó với đồ vật phù hợp.',
+            explanationEn: 'A detail check for colors or shapes should confirm quick visual recognition, not passive rereading.',
+            explanationVi: 'Câu hỏi chi tiết cho màu sắc hoặc hình dạng phải kiểm tra khả năng nhận diện nhanh bằng mắt, không phải chỉ đọc lại thụ động.',
+        },
+        'k-animals': {
+            correctEn: 'The learner links the correct animal with its sound, movement, or key feature.',
+            correctVi: 'Người học nối đúng con vật với âm thanh, chuyển động hoặc đặc điểm chính của nó.',
+            explanationEn: 'Animal lessons work when the learner ties the name to a concrete sound or movement clue.',
+            explanationVi: 'Bài học về con vật hiệu quả khi người học gắn được tên con vật với dấu hiệu cụ thể như âm thanh hoặc chuyển động.',
+        },
+        'k-body': {
+            correctEn: 'The learner moves or points to the correct body part or action immediately after hearing it.',
+            correctVi: 'Người học chỉ hoặc thực hiện đúng bộ phận cơ thể hay hành động ngay sau khi nghe thấy.',
+            explanationEn: 'Body lessons are accurate when language is tied directly to physical response.',
+            explanationVi: 'Bài học về cơ thể chỉ chính xác khi ngôn ngữ được nối trực tiếp với phản ứng vận động.',
+        },
+        'k-songs': {
+            correctEn: 'The learner notices who or what appears in each verse and repeats the chorus pattern accurately.',
+            correctVi: 'Người học nhận ra nhân vật hoặc sự vật trong từng đoạn và lặp lại đúng mẫu điệp khúc.',
+            explanationEn: 'Song lessons need detail checks on verse content and repeated chorus language.',
+            explanationVi: 'Bài học qua bài hát cần câu hỏi chi tiết về nội dung từng đoạn và phần điệp khúc lặp lại.',
+        },
+        'b-vocab': {
+            correctEn: `The learner groups the key words in "${lesson.title}" by meaning and uses one useful chunk correctly.`,
+            correctVi: `Người học gom các từ khóa trong bài "${context.titleVi}" theo nghĩa và dùng đúng một cụm hữu ích.`,
+            explanationEn: 'Vocabulary detail should confirm semantic grouping and practical chunk use.',
+            explanationVi: 'Chi tiết trong bài từ vựng phải xác nhận được việc gom nhóm theo nghĩa và dùng cụm từ vào thực tế.',
+        },
+        'i-vocab': {
+            correctEn: `The learner notices which words naturally go together in the topic "${lesson.title}".`,
+            correctVi: `Người học nhận ra những từ nào thường đi với nhau trong chủ đề "${context.titleVi}".`,
+            explanationEn: 'Intermediate vocabulary work is stronger when collocation is checked, not only isolated meaning.',
+            explanationVi: 'Ở mức trung cấp, bài từ vựng sẽ tốt hơn khi kiểm tra được kết hợp từ chứ không chỉ nghĩa rời rạc.',
+        },
+        'b-grammar': {
+            correctEn: 'The learner identifies the grammar form and explains why it fits the sentence meaning.',
+            correctVi: 'Người học nhận ra cấu trúc ngữ pháp và giải thích vì sao nó phù hợp với nghĩa của câu.',
+            explanationEn: 'Beginner grammar should connect form with sentence meaning, not memorization alone.',
+            explanationVi: 'Ngữ pháp cơ bản cần nối được hình thức với nghĩa câu, không chỉ học thuộc máy móc.',
+        },
+        'i-grammar': {
+            correctEn: 'The learner checks the signal word or contrast and explains why that grammar choice works.',
+            correctVi: 'Người học kiểm tra từ tín hiệu hoặc điểm đối chiếu và giải thích vì sao lựa chọn ngữ pháp đó đúng.',
+            explanationEn: 'Advanced grammar detail depends on noticing the signal that drives the form choice.',
+            explanationVi: 'Chi tiết trong bài ngữ pháp nâng cao phụ thuộc vào việc nhận ra tín hiệu dẫn đến lựa chọn cấu trúc.',
+        },
+        'b-listen': {
+            correctEn: 'The learner first catches the situation, then listens again to confirm the exact clue.',
+            correctVi: 'Người học trước hết nắm tình huống, rồi nghe lại để xác nhận đúng chi tiết then chốt.',
+            explanationEn: 'Listening detail should build from gist to one verified clue.',
+            explanationVi: 'Câu hỏi chi tiết trong bài nghe phải đi từ ý khái quát đến một dấu hiệu đã được xác nhận.',
+        },
+        'i-listen': {
+            correctEn: 'The learner separates the main message from the supporting detail and the speaker tone.',
+            correctVi: 'Người học tách được ý chính khỏi chi tiết hỗ trợ và sắc thái của người nói.',
+            explanationEn: 'Authentic listening improves when the learner tracks message, support, and tone separately.',
+            explanationVi: 'Nghe nguồn thật tiến bộ hơn khi người học theo dõi riêng ý chính, chi tiết hỗ trợ và sắc thái giọng.',
+        },
+        'b-convo': {
+            correctEn: 'The learner follows the opening, the key request, and the polite closing in the exchange.',
+            correctVi: 'Người học theo dõi được câu mở đầu, yêu cầu chính và câu kết lịch sự trong đoạn hội thoại.',
+            explanationEn: 'Conversation detail is accurate when the interaction structure is recognized end to end.',
+            explanationVi: 'Chi tiết trong bài hội thoại chỉ chính xác khi người học nhận ra được cấu trúc tương tác từ đầu đến cuối.',
+        },
+        'b-pronun': {
+            correctEn: 'The learner notices mouth position or sound contrast and repeats the pair clearly.',
+            correctVi: 'Người học chú ý vị trí miệng hoặc sự đối lập âm và lặp lại cặp âm một cách rõ ràng.',
+            explanationEn: 'Pronunciation detail should focus on the physical cue behind the sound contrast.',
+            explanationVi: 'Chi tiết trong bài phát âm phải tập trung vào dấu hiệu khẩu hình đứng sau sự khác biệt âm.',
+        },
+        'i-speak': {
+            correctEn: 'The learner notices how the response is organized with a point, a reason, and an example.',
+            correctVi: 'Người học nhận ra câu trả lời được tổ chức bằng một ý chính, một lý do và một ví dụ.',
+            explanationEn: 'Speaking detail is stronger when organization is checked, not just isolated phrases.',
+            explanationVi: 'Bài nói sẽ chắc hơn khi kiểm tra được cách tổ chức ý chứ không chỉ những cụm từ rời rạc.',
+        },
+        'a-fluency': {
+            correctEn: 'The learner listens for reduction, rhythm, and how one line flows naturally without translating.',
+            correctVi: 'Người học lắng nghe hiện tượng rút gọn, nhịp điệu và cách một câu được nói trôi tự nhiên mà không dịch thầm.',
+            explanationEn: 'Fluency detail should target rhythm and connected delivery, not isolated word memorization.',
+            explanationVi: 'Chi tiết trong bài trôi chảy phải nhắm vào nhịp điệu và cách nối âm tự nhiên, không phải học thuộc từng từ riêng lẻ.',
+        },
+        'a-business': {
+            correctEn: 'The learner tracks precise wording, tone, and the workplace purpose of the message.',
+            correctVi: 'Người học theo dõi cách dùng từ chính xác, sắc thái và mục đích công việc của thông điệp.',
+            explanationEn: 'Business English detail depends on wording, tone, and task fit.',
+            explanationVi: 'Chi tiết trong bài tiếng Anh công việc phụ thuộc vào từ ngữ, sắc thái và độ phù hợp với nhiệm vụ.',
+        },
+        'a-academic': {
+            correctEn: 'The learner checks structure, support, and the language that strengthens the argument or answer.',
+            correctVi: 'Người học kiểm tra cấu trúc, dẫn chứng và ngôn ngữ làm cho lập luận hoặc câu trả lời vững hơn.',
+            explanationEn: 'Academic detail is meaningful only when structure and evidence are both tracked.',
+            explanationVi: 'Chi tiết trong bài học thuật chỉ có giá trị khi cả cấu trúc lẫn dẫn chứng đều được theo dõi.',
+        },
+        'a-culture': {
+            correctEn: 'The learner compares literal meaning with the socially appropriate use in context.',
+            correctVi: 'Người học so sánh nghĩa trực tiếp với cách dùng phù hợp về mặt xã hội trong ngữ cảnh.',
+            explanationEn: 'Culture and real-world lessons need detail on pragmatic fit, not just dictionary meaning.',
+            explanationVi: 'Bài văn hóa và đời thực cần chi tiết về sự phù hợp dụng học, không chỉ nghĩa từ điển.',
+        },
+    };
+
+    const detail = detailBlueprints[category.id] || {
+        correctEn: anchor.statementEn,
+        correctVi: anchor.statementVi,
+        explanationEn: `A useful detail question for "${lesson.title}" should keep the learner focused on the intended learning clue.`,
+        explanationVi: `Câu hỏi chi tiết hữu ích cho bài "${context.titleVi}" phải giữ người học bám vào dấu hiệu học tập đúng trọng tâm.`,
+    };
+
+    return makeQuestion({
+        id: `q${index}`,
+        stage: 'detail',
+        q: promptEn,
+        qVi: promptVi,
+        options: [
+            makeOption(detail.correctEn, detail.correctVi),
+            makeOption(
+                'The lesson should switch to an unrelated topic and ignore the main clue.',
+                'Bài học nên chuyển sang chủ đề không liên quan và bỏ qua dấu hiệu chính.'
+            ),
+            makeOption(
+                'The learner should wait for subtitles only and skip checking the key detail.',
+                'Người học chỉ nên chờ phụ đề và bỏ qua việc kiểm tra chi tiết then chốt.'
+            ),
+            makeOption(
+                'The best approach is to memorize isolated words without linking them to the lesson goal.',
+                'Cách làm tốt nhất là học thuộc các từ rời rạc mà không nối chúng với mục tiêu của bài học.'
+            ),
+        ],
+        answer: 0,
+        explanation: detail.explanationEn,
+        explanationVi: detail.explanationVi,
+    });
+}
+
+function buildDetailQuestion(lesson, category, context, legacyQuestion, anchor, index) {
+    if (legacyQuestion) {
+        return buildLegacyDetailQuestion(lesson, legacyQuestion, anchor, index);
+    }
+
+    return buildGeneratedDetailQuestion(lesson, category, context, anchor, index);
 }
 
 function buildVocabularyQuestion(lesson, keywords, index) {
@@ -884,7 +1192,7 @@ function buildVocabularyQuestion(lesson, keywords, index) {
         || keywords[0]
         || { term: lesson.title, meaningVi: lesson.titleVi || translatePhrase(lesson.title) };
     const distractors = uniqueStrings(
-        keywords.slice(1).map((entry) => entry.meaningVi).concat(['noi dung khong lien quan', 'chi tiet sai', 'goi y phu']),
+        keywords.slice(1).map((entry) => entry.meaningVi).concat(['nội dung không liên quan', 'chi tiết sai', 'gợi ý phụ']),
         3
     );
 
@@ -892,11 +1200,11 @@ function buildVocabularyQuestion(lesson, keywords, index) {
         id: `q${index}`,
         stage: 'retrieve',
         q: `Which Vietnamese cue best matches "${keyword.term}" in this lesson?`,
-        qVi: `Goi y tieng Viet nao hop nhat voi "${keyword.term}" trong bai hoc nay?`,
+        qVi: `Gợi ý tiếng Việt nào hợp nhất với "${keyword.term}" trong bài học này?`,
         options: [makeOption(keyword.meaningVi, keyword.meaningVi), ...distractors.map((value) => makeOption(value, value))],
         answer: 0,
         explanation: `A learner should connect the English anchor word "${keyword.term}" with a stable meaning cue.`,
-        explanationVi: `Nguoi hoc can noi tu moc tieng Anh "${keyword.term}" voi mot goi y nghia on dinh.`,
+        explanationVi: `Người học cần nối từ mốc tiếng Anh "${keyword.term}" với một gợi ý nghĩa ổn định.`,
     });
 }
 
@@ -905,42 +1213,42 @@ function buildTransferQuestion(lesson, transferCue, index) {
         id: `q${index}`,
         stage: 'transfer',
         q: `After watching "${lesson.title}", what is the strongest next study move?`,
-        qVi: `Sau khi xem "${lesson.titleVi || translatePhrase(lesson.title)}", buoc hoc tiep theo tot nhat la gi?`,
+        qVi: `Sau khi xem "${lesson.titleVi || translatePhrase(lesson.title)}", bước học tiếp theo tốt nhất là gì?`,
         options: [
             makeOption(transferCue.en, transferCue.vi),
-            makeOption('Move on immediately without speaking, pausing, or recalling anything.', 'Chuyen ngay sang bai khac ma khong noi, tam dung hay goi lai gi.'),
-            makeOption('Copy every line once and avoid using it in a new example.', 'Chep lai moi dong mot lan va tranh dung no trong vi du moi.'),
-            makeOption('Only reread the title and assume the content is already mastered.', 'Chi doc lai tieu de va cho rang minh da nam vung noi dung.'),
+            makeOption('Move on immediately without speaking, pausing, or recalling anything.', 'Chuyển ngay sang bài khác mà không nói, tạm dừng hay gọi lại gì.'),
+            makeOption('Copy every line once and avoid using it in a new example.', 'Chép lại mỗi dòng một lần và tránh dùng nó trong ví dụ mới.'),
+            makeOption('Only reread the title and assume the content is already mastered.', 'Chỉ đọc lại tiêu đề và cho rằng mình đã nắm vững nội dung.'),
         ],
         answer: 0,
         explanation: 'Retrieval plus production helps turn watched input into usable language.',
-        explanationVi: 'Goi lai ket hop san sinh ngon ngu giup bien dau vao da xem thanh ngon ngu co the su dung.',
+        explanationVi: 'Gọi lại kết hợp sản sinh ngôn ngữ giúp biến đầu vào đã xem thành ngôn ngữ có thể sử dụng.',
     });
 }
 
-function buildQuizQuestions(lesson, category, siblingLessons, legacyQuestion, watchCue, transferCue, anchor, keywords) {
+function buildQuizQuestions(lesson, category, context, siblingLessons, legacyQuestion, watchCue, transferCue, anchor, keywords) {
     return [
         makeQuestion({
             id: 'q1',
             stage: 'preview',
             q: `Which title best matches the approved content for this lesson?`,
-            qVi: 'Tieu de nao phu hop nhat voi noi dung da duoc duyet cua bai hoc nay?',
+            qVi: 'Tiêu đề nào phù hợp nhất với nội dung đã được duyệt của bài học này?',
             options: buildQuestionOptionsForTopic(lesson, category, siblingLessons),
             answer: 0,
             explanation: 'A correct lesson should stay aligned with its intended title and classification.',
-            explanationVi: 'Mot bai hoc dung phai giu su thang hang voi tieu de va phan loai du kien.',
+            explanationVi: 'Một bài học đúng phải giữ sự thẳng hàng với tiêu đề và phân loại dự kiến.',
         }),
         makeQuestion({
             id: 'q2',
             stage: 'while_watch',
             q: `While watching "${lesson.title}", which cue should the learner track?`,
-            qVi: `Khi xem "${lesson.titleVi || translatePhrase(lesson.title)}", nguoi hoc nen theo doi dau hieu nao?`,
+            qVi: `Khi xem "${lesson.titleVi || translatePhrase(lesson.title)}", người học nên theo dõi dấu hiệu nào?`,
             options: buildWatchCueOptions(watchCue, category),
             answer: 0,
             explanation: 'This cue directs attention to the information that matters most in the lesson.',
-            explanationVi: 'Dau hieu nay giup huong su chu y vao thong tin quan trong nhat cua bai hoc.',
+            explanationVi: 'Dấu hiệu này giúp hướng sự chú ý vào thông tin quan trọng nhất của bài học.',
         }),
-        buildLegacyDetailQuestion(lesson, legacyQuestion, anchor, 3),
+        buildDetailQuestion(lesson, category, context, legacyQuestion, anchor, 3),
         buildVocabularyQuestion(lesson, keywords, 4),
         buildTransferQuestion(lesson, transferCue, 5),
     ];
@@ -1025,6 +1333,7 @@ export function buildLessonLearningPacketDefaults(lesson, category, level, sibli
     const questions = buildQuizQuestions(
         lesson,
         category,
+        context,
         siblingLessons,
         legacyQuestion,
         watchCue,
@@ -1044,9 +1353,9 @@ export function buildLessonLearningPacketDefaults(lesson, category, level, sibli
                 'bilingual_support_with_low_split_attention',
             ],
             rationaleEn: `This lesson uses short preview cues, guided noticing, retrieval, and transfer so the learner does more than passively watch ${lesson.title}.`,
-            rationaleVi: `Bai hoc nay dung goi y ngan truoc khi xem, huong chu y, goi lai va van dung de nguoi hoc khong chi xem thu dong bai ${context.titleVi}.`,
+            rationaleVi: `Bài học này dùng gợi ý ngắn trước khi xem, hướng chú ý, gọi lại và vận dụng để người học không chỉ xem thụ động bài ${context.titleVi}.`,
             designGuardrailEn: 'Use bilingual support as a cue, not as a wall of text that competes with the video.',
-            designGuardrailVi: 'Dung ho tro song ngu nhu mot goi y, khong bien no thanh buc tu day dac tranh chu y voi video.',
+            designGuardrailVi: 'Dùng hỗ trợ song ngữ như một gợi ý, không biến nó thành bức tường chữ dày đặc tranh chú ý với video.',
         },
         learningObjectives: buildObjectives(lesson, category, context, keywords, anchor),
         focusVocabulary: keywords,
@@ -1062,20 +1371,20 @@ export function buildLessonLearningPacketDefaults(lesson, category, level, sibli
         },
         quiz: {
             minimumPassRatio: 0.7,
-            unlockCondition: 'canonical_source_playable',
+            unlockCondition: 'video_or_script_ready',
             questions,
         },
         practice: {
             beforeWatch: [
                 {
                     en: `Read the title and predict two things you expect to hear in ${lesson.title}.`,
-                    vi: `Doc tieu de va doan hai dieu ban se nghe trong bai ${context.titleVi}.`,
+                    vi: `Đọc tiêu đề và đoán hai điều bạn sẽ nghe trong bài ${context.titleVi}.`,
                 },
             ],
             afterWatch: [
                 {
                     en: 'Recall from memory first, then replay only the part you missed.',
-                    vi: 'Hay goi lai bang tri nho truoc, roi chi xem lai phan ban bo lo.',
+                    vi: 'Hãy gọi lại bằng trí nhớ trước, rồi chỉ xem lại phần bạn bỏ lỡ.',
                 },
                 {
                     en: transferCue.en,
@@ -1085,7 +1394,7 @@ export function buildLessonLearningPacketDefaults(lesson, category, level, sibli
             memoryPlan: [
                 {
                     en: 'Do one immediate recall pass, one same-day retell, and one next-day quick review.',
-                    vi: 'Lam mot lan goi lai ngay lap tuc, mot lan ke lai trong ngay, va mot lan on nhanh vao hom sau.',
+                    vi: 'Làm một lần gọi lại ngay lập tức, một lần kể lại trong ngày, và một lần ôn nhanh vào hôm sau.',
                 },
             ],
             shadowing: [
@@ -1100,25 +1409,25 @@ export function buildLessonLearningPacketDefaults(lesson, category, level, sibli
                 key: 'retrieval_practice',
                 label: 'Retrieval practice',
                 whyEn: 'Quiz questions force recall instead of passive rereading.',
-                whyVi: 'Cau hoi quiz buoc nguoi hoc goi lai thay vi doc lai thu dong.',
+                whyVi: 'Câu hỏi quiz buộc người học gọi lại thay vì đọc lại thụ động.',
             },
             {
                 key: 'distributed_recall',
                 label: 'Distributed recall',
                 whyEn: 'The packet asks for replay, retell, and next-day review instead of one-shot viewing.',
-                whyVi: 'Goi hoc lieu yeu cau xem lai, ke lai va on vao hom sau thay vi xem mot lan roi bo.',
+                whyVi: 'Gói học liệu yêu cầu xem lại, kể lại và ôn vào hôm sau thay vì xem một lần rồi bỏ.',
             },
             {
                 key: 'segmenting_and_signaling',
                 label: 'Segmenting and signaling',
                 whyEn: 'Short watch cues reduce overload and highlight what the learner should notice.',
-                whyVi: 'Cac goi y ngan luc xem giup giam qua tai va lam ro dieu nguoi hoc can chu y.',
+                whyVi: 'Các gợi ý ngắn lúc xem giúp giảm quá tải và làm rõ điều người học cần chú ý.',
             },
             {
                 key: 'bilingual_support_with_low_split_attention',
                 label: 'Bilingual support',
                 whyEn: 'Each English line is paired with one concise Vietnamese cue rather than dense duplicate text.',
-                whyVi: 'Moi dong tieng Anh di kem mot goi y tieng Viet ngan gon thay vi lap lai day dac.',
+                whyVi: 'Mỗi dòng tiếng Anh đi kèm một gợi ý tiếng Việt ngắn gọn thay vì lặp lại dày đặc.',
             },
         ],
     };

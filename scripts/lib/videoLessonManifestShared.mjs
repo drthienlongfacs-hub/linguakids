@@ -154,6 +154,64 @@ function normalizeResearchBasis(value) {
         .filter((entry) => entry.key || entry.label);
 }
 
+const LEGACY_VIETNAMESE_PATTERNS = [
+    /Xac dinh/,
+    /Nhan ra va goi lai/,
+    /Nguoi hoc/,
+    /Goi y tieng Viet/,
+    /Mot thong tin/,
+    /Mot dap an/,
+    /Tam dung/,
+    /Doc tieu de/,
+    /Hay goi lai/,
+    /Lam mot lan/,
+    /Cau hoi quiz/,
+    /Cac goi y/,
+    /Moi dong tieng Anh/,
+    /Dung ho tro song ngu/,
+    /Tieu de nao/,
+];
+
+function hasLegacyVietnameseText(value) {
+    const serialized = JSON.stringify(value || {});
+    return LEGACY_VIETNAMESE_PATTERNS.some((pattern) => pattern.test(serialized));
+}
+
+function hasPopulatedQuestionOptions(question) {
+    const options = ensureArray(question?.options)
+        .map((option) => {
+            if (typeof option === 'string') {
+                return ensureString(option);
+            }
+
+            return ensureString(option?.en) || ensureString(option?.vi);
+        })
+        .filter(Boolean);
+
+    return options.length >= 2;
+}
+
+function hasBrokenGeneratedQuizQuestions(questions) {
+    const normalizedQuestions = ensureArray(questions);
+    if (normalizedQuestions.length === 0) {
+        return false;
+    }
+
+    const previewQuestion = normalizedQuestions.find((question) => ensureString(question?.id) === 'q1') || null;
+    const detailQuestion = normalizedQuestions.find((question) => ensureString(question?.id) === 'q3') || null;
+
+    if (normalizedQuestions.some((question) => !hasPopulatedQuestionOptions(question))) {
+        return true;
+    }
+
+    return !!(
+        previewQuestion
+        && detailQuestion
+        && ensureString(previewQuestion?.q)
+        && ensureString(previewQuestion?.q) === ensureString(detailQuestion?.q)
+    );
+}
+
 function normalizeSourceVerification(value, defaults) {
     const notes = ensureArray(value?.notes).map((entry) => ensureString(entry)).filter(Boolean);
     const fallbackNotes = ensureArray(defaults?.notes).map((entry) => ensureString(entry)).filter(Boolean);
@@ -212,27 +270,31 @@ function normalizeSourceVerification(value, defaults) {
 }
 
 function normalizeLearningPacket(value, defaults) {
-    const objectives = normalizeObjectives(value?.learningObjectives);
-    const vocabulary = normalizeVocabulary(value?.focusVocabulary);
-    const scriptSegments = normalizeScriptSegments(value?.script?.segments);
-    const questions = ensureArray(value?.quiz?.questions).map(normalizeQuestion);
-    const beforeWatch = normalizeBilingualList(value?.practice?.beforeWatch);
-    const afterWatch = normalizeBilingualList(value?.practice?.afterWatch);
-    const memoryPlan = normalizeBilingualList(value?.practice?.memoryPlan);
-    const shadowing = normalizeBilingualList(value?.practice?.shadowing);
-    const researchBasis = normalizeResearchBasis(value?.researchBasis);
+    const shouldRefreshGeneratedText = hasLegacyVietnameseText(value)
+        || hasBrokenGeneratedQuizQuestions(value?.quiz?.questions);
+    const sourcePacket = shouldRefreshGeneratedText ? null : value;
+
+    const objectives = normalizeObjectives(sourcePacket?.learningObjectives);
+    const vocabulary = normalizeVocabulary(sourcePacket?.focusVocabulary);
+    const scriptSegments = normalizeScriptSegments(sourcePacket?.script?.segments);
+    const questions = ensureArray(sourcePacket?.quiz?.questions).map(normalizeQuestion);
+    const beforeWatch = normalizeBilingualList(sourcePacket?.practice?.beforeWatch);
+    const afterWatch = normalizeBilingualList(sourcePacket?.practice?.afterWatch);
+    const memoryPlan = normalizeBilingualList(sourcePacket?.practice?.memoryPlan);
+    const shadowing = normalizeBilingualList(sourcePacket?.practice?.shadowing);
+    const researchBasis = normalizeResearchBasis(sourcePacket?.researchBasis);
 
     return {
         schemaVersion: Number.isFinite(value?.schemaVersion) ? value.schemaVersion : defaults.schemaVersion,
         packetType: ensureString(value?.packetType) || defaults.packetType,
         pedagogicalFrame: {
-            learningScience: ensureArray(value?.pedagogicalFrame?.learningScience).map((entry) => ensureString(entry)).filter(Boolean).length > 0
-                ? ensureArray(value.pedagogicalFrame.learningScience).map((entry) => ensureString(entry)).filter(Boolean)
+            learningScience: ensureArray(sourcePacket?.pedagogicalFrame?.learningScience).map((entry) => ensureString(entry)).filter(Boolean).length > 0
+                ? ensureArray(sourcePacket.pedagogicalFrame.learningScience).map((entry) => ensureString(entry)).filter(Boolean)
                 : defaults.pedagogicalFrame.learningScience,
-            rationaleEn: ensureString(value?.pedagogicalFrame?.rationaleEn) || defaults.pedagogicalFrame.rationaleEn,
-            rationaleVi: ensureString(value?.pedagogicalFrame?.rationaleVi) || defaults.pedagogicalFrame.rationaleVi,
-            designGuardrailEn: ensureString(value?.pedagogicalFrame?.designGuardrailEn) || defaults.pedagogicalFrame.designGuardrailEn,
-            designGuardrailVi: ensureString(value?.pedagogicalFrame?.designGuardrailVi) || defaults.pedagogicalFrame.designGuardrailVi,
+            rationaleEn: ensureString(sourcePacket?.pedagogicalFrame?.rationaleEn) || defaults.pedagogicalFrame.rationaleEn,
+            rationaleVi: ensureString(sourcePacket?.pedagogicalFrame?.rationaleVi) || defaults.pedagogicalFrame.rationaleVi,
+            designGuardrailEn: ensureString(sourcePacket?.pedagogicalFrame?.designGuardrailEn) || defaults.pedagogicalFrame.designGuardrailEn,
+            designGuardrailVi: ensureString(sourcePacket?.pedagogicalFrame?.designGuardrailVi) || defaults.pedagogicalFrame.designGuardrailVi,
         },
         learningObjectives: objectives.length > 0 ? objectives : defaults.learningObjectives,
         focusVocabulary: vocabulary.length > 0 ? vocabulary : defaults.focusVocabulary,

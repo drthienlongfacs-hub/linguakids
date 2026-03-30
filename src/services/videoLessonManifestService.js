@@ -98,10 +98,34 @@ export function getPublicVideoLevels(manifest) {
     return getVisibleVideoLevels(manifest, { mode: 'public' });
 }
 
+export function getStudyVideoLevels(manifest) {
+    return getVisibleVideoLevels(manifest, { mode: 'study' });
+}
+
 function isVisibleInReferenceMode(lesson) {
     return lesson?.status !== 'retired'
         && lesson?.status !== 'draft'
         && !!getVideoReferenceLink(lesson);
+}
+
+function hasCompleteStudyPacket(lesson) {
+    const scriptSegments = Array.isArray(lesson?.learningPacket?.script?.segments)
+        ? lesson.learningPacket.script.segments
+        : [];
+    const questions = Array.isArray(lesson?.learningPacket?.quiz?.questions)
+        ? lesson.learningPacket.quiz.questions
+        : Array.isArray(lesson?.quiz)
+            ? lesson.quiz
+            : [];
+
+    return scriptSegments.length >= 4 && questions.length >= 5;
+}
+
+function isStudyVisibleLesson(lesson) {
+    return lesson?.status !== 'retired'
+        && lesson?.status !== 'draft'
+        && hasCompleteStudyPacket(lesson)
+        && (!!getCanonicalVideoSource(lesson) || !!getVideoReferenceLink(lesson));
 }
 
 export function getVisibleVideoLevels(manifest, options = {}) {
@@ -118,6 +142,8 @@ export function getVisibleVideoLevels(manifest, options = {}) {
                                 ? category.lessons.filter((lesson) => (
                                     mode === 'public'
                                         ? lesson.status === 'public'
+                                        : mode === 'study'
+                                            ? isStudyVisibleLesson(lesson)
                                         : (lesson.status === 'public' || isVisibleInReferenceMode(lesson))
                                 ))
                                 : [],
@@ -131,6 +157,10 @@ export function getVisibleVideoLevels(manifest, options = {}) {
 
 export function flattenPublicVideoLessons(manifest) {
     return flattenVisibleVideoLessons(manifest, { mode: 'public' });
+}
+
+export function flattenStudyVideoLessons(manifest) {
+    return flattenVisibleVideoLessons(manifest, { mode: 'study' });
 }
 
 export function flattenVisibleVideoLessons(manifest, options = {}) {

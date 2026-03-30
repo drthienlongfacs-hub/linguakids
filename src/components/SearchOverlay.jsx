@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import {
-    flattenVisibleVideoLessons,
+    flattenStudyVideoLessons,
     getLessonFocusVocabulary,
     loadVideoLessonManifest,
 } from '../services/videoLessonManifestService';
@@ -135,7 +135,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
         loadVideoLessonManifest()
             .then((manifest) => {
                 if (!active) return;
-                const items = flattenVisibleVideoLessons(manifest).map((video) => ({
+                const items = flattenStudyVideoLessons(manifest).map((video) => ({
                     path: '/video-lessons',
                     title: video.title,
                     titleVi: video.titleVi,

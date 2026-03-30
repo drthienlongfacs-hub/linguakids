@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import CelebrationOverlay from '../components/CelebrationOverlay';
 import { useGame } from '../context/GameStateContext';
 import {
-    flattenPublicVideoLessons,
-    flattenVisibleVideoLessons,
+    flattenStudyVideoLessons,
     formatVideoLessonDuration,
     getCanonicalPosterSource,
     getCanonicalVideoSource,
@@ -18,11 +17,10 @@ import {
     getLessonScriptSegments,
     getLessonSubtitleLabel,
     getLessonSubtitleVariant,
-    getPublicVideoLevels,
+    getStudyVideoLevels,
     getVideoReferenceEmbedSource,
     getVideoReferenceLink,
     getVideoReferenceMeta,
-    getVisibleVideoLevels,
     loadVideoLessonManifest,
     loadVideoLessonOps,
 } from '../services/videoLessonManifestService';
@@ -35,15 +33,15 @@ function LoadingState({ adult }) {
         <div className="page">
             <div className="page-header">
                 <button className="page-header__back" type="button">←</button>
-                <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thu vien Video'}</h2>
+                <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thư viện video'}</h2>
             </div>
             <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '12px' }}>🎬</div>
                 <div style={{ fontWeight: 700, fontSize: '1rem', marginBottom: '6px' }}>
-                    {adult ? 'Loading approved video manifest...' : 'Dang tai manifest video da kiem duyet...'}
+                    {adult ? 'Loading video lesson manifest...' : 'Đang tải manifest video lesson...'}
                 </div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)' }}>
-                    {adult ? 'Only public, in-app compatible lessons will be shown.' : 'Chi nhung lesson public va phat duoc trong app moi duoc hien.'}
+                    {adult ? 'Lessons with a complete study packet will be shown.' : 'Những lesson có study packet đầy đủ sẽ được hiển thị.'}
                 </div>
             </div>
         </div>
@@ -52,24 +50,24 @@ function LoadingState({ adult }) {
 
 function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpenReviewQueue }) {
     const runtimeLabel = runtimeMode === 'standalone_pwa'
-        ? (adult ? 'standalone PWA' : 'PWA doc lap')
-        : (adult ? 'browser tab' : 'trinh duyet');
+        ? (adult ? 'standalone PWA' : 'PWA độc lập')
+        : (adult ? 'browser tab' : 'trình duyệt');
 
     return (
         <div className="page">
             <div className="page-header">
                 <button className="page-header__back" type="button" onClick={onBack}>←</button>
-                <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thu vien Video'}</h2>
+                <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thư viện video'}</h2>
             </div>
             <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}>
                 <div style={{ fontSize: '2.8rem', marginBottom: '12px' }}>🛡️</div>
                 <div style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: '8px' }}>
-                    {adult ? 'No public video lessons are approved yet' : 'Chua co video lesson public dat chuan'}
+                    {adult ? 'No video lessons are ready to study yet' : 'Chưa có video lesson nào sẵn sàng để học'}
                 </div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', lineHeight: 1.6 }}>
                     {adult
-                        ? `The old YouTube embeds were retired. Lessons stay hidden until a licensed or CC replacement can stream inside the app on ${runtimeLabel}.`
-                        : `YouTube embed cu da duoc rut khoi public. Lesson se duoc mo lai khi co nguon hop le, phat duoc ngay trong ${runtimeLabel}.`}
+                        ? `Lessons remain unavailable until the study packet and a playable source can be loaded on ${runtimeLabel}.`
+                        : `Lesson sẽ chưa mở cho đến khi study packet và nguồn phát khả dụng có thể tải trong ${runtimeLabel}.`}
                 </div>
                 <div style={{
                     marginTop: '16px',
@@ -80,18 +78,18 @@ function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpe
                     fontSize: '0.8rem',
                     textAlign: 'left',
                 }}>
-                    <strong>{adult ? 'Hidden lessons:' : 'Lesson dang an:'}</strong> {hiddenCount}
+                    <strong>{adult ? 'Hidden lessons:' : 'Lesson đang ẩn:'}</strong> {hiddenCount}
                     <br />
-                    <strong>{adult ? 'Candidate:' : 'Ung vien:'}</strong> {opsSummary?.statusCounts?.candidate || 0}
+                    <strong>{adult ? 'Candidate:' : 'Ứng viên:'}</strong> {opsSummary?.statusCounts?.candidate || 0}
                     <br />
-                    <strong>{adult ? 'Review queue:' : 'Hang duyet:'}</strong> {opsSummary?.statusCounts?.review_queue || 0}
+                    <strong>{adult ? 'Review queue:' : 'Hàng duyệt:'}</strong> {opsSummary?.statusCounts?.review_queue || 0}
                     <br />
-                    <strong>{adult ? 'Blocked:' : 'Bi chan:'}</strong> {opsSummary?.statusCounts?.blocked || 0}
+                    <strong>{adult ? 'Blocked:' : 'Bị chặn:'}</strong> {opsSummary?.statusCounts?.blocked || 0}
                     <br />
-                    <strong>{adult ? 'Release policy:' : 'Chinh sach release:'}</strong>{' '}
+                    <strong>{adult ? 'Release policy:' : 'Chính sách release:'}</strong>{' '}
                     {adult
                         ? 'Only approved CDN-backed videos can be public.'
-                        : 'Chi video da duoc kiem duyet va host tren CDN moi duoc public.'}
+                        : 'Chỉ video đã được kiểm duyệt và host trên CDN mới được public.'}
                 </div>
                 <button
                     type="button"
@@ -107,7 +105,7 @@ function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpe
                         cursor: 'pointer',
                     }}
                 >
-                    {adult ? 'Open Review Queue' : 'Mo hang duyet'}
+                    {adult ? 'Open Review Queue' : 'Mở hàng duyệt'}
                 </button>
             </div>
         </div>
@@ -115,22 +113,22 @@ function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpe
 }
 
 function formatQuizCount(adult, count) {
-    return adult ? `${count} quiz` : `${count} cau hoi`;
+    return adult ? `${count} quiz` : `${count} câu hỏi`;
 }
 
 const STAGE_LABELS = {
-    preview: { en: 'Preview', vi: 'Du doan' },
-    while_watch: { en: 'While Watching', vi: 'Luc xem' },
-    notice: { en: 'Notice', vi: 'Nhan ra' },
-    detail: { en: 'Detail', vi: 'Chi tiet' },
-    retrieve: { en: 'Retrieve', vi: 'Goi lai' },
-    transfer: { en: 'Transfer', vi: 'Van dung' },
+    preview: { en: 'Preview', vi: 'Dự đoán' },
+    while_watch: { en: 'While Watching', vi: 'Lúc xem' },
+    notice: { en: 'Notice', vi: 'Nhận ra' },
+    detail: { en: 'Detail', vi: 'Chi tiết' },
+    retrieve: { en: 'Retrieve', vi: 'Gọi lại' },
+    transfer: { en: 'Transfer', vi: 'Vận dụng' },
 };
 
 function getStageLabel(stage, adult) {
     const label = STAGE_LABELS[stage];
     if (!label) {
-        return adult ? 'Practice' : 'Luyen tap';
+        return adult ? 'Practice' : 'Luyện tập';
     }
 
     return adult ? label.en : label.vi;
@@ -216,35 +214,26 @@ export default function VideoLesson() {
         };
     }, []);
 
-    const publicLevels = useMemo(
-        () => getPublicVideoLevels(manifestState.manifest),
+    const studyLevels = useMemo(
+        () => getStudyVideoLevels(manifestState.manifest),
         [manifestState.manifest]
     );
-    const publicVideos = useMemo(
-        () => flattenPublicVideoLessons(manifestState.manifest),
+    const studyVideos = useMemo(
+        () => flattenStudyVideoLessons(manifestState.manifest),
         [manifestState.manifest]
     );
-    const visibleLevels = useMemo(
-        () => getVisibleVideoLevels(manifestState.manifest),
-        [manifestState.manifest]
-    );
-    const visibleVideos = useMemo(
-        () => flattenVisibleVideoLessons(manifestState.manifest),
-        [manifestState.manifest]
-    );
-    const referenceMode = publicLevels.length === 0 && visibleLevels.length > 0;
 
     const selectedLevel = useMemo(
-        () => (referenceMode ? visibleLevels : publicLevels).find((level) => level.id === selectedLevelId) || null,
-        [publicLevels, referenceMode, selectedLevelId, visibleLevels]
+        () => studyLevels.find((level) => level.id === selectedLevelId) || null,
+        [selectedLevelId, studyLevels]
     );
     const selectedCat = useMemo(
         () => selectedLevel?.categories.find((category) => category.id === selectedCatId) || null,
         [selectedLevel, selectedCatId]
     );
     const activeVideo = useMemo(
-        () => (referenceMode ? visibleVideos : publicVideos).find((video) => video.id === activeVideoId) || null,
-        [activeVideoId, publicVideos, referenceMode, visibleVideos]
+        () => studyVideos.find((video) => video.id === activeVideoId) || null,
+        [activeVideoId, studyVideos]
     );
     const activeQuizQuestions = useMemo(
         () => getLessonQuizQuestions(activeVideo),
@@ -267,10 +256,13 @@ export default function VideoLesson() {
         [activeVideo]
     );
 
-    const browseLevels = referenceMode ? visibleLevels : publicLevels;
-    const browseVideos = referenceMode ? visibleVideos : publicVideos;
+    const browseLevels = studyLevels;
+    const browseVideos = studyVideos;
     const totalVideos = browseVideos.length;
     const totalQuizzes = browseVideos.reduce((sum, video) => sum + getLessonQuizQuestions(video).length, 0);
+    const readyPacketCount = browseVideos.filter((video) => (
+        getLessonScriptSegments(video).length > 0 && getLessonQuizQuestions(video).length > 0
+    )).length;
     const hiddenCount = manifestState.manifest?.summary?.hiddenLessonCount || 0;
 
     const searchResults = useMemo(() => {
@@ -306,7 +298,7 @@ export default function VideoLesson() {
     }
 
     function startQuiz() {
-        if (sourceStatus !== 'playable' || activeQuizQuestions.length === 0) {
+        if (activeQuizQuestions.length === 0 || activeScriptSegments.length === 0) {
             return;
         }
 
@@ -381,15 +373,15 @@ export default function VideoLesson() {
             <div className="page">
                 <div className="page-header">
                     <button className="page-header__back" type="button" onClick={() => navigate(-1)}>←</button>
-                    <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thu vien Video'}</h2>
+                    <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thư viện video'}</h2>
                 </div>
                 <div className="glass-card" style={{ padding: '24px', textAlign: 'center' }}>
                     <div style={{ fontSize: '2.8rem', marginBottom: '12px' }}>⚠️</div>
                     <div style={{ fontWeight: 800, fontSize: '1.05rem', marginBottom: '8px' }}>
-                        {adult ? 'Could not load the video manifest' : 'Khong tai duoc manifest video'}
+                        {adult ? 'Could not load the video manifest' : 'Không tải được manifest video'}
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '14px' }}>
-                        {manifestState.error?.message || (adult ? 'Unknown error' : 'Loi khong xac dinh')}
+                        {manifestState.error?.message || (adult ? 'Unknown error' : 'Lỗi không xác định')}
                     </div>
                     <button
                         type="button"
@@ -404,7 +396,7 @@ export default function VideoLesson() {
                             cursor: 'pointer',
                         }}
                     >
-                        {adult ? 'Reload' : 'Tai lai'}
+                        {adult ? 'Reload' : 'Tải lại'}
                     </button>
                 </div>
             </div>
@@ -429,7 +421,7 @@ export default function VideoLesson() {
             <div className="page">
                 <div className="page-header">
                     <button className="page-header__back" type="button" onClick={() => setSearchQuery('')}>←</button>
-                    <h2 className="page-header__title">🔍 {searchResults.length} {adult ? 'results' : 'ket qua'}</h2>
+                    <h2 className="page-header__title">🔍 {searchResults.length} {adult ? 'results' : 'kết quả'}</h2>
                 </div>
                 <input
                     value={searchQuery}
@@ -502,7 +494,7 @@ export default function VideoLesson() {
                     ))}
                     {searchResults.length === 0 ? (
                         <p style={{ textAlign: 'center', color: 'var(--color-text-light)', fontSize: '0.82rem', padding: '20px' }}>
-                            {adult ? 'No video lessons found' : 'Khong tim thay lesson video'}
+                            {adult ? 'No video lessons found' : 'Không tìm thấy lesson video'}
                         </p>
                     ) : null}
                 </div>
@@ -515,13 +507,13 @@ export default function VideoLesson() {
             <div className="page">
                 <div className="page-header">
                     <button className="page-header__back" type="button" onClick={() => navigate(-1)}>←</button>
-                    <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thu vien Video'}</h2>
+                    <h2 className="page-header__title">🎬 {adult ? 'Video Library' : 'Thư viện video'}</h2>
                 </div>
                 <div style={{ position: 'relative', marginBottom: '14px' }}>
                     <input
                         value={searchQuery}
                         onChange={(event) => setSearchQuery(event.target.value)}
-                        placeholder={adult ? '🔍 Search lessons, scripts, quizzes...' : '🔍 Tim lesson, script, quiz...'}
+                        placeholder={adult ? '🔍 Search lessons, scripts, quizzes...' : '🔍 Tìm lesson, script, quiz...'}
                         style={{
                             width: '100%',
                             padding: '10px 14px',
@@ -545,19 +537,19 @@ export default function VideoLesson() {
                 }}>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalVideos}</div>
-                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Visible lessons' : 'Lesson hien thi'}</div>
+                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Visible lessons' : 'Lesson hiển thị'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{totalQuizzes}</div>
-                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Quiz items' : 'Cau hoi'}</div>
+                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Quiz items' : 'Câu hỏi'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{browseLevels.length}</div>
-                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Levels' : 'Cap do'}</div>
+                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Levels' : 'Cấp độ'}</div>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{hiddenCount}</div>
-                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Hidden' : 'Dang an'}</div>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>{readyPacketCount}</div>
+                        <div style={{ fontSize: '0.6rem', opacity: 0.8 }}>{adult ? 'Script + quiz ready' : 'Đủ script + quiz'}</div>
                     </div>
                 </div>
                 <div style={{ display: 'grid', gap: '10px' }}>
@@ -702,7 +694,7 @@ export default function VideoLesson() {
                                 <div style={{ fontSize: '0.62rem', color: 'var(--color-text-light)', marginTop: '2px' }}>
                                     {getCanonicalVideoSource(lesson)
                                         ? (adult ? 'In-app video' : 'Video trong app')
-                                        : (adult ? 'Reference video' : 'Video tham chieu')}
+                                        : (adult ? 'Reference video' : 'Video tham chiếu')}
                                 </div>
                             </div>
                             <span style={{ fontSize: '0.65rem', color: 'var(--color-text-light)', fontWeight: 600 }}>#{index + 1}</span>
@@ -726,6 +718,7 @@ export default function VideoLesson() {
     const reviewBadge = getLessonReviewBadge(activeVideo);
     const captionTrackEn = getLessonCaptionTrack(activeVideo, 'en');
     const captionTrackVi = getLessonCaptionTrack(activeVideo, 'vi');
+    const canTakeQuiz = activeQuizQuestions.length > 0 && activeScriptSegments.length > 0;
 
     return (
         <div className="page" style={{ padding: '0' }}>
@@ -803,7 +796,7 @@ export default function VideoLesson() {
                                 }}
                                 onError={() => {
                                     setSourceStatus('source_error');
-                                    setSourceError(adult ? 'Could not play the canonical in-app source.' : 'Khong phat duoc nguon video chuan trong app.');
+                                    setSourceError(adult ? 'Could not play the canonical in-app source.' : 'Không phát được nguồn video chuẩn trong app.');
                                     recordVideoLessonTelemetry('video_source_error', { lessonId: activeVideo.id });
                                 }}
                             >
@@ -820,7 +813,7 @@ export default function VideoLesson() {
                                     <track
                                         kind="subtitles"
                                         srcLang="vi"
-                                        label="Tieng Viet"
+                                        label="Tiếng Việt"
                                         src={captionTrackVi}
                                     />
                                 ) : null}
@@ -852,10 +845,10 @@ export default function VideoLesson() {
                             <div style={{ padding: '28px 20px', textAlign: 'center', color: '#fff' }}>
                                 <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⚠️</div>
                                 <div style={{ fontWeight: 700, marginBottom: '6px' }}>
-                                    {adult ? 'Video source missing' : 'Thieu nguon video'}
+                                    {adult ? 'Video source missing' : 'Thiếu nguồn video'}
                                 </div>
                                 <div style={{ fontSize: '0.82rem', opacity: 0.85 }}>
-                                    {adult ? 'This lesson cannot unlock the quiz until a playable video source is available.' : 'Lesson nay khong duoc mo quiz neu chua co nguon video phat duoc.'}
+                                    {adult ? 'Open the reference source in a new tab, then study with the script and quiz below.' : 'Hãy mở nguồn tham chiếu ở tab mới, rồi học bằng script và quiz phía dưới.'}
                                 </div>
                             </div>
                         )}
@@ -864,18 +857,18 @@ export default function VideoLesson() {
                     {sourceStatus === 'loading' ? (
                         <div className="glass-card" style={{ padding: '14px', fontSize: '0.8rem', color: 'var(--color-text-light)' }}>
                             {playbackMode === 'canonical'
-                                ? (adult ? 'Checking in-app playback compatibility...' : 'Dang kiem tra kha nang phat trong app...')
-                                : (adult ? 'Loading reference video...' : 'Dang tai video tham chieu...')}
+                                ? (adult ? 'Checking in-app playback compatibility...' : 'Đang kiểm tra khả năng phát trong app...')
+                                : (adult ? 'Loading reference video...' : 'Đang tải video tham chiếu...')}
                         </div>
                     ) : null}
 
                     {sourceStatus === 'source_error' ? (
                         <div className="glass-card" style={{ padding: '16px', borderLeft: '4px solid #EF4444' }}>
                             <div style={{ fontWeight: 800, marginBottom: '6px' }}>
-                                {adult ? 'Source error' : 'Loi nguon phat'}
+                                {adult ? 'Source error' : 'Lỗi nguồn phát'}
                             </div>
                             <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', lineHeight: 1.55 }}>
-                                {sourceError || (adult ? 'The approved in-app source failed to play.' : 'Nguon video chuan trong app dang loi.')}
+                                {sourceError || (adult ? 'The approved in-app source failed to play.' : 'Nguồn video chuẩn trong app đang lỗi.')}
                             </div>
                             {referenceLink ? (
                                 <a
@@ -893,7 +886,7 @@ export default function VideoLesson() {
                                         fontWeight: 700,
                                     }}
                                 >
-                                    {adult ? 'Open reference source' : 'Mo nguon tham chieu'}
+                                    {adult ? 'Open reference source' : 'Mở nguồn tham chiếu'}
                                 </a>
                             ) : null}
                         </div>
@@ -902,7 +895,7 @@ export default function VideoLesson() {
                     {activeObjectives.length > 0 ? (
                         <div className="glass-card" style={{ padding: '14px' }}>
                             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '8px', fontWeight: 700 }}>
-                                {adult ? 'Learning goals' : 'Muc tieu hoc'}
+                                {adult ? 'Learning goals' : 'Mục tiêu học'}
                             </div>
                             <div style={{ display: 'grid', gap: '8px' }}>
                                 {activeObjectives.map((objective, index) => (
@@ -927,7 +920,7 @@ export default function VideoLesson() {
                     {activeVocabulary.length > 0 ? (
                         <div className="glass-card" style={{ padding: '14px' }}>
                             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '8px', fontWeight: 700 }}>
-                                {adult ? 'Focus vocabulary' : 'Tu khoa trong tam'}
+                                {adult ? 'Focus vocabulary' : 'Từ khóa trọng tâm'}
                             </div>
                             <div style={{ display: 'grid', gap: '8px' }}>
                                 {activeVocabulary.slice(0, 6).map((entry) => (
@@ -955,7 +948,7 @@ export default function VideoLesson() {
                         <div className="glass-card" style={{ padding: '14px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap' }}>
                                 <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', fontWeight: 700 }}>
-                                    {adult ? 'Bilingual study script' : 'Script hoc song ngu'}
+                                    {adult ? 'Bilingual study script' : 'Script học song ngữ'}
                                 </div>
                                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                                     {[
@@ -1024,45 +1017,45 @@ export default function VideoLesson() {
 
                     <div className="glass-card" style={{ padding: '14px' }}>
                         <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '6px', fontWeight: 700 }}>
-                            {adult ? 'Source review' : 'Kiem duyet nguon'}
+                            {adult ? 'Source review' : 'Kiểm duyệt nguồn'}
                         </div>
                         <div style={{ fontSize: '0.82rem', lineHeight: 1.6 }}>
-                            <strong>{adult ? 'Source:' : 'Nguon:'}</strong> {activeVideo.attribution?.sourceName || activeVideo.channel || '--'}
+                            <strong>{adult ? 'Source:' : 'Nguồn:'}</strong> {activeVideo.attribution?.sourceName || activeVideo.channel || '--'}
                             <br />
-                            <strong>{adult ? 'Playback mode:' : 'Che do phat:'}</strong>{' '}
+                            <strong>{adult ? 'Playback mode:' : 'Chế độ phát:'}</strong>{' '}
                             {playbackMode === 'canonical'
                                 ? (adult ? 'In-app canonical video' : 'Video canonical trong app')
-                                : (adult ? 'Reference video mode' : 'Che do video tham chieu')}
+                                : (adult ? 'Reference video mode' : 'Chế độ video tham chiếu')}
                             <br />
-                            <strong>{adult ? 'License:' : 'Giay phep:'}</strong> {activeVideo.attribution?.licenseLabel || (adult ? 'Pending approval' : 'Dang cho duyet')}
+                            <strong>{adult ? 'License:' : 'Giấy phép:'}</strong> {activeVideo.attribution?.licenseLabel || (adult ? 'Pending approval' : 'Đang chờ duyệt')}
                             <br />
-                            <strong>{adult ? 'Review status:' : 'Trang thai duyet:'}</strong>{' '}
-                            {sourceVerification?.manualReviewStatus || (adult ? 'Pending' : 'Dang cho')}
+                            <strong>{adult ? 'Review status:' : 'Trạng thái duyệt:'}</strong>{' '}
+                            {sourceVerification?.manualReviewStatus || (adult ? 'Pending' : 'Đang chờ')}
                             <br />
-                            <strong>{adult ? 'Review badge:' : 'Huy hieu duyet:'}</strong>{' '}
+                            <strong>{adult ? 'Review badge:' : 'Huy hiệu duyệt:'}</strong>{' '}
                             {reviewBadge.label}
                             <br />
-                            <strong>{adult ? 'Content match:' : 'Do khop noi dung:'}</strong>{' '}
-                            {sourceVerification?.contentMatchStatus || (adult ? 'Unverified' : 'Chua xac minh')}
+                            <strong>{adult ? 'Content match:' : 'Độ khớp nội dung:'}</strong>{' '}
+                            {sourceVerification?.contentMatchStatus || (adult ? 'Unverified' : 'Chưa xác minh')}
                             <br />
-                            <strong>{adult ? 'Subtitle mode:' : 'Che do phu de:'}</strong>{' '}
+                            <strong>{adult ? 'Subtitle mode:' : 'Chế độ phụ đề:'}</strong>{' '}
                             {subtitleVariant === 'exact_timed'
-                                ? (adult ? 'Exact timed subtitles' : 'Phu de dong bo theo thoi gian')
-                                : (adult ? 'Companion learning script' : 'Script dong hanh de hoc')}
+                                ? (adult ? 'Exact timed subtitles' : 'Phụ đề đồng bộ theo thời gian')
+                                : (adult ? 'Companion learning script' : 'Script đồng hành để học')}
                             <br />
-                            <strong>{adult ? 'Reviewed by:' : 'Nguoi duyet:'}</strong>{' '}
+                            <strong>{adult ? 'Reviewed by:' : 'Người duyệt:'}</strong>{' '}
                             {sourceVerification?.reviewedBy || activeVideo.attribution?.reviewedBy || '--'}
                             {referenceMeta?.title ? (
                                 <>
                                     <br />
-                                    <strong>{adult ? 'Reference title:' : 'Tieu de tham chieu:'}</strong>{' '}
+                                    <strong>{adult ? 'Reference title:' : 'Tiêu đề tham chiếu:'}</strong>{' '}
                                     {referenceMeta.title}
                                 </>
                             ) : null}
                             {referenceMeta?.channel ? (
                                 <>
                                     <br />
-                                    <strong>{adult ? 'Reference channel:' : 'Kenh tham chieu:'}</strong>{' '}
+                                    <strong>{adult ? 'Reference channel:' : 'Kênh tham chiếu:'}</strong>{' '}
                                     {referenceMeta.channel}
                                 </>
                             ) : null}
@@ -1072,13 +1065,13 @@ export default function VideoLesson() {
                     {activePracticeBlocks ? (
                         <div className="glass-card" style={{ padding: '14px' }}>
                             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '8px', fontWeight: 700 }}>
-                                {adult ? 'Memory loop' : 'Vong lap tri nho'}
+                                {adult ? 'Memory loop' : 'Vòng lặp trí nhớ'}
                             </div>
                             <div style={{ display: 'grid', gap: '10px' }}>
                                 {Array.isArray(activePracticeBlocks.beforeWatch) && activePracticeBlocks.beforeWatch.length > 0 ? (
                                     <div>
                                         <div style={{ fontSize: '0.68rem', fontWeight: 700, marginBottom: '4px' }}>
-                                            {adult ? 'Before watching' : 'Truoc khi xem'}
+                                            {adult ? 'Before watching' : 'Trước khi xem'}
                                         </div>
                                         <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', lineHeight: 1.55 }}>
                                             {getLocalizedLine(activePracticeBlocks.beforeWatch[0], adult)}
@@ -1101,7 +1094,7 @@ export default function VideoLesson() {
                                 ) : null}
                                 {Array.isArray(activePracticeBlocks.memoryPlan) && activePracticeBlocks.memoryPlan.length > 0 ? (
                                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', lineHeight: 1.55 }}>
-                                        <strong>{adult ? 'Spaced review:' : 'On cach quang:'}</strong>{' '}
+                                        <strong>{adult ? 'Spaced review:' : 'Ôn cách quãng:'}</strong>{' '}
                                         {getLocalizedLine(activePracticeBlocks.memoryPlan[0], adult)}
                                     </div>
                                 ) : null}
@@ -1115,33 +1108,33 @@ export default function VideoLesson() {
                                 {sourceStatus === 'playable'
                                     ? (
                                         playbackMode === 'canonical'
-                                            ? (adult ? 'Watch the approved in-app video, then move through preview, detail, retrieval, and transfer questions.' : 'Xem video da kiem duyet trong app roi di qua cac cau hoi du doan, chi tiet, goi lai va van dung.')
-                                            : (adult ? 'Watch the reference video, then use the script and quiz to confirm understanding.' : 'Xem video tham chieu roi dung script va quiz de xac nhan muc do hieu bai.')
+                                            ? (adult ? 'Watch the approved in-app video, then move through preview, detail, retrieval, and transfer questions.' : 'Xem video đã kiểm duyệt trong app rồi đi qua các câu hỏi dự đoán, chi tiết, gọi lại và vận dụng.')
+                                            : (adult ? 'Watch the reference video, then use the script and quiz to confirm understanding.' : 'Xem video tham chiếu rồi dùng script và quiz để xác nhận mức độ hiểu bài.')
                                     )
-                                    : (adult ? 'Quiz stays locked until a playable video source is available.' : 'Quiz chi mo khi co nguon video phat duoc.')}
+                                    : (adult ? 'If the player is blocked, study from the bilingual script or open the reference source in a new tab, then take the quiz.' : 'Nếu player bị chặn, hãy học từ script song ngữ hoặc mở nguồn tham chiếu ở tab mới rồi làm quiz.')}
                             </p>
                             <button
                                 type="button"
                                 onClick={startQuiz}
-                                disabled={sourceStatus !== 'playable'}
+                                disabled={!canTakeQuiz}
                                 style={{
                                     padding: '12px 32px',
                                     borderRadius: '16px',
                                     border: 'none',
-                                    cursor: sourceStatus === 'playable' ? 'pointer' : 'not-allowed',
-                                    background: sourceStatus === 'playable'
+                                    cursor: canTakeQuiz ? 'pointer' : 'not-allowed',
+                                    background: canTakeQuiz
                                         ? 'linear-gradient(135deg, #4F46E5, #6366F1)'
                                         : 'linear-gradient(135deg, #9CA3AF, #6B7280)',
                                     color: '#fff',
                                     fontSize: '0.95rem',
                                     fontWeight: 700,
-                                    boxShadow: sourceStatus === 'playable'
+                                    boxShadow: canTakeQuiz
                                         ? '0 4px 12px rgba(79,70,229,0.3)'
                                         : 'none',
-                                    opacity: sourceStatus === 'playable' ? 1 : 0.7,
+                                    opacity: canTakeQuiz ? 1 : 0.7,
                                 }}
                             >
-                                📝 {adult ? 'Take Quiz' : 'Lam Quiz'} ({activeQuizQuestions.length} {adult ? 'Q' : 'cau'})
+                                📝 {adult ? 'Take Quiz' : 'Làm quiz'} ({activeQuizQuestions.length} {adult ? 'Q' : 'câu'})
                             </button>
                         </div>
                     ) : null}
@@ -1172,7 +1165,7 @@ export default function VideoLesson() {
                         {getStageLabel(currentQuestion.stage, adult)}
                     </div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '8px', fontWeight: 600 }}>
-                        {adult ? `Question ${quizIdx + 1}/${activeQuizQuestions.length}` : `Cau ${quizIdx + 1}/${activeQuizQuestions.length}`}
+                        {adult ? `Question ${quizIdx + 1}/${activeQuizQuestions.length}` : `Câu ${quizIdx + 1}/${activeQuizQuestions.length}`}
                     </div>
                     <div style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '16px', lineHeight: 1.4 }}>
                         {adult ? currentQuestion.q : currentQuestion.qVi}
@@ -1258,8 +1251,8 @@ export default function VideoLesson() {
                         >
                             <div style={{ fontWeight: 700, marginBottom: '4px' }}>
                                 {answered === currentQuestion.answer
-                                    ? (adult ? 'Correct focus' : 'Dung trong tam')
-                                    : (adult ? 'Review this clue' : 'Xem lai dau hieu nay')}
+                                    ? (adult ? 'Correct focus' : 'Đúng trọng tâm')
+                                    : (adult ? 'Review this clue' : 'Xem lại dấu hiệu này')}
                             </div>
                             <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)', lineHeight: 1.55 }}>
                                 {adult
@@ -1277,7 +1270,7 @@ export default function VideoLesson() {
                         {score === activeQuizQuestions.length ? '🏆' : score >= activeQuizQuestions.length * 0.7 ? '⭐' : '💪'}
                     </div>
                     <div style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '4px' }}>
-                        {score}/{activeQuizQuestions.length} {adult ? 'Correct!' : 'Dung!'}
+                        {score}/{activeQuizQuestions.length} {adult ? 'Correct!' : 'Đúng!'}
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', marginBottom: '16px' }}>
                         +{Math.round((score / activeQuizQuestions.length) * 15)} XP
@@ -1292,7 +1285,7 @@ export default function VideoLesson() {
                             }}
                         >
                             <div style={{ fontSize: '0.72rem', color: 'var(--color-text-light)', marginBottom: '6px', fontWeight: 700 }}>
-                                {adult ? 'Say it again from memory' : 'Noi lai tu tri nho'}
+                                {adult ? 'Say it again from memory' : 'Nói lại từ trí nhớ'}
                             </div>
                             <div style={{ fontSize: '0.82rem', lineHeight: 1.55, fontWeight: 600 }}>
                                 {activePracticeBlocks.shadowing[0].en}
@@ -1316,7 +1309,7 @@ export default function VideoLesson() {
                                 fontWeight: 600,
                             }}
                         >
-                            🔄 {adult ? 'Watch Again' : 'Xem lai'}
+                            🔄 {adult ? 'Watch Again' : 'Xem lại'}
                         </button>
                         <button
                             type="button"
@@ -1335,7 +1328,7 @@ export default function VideoLesson() {
                                 fontWeight: 700,
                             }}
                         >
-                            ➡️ {adult ? 'Next Video' : 'Video tiep'}
+                            ➡️ {adult ? 'Next Video' : 'Video tiếp'}
                         </button>
                     </div>
                 </div>
