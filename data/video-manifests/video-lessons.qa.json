@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-29T23:43:43.453Z",
-  "version": "video-lessons-9bf16b0a9791",
+  "generatedAt": "2026-03-30T02:15:41.446Z",
+  "version": "video-lessons-f5493d872066",
   "summary": {
     "totalLessons": 120,
     "publicLessons": 0,
@@ -18,7 +18,7 @@
   },
   "audit": {
     "status": "pass",
-    "checkedAt": "2026-03-29T23:43:41.719Z"
+    "checkedAt": "2026-03-30T02:15:39.656Z"
   },
   "findings": []
 }
