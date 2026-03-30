@@ -125,7 +125,6 @@ function isStudyVisibleLesson(lesson) {
     return lesson?.status !== 'retired'
         && lesson?.status !== 'draft'
         && hasCompleteStudyPacket(lesson)
-        && lesson?.sourceVerification?.contentMatchStatus === 'aligned'
         && (!!getCanonicalVideoSource(lesson) || !!getVideoReferenceLink(lesson));
 }
 
@@ -145,7 +144,7 @@ export function getVisibleVideoLevels(manifest, options = {}) {
                                         ? lesson.status === 'public'
                                         : mode === 'study'
                                             ? isStudyVisibleLesson(lesson)
-                                        : (lesson.status === 'public' || isVisibleInReferenceMode(lesson))
+                                            : (lesson.status === 'public' || isVisibleInReferenceMode(lesson))
                                 ))
                                 : [],
                         }))
