@@ -125,6 +125,7 @@ function isStudyVisibleLesson(lesson) {
     return lesson?.status !== 'retired'
         && lesson?.status !== 'draft'
         && hasCompleteStudyPacket(lesson)
+        && lesson?.sourceVerification?.contentMatchStatus === 'aligned'
         && (!!getCanonicalVideoSource(lesson) || !!getVideoReferenceLink(lesson));
 }
 

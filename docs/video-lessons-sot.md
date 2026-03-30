@@ -106,7 +106,7 @@ Each lesson now carries a `learningPacket` and a `sourceVerification` block.
 - content match status
 - reviewer identity and evidence URL before publication
 
-The runtime now exposes the bilingual script and richer quiz for every lesson that has a complete study packet, while still preserving the distinction between `public` canonical playback and reference-backed study mode.
+The runtime now exposes the bilingual script and richer quiz only for lessons that have both a complete study packet and an `aligned` source match, while still preserving the distinction between `public` canonical playback and reference-backed study mode.
 
 ## Lifecycle policy
 
@@ -132,7 +132,7 @@ The runtime now exposes the bilingual script and richer quiz for every lesson th
   - search overlay video results
   - public category counts
 
-`review_queue` and `blocked` lessons must not be mislabeled as `public`, but they may appear in the study surface when a complete packet and a reference source are available, with their review state shown explicitly in the UI.
+`review_queue`, `candidate`, and `blocked` lessons must not be mislabeled as `public`. They also must not appear in the live study surface unless their source match is `aligned`. Non-aligned lessons remain available only in reviewer workflows.
 
 ## Migration workflow
 

@@ -41,7 +41,7 @@ function LoadingState({ adult }) {
                     {adult ? 'Loading video lesson manifest...' : 'Đang tải manifest video lesson...'}
                 </div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)' }}>
-                    {adult ? 'Lessons with a complete study packet will be shown.' : 'Những lesson có study packet đầy đủ sẽ được hiển thị.'}
+                    {adult ? 'Only lessons with aligned study packets and matching sources will be shown.' : 'Chỉ những lesson có study packet đầy đủ và nguồn khớp nội dung mới được hiển thị.'}
                 </div>
             </div>
         </div>
@@ -66,8 +66,8 @@ function EmptyState({ adult, hiddenCount, runtimeMode, onBack, opsSummary, onOpe
                 </div>
                 <div style={{ fontSize: '0.82rem', color: 'var(--color-text-light)', lineHeight: 1.6 }}>
                     {adult
-                        ? `Lessons remain unavailable until the study packet and a playable source can be loaded on ${runtimeLabel}.`
-                        : `Lesson sẽ chưa mở cho đến khi study packet và nguồn phát khả dụng có thể tải trong ${runtimeLabel}.`}
+                        ? `Lessons remain unavailable until the study packet is complete and the source matches the intended lesson on ${runtimeLabel}.`
+                        : `Lesson sẽ chưa mở cho đến khi study packet đầy đủ và nguồn nội dung khớp đúng bài học trong ${runtimeLabel}.`}
                 </div>
                 <div style={{
                     marginTop: '16px',
