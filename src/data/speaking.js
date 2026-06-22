@@ -492,6 +492,28 @@ export const SPEAKING_LESSONS = [
             { text: "To sum up, while there are valid arguments on both sides, the evidence predominantly supports the first view.", textVi: "Tóm lại, dù có lập luận hợp lệ từ cả hai phía, bằng chứng chủ yếu ủng hộ quan điểm thứ nhất." },
         ],
     },
+    {
+        id: 'shadow-pr-crisis',
+        type: 'shadowing',
+        title: 'Public Relations Crisis Management',
+        titleVi: 'Quản lý khủng hoảng Quan hệ công chúng',
+        level: 'C1',
+        emoji: '📢',
+        mode: 'adult',
+        sentences: [
+            { text: "The spokesperson initiated the high-stakes briefing by sharing a brief anecdote about the firm's humble beginnings, aiming to align stakeholders through a clear statement of purpose.", textVi: "Người phát ngôn đã bắt đầu buổi báo cáo quan trọng bằng cách chia sẻ một giai thoại ngắn về sự khởi đầu khiêm tốn của công ty, nhằm thống nhất các bên liên quan thông qua một tuyên bố mục đích rõ ràng." },
+            { text: "However, the company faced a profound ethical dilemma after reports on social media exposed corporate negligence regarding customer safety.", textVi: "Tuy nhiên, công ty đã phải đối mặt với một tình thế lưỡng nan sâu sắc về đạo đức sau khi các báo cáo trên mạng xã hội vạch trần sự cẩu thả của doanh nghiệp đối với sự an toàn của khách hàng." },
+            { text: "As a catalyst for public outrage, activists organized a massive demonstration and urged consumers to boycott the brand, while journalists received a media alert regarding the growing controversy.", textVi: "Như một chất xúc tác cho sự phẫn nộ của công chúng, các nhà hoạt động đã tổ chức một cuộc biểu tình quy mô lớn và kêu gọi người tiêu dùng tẩy chay thương hiệu, trong khi các nhà báo nhận được thông báo truyền thông về cuộc tranh cãi ngày càng tăng." },
+            { text: "To prevent a legal cover-up, the legal counsel warned that deleting digital data encoded in a binary format would lead to aggressive criminal prosecution under common law.", textVi: "Để ngăn chặn hành vi che giấu pháp lý, cố vấn pháp lý cảnh báo rằng việc xóa dữ liệu kỹ thuật số được mã hóa dưới dạng nhị phân sẽ dẫn đến việc bị truy tố hình sự nghiêm trọng theo thông luật." },
+            { text: "Moreover, accusing their competitor of fabricating the defect was deemed a trade libel, while using a celebrity's likeness without authorization resulted in a lawsuit for misappropriation of personality and invasion of privacy.", textVi: "Hơn nữa, việc cáo buộc đối thủ cạnh tranh ngụy tạo ra lỗi sản phẩm bị coi là hành vi bôi nhọ thương mại, trong khi việc sử dụng hình ảnh của người nổi tiếng mà không được phép đã dẫn đến một vụ kiện vì chiếm đoạt hình ảnh cá nhân và xâm phạm quyền riêng tư." },
+            { text: "In response, the executive board leveraged their business acumen to launch a comprehensive media tour, utilizing strategic product placement and issues placement to rebuild their brand image, and distributing a public service announcement via smartphones.", textVi: "Để đáp lại, ban điều hành đã tận dụng sự nhạy bén trong kinh doanh của mình để phát động một chiến dịch du thuyết truyền thông toàn diện, sử dụng việc lồng ghép sản phẩm và lồng ghép vấn đề một cách chiến lược để xây dựng lại hình ảnh thương hiệu, đồng thời phân phối một thông điệp dịch vụ công ích qua điện thoại thông minh." },
+            { text: "They used targeted dissemination, personalized postcards, and RSS feeds to ensure the information reached specific publics with a notoriously diminished attention span, bypassing old brochureware static websites.", textVi: "Họ đã sử dụng việc phổ biến thông tin có mục tiêu, bưu thiếp cá nhân hóa và nguồn cấp dữ liệu RSS để đảm bảo thông tin tiếp cận các nhóm công chúng cụ thể có khoảng thời gian chú ý bị giảm sút nghiêm trọng, bỏ qua các trang web tĩnh kiểu brochure cũ kỹ." },
+            { text: "During the subsequent news conference, the PR director utilized a high-resolution infographic as a visual aid to help people anticipate upcoming regulatory policy shifts.", textVi: "Trong cuộc họp báo sau đó, giám đốc PR đã sử dụng một biểu đồ thông tin độ phân giải cao như một công cụ trực quan để giúp mọi người dự đoán trước những thay đổi chính sách pháp lý sắp tới." },
+            { text: "Critics argued that the executives orchestrated a secret conspiracy to suppress competitive bidding, asserting that their harsh reviews were protected as fair comment.", textVi: "Các nhà phê bình lập luận rằng các giám đốc điều hành đã dàn dựng một âm mưu bí mật nhằm triệt tiêu đấu thầu cạnh tranh, đồng thời khẳng định rằng các đánh giá gay gắt của họ được bảo vệ dưới dạng bình luận công bằng." },
+            { text: "Finally, the chamber of commerce concluded that the firm's actions, while questionable, were entirely legitimate and that they had successfully protected their registered trademark.", textVi: "Cuối cùng, phòng thương mại kết luận rằng các hành động của công ty, mặc dù đáng nghi ngờ, là hoàn toàn hợp pháp và họ đã bảo vệ thành công nhãn hiệu đã đăng ký của mình." },
+            { text: "Through the philosophical supremacy of group cohesion, the team managed to reduce public animosity and restore corporate trust.", textVi: "Thông qua việc đề cao sự gắn kết tập thể, đội ngũ đã giảm thiểu được sự thù hằn từ công chúng và khôi phục niềm tin vào doanh nghiệp." },
+        ],
+    },
 ];
 
 export function getSpeakingByMode(mode) {
