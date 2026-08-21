@@ -1,28 +1,16 @@
 import { SPEAKING_UI_THEME } from '../data/speakingUiTheme';
 
 const TONE_STYLES = {
-    info: {
-        border: '#4F46E5',
-        background: '#1E1B4B',
-        title: '#C7D2FE',
-        text: '#E0E7FF',
-    },
     warn: {
         border: SPEAKING_UI_THEME.warningBorder,
         background: SPEAKING_UI_THEME.warningSurface,
         title: SPEAKING_UI_THEME.warningText,
         text: '#FDE68A',
     },
-    success: {
-        border: SPEAKING_UI_THEME.successBorder,
-        background: SPEAKING_UI_THEME.successSurface,
-        title: SPEAKING_UI_THEME.successText,
-        text: '#DCFCE7',
-    },
 };
 
 export default function CapabilityNotice({
-    icon = 'ℹ️',
+    icon = '⚠️',
     title,
     badge,
     summary,
@@ -30,13 +18,20 @@ export default function CapabilityNotice({
     tone = 'info',
     compact = false,
 }) {
-    const palette = TONE_STYLES[tone] || TONE_STYLES.info;
+    // Extraneous Cognitive Load Elimination:
+    // Only render visual alerts for actual user-actionable warnings (e.g. mic permission denied).
+    // Suppress background telemetry & capability assertions on child learning screens.
+    if (tone !== 'warn') {
+        return null;
+    }
+
+    const palette = TONE_STYLES.warn;
 
     return (
         <div style={{
-            marginBottom: compact ? '10px' : '14px',
-            padding: compact ? '10px 12px' : '12px 14px',
-            borderRadius: '14px',
+            marginBottom: compact ? '8px' : '12px',
+            padding: compact ? '8px 10px' : '10px 12px',
+            borderRadius: '12px',
             border: `1px solid ${palette.border}`,
             background: palette.background,
         }}>
@@ -45,15 +40,15 @@ export default function CapabilityNotice({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 gap: '8px',
-                marginBottom: summary || bullets.length > 0 ? '6px' : 0,
+                marginBottom: summary || bullets.length > 0 ? '4px' : 0,
             }}>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: '6px',
                     fontFamily: 'var(--font-display)',
                     fontWeight: 700,
-                    fontSize: compact ? '0.84rem' : '0.88rem',
+                    fontSize: compact ? '0.8rem' : '0.84rem',
                     color: palette.title,
                 }}>
                     <span>{icon}</span>
@@ -61,12 +56,12 @@ export default function CapabilityNotice({
                 </div>
                 {badge && (
                     <span style={{
-                        padding: '4px 10px',
+                        padding: '2px 8px',
                         borderRadius: '999px',
                         background: SPEAKING_UI_THEME.panelSurfaceSoft,
                         border: `1px solid ${palette.border}`,
                         color: palette.title,
-                        fontSize: '0.7rem',
+                        fontSize: '0.68rem',
                         fontWeight: 700,
                         whiteSpace: 'nowrap',
                     }}>
@@ -79,8 +74,8 @@ export default function CapabilityNotice({
                 <p style={{
                     margin: 0,
                     color: palette.text,
-                    fontSize: compact ? '0.77rem' : '0.8rem',
-                    lineHeight: 1.5,
+                    fontSize: compact ? '0.74rem' : '0.78rem',
+                    lineHeight: 1.45,
                 }}>
                     {summary}
                 </p>
@@ -89,11 +84,11 @@ export default function CapabilityNotice({
             {bullets.length > 0 && (
                 <div style={{
                     display: 'grid',
-                    gap: '4px',
-                    marginTop: '8px',
+                    gap: '3px',
+                    marginTop: '6px',
                     color: palette.text,
-                    fontSize: compact ? '0.75rem' : '0.78rem',
-                    lineHeight: 1.45,
+                    fontSize: compact ? '0.72rem' : '0.75rem',
+                    lineHeight: 1.4,
                 }}>
                     {bullets.map((item) => (
                         <div key={item}>• {item}</div>
@@ -103,3 +98,4 @@ export default function CapabilityNotice({
         </div>
     );
 }
+
