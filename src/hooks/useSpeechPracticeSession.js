@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getSpeechRecognitionCtor, recordCapabilityEvent } from '../services/capabilityService';
+import {
+    getInAppBrowserName,
+    getSpeechRecognitionCtor,
+    isInsideInAppBrowser,
+    recordCapabilityEvent,
+} from '../services/capabilityService';
 
 function getMediaRecorderMimeType() {
     if (typeof window === 'undefined' || !window.MediaRecorder?.isTypeSupported) {
@@ -177,6 +182,7 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         autoStopOnEnd = true,
         autoStopOnSilence = false,
         silenceMs = 2000,
+        recordAudio = false,
         fallback,
         onFinalize,
     } = {}) => {
@@ -187,51 +193,60 @@ export function useSpeechPracticeSession(moduleName = 'speaking') {
         autoStopOnSilenceRef.current = autoStopOnSilence;
         silenceMsRef.current = silenceMs;
 
+        // 1. In-App Browser check
+        const inAppName = getInAppBrowserName();
+        if (inAppName) {
+            requestManualFallback({
+                title: `Mở bằng trình duyệt ngoài`,
+                description: `Bạn đang mở ứng dụng bên trong ${inAppName}. Để thu âm giọng nói, vui lòng nhấn menu (⋮ hoặc •••) ở góc trên và chọn "Mở bằng Safari / Chrome".`,
+                isInApp: true,
+                inAppName,
+                ...(fallback || {}),
+            });
+            return;
+        }
+
         const SpeechRecognitionCtor = getSpeechRecognitionCtor();
-        const hasMediaCapture = !!navigator.mediaDevices?.getUserMedia;
+        const hasMediaCapture = typeof navigator !== 'undefined' && !!navigator.mediaDevices?.getUserMedia;
 
-        if (!hasMediaCapture) {
+        if (!SpeechRecognitionCtor && !hasMediaCapture) {
             requestManualFallback(fallback);
             return;
         }
 
-        let stream;
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaStreamRef.current = stream;
-        } catch {
-            requestManualFallback(fallback);
-            return;
-        }
-
-        audioChunksRef.current = [];
-        revokeAudioUrl();
-
-        if (window.MediaRecorder && stream) {
+        // 2. If MediaRecorder is explicitly needed (and not purely STT)
+        if (recordAudio && hasMediaCapture) {
             try {
-                const mimeType = getMediaRecorderMimeType();
-                const mediaRecorder = mimeType
-                    ? new MediaRecorder(stream, { mimeType })
-                    : new MediaRecorder(stream);
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaStreamRef.current = stream;
+                audioChunksRef.current = [];
+                revokeAudioUrl();
 
-                mediaRecorderRef.current = mediaRecorder;
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data.size > 0) {
-                        audioChunksRef.current.push(event.data);
-                    }
-                };
-                mediaRecorder.onstop = () => {
-                    if (!audioChunksRef.current.length) return;
-                    const blob = new Blob(audioChunksRef.current, {
-                        type: mediaRecorder.mimeType || 'audio/webm',
-                    });
-                    const nextUrl = URL.createObjectURL(blob);
-                    audioUrlRef.current = nextUrl;
-                    setAudioUrl(nextUrl);
-                };
-                mediaRecorder.start(150);
+                if (window.MediaRecorder) {
+                    const mimeType = getMediaRecorderMimeType();
+                    const mediaRecorder = mimeType
+                        ? new MediaRecorder(stream, { mimeType })
+                        : new MediaRecorder(stream);
+
+                    mediaRecorderRef.current = mediaRecorder;
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            audioChunksRef.current.push(event.data);
+                        }
+                    };
+                    mediaRecorder.onstop = () => {
+                        if (!audioChunksRef.current.length) return;
+                        const blob = new Blob(audioChunksRef.current, {
+                            type: mediaRecorder.mimeType || 'audio/webm',
+                        });
+                        const nextUrl = URL.createObjectURL(blob);
+                        audioUrlRef.current = nextUrl;
+                        setAudioUrl(nextUrl);
+                    };
+                    mediaRecorder.start(150);
+                }
             } catch {
-                mediaRecorderRef.current = null;
+                // If getUserMedia fails, continue to SpeechRecognition or fallback
             }
         }
 

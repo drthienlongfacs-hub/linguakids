@@ -15,6 +15,23 @@ export function getSpeechRecognitionCtor() {
     return win.SpeechRecognition || win.webkitSpeechRecognition || null;
 }
 
+export function getInAppBrowserName(customUserAgent) {
+    const nav = safeNavigator();
+    const userAgent = customUserAgent || nav?.userAgent || '';
+    if (/zalo/i.test(userAgent)) return 'Zalo';
+    if (/micromessenger/i.test(userAgent)) return 'WeChat';
+    if (/messenger|fb_iab.*messenger/i.test(userAgent)) return 'Messenger';
+    if (/fban|fbav/i.test(userAgent)) return 'Facebook';
+    if (/instagram/i.test(userAgent)) return 'Instagram';
+    if (/musical_ly|bytedance|tiktok/i.test(userAgent)) return 'TikTok';
+    if (/line/i.test(userAgent)) return 'Line';
+    return null;
+}
+
+export function isInsideInAppBrowser(customUserAgent) {
+    return !!getInAppBrowserName(customUserAgent);
+}
+
 export function detectDeviceCapabilities() {
     const win = safeWindow();
     const nav = safeNavigator();
@@ -24,9 +41,10 @@ export function detectDeviceCapabilities() {
     const isiOS = /iPad|iPhone|iPod/.test(userAgent)
         || (platform === 'MacIntel' && maxTouchPoints > 1);
     const isSafari = /safari/i.test(userAgent) && !/chrome|android|crios|fxios/i.test(userAgent);
+    const inAppBrowser = getInAppBrowserName();
     const ttsSupported = !!(win?.speechSynthesis && win?.SpeechSynthesisUtterance);
-    const sttSupported = !!getSpeechRecognitionCtor();
-    const audioCaptureSupported = !!nav?.mediaDevices?.getUserMedia;
+    const sttSupported = !inAppBrowser && !!getSpeechRecognitionCtor();
+    const audioCaptureSupported = !inAppBrowser && !!nav?.mediaDevices?.getUserMedia;
     const mediaRecorderSupported = !!win?.MediaRecorder;
     const voices = ttsSupported ? (win.speechSynthesis.getVoices() || []) : [];
     const platformLabel = isiOS
@@ -43,9 +61,12 @@ export function detectDeviceCapabilities() {
 
     return {
         platformLabel,
-        browserLabel: isSafari ? 'Safari' : /chrome|crios/i.test(userAgent) ? 'Chrome' : 'Browser',
+        browserLabel: inAppBrowser
+            ? `In-App (${inAppBrowser})`
+            : isSafari ? 'Safari' : /chrome|crios/i.test(userAgent) ? 'Chrome' : 'Browser',
         isiOS,
         isSafari,
+        inAppBrowser,
         ttsSupported,
         sttSupported,
         audioCaptureSupported,

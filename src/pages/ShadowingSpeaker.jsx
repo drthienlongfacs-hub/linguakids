@@ -1,12 +1,11 @@
-// ShadowingSpeaker — Practice mimicking famous speaking styles
-// Technique: Listen → Pause → Repeat (Shadowing method used by language schools)
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import ManualTranscriptFallback from '../components/ManualTranscriptFallback';
 import { speakText } from '../utils/speakText';
-
-const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+import { useSpeechPracticeSession } from '../hooks/useSpeechPracticeSession';
+import { getInAppBrowserName } from '../services/capabilityService';
 
 const SPEAKERS = [
     {
@@ -89,43 +88,68 @@ export default function ShadowingSpeaker() {
     const { addXP, state } = useGame();
     const [speakerId, setSpeakerId] = useState(null);
     const [sIdx, setSIdx] = useState(0);
-    const [listening, setListening] = useState(false);
     const [spoken, setSpoken] = useState('');
     const [score, setScore] = useState(null);
     const [celebration, setCelebration] = useState(0);
     const [results, setResults] = useState([]);
     const [complete, setComplete] = useState(false);
+    const inAppName = useMemo(() => getInAppBrowserName(), []);
 
     const speaker = speakerId !== null ? SPEAKERS.find(s => s.id === speakerId) : null;
+
+    const {
+        phase,
+        interimText,
+        manualFallback,
+        startCapture,
+        stopCapture,
+        resetSession,
+        submitManualTranscript,
+    } = useSpeechPracticeSession('ShadowingSpeaker');
 
     const speak = useCallback((text) => {
         if (!speaker) return;
         speakText(text, { lang: 'en-US', rate: speaker.rate, pitch: speaker.pitch });
     }, [speaker]);
 
-    const startListening = useCallback(() => {
-        if (!SpeechRecognition || !speaker) return;
-        setSpoken(''); setScore(null);
-        const rec = new SpeechRecognition();
-        rec.lang = 'en-US'; rec.continuous = false; rec.interimResults = false;
-        rec.onresult = (e) => {
-            const transcript = e.results[0][0].transcript;
-            setSpoken(transcript);
-            const s = getScore(speaker.sentences[sIdx].text, transcript);
-            setScore(s);
-            if (s >= 70) { addXP(s >= 90 ? 15 : 10); setCelebration(c => c + 1); }
-            setResults(prev => [...prev, { text: speaker.sentences[sIdx].text, spoken: transcript, score: s }]);
-            setListening(false);
-        };
-        rec.onerror = () => setListening(false);
-        rec.onend = () => setListening(false);
-        rec.start();
-        setListening(true);
-    }, [speaker, sIdx]);
+    const handleEvaluation = useCallback((transcript) => {
+        if (!speaker) return;
+        const currentSentence = speaker.sentences[sIdx]?.text || '';
+        const s = getScore(currentSentence, transcript);
+        setSpoken(transcript);
+        setScore(s);
+        if (s >= 70) {
+            addXP(s >= 90 ? 15 : 10);
+            setCelebration(c => c + 1);
+        }
+        setResults(prev => [...prev, { text: currentSentence, spoken: transcript, score: s }]);
+    }, [addXP, sIdx, speaker]);
+
+    const handleStartListening = useCallback(() => {
+        setSpoken('');
+        setScore(null);
+        startCapture({
+            lang: 'en-US',
+            continuous: false,
+            interimResults: true,
+            maxAlternatives: 3,
+            autoStopOnSilence: true,
+            silenceMs: 2200,
+            onFinalize: ({ transcript }) => {
+                if (transcript) handleEvaluation(transcript);
+            },
+        });
+    }, [handleEvaluation, startCapture]);
 
     const next = () => {
-        if (sIdx + 1 >= speaker.sentences.length) setComplete(true);
-        else { setSIdx(i => i + 1); setSpoken(''); setScore(null); }
+        resetSession();
+        if (sIdx + 1 >= (speaker?.sentences.length || 0)) {
+            setComplete(true);
+        } else {
+            setSIdx(i => i + 1);
+            setSpoken('');
+            setScore(null);
+        }
     };
 
     // Speaker selection
@@ -137,6 +161,17 @@ export default function ShadowingSpeaker() {
                     <h2 className="page-header__title">🎭 Shadowing Practice</h2>
                     <div className="xp-badge">⭐ {state.xp}</div>
                 </div>
+
+                {inAppName && (
+                    <div style={{
+                        padding: '10px 14px', borderRadius: '12px', background: '#FEF3C7',
+                        border: '1.5px solid #F59E0B', color: '#92400E', fontSize: '0.82rem',
+                        marginBottom: '12px',
+                    }}>
+                        ⚠️ <strong>Đang mở trong {inAppName}:</strong> Nhấn ⋮ góc trên và chọn <em>"Mở bằng Safari / Chrome"</em> để bật Microphone.
+                    </div>
+                )}
+
                 <p style={{ color: 'var(--color-text-light)', marginBottom: '12px', fontSize: '0.85rem' }}>
                     Chọn phong cách nói để luyện tập shadowing:
                 </p>
@@ -189,6 +224,7 @@ export default function ShadowingSpeaker() {
 
     // Practice
     const sentence = speaker.sentences[sIdx];
+    const isRecording = phase === 'recording';
 
     return (
         <div className="page">
@@ -213,27 +249,38 @@ export default function ShadowingSpeaker() {
             </div>
 
             <div style={{ textAlign: 'center', margin: '16px 0' }}>
-                <button onClick={startListening} disabled={listening}
+                <button onClick={isRecording ? stopCapture : handleStartListening}
                     style={{
                         width: '85px', height: '85px', borderRadius: '50%', border: 'none',
-                        background: listening ? '#EF4444' : speaker.color,
+                        background: isRecording ? '#EF4444' : speaker.color,
                         color: 'white', fontSize: '2rem', cursor: 'pointer',
-                        boxShadow: listening ? '0 0 0 8px #EF444440' : `0 0 0 8px ${speaker.color}30`,
-                        animation: listening ? 'pulse 1.2s infinite' : 'none',
+                        boxShadow: isRecording ? '0 0 0 8px #EF444440' : `0 0 0 8px ${speaker.color}30`,
+                        animation: isRecording ? 'pulse 1.2s infinite' : 'none',
                     }}>
-                    {listening ? '⏹️' : '🎙️'}
+                    {isRecording ? '⏹️' : '🎙️'}
                 </button>
                 <p style={{ marginTop: '6px', fontSize: '0.75rem', color: 'var(--color-text-light)' }}>
-                    {listening ? '🔴 Đang nghe...' : 'Bấm → Nói giống phong cách mẫu'}
+                    {isRecording ? '🔴 Đang nghe...' : 'Bấm → Nói giống phong cách mẫu'}
                 </p>
+                {interimText && (
+                    <div style={{ fontSize: '0.8rem', color: '#4B5563', marginTop: '4px' }}>"{interimText}"</div>
+                )}
             </div>
+
+            {manualFallback && (
+                <ManualTranscriptFallback
+                    fallback={manualFallback}
+                    onSubmit={submitManualTranscript}
+                    onCancel={resetSession}
+                />
+            )}
 
             {score !== null && (
                 <div style={{ textAlign: 'center', padding: '14px', borderRadius: 'var(--radius-lg)', background: `${score >= 80 ? '#22C55E' : '#F59E0B'}10`, border: `2px solid ${score >= 80 ? '#22C55E' : '#F59E0B'}`, margin: '8px 0' }}>
                     <div style={{ fontSize: '1.5rem', fontWeight: 800, color: score >= 80 ? '#22C55E' : '#F59E0B' }}>{score >= 90 ? '🌟' : '👍'} {score}%</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>"{spoken}"</div>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '8px' }}>
-                        {score < 70 && <button className="btn btn--outline" onClick={startListening}>🔄 Lại</button>}
+                        {score < 70 && <button className="btn btn--outline" onClick={handleStartListening}>🔄 Lại</button>}
                         <button className="btn btn--primary" onClick={next}>{sIdx + 1 >= speaker.sentences.length ? '📊 Kết quả' : '➡️ Tiếp'}</button>
                     </div>
                 </div>

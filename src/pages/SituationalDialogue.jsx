@@ -89,43 +89,62 @@ export default function SituationalDialogue() {
     const { addXP, state } = useGame();
     const [scenarioId, setScenarioId] = useState(null);
     const [turnIdx, setTurnIdx] = useState(0);
-    const [listening, setListening] = useState(false);
     const [spoken, setSpoken] = useState('');
     const [score, setScore] = useState(null);
     const [celebration, setCelebration] = useState(0);
     const [complete, setComplete] = useState(false);
     const [totalScore, setTotalScore] = useState(0);
     const [totalTurns, setTotalTurns] = useState(0);
+    const inAppName = useMemo(() => getInAppBrowserName(), []);
 
     const scenario = scenarioId ? SCENARIOS.find(s => s.id === scenarioId) : null;
+
+    const {
+        phase: capturePhase,
+        interimText,
+        manualFallback,
+        startCapture,
+        stopCapture,
+        resetSession,
+        submitManualTranscript,
+    } = useSpeechPracticeSession('SituationalDialogue');
 
     const speakAI = useCallback((text) => {
         speakText(text, { lang: 'en-US', rate: 0.85 });
     }, []);
 
-    const startListening = useCallback(() => {
-        if (!SpeechRecognition || !scenario) return;
-        setSpoken(''); setScore(null);
-        const rec = new SpeechRecognition();
-        rec.lang = 'en-US'; rec.continuous = false; rec.interimResults = false;
-        rec.onresult = (e) => {
-            const transcript = e.results[0][0].transcript;
-            setSpoken(transcript);
-            const turn = scenario.turns[turnIdx];
-            const s = similarity(turn.text, transcript);
-            setScore(s);
-            setTotalScore(prev => prev + s);
-            setTotalTurns(prev => prev + 1);
-            if (s >= 60) { addXP(s >= 90 ? 15 : 10); setCelebration(c => c + 1); }
-            setListening(false);
-        };
-        rec.onerror = () => setListening(false);
-        rec.onend = () => setListening(false);
-        rec.start();
-        setListening(true);
-    }, [scenario, turnIdx]);
+    const handleEvaluation = useCallback((transcript) => {
+        if (!scenario) return;
+        setSpoken(transcript);
+        const turn = scenario.turns[turnIdx];
+        const s = similarity(turn.text, transcript);
+        setScore(s);
+        setTotalScore(prev => prev + s);
+        setTotalTurns(prev => prev + 1);
+        if (s >= 60) {
+            addXP(s >= 90 ? 15 : 10);
+            setCelebration(c => c + 1);
+        }
+    }, [addXP, scenario, turnIdx]);
+
+    const handleStartListening = useCallback(() => {
+        setSpoken('');
+        setScore(null);
+        startCapture({
+            lang: 'en-US',
+            continuous: false,
+            interimResults: true,
+            maxAlternatives: 3,
+            autoStopOnSilence: true,
+            silenceMs: 2200,
+            onFinalize: ({ transcript }) => {
+                if (transcript) handleEvaluation(transcript);
+            },
+        });
+    }, [handleEvaluation, startCapture]);
 
     const nextTurn = () => {
+        resetSession();
         let nextIdx = turnIdx + 1;
         if (nextIdx >= scenario.turns.length) { setComplete(true); return; }
         // Auto-play AI turns
@@ -147,24 +166,35 @@ export default function SituationalDialogue() {
                     <h2 className="page-header__title">🗣️ Role-play 1:1</h2>
                     <div className="xp-badge">⭐ {state.xp}</div>
                 </div>
+
+                {inAppName && (
+                    <div style={{
+                        padding: '10px 14px', borderRadius: '12px', background: '#FEF3C7',
+                        border: '1.5px solid #F59E0B', color: '#92400E', fontSize: '0.82rem',
+                        marginBottom: '12px',
+                    }}>
+                        ⚠️ <strong>Đang mở trong {inAppName}:</strong> Nhấn ⋮ góc trên và chọn <em>"Mở bằng Safari / Chrome"</em> để bật Microphone.
+                    </div>
+                )}
+
                 <p style={{ color: 'var(--color-text-light)', fontSize: '0.85rem', marginBottom: '12px' }}>
-                    Chọn tình huống để luyện hội thoại 1:1 như giáo viên bản ngữ:
+                    Chọn tình huống thực tế để nhập vai luyện nói:
                 </p>
                 <div style={{ display: 'grid', gap: '10px' }}>
-                    {SCENARIOS.map(s => (
-                        <button key={s.id} onClick={() => { setScenarioId(s.id); setTurnIdx(0); setComplete(false); setTotalScore(0); setTotalTurns(0); speakAI(s.turns[0]?.text); }}
+                    {SCENARIOS.map(sc => (
+                        <button key={sc.id} onClick={() => { setScenarioId(sc.id); setTurnIdx(0); setTotalScore(0); setTotalTurns(0); setComplete(false); }}
                             style={{
-                                display: 'flex', alignItems: 'center', gap: '12px',
+                                display: 'flex', alignItems: 'center', gap: '14px',
                                 padding: '16px', borderRadius: 'var(--radius-lg)',
-                                background: `${s.color}08`, border: `2px solid ${s.color}25`,
+                                background: `${sc.color}08`, border: `2px solid ${sc.color}30`,
                                 cursor: 'pointer', textAlign: 'left',
                             }}>
-                            <span style={{ fontSize: '2rem' }}>{s.emoji}</span>
+                            <span style={{ fontSize: '2rem' }}>{sc.emoji}</span>
                             <div style={{ flex: 1 }}>
-                                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: s.color }}>{s.title}</div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>{s.contextVi}</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: sc.color }}>{sc.title} ({sc.titleVi})</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-light)' }}>{sc.contextVi}</div>
                             </div>
-                            <span style={{ fontSize: '0.7rem', color: s.color, fontWeight: 700 }}>{s.turns.filter(t => t.speaker === 'you').length} lượt nói</span>
+                            <span style={{ fontSize: '0.75rem', color: sc.color, fontWeight: 700 }}>{sc.turns.filter(t => t.speaker === 'you').length} lượt nói</span>
                         </button>
                     ))}
                 </div>
@@ -174,7 +204,7 @@ export default function SituationalDialogue() {
 
     // Complete
     if (complete) {
-        const avg = totalTurns ? Math.round(totalScore / totalTurns) : 0;
+        const avg = totalTurns > 0 ? Math.round(totalScore / totalTurns) : 0;
         return (
             <div className="page" style={{ textAlign: 'center', paddingTop: '50px' }}>
                 <StarBurst trigger={celebration} />
@@ -192,6 +222,7 @@ export default function SituationalDialogue() {
 
     const turn = scenario.turns[turnIdx];
     const isUserTurn = turn.speaker === 'you';
+    const isRecording = capturePhase === 'recording';
 
     // Auto advance AI turns
     if (!isUserTurn) {
@@ -236,22 +267,33 @@ export default function SituationalDialogue() {
                     </div>
 
                     <div style={{ textAlign: 'center' }}>
-                        <button onClick={startListening} disabled={listening}
+                        <button onClick={isRecording ? stopCapture : handleStartListening}
                             style={{
                                 width: '75px', height: '75px', borderRadius: '50%', border: 'none',
-                                background: listening ? '#EF4444' : scenario.color,
+                                background: isRecording ? '#EF4444' : scenario.color,
                                 color: 'white', fontSize: '2rem', cursor: 'pointer',
-                                boxShadow: listening ? '0 0 0 6px #EF444440' : `0 0 0 6px ${scenario.color}30`,
-                                animation: listening ? 'pulse 1.2s infinite' : 'none',
-                            }}>{listening ? '⏹️' : '🎙️'}</button>
+                                boxShadow: isRecording ? '0 0 0 6px #EF444440' : `0 0 0 6px ${scenario.color}30`,
+                                animation: isRecording ? 'pulse 1.2s infinite' : 'none',
+                            }}>{isRecording ? '⏹️' : '🎙️'}</button>
+                        {interimText && (
+                            <div style={{ fontSize: '0.8rem', color: '#4B5563', marginTop: '4px' }}>"{interimText}"</div>
+                        )}
                     </div>
+
+                    {manualFallback && (
+                        <ManualTranscriptFallback
+                            fallback={manualFallback}
+                            onSubmit={submitManualTranscript}
+                            onCancel={resetSession}
+                        />
+                    )}
 
                     {score !== null && (
                         <div style={{ textAlign: 'center', padding: '12px', borderRadius: 'var(--radius-lg)', marginTop: '10px', background: `${score >= 70 ? '#22C55E' : '#F59E0B'}10`, border: `2px solid ${score >= 70 ? '#22C55E' : '#F59E0B'}` }}>
                             <span style={{ fontSize: '1.5rem', fontWeight: 800, color: score >= 70 ? '#22C55E' : '#F59E0B' }}>{score}%</span>
                             <span style={{ fontSize: '0.8rem', marginLeft: '8px' }}>"{spoken}"</span>
                             <div style={{ marginTop: '6px' }}>
-                                {score < 60 && <button className="btn btn--outline" onClick={startListening} style={{ marginRight: '6px' }}>🔄 Lại</button>}
+                                {score < 60 && <button className="btn btn--outline" onClick={handleStartListening} style={{ marginRight: '6px' }}>🔄 Lại</button>}
                                 <button className="btn btn--primary" onClick={nextTurn}>➡️ Tiếp</button>
                             </div>
                         </div>

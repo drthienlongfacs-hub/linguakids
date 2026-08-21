@@ -1,12 +1,13 @@
 // ChineseToneDrill — Practice Chinese tones (4 tones + neutral)
 // Uses SpeechSynthesis with zh-CN for native-quality tone modeling
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameStateContext';
 import StarBurst from '../components/StarBurst';
+import ManualTranscriptFallback from '../components/ManualTranscriptFallback';
 import { speakText } from '../utils/speakText';
-
-const SpeechRecognition = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+import { useSpeechPracticeSession } from '../hooks/useSpeechPracticeSession';
+import { getInAppBrowserName } from '../services/capabilityService';
 
 const TONE_INFO = [
     { tone: 1, mark: 'ā', name: 'High flat', nameVi: 'Thanh cao bằng', color: '#3B82F6', visual: '—' },
@@ -52,10 +53,20 @@ export default function ChineseToneDrill() {
     const [score, setScore] = useState(0);
     const [celebration, setCelebration] = useState(0);
     const [complete, setComplete] = useState(false);
-    const [listening, setListening] = useState(false);
     const [spoken, setSpoken] = useState('');
+    const inAppName = useMemo(() => getInAppBrowserName(), []);
 
     const ex = exercises[idx];
+
+    const {
+        phase: capturePhase,
+        interimText,
+        manualFallback,
+        startCapture,
+        stopCapture,
+        resetSession,
+        submitManualTranscript,
+    } = useSpeechPracticeSession('ChineseToneDrill');
 
     const speak = useCallback((text, rate = 0.7) => {
         speakText(text, { lang: 'zh-CN', rate });
@@ -66,23 +77,32 @@ export default function ChineseToneDrill() {
         if (tone === ex.tone) { setScore(s => s + 1); addXP(10); setCelebration(c => c + 1); }
     };
 
-    const startSpeaking = useCallback(() => {
-        if (!SpeechRecognition) return;
+    const handleEvaluation = useCallback((transcript) => {
+        setSpoken(transcript);
+        if (transcript.includes(ex.char) || transcript.toLowerCase().includes(ex.pinyin.replace(/[āáǎà]/g, 'a'))) {
+            addXP(15);
+            setCelebration(c => c + 1);
+            setScore(s => s + 1);
+        }
+    }, [addXP, ex]);
+
+    const handleStartSpeaking = useCallback(() => {
         setSpoken('');
-        const rec = new SpeechRecognition();
-        rec.lang = 'zh-CN'; rec.continuous = false; rec.interimResults = false;
-        rec.onresult = (e) => {
-            const transcript = e.results[0][0].transcript;
-            setSpoken(transcript);
-            if (transcript.includes(ex.char)) { addXP(15); setCelebration(c => c + 1); setScore(s => s + 1); }
-            setListening(false);
-        };
-        rec.onerror = () => setListening(false);
-        rec.onend = () => setListening(false);
-        rec.start(); setListening(true);
-    }, [ex]);
+        startCapture({
+            lang: 'zh-CN',
+            continuous: false,
+            interimResults: true,
+            maxAlternatives: 3,
+            autoStopOnSilence: true,
+            silenceMs: 2200,
+            onFinalize: ({ transcript }) => {
+                if (transcript) handleEvaluation(transcript);
+            },
+        });
+    }, [handleEvaluation, startCapture]);
 
     const next = () => {
+        resetSession();
         if (idx + 1 >= TOTAL) setComplete(true);
         else { setIdx(i => i + 1); setPhase('listen'); setSelected(null); setSpoken(''); }
     };
@@ -104,6 +124,7 @@ export default function ChineseToneDrill() {
     }
 
     const toneInfo = TONE_INFO.find(t => t.tone === ex.tone);
+    const isRecording = capturePhase === 'recording';
 
     return (
         <div className="page">
@@ -113,6 +134,17 @@ export default function ChineseToneDrill() {
                 <h2 className="page-header__title">🏮 Tone Drill</h2>
                 <div className="xp-badge">⭐ {state.xp}</div>
             </div>
+
+            {inAppName && (
+                <div style={{
+                    padding: '10px 14px', borderRadius: '12px', background: '#FEF3C7',
+                    border: '1.5px solid #F59E0B', color: '#92400E', fontSize: '0.82rem',
+                    marginBottom: '12px',
+                }}>
+                    ⚠️ <strong>Đang mở trong {inAppName}:</strong> Nhấn ⋮ góc trên và chọn <em>"Mở bằng Safari / Chrome"</em> để bật Microphone.
+                </div>
+            )}
+
             <div className="lesson-progress">
                 <div className="progress-bar" style={{ flex: 1 }}>
                     <div className="progress-bar__fill" style={{ width: `${(idx / TOTAL) * 100}%`, background: '#EF4444' }} />
@@ -160,19 +192,31 @@ export default function ChineseToneDrill() {
             {phase === 'speak' && (
                 <div style={{ textAlign: 'center', marginTop: '16px' }}>
                     <p style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '10px' }}>🎙️ Nói theo: <strong style={{ color: toneInfo?.color }}>{ex.pinyin}</strong></p>
-                    <button onClick={startSpeaking} disabled={listening}
+                    <button onClick={isRecording ? stopCapture : handleStartSpeaking}
                         style={{
                             width: '80px', height: '80px', borderRadius: '50%', border: 'none',
-                            background: listening ? '#EF4444' : '#DC2626', color: 'white', fontSize: '2rem',
-                            cursor: 'pointer', boxShadow: listening ? '0 0 0 8px #EF444440' : '0 0 0 8px #DC262630',
-                            animation: listening ? 'pulse 1.2s infinite' : 'none',
-                        }}>{listening ? '⏹️' : '🎙️'}</button>
+                            background: isRecording ? '#EF4444' : '#DC2626', color: 'white', fontSize: '2rem',
+                            cursor: 'pointer', boxShadow: isRecording ? '0 0 0 8px #EF444440' : '0 0 0 8px #DC262630',
+                            animation: isRecording ? 'pulse 1.2s infinite' : 'none',
+                        }}>{isRecording ? '⏹️' : '🎙️'}</button>
+                    {interimText && (
+                        <div style={{ fontSize: '0.8rem', color: '#4B5563', marginTop: '4px' }}>"{interimText}"</div>
+                    )}
                     {spoken && (
-                        <div style={{ marginTop: '10px', padding: '10px', borderRadius: 'var(--radius-lg)', background: spoken.includes(ex.char) ? '#22C55E10' : '#F59E0B10', border: `2px solid ${spoken.includes(ex.char) ? '#22C55E' : '#F59E0B'}` }}>
-                            <div style={{ fontSize: '1.2rem' }}>{spoken.includes(ex.char) ? '✅ Chính xác!' : '💪 Thử lại!'}</div>
+                        <div style={{ marginTop: '10px', padding: '10px', borderRadius: 'var(--radius-lg)', background: (spoken.includes(ex.char) || spoken.toLowerCase().includes(ex.pinyin.replace(/[āáǎà]/g, 'a'))) ? '#22C55E10' : '#F59E0B10', border: `2px solid ${(spoken.includes(ex.char) || spoken.toLowerCase().includes(ex.pinyin.replace(/[āáǎà]/g, 'a'))) ? '#22C55E' : '#F59E0B'}` }}>
+                            <div style={{ fontSize: '1.2rem' }}>{(spoken.includes(ex.char) || spoken.toLowerCase().includes(ex.pinyin.replace(/[āáǎà]/g, 'a'))) ? '✅ Chính xác!' : '💪 Thử lại!'}</div>
                             <div style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Nhận dạng: "{spoken}"</div>
                         </div>
                     )}
+
+                    {manualFallback && (
+                        <ManualTranscriptFallback
+                            fallback={manualFallback}
+                            onSubmit={submitManualTranscript}
+                            onCancel={resetSession}
+                        />
+                    )}
+
                     <button className="btn btn--primary btn--block" style={{ marginTop: '12px' }} onClick={next}>
                         {idx + 1 >= TOTAL ? '📊 Kết quả' : '➡️ Tiếp'}
                     </button>
